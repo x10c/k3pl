@@ -1,0 +1,11 @@
+../extjs/resources/css/ext-all.css		../extjs/resources
+../extjs/resources/css/xtheme-gray.css		../extjs/resources
+../extjs/ux/css/RowEditor.css			../extjs/ux
+../extjs/ux/css/Spinner.css			../extjs/ux
+../extjs/ux/css/GridSummary.css			../extjs/ux
+../extjs/ux/css/GroupSummary.css		../extjs/ux
+../extjs/ux/css/ColumnHeaderGroup.css		../extjs/ux
+../extjs/ux/css/LockingGridView.css		../extjs/ux
+../extjs/ux/gridfilters/css/GridFilters.css	../extjs/ux/gridfilters
+../extjs/ux/gridfilters/css/RangeMenu.css	../extjs/ux/gridfilters
+../css/all.css					..

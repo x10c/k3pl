@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CSM_01_SR_UTAMA" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="HEADER_STYLE" hAlign="Center" vAlign="Middle" fontName="Arial" fontSize="11" isBold="true"/>
+	<style name="DETAIL_STYLE" style="HEADER_STYLE" hAlign="Left" vAlign="Top" isBold="false"/>
+	<parameter name="ID_PROJECT" class="java.lang.Long"/>
+	<parameter name="ID_KONTRAKTOR" class="java.lang.Long"/>
+	<parameter name="ID_FAKTOR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select	A.id
+,		A.keterangan as faktor_utama
+,		A.nilai_A
+,		A.nilai_B
+,		A.nilai_C
+,		A.nilai_D
+,		isnull(B.nilai, 0) as nilai
+,		isnull(B.keterangan, '') as nilai_keterangan
+,		A.koefisien
+from
+(
+	select	rcp.id
+	,		rcp.keterangan
+	,		rcp.nilai_A
+	,		rcp.nilai_B
+	,		rcp.nilai_C
+	,		rcp.nilai_D
+	,		rcfp.koefisien
+	from	r_csm_penilaian rcp, r_csm_faktor_penilaian rcfp
+	where	rcp.id_faktor = $P{ID_FAKTOR} and rcp.id_faktor = rcfp.id) A
+left join
+(
+	select	id_penilaian
+	,		nilai
+	,		keterangan
+	from	t_csm_proyek_kont_nilai
+	where	id_project		= $P{ID_PROJECT}
+	and		id_kontraktor	= $P{ID_KONTRAKTOR}
+) B
+on A.id = B.id_penilaian]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="faktor_utama" class="java.lang.String"/>
+	<field name="nilai_A" class="java.lang.Short"/>
+	<field name="nilai_B" class="java.lang.Short"/>
+	<field name="nilai_C" class="java.lang.Short"/>
+	<field name="nilai_D" class="java.lang.Short"/>
+	<field name="nilai" class="java.lang.Integer"/>
+	<field name="nilai_keterangan" class="java.lang.String"/>
+	<field name="koefisien" class="java.lang.Double"/>
+	<variable name="NO" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{NO}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_NILAI" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{nilai}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="0" y="0" width="40" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="40" y="0" width="230" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Faktor Utama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="270" y="0" width="70" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Hasil Pantauan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="340" y="0" width="60" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Nilai]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="400" y="0" width="155" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="40" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{NO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="40" y="0" width="230" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{faktor_utama}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="270" y="0" width="70" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nilai} == $F{nilai_A}.intValue() ? "A" : $F{nilai} == $F{nilai_B}.intValue() ? "B" : $F{nilai} == $F{nilai_C}.intValue() ? "C" : $F{nilai} == $F{nilai_D}.intValue() ? "D" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="340" y="0" width="60" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{nilai}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="400" y="0" width="155" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nilai_keterangan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<textField>
+				<reportElement style="HEADER_STYLE" x="0" y="0" width="270" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["(Koefisien : " + $F{koefisien} + ")"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="270" y="0" width="70" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="HEADER_STYLE" x="340" y="0" width="60" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SUM_NILAI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="HEADER_STYLE" x="400" y="0" width="155" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["(" + ($F{koefisien} * $V{SUM_NILAI}) + ")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

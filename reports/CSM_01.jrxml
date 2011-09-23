@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CSM_01" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="TITLE_STYLE" fontName="Arial" fontSize="12" isBold="true"/>
+	<parameter name="ID_PROJECT" class="java.lang.String"/>
+	<parameter name="ID_KONTRAKTOR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     R_KONTRAKTOR."NAMA" AS R_KONTRAKTOR_NAMA,
+     R_PROJECT."NAMA_PROJECT" AS R_PROJECT_NAMA_PROJECT,
+     T_CSM_PROYEK_KONTRAKTOR."TOTAL_NILAI" AS T_CSM_PROYEK_KONTRAKTOR_TOTAL_NILAI,
+     T_CSM_PROYEK."KOEFISIEN_UTAMA" AS T_CSM_PROYEK_KOEFISIEN_UTAMA,
+     T_CSM_PROYEK."KOEFISIEN_TAMBAH" AS T_CSM_PROYEK_KOEFISIEN_TAMBAH
+FROM
+     "dbo"."R_KONTRAKTOR" R_KONTRAKTOR INNER JOIN "dbo"."T_CSM_PROYEK" T_CSM_PROYEK ON R_KONTRAKTOR."ID" = T_CSM_PROYEK."ID_KONTRAKTOR"
+     INNER JOIN "dbo"."R_PROJECT" R_PROJECT ON T_CSM_PROYEK."ID_PROJECT" = R_PROJECT."ID_PROJECT"
+     INNER JOIN "dbo"."T_CSM_PROYEK_KONTRAKTOR" T_CSM_PROYEK_KONTRAKTOR ON T_CSM_PROYEK."ID_PROJECT" = T_CSM_PROYEK_KONTRAKTOR."ID_PROJECT"
+     AND R_KONTRAKTOR."ID" = T_CSM_PROYEK_KONTRAKTOR."ID_KONTRAKTOR"
+WHERE
+     T_CSM_PROYEK."ID_PROJECT" = $P{ID_PROJECT}
+ AND T_CSM_PROYEK."ID_KONTRAKTOR" = $P{ID_KONTRAKTOR}]]>
+	</queryString>
+	<field name="R_KONTRAKTOR_NAMA" class="java.lang.String"/>
+	<field name="R_PROJECT_NAMA_PROJECT" class="java.lang.String"/>
+	<field name="T_CSM_PROYEK_KONTRAKTOR_TOTAL_NILAI" class="java.lang.Double"/>
+	<field name="T_CSM_PROYEK_KOEFISIEN_UTAMA" class="java.lang.Double"/>
+	<field name="T_CSM_PROYEK_KOEFISIEN_TAMBAH" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="120" splitType="Stretch">
+			<staticText>
+				<reportElement style="TITLE_STYLE" x="0" y="15" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Proyek]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="TITLE_STYLE" x="0" y="40" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Kontraktor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="TITLE_STYLE" x="100" y="15" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="TITLE_STYLE" x="100" y="40" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="TITLE_STYLE" x="110" y="15" width="445" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_PROJECT_NAMA_PROJECT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="TITLE_STYLE" x="110" y="40" width="445" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_KONTRAKTOR_NAMA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="TITLE_STYLE" x="110" y="65" width="445" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{T_CSM_PROYEK_KONTRAKTOR_TOTAL_NILAI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="TITLE_STYLE" x="100" y="65" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="TITLE_STYLE" x="0" y="65" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total Nilai]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="80" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_PROJECT">
+					<subreportParameterExpression><![CDATA[new Long($P{ID_PROJECT})]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_FAKTOR">
+					<subreportParameterExpression><![CDATA[new String("1")]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_KONTRAKTOR">
+					<subreportParameterExpression><![CDATA[new Long($P{ID_KONTRAKTOR})]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KOEFISIEN_UTAMA">
+					<subreportParameterExpression><![CDATA[$F{T_CSM_PROYEK_KOEFISIEN_UTAMA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "CSM_01_SR_UTAMA.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="50" width="555" height="20"/>
+				<subreportParameter name="KOEFISIEN_TAMBAH">
+					<subreportParameterExpression><![CDATA[$F{T_CSM_PROYEK_KOEFISIEN_TAMBAH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_PROJECT">
+					<subreportParameterExpression><![CDATA[new Long($P{ID_PROJECT})]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_FAKTOR">
+					<subreportParameterExpression><![CDATA[new String("2")]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_KONTRAKTOR">
+					<subreportParameterExpression><![CDATA[new Long($P{ID_KONTRAKTOR})]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "CSM_01_SR_PELENGKAP.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

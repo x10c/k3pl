@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CSM_02_SR_SCOREIDX" pageWidth="347" pageHeight="802" columnWidth="347" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     R_CSM_PERF_EVAL_SI."SCORE" AS R_CSM_PERF_EVAL_SI_SCORE,
+     R_CSM_PERF_EVAL_SI."KETERANGAN" AS R_CSM_PERF_EVAL_SI_KETERANGAN
+FROM
+     "dbo"."R_CSM_PERF_EVAL_SI" R_CSM_PERF_EVAL_SI
+ORDER BY
+     R_CSM_PERF_EVAL_SI."SCORE" ASC]]>
+	</queryString>
+	<field name="R_CSM_PERF_EVAL_SI_SCORE" class="java.lang.Integer"/>
+	<field name="R_CSM_PERF_EVAL_SI_KETERANGAN" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="5" y="0" width="15" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{R_CSM_PERF_EVAL_SI_SCORE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="30" y="0" width="317" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_CSM_PERF_EVAL_SI_KETERANGAN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="0" width="10" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="11"/>
+				</textElement>
+				<text><![CDATA[=]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

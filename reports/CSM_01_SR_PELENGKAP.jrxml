@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CSM_01_SR_PELENGKAP" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="HEADER_STYLE" hAlign="Center" vAlign="Middle" fontName="Arial" fontSize="11" isBold="true"/>
+	<style name="DETAIL_STYLE" style="HEADER_STYLE" hAlign="Left" vAlign="Top" isBold="false"/>
+	<parameter name="ID_PROJECT" class="java.lang.Long"/>
+	<parameter name="ID_KONTRAKTOR" class="java.lang.Long"/>
+	<parameter name="ID_FAKTOR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="KOEFISIEN_TAMBAH" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[SELECT
+     T_CSM_PROYEK_KONT_NILAI."NILAI" AS T_CSM_PROYEK_KONT_NILAI_NILAI,
+     T_CSM_PROYEK_KONT_NILAI."KETERANGAN" AS T_CSM_PROYEK_KONT_NILAI_KETERANGAN,
+     R_CSM_PENILAIAN."KETERANGAN" AS R_CSM_PENILAIAN_KETERANGAN
+FROM
+     "dbo"."T_CSM_PROYEK_KONT_NILAI" T_CSM_PROYEK_KONT_NILAI INNER JOIN "dbo"."R_CSM_PENILAIAN" R_CSM_PENILAIAN ON T_CSM_PROYEK_KONT_NILAI."ID_PENILAIAN" = R_CSM_PENILAIAN."ID"
+WHERE
+     T_CSM_PROYEK_KONT_NILAI."ID_PROJECT" = $P{ID_PROJECT}
+ AND T_CSM_PROYEK_KONT_NILAI."ID_KONTRAKTOR" = $P{ID_KONTRAKTOR}
+ AND R_CSM_PENILAIAN."ID_FAKTOR" = $P{ID_FAKTOR}]]>
+	</queryString>
+	<field name="T_CSM_PROYEK_KONT_NILAI_NILAI" class="java.lang.Integer"/>
+	<field name="T_CSM_PROYEK_KONT_NILAI_KETERANGAN" class="java.lang.String"/>
+	<field name="R_CSM_PENILAIAN_KETERANGAN" class="java.lang.String"/>
+	<variable name="NO" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{NO}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_NILAI" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{T_CSM_PROYEK_KONT_NILAI_NILAI}.doubleValue()]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="NILAI" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{T_CSM_PROYEK_KONT_NILAI_NILAI}.doubleValue() * $P{KOEFISIEN_TAMBAH}.doubleValue()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="0" y="0" width="40" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="40" y="0" width="230" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Faktor Penambah/Pelengkap]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="270" y="0" width="70" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Hasil Pantauan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="400" y="0" width="155" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="340" y="0" width="60" height="40"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Nilai]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="40" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{NO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="40" y="0" width="230" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_CSM_PENILAIAN_KETERANGAN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="DETAIL_STYLE" positionType="Float" stretchType="RelativeToBandHeight" x="400" y="0" width="155" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{T_CSM_PROYEK_KONT_NILAI_KETERANGAN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="270" y="0" width="70" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{T_CSM_PROYEK_KONT_NILAI_NILAI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="340" y="0" width="60" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{NILAI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<textField>
+				<reportElement style="HEADER_STYLE" x="0" y="0" width="270" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["(Koefisien : " + $P{KOEFISIEN_TAMBAH} + ")"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="HEADER_STYLE" x="270" y="0" width="70" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="###0.00">
+				<reportElement stretchType="RelativeToBandHeight" x="340" y="0" width="60" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{SUM_NILAI} * $P{KOEFISIEN_TAMBAH}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
