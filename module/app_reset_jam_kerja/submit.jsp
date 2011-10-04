@@ -17,6 +17,7 @@ try {
 
 	Statement	db_stmt	= db_con.createStatement();
 	String		id		= request.getParameter("id_insiden");
+	String		state	= request.getParameter("state");
 
 	if (id.equals("0") || id.equals("")) {
 		return;
@@ -29,7 +30,7 @@ try {
 	db_stmt.executeUpdate(q);
 
 	q	=" update	t_insiden"
-		+" set		status_reset	= 1"
+		+" set		status_reset= "+ state
 		+" where	id_insiden	= "+ id;
 
 	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"

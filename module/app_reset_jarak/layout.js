@@ -104,10 +104,17 @@ function M_AppResetJamKerja()
 
 	this.do_save = function(record)
 	{
+		var state = 0;
+
+		if (record.data['status_reset']) {
+			state = 1;
+		}
+
 		Ext.Ajax.request({
 			url	: m_app_reset_jarak_d +'submit.jsp'
 		,	params	: {
-				id_insiden : record.data['id']
+				id_insiden	: record.data['id']
+			,	state		: state
 			}
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
