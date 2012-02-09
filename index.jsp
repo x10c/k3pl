@@ -14,6 +14,13 @@
 Properties	props	= new Properties();
 props.load(new FileInputStream(application.getRealPath("WEB-INF"+File.separator+"web.properties")));
 String		db_url	= props.getProperty("db")+";user="+props.getProperty("user")+";password="+props.getProperty("pass");
+
+try {
+	DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+} catch (SQLException e) {
+	System.out.println(e.getMessage());
+}
+
 Connection	db_con	= DriverManager.getConnection(db_url);
 Statement	db_stmt	= db_con.createStatement();
 ResultSet	rs		= null;
