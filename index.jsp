@@ -57,14 +57,14 @@ rs.close();
 <html>
 <head>
 <title> PT. PGN Tbk. | K3PL</title>
-<link rel='shortcut icon' href='<%=cpath%>/images/logo.ico'/>
+<link rel='shortcut icon' href='<%=cpath%>/images/favicon_new.ico'/>
 <script>
 	var _g_root = '<%= cpath %>';
 	var _g_chart_delay		= <%= chart_delay %> * 1000;
 	var _g_gallery_delay	= <%= gallery_delay %> * 1000;
 </script>
 
-<link rel='icon' href='<%=cpath%>/images/favicon.ico' />
+<link rel='icon' href='<%=cpath%>/images/favicon_new.ico' />
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/css/index.css'/>
 <%--
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/extjs/resources/css/ext-all.css'/>
@@ -99,7 +99,7 @@ rs.close();
 <body>
 <div id="back" class="clearfloat">
 	<div id="header" class="clearfloat">
-		<img src="<%=cpath%>/images/logo.png"/>
+		<img src="<%=cpath%>/images/logo_new.png"/>
 		<h1> PT. Perusahaan Gas Negara (Persero) Tbk.</h1>
 		<h2> Sistem Informasi K3PL - SBU Distribusi Wilayah I </h2>
 	</div><!--end #header-->

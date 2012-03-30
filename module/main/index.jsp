@@ -22,7 +22,7 @@ if (null == user || null == db_url) {
 <html>
 <head>
 <title>PT. Perusahaan Gas Negara Tbk. | K3PL</title>
-<link rel='shortcut icon' href='<%=cpath%>/images/logo.ico'/>
+<link rel='shortcut icon' href='<%=cpath%>/images/favicon_new.ico'/>
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/css/main.css'/>
 <%--
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/extjs/resources/css/ext-all.css'/>
@@ -95,7 +95,7 @@ if (null == user || null == db_url) {
 <div id='loading-mask'></div>
 <div id='loading'>
     <div class="loading-indicator">
-        <img src='<%=cpath%>/images/logo.png'
+        <img src='<%=cpath%>/images/logo_new.png'
 		style='margin-right:8px;' align='absmiddle' />
 	<br/>
         Loading&hellip;
@@ -103,7 +103,7 @@ if (null == user || null == db_url) {
 </div>
 
 <div id='header'>
-	<img class='header_logo' src='<%=cpath%>/images/logo.png'/>
+	<img class='header_logo' src='<%=cpath%>/images/logo_new.png'/>
 	<span class='title'>Sistem Informasi K3PL</span>
 	<span class='subtitle'>SBU Distribusi Wilayah I</span>
 </div>

@@ -605,6 +605,9 @@ function M_TrxRCADetail()
 	,	autoWidth			: true
 	,	plugins				: [this.summary, this.editor, this.hdr]
 	//,	headerCfg			: {	cls: 'rca-header-form' }
+	,	viewConfig			: {
+			forceFit		: true
+		}
 	,	tbar				:[
 			this.btn_add,'-'
 		,	this.btn_del
@@ -1200,6 +1203,9 @@ function M_TrxEditRCADetail()
 	,	autoWidth			: true
 	,	plugins				: [this.summary, this.editor, this.hdr]
 	//,	headerCfg			: {	cls: 'rca-header-form' }
+	,	viewConfig			: {
+			forceFit		: true
+		}
 	,	tbar				:[
 			this.btn_add,'-'
 		,	this.btn_del
