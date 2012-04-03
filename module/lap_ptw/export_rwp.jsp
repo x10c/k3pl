@@ -148,7 +148,7 @@ th {
 <!-- header -->
 <table class="header">
 <tr>
-	<th class="tcenter" width="100"><img src="/k3pl/images/logo.png" width="49" height="70"/></th>
+	<th class="tcenter" width="100"><img src="../../images/logo_new.png" width="49" height="70"/></th>
 	<th class="theader">
 INSTRUKSI KERJA<br/>
 IJIN KERJA RADIOGRAFI (<i>RADIOGRAPHIC WORK PERMIT</i>) <br/>

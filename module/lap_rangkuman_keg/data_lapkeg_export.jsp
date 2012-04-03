@@ -308,7 +308,9 @@ try {
     +" ,a.uraian "
 	+"	from t_insiden a, r_seksi b, r_wilayah c "
 	+"	where a.id_area_seksi = b.id_seksi "
-	+"	and b.id_wilayah = c.id_wilayah ";
+	+"	and b.id_wilayah = c.id_wilayah "
+	+"	and a.tahun = "+tahun
+	+"	and a.bulan = "+bulan;
 
 	rs	= db_stmt.executeQuery(q);
 	String body_insiden_wilayah, insiden_wilayah;
