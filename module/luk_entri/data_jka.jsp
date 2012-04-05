@@ -19,6 +19,7 @@ try {
 	Statement	db_stmt		= db_con.createStatement();
 	String		year		= (String) request.getParameter("year");
 	String		data		= "{rows:[";
+	int		year_before	= 0;
 	int		month		= Integer.parseInt((String) request.getParameter("month"));
 	int		month_before	= month - 1;
 
@@ -26,6 +27,12 @@ try {
 		data += "]}";
 		out.print(data);
 		return;
+	}
+
+	year_before = Integer.parseInt (year);
+	if (month == 1) {
+		year_before	= year_before - 1;
+		month_before	= 12;
 	}
 
 	q	=" select	Y.id_klasifikasi_pegawai"
@@ -45,7 +52,7 @@ try {
 		+" from ("
 		+" 	select	B.id_klasifikasi_pegawai"
 		+" 	,	B.nama_klasifikasi_pegawai"
-		+" 	,	isnull(A.tahun,"+ year +")		as tahun"
+		+" 	,	isnull(A.tahun,"+ year_before +")	as tahun"
 		+" 	,	isnull(A.bulan,"+ month_before +")	as bulan"
 		+" 	,	isnull(A.jml_tenaga_kerja, 0)		as jml_tk_bulan_lalu"
 		+" 	,	isnull(A.jml_hari_kerja, 0)		as jml_hk_bulan_lalu"
@@ -54,8 +61,8 @@ try {
 		+" 	from		t_unjuk_kerja		A"
 		+" 	right join	r_klasifikasi_pegawai	B"
 		+" 	on		A.id_klasifikasi_pegawai= B.id_klasifikasi_pegawai"
-		+" 	and		A.tahun			= "+ year
-		+" 	and		(A.bulan		= "+ month_before +")"
+		+" 	and		A.tahun			= "+ year_before
+		+" 	and		A.bulan			= "+ month_before
 		+" ) X"
 		+" right join ("
 		+" 	select	D.id_klasifikasi_pegawai"
@@ -70,10 +77,9 @@ try {
 		+" 	right join	r_klasifikasi_pegawai	D"
 		+" 	on	C.id_klasifikasi_pegawai= D.id_klasifikasi_pegawai"
 		+" 	and	C.tahun			= "+ year
-		+" 	and	(C.bulan		= "+ month +")"
+		+" 	and	C.bulan			= "+ month
 		+" ) Y"
-		+" on	X.id_klasifikasi_pegawai= Y.id_klasifikasi_pegawai"
-		+" and	X.tahun			= Y.tahun";
+		+" on X.id_klasifikasi_pegawai = Y.id_klasifikasi_pegawai";
 
 	ResultSet rs = db_stmt.executeQuery(q);
 
