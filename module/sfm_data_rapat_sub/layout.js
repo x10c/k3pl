@@ -1729,7 +1729,7 @@ function M_SfmAbsenRapatSub (title){
 	
 	/* observation data */
 	this.panel = new Ext.form.FormPanel({
-		title		: 'Central Safety Committee Meeting'
+		title		: 'Sub Committee Meeting'
 	,	labelAlign	: 'right'
 	,	labelWidth	: 220
 	,	autoWidth	: true
