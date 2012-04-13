@@ -447,13 +447,13 @@ function M_ObsLapPerfByHourGrid()
 				header		: 'Safe Act per Hour'
 			,	dataIndex	: 'safe_hour'
 			,	summaryType	: 'sum'
-			,	format		: '000.00%'
+			,	format		: '000.00'
 			,	css		: 'background-color: #CBFFBB;'
 			},{
 				header		: 'Unsafe Act per Hour'
 			,	dataIndex	: 'unsafe_hour'
 			,	summaryType	: 'sum'
-			,	format		: '000.00%'
+			,	format		: '000.00'
 			,	css		: 'background-color: #FFB5C1;'
 			}
 		]
@@ -510,8 +510,8 @@ function M_ObsLapPerfByHour()
 					this.grid.store
 				,	'Grafik Safe/Unsafe per Hour'
 				,	'month'			,	'Bulan'
-				,	'safe_hour'		,	'% Safe'
-				,	'unsafe_hour'	,	'% Unsafe'
+				,	'safe_hour'		,	'Safe'
+				,	'unsafe_hour'	,	'Unsafe'
 				,	'line');
 
 
