@@ -44,7 +44,8 @@ try {
 +"		,		t_insiden		B"
 +"		where"
 +"		B.status_reset	= 1"
-+"		and	A.tanggal	> B.tanggal"
++"		and	A.tanggal	>= B.tanggal"
++"		and A.tanggal	<= "+ tanggal_skrg
 +"	) W,"
 +"	("
 +"		select	isnull(sum(A.jml_jam_kerja),0)  as kum_jk_bulan_skrg"
@@ -52,16 +53,16 @@ try {
 +"		,		t_insiden		B"
 +"		where"
 +"			B.status_reset	= 1"
-+"		and	A.tanggal		> B.tanggal"
-+"		and	A.tanggal		= "+ tanggal_skrg
++"		and	A.tanggal		>= B.tanggal"
++"		and	A.tanggal		<= "+ tanggal_skrg
 +"	) X,"
 +"	(	select	isnull(sum(A.jml_jam_kerja),0) as kum_jk_bulan_lalu"
 +"		from	t_unjuk_kerja	A"
 +"		,		t_insiden		B"
 +"		where"
 +"			B.status_reset	= 1"
-+"		and	A.tanggal		> B.tanggal"
-+"		and	A.tanggal		= "+ tanggal_lalu
++"		and	A.tanggal		>= B.tanggal"
++"		and	A.tanggal		<= "+ tanggal_lalu
 +"	) Y,"
 +"	(	select	tanggal"
 +"		from	t_insiden"
