@@ -73,7 +73,7 @@ try {
 			q2	=" insert into t_rca_auditor (id_rca, nipg, status, id_user)";
 			for (i = 0; i < l; i++) {
 				if (periode == 1){
-					query	=" select	count(*) as jumlah"
+					query	=" select	isnull(count(*),0) as jumlah"
 							+" from		t_rca	as a"
 							+" where	year(a.tanggal_rca) = " + tahun
 							+" and		month(a.tanggal_rca) = " + bulan
@@ -96,7 +96,7 @@ try {
 						status = 1;
 					}
 				} else {
-					query	=" select	count(*) as jumlah"
+					query	=" select	isnull(count(*),0) as jumlah"
 							+" from		t_rca	as a"
 							+" where	year(a.tanggal_rca) = " + tahun
 							+" and		month(a.tanggal_rca) = " + bulan
@@ -189,7 +189,7 @@ try {
 			q3	=" insert into t_rca_auditor (id_rca, nipg, status, id_user)";
 			for (i = 0; i < l; i++) {
 				if (periode == 1){
-					query	=" select	count(*) as jumlah"
+					query	=" select	isnull(count(*),0) as jumlah"
 							+" from		t_rca	as a"
 							+" where	year(a.tanggal_rca) = " + tahun
 							+" and		month(a.tanggal_rca) = " + bulan
@@ -212,7 +212,7 @@ try {
 						status = 1;
 					}
 				} else {
-					query	=" select	count(*) as jumlah"
+					query	=" select	isnull(count(*),0) as jumlah"
 							+" from		t_rca	as a"
 							+" where	year(a.tanggal_rca) = " + tahun
 							+" and		month(a.tanggal_rca) = " + bulan

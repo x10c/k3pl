@@ -2322,7 +2322,7 @@ function M_TrxRCAEdit()
 
 	this.form_penanggung_jawab = new Ext.form.ComboBox({
 			fieldLabel		: 'Penanggung Jawab'
-		,	store			: m_trx_rca_store_seksi
+		,	store			: m_trx_rca_store_penanggung_jawab
 		,	valueField		: 'id_seksi'
 		,	displayField	: 'nama_seksi'
 		,	mode			: 'local'
@@ -2630,6 +2630,14 @@ function M_TrxRCAEdit()
 
 	this.do_save = function()
 	{
+		if (this.pic == undefined || this.pic == 'undefined'
+		|| this.pic == 'null' || this.pic == '')
+		{
+			Ext.MessageBox.alert('Kesalahan', 'Area pada Penanggung Jawab belum memiliki Kepala Seksi!<br/>'
+			+' Tambah/ubah data pegawai dengan jabatan Kepala Seksi pada Area bersangkutan.' );
+			return;
+		}
+
 		if (!this.is_valid()) {
 			Ext.MessageBox.alert('Kesalahan', 'Form belum terisi dengan benar!');
 			return;
@@ -2687,7 +2695,22 @@ function M_TrxRCAEdit()
 		auditor += ']';
 
 		var rca_detail 	= '[]';
-		
+		var	d, m ,y;
+		var periode = 0;
+
+		d = this.form_tanggal_rca.getValue();
+		d = d.getDate();
+		m = this.form_tanggal_rca.getValue();
+		m = 1 + m.getMonth();
+		y = this.form_tanggal_rca.getValue();
+		y = 1900 + y.getYear();
+
+		if (d <= 15){
+			periode = 1;
+		} else {
+			periode = 2;
+		}
+
 		Ext.Ajax.request({
 			url	: m_trx_rca_dir +'submit_rca_data.jsp'
 		,	params	: {
@@ -2705,6 +2728,9 @@ function M_TrxRCAEdit()
 			,	waktu_audit					: this.form_waktu_audit.getValue()
 			,	lama_audit					: this.form_lama_audit.getValue()
 			,	cuaca						: this.form_cuaca.getValue()
+			,	periode						: periode
+			,	bulan						: m
+			,	tahun						: y
 			,	auditor						: auditor
 			,	rca_detail					: rca_detail
 			}
