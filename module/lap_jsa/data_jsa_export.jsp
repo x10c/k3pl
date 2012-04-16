@@ -42,18 +42,23 @@ try {
 	String header;
 	header = "";
 	if (rs.next()){ 
-		
+	
+	String	scheme 		= request.getScheme();
+	String	serverName	= request.getServerName();
+	int		serverPort	= request.getServerPort();
+	String	contextPath	= request.getContextPath();
+	
 	header =	"<div> "
 				+" 	<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 align=center> "
 				+" 		<tr> "
 				+" 			<td width=120 valign=center valign=middle> "
-				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ getServletContext().getRealPath("\\images") +"\\Logo-PGN.jpg' width=60 height=60 align=center/> </p>"
+				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ scheme + "://"+ serverName + ":" + serverPort + contextPath + "/images/Logo-PGN.jpg' width=60 height=60 align=center/> </p>"
 				+" 			</td> "
 				+" 			<td width=700  valign=middle> "
 				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><b>JOB SAFETY ANALISYS</b></p> "
 				+" 			</td> "
 				+" 			<td width=120 valign=center valign=middle> "
-				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ getServletContext().getRealPath("\\images") +"\\SBU_I.png' width=60 height=42 align=center/> </p>"
+				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ scheme + "://"+ serverName + ":" + serverPort + contextPath + "/images/SBU_I.png' width=60 height=42 align=center/> </p>"
 				+" 			</td> "
 				+" 		</tr> "
 				+" 	</table> "
