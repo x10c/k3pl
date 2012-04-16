@@ -106,7 +106,7 @@ function M_AppResetJamKerja()
 	{
 		var state = 0;
 
-		if (record.data['status_reset']) {
+		if (record.data['status_reset_jarak']) {
 			state = 1;
 		}
 

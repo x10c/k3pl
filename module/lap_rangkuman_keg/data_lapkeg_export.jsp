@@ -152,11 +152,16 @@ try {
 	DateFormat df = new SimpleDateFormat ("dd MMMMMMMMM yyyy");
 	String formattedDate = df.format(new Date());
 
+	String	scheme 		= request.getScheme();
+	String	serverName	= request.getServerName();
+	int		serverPort	= request.getServerPort();
+	String	contextPath	= request.getContextPath();
+	
 	header =	"<div> "
 				+" 	<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 align=center> "
 				+" 		<tr> "
 				+" 			<td width=140 valign=center halign=center> "
-				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ getServletContext().getRealPath("\\images") +"\\Logo-PGN.jpg' width=80 height=80 align=center/> </p>"
+				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ scheme + "://"+ serverName + ":" + serverPort + contextPath + "/images/Logo-PGN.jpg' width=80 height=80 align=center/> </p>"
 				+" 			</td> "
 				+" 			<td width=800  valign=top> "
 				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><b>PT Perusahaan Gas Negara (Persero) Tbk</b></p> "
