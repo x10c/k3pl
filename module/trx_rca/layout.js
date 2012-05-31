@@ -2045,7 +2045,7 @@ function M_TrxRCAAdd()
 		}
 
 		if (m_trx_rca_ha_level < 4) {
-			this.set_min_max_date();
+			// this.set_min_max_date();
 		}
 
 		this.do_load();
@@ -2961,7 +2961,7 @@ function M_TrxRCAEdit()
 		}
 
 		if (m_trx_rca_ha_level < 4) {
-			this.set_min_max_date();
+			// this.set_min_max_date();
 		}
 
 		this.do_load();
