@@ -9,8 +9,8 @@
 var m_obs_input_stop;
 var m_obs_input_stop_d	= _g_root +'/module/obs_input_stop/';
 var m_stop_form_obs	= [];
-var m_stop_n_discuss	= 1;
-var m_stop_n_observed	= 0;
+var m_stop_n_discuss	= 0;
+var m_stop_n_observed	= 1;
 
 function cb_all_safe_clicked(cb_id, form_id)
 {
@@ -204,10 +204,16 @@ function M_ObsInputStop()
 		,	value		: m_stop_n_discuss
 		,	width		: 100
 		,	msgTarget	: 'side'
+		,	validator	: function(v)
+			{
+				if (v > m_stop_n_observed) {
+					return false;
+				}
+				return true;
+			}
 		,	listeners	: {
-				change	: function(form, newvalue, oldvalue) {
-					m_stop_n_discuss = newvalue;
-					this.form_n_observed.setMaxValue(newvalue);
+				valid	: function (form) {
+					m_stop_n_discuss = form.getRawValue ();
 				}
 			,	scope	: this
 			}
@@ -223,15 +229,11 @@ function M_ObsInputStop()
 		,	value		: m_stop_n_observed
 		,	width		: 100
 		,	msgTarget	: 'side'
-		,	validator	: function(v) {
-				if (v > m_stop_n_discuss) {
-					return false;
-				}
-				return true;
-			}
 		,	listeners	: {
-				valid	: function(form) {
-					m_stop_n_observed = form.getRawValue();
+				change	: function (form, newvalue, oldvalue)
+				{
+					m_stop_n_observed = newvalue;
+					this.form_n_discuss.setMaxValue (newvalue);
 
 					/* don't change safe value if user edit the data */
 					this.set_detail_max_value(m_stop_n_observed);
@@ -272,8 +274,8 @@ function M_ObsInputStop()
 					,	value:'menit'
 				}]
 		}
-		,	this.form_n_discuss
 		,	this.form_n_observed
+		,	this.form_n_discuss
 		,	this.form_safe
 		,	this.form_unsafe
 		]
@@ -460,7 +462,7 @@ function M_ObsInputStop()
 	this.do_save = function()
 	{
 		if (!this.is_valid()) {
-			Ext.MessageBox.alert('Kesalahan', 'Form belum terisi semuanya!');
+			Ext.MessageBox.alert('Kesalahan', 'Form belum terisi semuanya atau ada kesalahan pada isian.');
 			return;
 		}
 
@@ -559,8 +561,8 @@ function M_ObsInputStop()
 			this.form_area.setValue(record.get('id'));
 		}
 
-		m_stop_n_observed	= 0;
-		m_stop_n_discuss	= 1;
+		m_stop_n_observed	= 1;
+		m_stop_n_discuss	= 0;
 		this.form_obs_date.setValue('');
 		this.form_site.setValue('');
 		this.form_shift.setValue('');
