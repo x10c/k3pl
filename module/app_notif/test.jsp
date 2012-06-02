@@ -13,15 +13,15 @@
 <%
 String q = "";
 try {
-	String email_server		= request.getParameter("email_server");
+	String email_server			= request.getParameter("email_server");
 	String email_server_port	= request.getParameter("email_server_port");
 	String email_use_auth		= request.getParameter("email_use_auth");
 	String email_username		= request.getParameter("email_username");
 	String email_password		= request.getParameter("email_password");
-	String from			= request.getParameter("from");
-	String subject			= request.getParameter("subject");
-	String content			= request.getParameter("content");
-	String to			= request.getParameter("to");
+	String from					= request.getParameter("from");
+	String subject				= request.getParameter("subject");
+	String content				= request.getParameter("content");
+	String to					= request.getParameter("to");
 
 	Properties props = System.getProperties();
 

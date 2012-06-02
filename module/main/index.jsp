@@ -8,12 +8,30 @@
 
 <%@ page contentType="text/html" %>
 <%
+Cookie[]	cookies	= request.getCookies ();
+String		c_name	= "";
+String		user_nipg	= null;
+String		user_name	= null;
+String		user_email	= null;
+
+if (cookies != null) {
+	for (int i = 0; i < cookies.length; i++) {
+		c_name = cookies[i].getName ();
+		if (c_name.equalsIgnoreCase ("user.nipg")) {
+			user_nipg = cookies[i].getValue ();
+		} else if (c_name.equalsIgnoreCase ("user.name")) {
+			user_name = cookies[i].getValue ();
+		} else if (c_name.equalsIgnoreCase ("user.email")) {
+			user_email = cookies[i].getValue ();
+		}
+	}
+}
+
 // check user session, if not exist redirect user to module login
-String user	= (String) session.getAttribute("user.nipg");
 String cpath	= (String) request.getContextPath();
 String db_url	= (String) session.getAttribute("db.url");
 
-if (null == user || null == db_url) {
+if (null == user_nipg || null == db_url) {
 	String url = cpath +"/index.jsp";
 	response.sendRedirect(url);
 	return;
@@ -74,9 +92,9 @@ if (null == user || null == db_url) {
 
 <script>
 	var _g_root = '<%= cpath %>'
-	var _g_username = "<%= session.getAttribute("user.name") %>"
-	var _g_usernipg = '<%= session.getAttribute("user.nipg") %>'
-	var _g_usermail = '<%= session.getAttribute("user.email") %>'
+	var _g_username = "<%= user_name %>"
+	var _g_usernipg = '<%= user_nipg %>'
+	var _g_usermail = '<%= user_email %>'
 
 	Ext.QuickTips.init();
 </script>
@@ -109,7 +127,7 @@ if (null == user || null == db_url) {
 </div>
 
 <div class='user'>
-<span><%= session.getAttribute("user.name") + "&nbsp;&nbsp ("+ user +")"%></span>
+<span><%= user_name + "&nbsp;&nbsp ("+ user_nipg +")"%></span>
 &nbsp;&nbsp; | &nbsp;&nbsp;
 <a class="logout" href="#" onclick='do_logout()'>Logout</a>
 </div>

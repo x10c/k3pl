@@ -24,21 +24,33 @@ try {
 Connection	db_con	= DriverManager.getConnection(db_url);
 Statement	db_stmt	= db_con.createStatement();
 ResultSet	rs		= null;
+Cookie[]	cookies	= request.getCookies ();
+String		c_name	= "";
+String		user	= null;
+String		cpath	= request.getContextPath();
 
 session.setAttribute("db.url", (Object) db_url);
 session.setAttribute("db.con", (Object) db_con);
 
 // get user session, redirect to main page if user already logged in
-Object		user	= session.getAttribute("user.nipg");
-String		cpath	= request.getContextPath();
-String		q		= "";
-String		chart_delay		= "10";
-String		gallery_delay	= "7";
+
+if (cookies != null) {
+	for (int i = 0; i < cookies.length; i++) {
+		c_name = cookies[i].getName ();
+		if (c_name.equalsIgnoreCase ("user.nipg")) {
+			user = cookies[i].getValue ();
+		}
+	}
+}
 
 if (user != null) {
 	response.sendRedirect(cpath +"/module/main/index.jsp");
 	return;
 }
+
+String		q		= "";
+String		chart_delay		= "10";
+String		gallery_delay	= "7";
 
 q	=" select	isnull(chart_delay, 10) as chart_delay"
 	+" ,		isnull(gallery_delay, 7) as gallery_delay"

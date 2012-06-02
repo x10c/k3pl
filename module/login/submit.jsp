@@ -8,7 +8,12 @@
 
 <%@ page import="java.sql.*" %>
 <%
-String q = "";
+String	q				= "";
+Cookie	c_user_nipg		= null;
+Cookie	c_user_name		= null;
+Cookie	c_user_email	= null;
+String	c_path			= request.getContextPath ();
+int		c_max_age		= 60 * 60 * 24 * 30; // 30 days
 try {
 	Connection db_con = (Connection) session.getAttribute("db.con");
 
@@ -16,7 +21,7 @@ try {
 		String db_url = (String) session.getAttribute("db.url");
 
 		if (db_url == null) {
-			response.sendRedirect(request.getContextPath());
+			response.sendRedirect (c_path);
 			return;
 		}
 
@@ -66,6 +71,23 @@ try {
 	session.setAttribute("user.nipg", get_nipg);
 	session.setAttribute("user.name", get_nama);
 	session.setAttribute("user.email", get_email);
+
+	/* save user data to cookies */
+	c_user_nipg		= new Cookie ("user.nipg", get_nipg);
+	c_user_name		= new Cookie ("user.name", get_nama);
+	c_user_email	= new Cookie ("user.email", get_email);
+
+	c_user_nipg.setMaxAge (c_max_age);
+	c_user_name.setMaxAge (c_max_age);
+	c_user_email.setMaxAge (c_max_age);
+
+	c_user_nipg.setPath (c_path);
+	c_user_name.setPath (c_path);
+	c_user_email.setPath (c_path);
+
+	response.addCookie (c_user_nipg);
+	response.addCookie (c_user_name);
+	response.addCookie (c_user_email);
 
 	/* insert to __log */
 	q	=" insert into __log (tanggal,nipg,nama_menu,status_akses)"

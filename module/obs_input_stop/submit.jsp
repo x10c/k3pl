@@ -6,16 +6,21 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="javax.mail.*" %>
-<%@ page import="javax.mail.internet.*" %>
-<%@ page import="java.util.*" %>
-<%@ page import="java.io.*" %>
+<%@ page import="javax.mail.Message" %>
+<%@ page import="javax.mail.Session" %>
+<%@ page import="javax.mail.Transport" %>
+<%@ page import="javax.mail.internet.MimeMessage" %>
+<%@ page import="javax.mail.internet.InternetAddress" %>
+<%@ page import="java.util.Properties" %>
 <%
 String q = "";
 try {
@@ -27,8 +32,24 @@ try {
 
 	Statement	db_stmt = db_con.createStatement();
 
-	String		id_user = (String) session.getAttribute("user.nipg");
-	String		user_email = (String) session.getAttribute("user.email");
+	Cookie[]	cookies	= request.getCookies ();
+	String		c_name	= "";
+	String		user_nipg	= null;
+	String		user_name	= null;
+	String		user_email	= null;
+
+	if (cookies != null) {
+		for (int i = 0; i < cookies.length; i++) {
+			c_name = cookies[i].getName ();
+			if (c_name.equalsIgnoreCase ("user.nipg")) {
+				user_nipg = cookies[i].getValue ();
+			} else if (c_name.equalsIgnoreCase ("user.name")) {
+				user_name = cookies[i].getValue ();
+			} else if (c_name.equalsIgnoreCase ("user.email")) {
+				user_email = cookies[i].getValue ();
+			}
+		}
+	}
 
 	int			dml		= Integer.parseInt(request.getParameter("dml_type"));
 	String		id_stop	= request.getParameter("id_stop");
@@ -152,7 +173,7 @@ try {
 			+" ,'"+ unsafe +"'"
 			+" ,'"+ st_aktif +"'"
 			+" ,"+ status
-			+" ,'"+ id_user +"'"
+			+" ,'"+ user_nipg +"'"
 			+" from		r_pegawai	A"
 			+" ,		r_seksi		B"
 			+" where	A.nipg		= '"+ nipg +"'"
@@ -183,7 +204,7 @@ try {
 			+" , tindakan_aman_diamati	= '"+ safe +"'"
 			+" , tindakan_tidak_aman_diamati= '"+ unsafe +"'"
 			+" , status_aktif		=  "+ st_aktif
-			+" , id_user			= '"+ id_user +"'"
+			+" , id_user			= '"+ user_nipg +"'"
 			+" , tanggal_akses		= getdate() "
 			+" where id_stop		=  "+ id_stop;
 		break;
@@ -226,7 +247,7 @@ try {
 				+", "+ o.getString("detail_id")
 				+", "+ o.getString("safe")
 				+", "+ o.getString("unsafe")
-				+",'"+ id_user +"' ";
+				+",'"+ user_nipg +"' ";
 
 			if (i < (l - 1)) {
 				q += " union all ";
@@ -242,7 +263,7 @@ try {
 			q	+=" update	t_stop_detail "
 				+ " set		jumlah_safe	= "+ o.getString("safe")
 				+ " ,		jumlah_unsafe	= "+ o.getString("unsafe")
-				+ " ,		id_user		= '"+ id_user +"' "
+				+ " ,		id_user		= '"+ user_nipg +"' "
 				+ " ,		tanggal_akses	= getdate() "
 				+ " where	id_kel_tipe_observasi		= "+ o.getString("kel_id")
 				+ " and		id_tipe_observasi		= "+ o.getString("tipe_id")
@@ -256,7 +277,7 @@ try {
 	db_stmt.executeUpdate(q);
 
 	q	="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ session.getAttribute("user.nipg") +"','"
+		+ user_nipg +"','"
 		+ session.getAttribute("menu.id") +"','"+ dml +"')";
 
 	db_stmt.executeUpdate(q);
@@ -264,8 +285,11 @@ try {
 /*
  * send email notification if enabled.
  */
-	if (user_email.equals("") || dml != 2) {
-		out.print("{success:true, info:'Data telah tersimpan.'}");
+	if (user_email == null
+    || (user_email != null && user_email.equals(""))
+	|| dml != 2) {
+		out.print("{success:true, info:'Data telah tersimpan.'"
+				+", user_email:'"+ user_email +"'}");
 		return;
 	}
 
@@ -275,7 +299,6 @@ try {
 	+" ,		email_use_auth"
 	+" ,		email_username"
 	+" ,		email_password"
-	+" ,		email_stop_notif_active"
 	+" ,		email_stop_sender"
 	+" ,		email_stop_subject"
 	+" ,		email_stop_content"
@@ -285,11 +308,12 @@ try {
 	ResultSet rs = db_stmt.executeQuery(q);
 
 	if (!rs.next()) {
-		out.print("{success:true, info:'Data telah tersimpan.'}");
+		out.print("{success:true, info:'Data telah tersimpan.'"
+				+", message:'Failed to get server email'}");
 		return;
 	}
 
-	String email_server		= rs.getString("email_server");
+	String email_server			= rs.getString("email_server");
 	String email_server_port	= rs.getString("email_server_port");
 	String email_use_auth		= rs.getString("email_use_auth");
 	String email_username		= rs.getString("email_username");
@@ -303,7 +327,9 @@ try {
 
 	if (email_server == null || email_server.equals("")
 	||  email_server_port == null || email_server_port.equals("")) {
-		out.print("{success:true, info:'Data telah tersimpan.'}");
+		out.print("{success:true, info:'Data telah tersimpan.'"
+				+", email_server:'"+ email_server +"'"
+				+", email_port:"+ email_server_port +"}");
 		return;
 	}
 
@@ -339,7 +365,8 @@ try {
 		Transport.send(msg);
 	}
 
-	out.print("{success:true, info:'Data telah tersimpan.'}");
+	out.print("{success:true, info:'Data telah tersimpan.'"
+			+", message:'Notifikasi email telah dikirim.'}");
 } catch (Exception e) {
 	out.print("{success:false, info:'"+ e.toString().replace("'","\\'") +"'}");
 }
