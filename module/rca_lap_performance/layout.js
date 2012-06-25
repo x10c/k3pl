@@ -15,15 +15,17 @@ var m_rca_lap_performance_d = _g_root +'/module/rca_lap_performance/';
  */
 function M_RCALapPerfForm(grid, displayBulan)
 {
+	this.id_dir		= 0;
+	this.id_div		= 0;
 	this.id_dep		= 0;
-	this.id_dinas		= 0;
-	this.id_seksi		= 0;
-	this.ref_grid		= grid;
+	this.id_dinas	= 0;
+	this.id_seksi	= 0;
+	this.ref_grid	= grid;
 
 	this.set_org = new k3pl.form.SetOrganisasi({
-			itemAll		:true
-		,	scope		:this
-		,	onCheckClick	:function() {
+			itemAll			: true
+		,	scope			: this
+		,	onCheckClick	: function() {
 				this.scope.set_checked()
 			}
 		});
@@ -47,7 +49,9 @@ function M_RCALapPerfForm(grid, displayBulan)
 			scope	: this
 		,	click	: function(btn, e) {
 				this.ref_grid.do_load(
-						this.set_org.formDepartemen.getValue()
+						this.set_org.formDirektorat.getValue()
+					,	this.set_org.formDivProSBU.getValue()
+					,	this.set_org.formDepartemen.getValue()
 					,	this.set_org.formDinas.getValue()
 					,	this.set_org.formSeksi.getValue()
 					,	this.set_wil.formWilayah.getValue()
@@ -62,10 +66,11 @@ function M_RCALapPerfForm(grid, displayBulan)
 
 	this.panel = new Ext.form.FormPanel({
 		frame		: true
-	,	width		: 450
+	,	width		: 500
 	,	autoHeight	: true
 	,	autoScroll	: true
 	,	labelAlign	: 'right'
+	,	labelWidth	: 150
 	,	items		: [
 			this.set_org
 		,	this.set_wil
@@ -149,10 +154,12 @@ function M_RCALapRCAGrid()
 	this.store = new Ext.data.ArrayStore({
 			fields	: [
 				'item'
+			,	'partisipan'
 			,	'total_part_percent'
 			,	'violation'
 			,	'temuan'
 			,	'severity'
+			,	'jml_tl_temuan'
 			,	'tl_temuan'
 			,	'avg'
 			]
@@ -170,21 +177,28 @@ function M_RCALapRCAGrid()
 		,	width		: 200
 		,	css			: 'font-weight: bold;'
 		},{
+			header		: 'Partisipan'
+		,	dataIndex	: 'partisipan'
+		,	css			: 'background-color: #f0f0f0;'
+		},{
 			header		: '% Partisipasi'
 		,	dataIndex	: 'total_part_percent'
 		,	format		: '000.00%'
-		,	css			: 'background-color: #f0f0f0;'
 		},{
 			header		: 'Violation'
 		,	dataIndex	: 'violation'
+		,	css			: 'background-color: #f0f0f0;'
 		},{
 			header		: 'Temuan Kumulatif 4/5'
 		,	dataIndex	: 'temuan'
-		,	css			: 'background-color: #f0f0f0;'
 		},{
 			header		: '% Severity 4/5'
 		,	dataIndex	: 'severity'
 		,	format		: '000.00%'
+		,	css			: 'background-color: #f0f0f0;'
+		},{
+			header		: 'Jml Tindak Lanjut Temuan 4/5'
+		,	dataIndex	: 'jml_tl_temuan'
 		},{
 			header		: '% Tindak Lanjut Temuan 4/5'
 		,	dataIndex	: 'tl_temuan'
@@ -220,13 +234,15 @@ function M_RCALapRCAGrid()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah, id_area
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah
@@ -254,7 +270,7 @@ function M_RCALapperformance()
 
 	this.panel = new Ext.Panel({
 		id			: 'rca_lap_performance_panel'
-	,	title		: 'Laporan performance RCA'
+	,	title		: 'Laporan Performance RCA'
 	,	padding		: '6'
 	,	autoScroll	: true
 	,	defaults	: {

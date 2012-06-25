@@ -41,6 +41,8 @@ try {
 	String		id, name;
 
 	String		is_in_org	= request.getParameter("is_in_org");
+	String		id_dir		= request.getParameter("id_dir");
+	String		id_div		= request.getParameter("id_div");
 	String		id_dep		= request.getParameter("id_dep");
 	String		id_dinas	= request.getParameter("id_dinas");
 	String		id_seksi	= request.getParameter("id_seksi");
@@ -164,8 +166,8 @@ try {
 	q_tl_temuan	+= q_nipg3;
 	q_avg		+= q_nipg3;
 
+	/* query by organisasi */
 	if (is_in_org.equals("1")) {
-		/* query by organisasi */
 		if (!id_seksi.equals("0")) {
 			/* select partisipasi by single seksi */
 			q_where	=" and A.id_seksi = ";
@@ -173,37 +175,48 @@ try {
 			q_org	=" select	id_seksi	as id"
 					+" ,		nama_seksi	as name"
 					+" from		r_seksi"
-					+" where	id_seksi = "+ id_seksi;
+					+" where	id_seksi = "+ id_area;
+		} else if (!id_dinas.equals("0")) {
+			/* select all seksi in one dinas */
+			q_where	=" and A.id_seksi = ";
+
+			q_org	=" select	id_seksi	as id"
+					+" ,		nama_seksi	as name"
+					+" from		r_seksi"
+					+" where	id_dinas = "+ id_dinas;
+		} else if (!id_dep.equals("0")) {
+			/* select all dinas in one departement */
+			q_where =" and A.id_dinas = ";
+
+			q_org	=" select	id_dinas	as id"
+					+" ,		nama_dinas	as name"
+					+" from		r_dinas"
+					+" where	id_departemen = "+ id_dep;
+		} else if (!id_div.equals ("0")) {
+			/* select all departement */
+			q_where =" and A.id_departemen = ";
+
+			q_org	=" select	id_departemen	as id"
+					+" ,		nama_departemen	as name"
+					+" from		r_departemen"
+					+" where	id_divprosbu = "+ id_div;
+		} else if (!id_dir.equals ("0")) {
+			/* select all divisi */
+			q_where =" and A.id_divprosbu = ";
+
+			q_org	=" select	id_divprosbu	as id"
+					+" ,		nama_divprosbu	as name"
+					+" from		r_divprosbu"
+					+" where	id_direktorat = "+ id_dir;
 		} else {
-			if (!id_dinas.equals("0")) {
-				/* select all seksi in one dinas */
-				q_where	=" and A.id_seksi = ";
+			/* select all direktorat */
+			q_where =" and A.id_direktorat = ";
 
-				q_org	=" select	id_seksi	as id"
-						+" ,		nama_seksi	as name"
-						+" from		r_seksi"
-						+" where	id_dinas = "+ id_dinas;
-			} else {
-				if (!id_dep.equals("0")) {
-					/* select all dinas in one departement */
-					q_where =" and A.id_dinas = ";
-
-					q_org	=" select	id_dinas	as id"
-							+" ,		nama_dinas	as name"
-							+" from		r_dinas"
-							+" where	id_departemen = "+ id_dep;
-				} else {
-					/* select all departement */
-					q_where =" and A.id_departemen = ";
-
-					q_org	=" select	id_departemen	as id"
-							+" ,		nama_departemen	as name"
-							+" from		r_departemen";
-				}
-			}
+			q_org	=" select	id_direktorat	as id"
+					+" ,		nama_direktorat	as name"
+					+" from		r_direktorat";
 		}
-	} else {
-		/* query by wilayah/area */
+	} else { /* query by wilayah/area */
 		if (!id_area.equals("0")) {
 			/* select partisipasi by single area */
 			q_where	=" and A.id_seksi = ";
@@ -240,12 +253,14 @@ try {
 		id		= rs_org.getString("id");
 		name	= rs_org.getString("name");
 
-		q	=" select	round((P.total_part"
+		q	=" select	P.total_part as partisipan"
+			+" ,		round((P.total_part"
 			+"			/ cast(isnull(nullif(T.target,0),1) as float))"
 			+"			* 100, 2, 1)		as total_part_percent"
 			+" ,		V.violation"
 			+" ,		TEMUAN.temuan"
 			+" ,		SEV.severity"
+			+" ,		TL_TEMUAN.temuan as jml_tl_temuan"
 			+" ,		round((TL_TEMUAN.temuan / (case GET_TEMUAN.jml when 0 then 1.00 else GET_TEMUAN.jml * 1.00 end)), 2, 1) as tl_temuan"
 			+" ,		AVERAGE.average"
 			+" from ("+ q_target	+ q_where + id +")) T"
@@ -266,10 +281,12 @@ try {
 				i = 1;
 			}
 			data	+="[\""+ name +"\""
+					+ ","+ rs.getString("partisipan")
 					+ ","+ rs.getString("total_part_percent")
 					+ ","+ rs.getString("violation")
 					+ ","+ rs.getString("temuan")
 					+ ","+ rs.getString("severity")
+					+ ","+ rs.getString("jml_tl_temuan")
 					+ ","+ rs.getString("tl_temuan")
 					+ ","+ rs.getString("average")
 					+ "]";
