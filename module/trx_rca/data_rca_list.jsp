@@ -15,9 +15,10 @@ try {
 		return;
 	}
 
-	Statement	db_stmt 	= db_con.createStatement();
-	String		load_type	= (String) request.getParameter("load_type");
-	String		nipg		= (String) session.getAttribute("user.nipg");
+	Statement	db_stmt 		= db_con.createStatement();
+	String		load_type		= (String) request.getParameter("load_type");
+	String		nipg			= (String) session.getAttribute("user.nipg");
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
 	
 	String q=" select	a.id_rca "
 		+" ,		replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
@@ -45,6 +46,7 @@ try {
 
 		if (load_type.equals("all")) {
 			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)";
+			q+=" and	a.auditor_divprosbu = "+ id_divprosbu;
 		}
 
 		q+=" order by	a.tanggal_rca desc ";

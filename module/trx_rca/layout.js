@@ -25,7 +25,19 @@ var m_trx_rca_store_auditor = new Ext.data.ArrayStore({
 
 var m_trx_rca_store_penanggung_jawab = new Ext.data.ArrayStore({
 		url			: m_trx_rca_dir +'data_ref_penanggung_jawab.jsp'
-	,	fields		: ['id_seksi','id_dinas','id_departemen','nama_seksi','kepala_seksi']
+	,	fields		: ['id_seksi','id_dinas','id_departemen','id_divprosbu','id_direktorat','nama_seksi','kepala_seksi']
+	,	autoLoad	: false
+});
+
+var m_trx_rca_store_direktorat = new Ext.data.ArrayStore({
+		fields		: ['id_direktorat', 'nama_direktorat']
+	,	url			: m_trx_rca_dir + 'data_ref_direktorat.jsp'
+	,	autoLoad	: false
+});
+
+var m_trx_rca_store_divprosbu = new Ext.data.ArrayStore({
+		fields		: ['id_divprosbu', 'nama_divprosbu']
+	,	url			: m_trx_rca_dir + 'data_ref_divprosbu.jsp'
 	,	autoLoad	: false
 });
 
@@ -42,7 +54,7 @@ var m_trx_rca_store_dinas = new Ext.data.ArrayStore({
 });
 
 var m_trx_rca_store_seksi = new Ext.data.ArrayStore({
-		fields		: ['id_seksi', 'id_dinas', 'id_departemen', 'nama_seksi']
+		fields		: ['id_seksi', 'id_dinas', 'id_departemen', 'id_divprosbu', 'id_direktorat', 'nama_seksi']
 	,	url			: m_trx_rca_dir + 'data_ref_seksi.jsp'
 	,	autoLoad	: false
 });
@@ -1237,9 +1249,13 @@ function M_TrxRCAAdd()
 {
 	this.dml_type		= 2;
 	this.id_rca			= '';
+	this.id_direktorat	= '0';
+	this.id_divprosbu	= '0';
 	this.id_departemen	= '0';
 	this.id_dinas		= '0';
 	this.id_seksi		= '0';
+	this.direktorat		= '0';
+	this.divprosbu		= '0';
 	this.departemen		= '0';
 	this.dinas			= '0';
 	this.seksi			= '0';
@@ -1265,10 +1281,14 @@ function M_TrxRCAAdd()
 		this.id_seksi 		= record.get('id_seksi');
 		this.id_dinas 		= record.get('id_dinas');
 		this.id_departemen 	= record.get('id_departemen');
+		this.id_divprosbu 	= record.get('id_divprosbu');
+		this.id_direktorat 	= record.get('id_direktorat');
 
 		if (this.id_seksi != 'undefined' && this.id_seksi != '') {
 			this.form_dinas_auditor.setValue(this.id_dinas);
 			this.form_departemen_auditor.setValue(this.id_departemen);
+			this.form_divprosbu_auditor.setValue(this.id_divprosbu);
+			this.form_direktorat_auditor.setValue(this.id_direktorat);
 		}
 		
 		m_trx_rca_store_auditor.removeAll();
@@ -1362,6 +1382,8 @@ function M_TrxRCAAdd()
 		this.seksi		= record.get('id_seksi');
 		this.dinas 		= record.get('id_dinas');
 		this.departemen = record.get('id_departemen');
+		this.divprosbu	= record.get('id_divprosbu');
+		this.direktorat = record.get('id_direktorat');
 		this.pic		= record.get('kepala_seksi');
 	}
 
@@ -1372,6 +1394,38 @@ function M_TrxRCAAdd()
 		,	editable	: false
 		,	allowBlank	: false
 		,	width		: 150
+	});
+
+	this.form_direktorat_auditor = new Ext.form.ComboBox({
+			fieldLabel		: 'Direktorat'
+		,	store			: m_trx_rca_store_direktorat
+		,	valueField		: 'id_direktorat'
+		,	displayField	: 'nama_direktorat'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	forceSelection	: true
+		,	typeAhead		: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		,	disabled		: true
+		,	hidden			: true
+		,	width			: 300
+	});
+
+	this.form_divprosbu_auditor = new Ext.form.ComboBox({
+			fieldLabel		: 'DivProSBU'
+		,	store			: m_trx_rca_store_divprosbu
+		,	valueField		: 'id_divprosbu'
+		,	displayField	: 'nama_divprosbu'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	forceSelection	: true
+		,	typeAhead		: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		,	disabled		: true
+		,	hidden			: true
+		,	width			: 300
 	});
 
 	this.form_departemen_auditor = new Ext.form.ComboBox({
@@ -1738,6 +1792,8 @@ function M_TrxRCAAdd()
 
 	this.do_load = function()
 	{
+		m_trx_rca_store_direktorat.load();
+		m_trx_rca_store_divprosbu.load();
 		m_trx_rca_store_departemen.load();
 		m_trx_rca_store_dinas.load();
 		m_trx_rca_store_seksi.load();
@@ -1760,6 +1816,14 @@ function M_TrxRCAAdd()
 		}
 		
 		if (!this.form_departemen_auditor.isValid()) {
+			return false;
+		}
+		
+		if (!this.form_divprosbu_auditor.isValid()) {
+			return false;
+		}
+		
+		if (!this.form_direktorat_auditor.isValid()) {
 			return false;
 		}
 
@@ -1797,6 +1861,8 @@ function M_TrxRCAAdd()
 		this.form_satuan_kerja_auditor.setValue('');
 		this.form_dinas_auditor.setValue('');
 		this.form_departemen_auditor.setValue('');
+		this.form_divprosbu_auditor.setValue('');
+		this.form_direktorat_auditor.setValue('');
 		this.form_nama_auditor_1.setValue('');
 		this.form_nama_auditor_1.setDisabled(true);
 		this.form_nama_auditor_2.setValue('');
@@ -1848,6 +1914,14 @@ function M_TrxRCAAdd()
 	
 	this.do_save = function()
 	{
+		if (this.pic == undefined || this.pic == 'undefined'
+		|| this.pic == 'null' || this.pic == '')
+		{
+			Ext.MessageBox.alert('Kesalahan', 'Area pada Penanggung Jawab belum memiliki Kepala Seksi!<br/>'
+			+' Tambah/ubah data pegawai dengan jabatan Kepala Seksi pada Area bersangkutan.' );
+			return;
+		}
+
 		if (!this.is_valid()) {
 			Ext.MessageBox.alert('Kesalahan', 'Form belum terisi dengan benar!');
 			return;
@@ -1963,10 +2037,14 @@ function M_TrxRCAAdd()
 				dml_type					: this.dml_type
 			,	id_rca						: this.id_rca
 			,	tanggal_rca					: this.form_tanggal_rca.getValue()
+			,	auditor_direktorat			: this.form_direktorat_auditor.getValue()
+			,	auditor_divprosbu			: this.form_divprosbu_auditor.getValue()
 			,	auditor_departemen			: this.form_departemen_auditor.getValue()
 			,	auditor_dinas				: this.form_dinas_auditor.getValue()
 			,	auditor_seksi				: this.form_satuan_kerja_auditor.getValue()
 			,	nama_tempat_rca				: this.form_nama_tempat_rca.getValue()
+			,	penanggung_jawab_direktorat	: this.direktorat
+			,	penanggung_jawab_divprosbu	: this.divprosbu
 			,	penanggung_jawab_departemen	: this.departemen
 			,	penanggung_jawab_dinas		: this.dinas
 			,	penanggung_jawab_seksi		: this.form_penanggung_jawab.getValue()
@@ -2055,9 +2133,13 @@ function M_TrxRCAAdd()
 function M_TrxRCAEdit()
 {
 	this.dml_type		= 3;
+	this.id_direktorat	= '0';
+	this.id_divprosbu	= '0';
 	this.id_departemen	= '0';
 	this.id_dinas		= '0';
 	this.id_seksi		= '0';
+	this.direktorat		= '0';
+	this.divprosbu		= '0';
 	this.departemen		= '0';
 	this.dinas			= '0';
 	this.seksi			= '0';
@@ -2088,10 +2170,14 @@ function M_TrxRCAEdit()
 		this.id_seksi 		= record.get('id_seksi');
 		this.id_dinas 		= record.get('id_dinas');
 		this.id_departemen 	= record.get('id_departemen');
+		this.id_divprosbu 	= record.get('id_divprosbu');
+		this.id_direktorat 	= record.get('id_direktorat');
 
 		if (this.id_seksi != 'undefined' && this.id_seksi != '') {
 			this.form_dinas_auditor.setValue(this.id_dinas);
 			this.form_departemen_auditor.setValue(this.id_departemen);
+			this.form_divprosbu_auditor.setValue(this.id_divprosbu);
+			this.form_direktorat_auditor.setValue(this.id_direktorat);
 		}
 		
 		m_trx_rca_store_auditor.removeAll();
@@ -2185,6 +2271,8 @@ function M_TrxRCAEdit()
 		this.seksi		= record.get('id_seksi');
 		this.dinas 		= record.get('id_dinas');
 		this.departemen = record.get('id_departemen');
+		this.divprosbu 	= record.get('id_divprosbu');
+		this.direktorat = record.get('id_direktorat');
 		this.pic		= record.get('kepala_seksi');
 	}
 
@@ -2195,6 +2283,36 @@ function M_TrxRCAEdit()
 		,	editable	: false
 		,	allowBlank	: false
 		,	width		: 150
+	});
+
+	this.form_direktorat_auditor = new Ext.form.ComboBox({
+			fieldLabel		: 'Direktorat'
+		,	store			: m_trx_rca_store_direktorat
+		,	valueField		: 'id_direktorat'
+		,	displayField	: 'nama_direktorat'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	forceSelection	: true
+		,	typeAhead		: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		,	disabled		: true
+		,	width			: 300
+	});
+
+	this.form_divprosbu_auditor = new Ext.form.ComboBox({
+			fieldLabel		: 'DivProSBU'
+		,	store			: m_trx_rca_store_divprosbu
+		,	valueField		: 'id_divprosbu'
+		,	displayField	: 'nama_divprosbu'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	forceSelection	: true
+		,	typeAhead		: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		,	disabled		: true
+		,	width			: 300
 	});
 
 	this.form_departemen_auditor = new Ext.form.ComboBox({
@@ -2559,6 +2677,8 @@ function M_TrxRCAEdit()
 
 	this.do_load = function()
 	{
+		m_trx_rca_store_direktorat.load();
+		m_trx_rca_store_divprosbu.load();
 		m_trx_rca_store_departemen.load();
 		m_trx_rca_store_dinas.load();
 		m_trx_rca_store_seksi.load();
@@ -2597,6 +2717,14 @@ function M_TrxRCAEdit()
 		}
 		
 		if (!this.form_departemen_auditor.isValid()) {
+			return false;
+		}
+
+		if (!this.form_divprosbu_auditor.isValid()) {
+			return false;
+		}
+
+		if (!this.form_direktorat_auditor.isValid()) {
 			return false;
 		}
 
@@ -2717,10 +2845,14 @@ function M_TrxRCAEdit()
 				dml_type					: this.dml_type
 			,	id_rca						: this.id_rca
 			,	tanggal_rca					: this.form_tanggal_rca.getValue()
+			,	auditor_direktorat			: this.form_direktorat_auditor.getValue()
+			,	auditor_divprosbu			: this.form_divprosbu_auditor.getValue()
 			,	auditor_departemen			: this.form_departemen_auditor.getValue()
 			,	auditor_dinas				: this.form_dinas_auditor.getValue()
 			,	auditor_seksi				: this.form_satuan_kerja_auditor.getValue()
 			,	nama_tempat_rca				: this.form_nama_tempat_rca.getValue()
+			,	penanggung_jawab_direktorat	: this.direktorat
+			,	penanggung_jawab_divprosbu	: this.divprosbu
 			,	penanggung_jawab_departemen	: this.departemen
 			,	penanggung_jawab_dinas		: this.dinas
 			,	penanggung_jawab_seksi		: this.form_penanggung_jawab.getValue()
@@ -2761,10 +2893,14 @@ function M_TrxRCAEdit()
 		this.form_satuan_kerja_auditor.setValue(data.auditor_seksi);
 		this.form_dinas_auditor.setValue(data.auditor_dinas);
 		this.form_departemen_auditor.setValue(data.auditor_departemen);
+		this.form_divprosbu_auditor.setValue(data.auditor_divprosbu);
+		this.form_direktorat_auditor.setValue(data.auditor_direktorat);
 		this.form_nama_tempat_rca.setValue(data.nama_tempat_rca);
 		this.form_penanggung_jawab.setValue(data.penanggung_jawab_seksi);
 		this.dinas = data.penanggung_jawab_dinas;
 		this.departemen = data.penanggung_jawab_departemen;
+		this.divprosbu = data.penanggung_jawab_divprosbu;
+		this.direktorat = data.penanggung_jawab_direktorat;
 		this.pic = data.penanggung_jawab_nipg;
 		this.form_waktu_audit.setValue(data.waktu_audit);
 		this.form_lama_audit.setValue(data.lama_audit);
@@ -2824,6 +2960,8 @@ function M_TrxRCAEdit()
 			this.form_satuan_kerja_auditor.setDisabled(true);
 			this.form_dinas_auditor.setDisabled(true);
 			this.form_departemen_auditor.setDisabled(true);
+			this.form_divprosbu_auditor.setDisabled(true);
+			this.form_direktorat_auditor.setDisabled(true);
 			this.form_nama_tempat_rca.setDisabled(true);
 			this.form_penanggung_jawab.setDisabled(true);
 			this.form_nama_auditor_1.setDisabled(true);
@@ -2863,6 +3001,8 @@ function M_TrxRCAEdit()
 			this.form_satuan_kerja_auditor.setDisabled(false);
 			this.form_dinas_auditor.setDisabled(false);
 			this.form_departemen_auditor.setDisabled(false);
+			this.form_divprosbu_auditor.setDisabled(false);
+			this.form_direktorat_auditor.setDisabled(false);
 			this.form_nama_tempat_rca.setDisabled(false);
 			this.form_penanggung_jawab.setDisabled(false);
 			this.form_nama_auditor_1.setDisabled(false);
@@ -3125,10 +3265,14 @@ function M_TrxRCAList()
 				dml_type					: 4
 			,	id_rca						: data.get('id_rca')
 			,	tanggal_rca					: ''
+			,	auditor_direktorat			: ''
+			,	auditor_divprosbu			: ''
 			,	auditor_departemen			: ''
 			,	auditor_dinas				: ''
 			,	auditor_seksi				: ''
 			,	nama_tempat_rca				: ''
+			,	penanggung_jawab_direktorat	: ''
+			,	penanggung_jawab_divprosbu	: ''
 			,	penanggung_jawab_departemen	: ''
 			,	penanggung_jawab_dinas		: ''
 			,	penanggung_jawab_seksi		: ''

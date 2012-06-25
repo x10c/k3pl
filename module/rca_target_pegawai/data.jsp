@@ -17,11 +17,12 @@ try {
 		return;
 	}
 
-	Statement	db_stmt	= db_con.createStatement();
-	String		year	= (String) request.getParameter("year");
-	String		data	= "{rows:[";
-	ResultSet	rs		= null;
-	int			i		= 0;
+	Statement	db_stmt			= db_con.createStatement();
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
+	String		year			= (String) request.getParameter("year");
+	String		data			= "{rows:[";
+	ResultSet	rs				= null;
+	int			i				= 0;
 
 	if (year == null || year.isEmpty()) {
 		data += "]}";
@@ -51,6 +52,7 @@ try {
 		+"	and	A.year		= "+ year
 		+" where	C.id_grup	= 5"
 		+" and		C.nipg		= B.nipg"
+		+" and		B.id_divprosbu	= "+ id_divprosbu
 		+" order by B.nama_pegawai";
 
 	rs = db_stmt.executeQuery(q);

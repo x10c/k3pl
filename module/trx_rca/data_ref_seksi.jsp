@@ -15,14 +15,18 @@ try {
 		return;
 	}
 
-	Statement	db_stmt		= db_con.createStatement();
+	Statement	db_stmt			= db_con.createStatement();
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
 
 	String	q	=" select	id_seksi "
-			+" ,		id_dinas "
-			+" ,		id_departemen "
-			+" ,		nama_seksi "
-			+" from		r_seksi "
-			+" order by	nama_seksi ";
+				+" ,		id_dinas "
+				+" ,		id_departemen "
+				+" ,		id_divprosbu "
+				+" ,		id_direktorat "
+				+" ,		nama_seksi "
+				+" from		r_seksi "
+				+" where	id_divprosbu = " + id_divprosbu
+				+" order by	nama_seksi ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;
@@ -35,10 +39,12 @@ try {
 			i++;
 		}
 		data	+= "[ '"+ rs.getString("id_seksi") +"' "
-			+  ", '"+ rs.getString("id_dinas") +"' "
-			+  ", '"+ rs.getString("id_departemen") +"' "
-			+  ", '"+ rs.getString("nama_seksi") +"' "
-			+  "]";
+				+  ", '"+ rs.getString("id_dinas") +"' "
+				+  ", '"+ rs.getString("id_departemen") +"' "
+				+  ", '"+ rs.getString("id_divprosbu") +"' "
+				+  ", '"+ rs.getString("id_direktorat") +"' "
+				+  ", '"+ rs.getString("nama_seksi") +"' "
+				+  "]";
 	}
 
 	data += "]";

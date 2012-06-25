@@ -24,10 +24,14 @@ try {
 	int		i	= 0;
 
 	q=" select	replace(convert(varchar, tanggal_rca, 111), '/', '-') tanggal_rca "
+	+" ,		auditor_direktorat "
+	+" ,		auditor_divprosbu "
 	+" ,		auditor_departemen "
 	+" ,		auditor_dinas "
 	+" ,		auditor_seksi "
 	+" ,		nama_tempat_rca "
+	+" ,		penanggung_jawab_direktorat "
+	+" ,		penanggung_jawab_divprosbu "
 	+" ,		penanggung_jawab_departemen "
 	+" ,		penanggung_jawab_dinas "
 	+" ,		penanggung_jawab_seksi "
@@ -48,10 +52,14 @@ try {
 
 	data	="{  id_rca	: '"+ id_rca
 		+"', tanggal_rca	: '"+ rs.getString("tanggal_rca")
+		+"', auditor_direktorat	: '"+ rs.getString("auditor_direktorat")
+		+"', auditor_divprosbu	: '"+ rs.getString("auditor_divprosbu")
 		+"', auditor_departemen	: '"+ rs.getString("auditor_departemen")
 		+"', auditor_dinas : '"+ rs.getString("auditor_dinas")
 		+"', auditor_seksi : '"+ rs.getString("auditor_seksi")
 		+"', nama_tempat_rca : '"+ rs.getString("nama_tempat_rca")
+		+"', penanggung_jawab_direktorat : '"+ rs.getString("penanggung_jawab_direktorat")
+		+"', penanggung_jawab_divprosbu : '"+ rs.getString("penanggung_jawab_divprosbu")
 		+"', penanggung_jawab_departemen : '"+ rs.getString("penanggung_jawab_departemen")
 		+"', penanggung_jawab_dinas	: '"+ rs.getString("penanggung_jawab_dinas")
 		+"', penanggung_jawab_seksi	: '"+ rs.getString("penanggung_jawab_seksi")

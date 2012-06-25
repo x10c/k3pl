@@ -26,10 +26,14 @@ try {
 	int			dml							= Integer.parseInt(request.getParameter("dml_type"));
 	String		id_rca						= request.getParameter("id_rca");
 	String		tanggal_rca					= request.getParameter("tanggal_rca");
+	String		auditor_direktorat			= request.getParameter("auditor_direktorat");
+	String		auditor_divprosbu			= request.getParameter("auditor_divprosbu");
 	String		auditor_departemen			= request.getParameter("auditor_departemen");
 	String		auditor_dinas				= request.getParameter("auditor_dinas");
 	String		auditor_seksi				= request.getParameter("auditor_seksi");
 	String		nama_tempat_rca				= request.getParameter("nama_tempat_rca");
+	String		penanggung_jawab_direktorat	= request.getParameter("penanggung_jawab_direktorat");
+	String		penanggung_jawab_divprosbu	= request.getParameter("penanggung_jawab_divprosbu");
 	String		penanggung_jawab_departemen	= request.getParameter("penanggung_jawab_departemen");
 	String		penanggung_jawab_dinas		= request.getParameter("penanggung_jawab_dinas");
 	String		penanggung_jawab_seksi		= request.getParameter("penanggung_jawab_seksi");
@@ -61,11 +65,11 @@ try {
 	case 2:
 		id_rca	= Long.toString(date.getTime());
 
-		q	=" insert into t_rca (id_rca, tanggal_rca, auditor_departemen, auditor_dinas, auditor_seksi,"
-			+" nama_tempat_rca, penanggung_jawab_departemen, penanggung_jawab_dinas, penanggung_jawab_seksi,"
+		q	=" insert into t_rca (id_rca, tanggal_rca, auditor_direktorat, auditor_divprosbu, auditor_departemen, auditor_dinas, auditor_seksi,"
+			+" nama_tempat_rca, penanggung_jawab_direktorat, penanggung_jawab_divprosbu, penanggung_jawab_departemen, penanggung_jawab_dinas, penanggung_jawab_seksi,"
 			+" penanggung_jawab_nipg, waktu_audit, lama_audit, cuaca, id_user)"
-			+" values ("+ id_rca +" ,'"+ tanggal_rca +"' ,"+ auditor_departemen +" ,"+ auditor_dinas +" ,"+ auditor_seksi +" ,"
-			+" '"+ nama_tempat_rca +"' ,"+ penanggung_jawab_departemen +" ,"+ penanggung_jawab_dinas +" ,"+ penanggung_jawab_seksi +" ,"
+			+" values ("+ id_rca +" ,'"+ tanggal_rca +"' ,"+ auditor_direktorat +" ,"+ auditor_divprosbu +" ,"+ auditor_departemen +" ,"+ auditor_dinas +" ,"+ auditor_seksi +" ,"
+			+" '"+ nama_tempat_rca +"' ,"+ penanggung_jawab_direktorat +" ,"+ penanggung_jawab_divprosbu +" ,"+ penanggung_jawab_departemen +" ,"+ penanggung_jawab_dinas +" ,"+ penanggung_jawab_seksi +" ,"
 			+" '"+ penanggung_jawab_nipg + "' ,'"+ waktu_audit +"' ,"+ lama_audit +" ,'"+ cuaca +"' ,'"+ id_user + "')";
 
 		l = auditor.length();
@@ -167,10 +171,14 @@ try {
 		q	=" update t_rca "
 			+" set "
 			+"   tanggal_rca					= cast('"+ tanggal_rca +"' as datetime) "
+			+" , auditor_direktorat				= "+ auditor_direktorat +" "
+			+" , auditor_divprosbu				= "+ auditor_divprosbu +" "
 			+" , auditor_departemen				= "+ auditor_departemen +" "
 			+" , auditor_dinas					= "+ auditor_dinas +" "
 			+" , auditor_seksi					= "+ auditor_seksi +" "
 			+" , nama_tempat_rca				= '"+ nama_tempat_rca +"' "
+			+" , penanggung_jawab_direktorat	= "+ penanggung_jawab_direktorat +" "
+			+" , penanggung_jawab_divprosbu		= "+ penanggung_jawab_divprosbu +" "
 			+" , penanggung_jawab_departemen	= "+ penanggung_jawab_departemen +" "
 			+" , penanggung_jawab_dinas			= "+ penanggung_jawab_dinas +" "
 			+" , penanggung_jawab_seksi			= "+ penanggung_jawab_seksi +" "

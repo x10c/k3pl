@@ -1,5 +1,5 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
@@ -17,10 +17,10 @@ try {
 
 	Statement	db_stmt		= db_con.createStatement();
 
-	String	q	=" select	id_dinas "
-				+" ,		nama_dinas "
-				+" from		r_dinas "
-				+" order by	id_direktorat, id_divprosbu, id_departemen, id_dinas ";
+	String	q	=" select	id_direktorat "
+				+" ,		nama_direktorat "
+				+" from		r_direktorat "
+				+" order by	id_direktorat ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;
@@ -32,8 +32,8 @@ try {
 		} else {
 			i++;
 		}
-		data	+= "[ '"+ rs.getString("id_dinas") +"' "
-				+  ", '"+ rs.getString("nama_dinas") +"' "
+		data	+= "[ '"+ rs.getString("id_direktorat") +"' "
+				+  ", '"+ rs.getString("nama_direktorat") +"' "
 				+  "]";
 	}
 

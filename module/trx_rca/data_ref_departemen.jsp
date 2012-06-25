@@ -18,9 +18,9 @@ try {
 	Statement	db_stmt		= db_con.createStatement();
 
 	String	q	=" select	id_departemen "
-			+" ,		nama_departemen "
-			+" from		r_departemen "
-			+" order by	id_departemen ";
+				+" ,		nama_departemen "
+				+" from		r_departemen "
+				+" order by	id_direktorat, id_divprosbu, id_departemen ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;
@@ -33,8 +33,8 @@ try {
 			i++;
 		}
 		data	+= "[ '"+ rs.getString("id_departemen") +"' "
-			+  ", '"+ rs.getString("nama_departemen") +"' "
-			+  "]";
+				+  ", '"+ rs.getString("nama_departemen") +"' "
+				+  "]";
 	}
 
 	data += "]";
