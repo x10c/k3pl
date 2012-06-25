@@ -35,6 +35,8 @@ try {
 	String		id, name;
 
 	String		is_in_org	= request.getParameter("is_in_org");
+	String		id_dir		= request.getParameter("id_dir");
+	String		id_div		= request.getParameter("id_div");
 	String		id_dep		= request.getParameter("id_dep");
 	String		id_dinas	= request.getParameter("id_dinas");
 	String		id_seksi	= request.getParameter("id_seksi");
@@ -121,33 +123,45 @@ try {
 					+" ,		nama_seksi	as name"
 					+" from		r_seksi"
 					+" where	id_seksi = "+ id_seksi;
+		} else if (!id_dinas.equals("0")) {
+			/* select all seksi in one dinas */
+			q_where	=" and A.id_seksi = ";
+
+			q_org	=" select	id_seksi	as id"
+					+" ,		nama_seksi	as name"
+					+" from		r_seksi"
+					+" where	id_dinas = "+ id_dinas;
+		} else if (!id_dep.equals("0")) {
+			/* select all dinas in one departement */
+			q_where =" and A.id_dinas = ";
+
+			q_org	=" select	id_dinas	as id"
+					+" ,		nama_dinas	as name"
+					+" from		r_dinas"
+					+" where	id_departemen = "+ id_dep;
+		} else if (!id_div.equals ("0")) {
+			/* select all departement */
+			q_where =" and A.id_departemen = ";
+
+			q_org	=" select	id_departemen	as id"
+					+" ,		nama_departemen	as name"
+					+" from		r_departemen"
+					+" where	id_divprosbu = "+ id_div;
+		} else if (!id_dir.equals ("0")) {
+			/* select all divisi */
+			q_where =" and A.id_divprosbu = ";
+
+			q_org	=" select	id_divprosbu	as id"
+					+" ,		nama_divprosbu	as name"
+					+" from		r_divprosbu"
+					+" where	id_direktorat = "+ id_dir;
 		} else {
-			if (!id_dinas.equals("0")) {
-				/* select all seksi in one dinas */
-				q_where	=" and A.id_seksi = ";
+			/* select all direktorat */
+			q_where =" and A.id_direktorat = ";
 
-				q_org	=" select	id_seksi	as id"
-						+" ,		nama_seksi	as name"
-						+" from		r_seksi"
-						+" where	id_dinas = "+ id_dinas;
-			} else {
-				if (!id_dep.equals("0")) {
-					/* select all dinas in one departement */
-					q_where =" and A.id_dinas = ";
-
-					q_org	=" select	id_dinas	as id"
-							+" ,		nama_dinas	as name"
-							+" from		r_dinas"
-							+" where	id_departemen = "+ id_dep;
-				} else {
-					/* select all departement */
-					q_where =" and A.id_departemen = ";
-
-					q_org	=" select	id_departemen	as id"
-							+" ,		nama_departemen	as name"
-							+" from		r_departemen";
-				}
-			}
+			q_org	=" select	id_direktorat	as id"
+					+" ,		nama_direktorat	as name"
+					+" from		r_direktorat";
 		}
 	} else {
 		/* query by wilayah/area */

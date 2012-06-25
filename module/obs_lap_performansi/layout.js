@@ -15,7 +15,7 @@ var m_obs_lap_performansi_d = _g_root +'/module/obs_lap_performansi/';
  */
 function M_ObsLapPerfForm(grid, displayBulan)
 {
-	this.id_dep		= 0;
+	this.id_dep			= 0;
 	this.id_dinas		= 0;
 	this.id_seksi		= 0;
 	this.ref_grid		= grid;
@@ -47,7 +47,9 @@ function M_ObsLapPerfForm(grid, displayBulan)
 			scope	: this
 		,	click	: function(btn, e) {
 				this.ref_grid.do_load(
-						this.set_org.formDepartemen.getValue()
+						this.set_org.formDirektorat.getValue ()
+					,	this.set_org.formDivProSBU.getValue ()
+					,	this.set_org.formDepartemen.getValue()
 					,	this.set_org.formDinas.getValue()
 					,	this.set_org.formSeksi.getValue()
 					,	this.set_wil.formWilayah.getValue()
@@ -62,10 +64,11 @@ function M_ObsLapPerfForm(grid, displayBulan)
 
 	this.panel = new Ext.form.FormPanel({
 		frame		: true
-	,	width		: 450
+	,	width		: 500
 	,	autoHeight	: true
 	,	autoScroll	: true
 	,	labelAlign	: 'right'
+	,	labelWidth	: 150
 	,	items		: [
 			this.set_org
 		,	this.set_wil
@@ -155,14 +158,14 @@ function M_ObsLapPerfByCategoryGrid()
 		,	'safe_percent'
 		,	'unsafe_percent'
 		]
-	,	url		: m_obs_lap_performansi_d +'data_by_category.jsp'
+	,	url			: m_obs_lap_performansi_d +'data_by_category.jsp'
 	,	autoLoad	: false
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
 		columns	: [
 			{
-				id		: 'obs_type_name'
+				id			: 'obs_type_name'
 			,	header		: 'Kategori'
 			,	dataIndex	: 'obs_type_name'
 			,	align		: 'left'
@@ -206,7 +209,7 @@ function M_ObsLapPerfByCategoryGrid()
 
 	this.panel = new Ext.grid.GridPanel({
 		store		: this.store
-	,	cm		: this.cm
+	,	cm			: this.cm
 	,	width		: 450
 	,	autoExpandColumn: 'obs_type_name'
 	,	autoHeight	: true
@@ -220,13 +223,15 @@ function M_ObsLapPerfByCategoryGrid()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah, id_area
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah
@@ -351,13 +356,15 @@ function M_ObsLapPerfByIndexGrid()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah, id_area
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah
@@ -483,13 +490,15 @@ function M_ObsLapPerfByHourGrid()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah, id_area
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah
@@ -602,13 +611,15 @@ function M_ObsLapSTOPGrid()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah, id_area
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah

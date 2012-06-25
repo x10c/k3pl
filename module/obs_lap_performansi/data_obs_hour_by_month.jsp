@@ -24,6 +24,8 @@ try {
 	String		q;
 	int			i;
 
+	String		id_dir		= request.getParameter("id_dir");
+	String		id_div		= request.getParameter("id_div");
 	String		id_dep		= request.getParameter("id_dep");
 	String		id_dinas	= request.getParameter("id_dinas");
 	String		id_seksi	= request.getParameter("id_seksi");
@@ -53,6 +55,16 @@ try {
 			+" where	A.status_aktif	= '1'"
 			+" and		A.year			= "+ year;
 
+	if (id_dir != null
+	&& !(id_dir.equals("0") || id_dir.equals(""))) {
+		q_sum	+=" and A.id_direktorat = "+ id_dir;
+		q_time	+=" and A.id_direktorat = "+ id_dir;
+	}
+	if (id_div != null
+	&& !(id_div.equals("0") || id_div.equals(""))) {
+		q_sum	+=" and A.id_divprosbu = "+ id_div;
+		q_time	+=" and A.id_divprosbu = "+ id_div;
+	}
 	if (id_dep != null
 	&& !(id_dep.equals("0") || id_dep.equals(""))) {
 		q_sum	+=" and A.id_departemen = "+ id_dep;

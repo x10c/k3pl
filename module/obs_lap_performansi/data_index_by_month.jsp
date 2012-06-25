@@ -20,9 +20,12 @@ try {
 
 	ResultSet	rs;
 	String		data	= "[";
-	String		q, q2;
+	String		q		= "";
+	String		q2		= "";
 	int		i, sum_act;
 
+	String		id_dir		= request.getParameter("id_dir");
+	String		id_div		= request.getParameter("id_div");
 	String		id_dep		= request.getParameter("id_dep");
 	String		id_dinas	= request.getParameter("id_dinas");
 	String		id_seksi	= request.getParameter("id_seksi");
@@ -41,10 +44,16 @@ try {
 		+" where	id_stop in ("
 		+"	select	A.id_stop"
 		+"	from	t_stop 		A"
-		+"	,	r_seksi		B"
+		+"	,		r_seksi		B"
 		+"	where	A.status_aktif	= '1'"
-		+"	and	A.year		= "+ year;
+		+"	and		A.year			= "+ year;
 
+	if (id_dir != null && (!id_dir.equals("0") && !id_dir.equals(""))) {
+		q += " and A.id_direktorat = "+ id_dir;
+	}
+	if (id_div != null && (!id_div.equals ("0") && !id_div.equals (""))) {
+		q += " and A.id_divprosbu = "+ id_div;
+	}
 	if (id_dep != null && !(id_dep.equals("0") || id_dep.equals(""))) {
 		q += " and	A.id_departemen	= "+ id_dep;
 	}
@@ -97,6 +106,12 @@ try {
 			+"	and	year		= "+ year
 			+"	and	month		= "+ (i + 1);
 
+		if (id_dir != null && (!id_dir.equals ("0") && !id_dir.equals (""))) {
+			q2 += " and A.id_direktorat = "+ id_dir;
+		}
+		if (id_div != null && (!id_div.equals ("0") && !id_div.equals (""))) {
+			q2 += " and A.id_divprosbu = "+ id_div;
+		}
 		if (!id_dep.equals("0") && !id_dep.equals("")) {
 			q2 += " and	id_departemen	= "+ id_dep;
 		}

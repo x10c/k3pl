@@ -298,19 +298,36 @@ Highcharts.setOptions ({
  */
 Ext.ns('k3pl.record');
 
-k3pl.record.Departemen = new Ext.data.Record.create([
+k3pl.record.Direktorat = new Ext.data.Record.create ([
 		{name:'id'}
 	,	{name:'name'}
 	]);
 
+k3pl.record.DivProSBU = new Ext.data.Record.create ([
+		{name:'id_direktorat'}
+	,	{name:'id'}
+	,	{name:'name'}
+	]);
+
+k3pl.record.Departemen = new Ext.data.Record.create([
+		{name:'id_direktorat'}
+	,	{name:'id_divprosbu'}
+	,	{name:'id'}
+	,	{name:'name'}
+	]);
+
 k3pl.record.Dinas = new Ext.data.Record.create([
-		{name:'id_departemen'}
+		{name:'id_direktorat'}
+	,	{name:'id_divprosbu'}
+	,	{name:'id_departemen'}
 	,	{name:'id'}
 	,	{name:'name'}
 	]);
 
 k3pl.record.Seksi = new Ext.data.Record.create([
-		{name:'id_departemen'}
+		{name:'id_direktorat'}
+	,	{name:'id_divprosbu'}
+	,	{name:'id_departemen'}
 	,	{name:'id_dinas'}
 	,	{name:'id'}
 	,	{name:'name'}
@@ -331,30 +348,44 @@ k3pl.record.Area = new Ext.data.Record.create([
 
 Ext.ns('k3pl.store');
 
+k3pl.store.Direktorat = new Ext.data.ArrayStore ({
+		fields		: k3pl.record.Direktorat
+	,	url			: _g_root +'/module/ref_organisasi/data_direktorat.jsp'
+	,	autoLoad	: false
+	,	idIndex		: 0
+	});
+
+k3pl.store.DivProSBU = new Ext.data.ArrayStore ({
+		fields		: k3pl.record.DivProSBU
+	,	url			: _g_root +'/module/ref_organisasi/data_divprosbu.jsp'
+	,	autoLoad	: false
+	,	idIndex		: 1
+	});
+
 k3pl.store.Departemen = new Ext.data.ArrayStore({
 		fields		: k3pl.record.Departemen
 	,	url			: _g_root +'/module/ref_organisasi/data_departemen.jsp'
 	,	autoLoad	: false
-	,	idIndex		: 0
+	,	idIndex		: 2
 	});
 
 k3pl.store.Dinas = new Ext.data.ArrayStore({
 		fields		: k3pl.record.Dinas
 	,	url			: _g_root +'/module/ref_organisasi/data_dinas.jsp'
 	,	autoLoad	: false
-	,	idIndex		: 1
+	,	idIndex		: 3
 	});
 
 k3pl.store.Seksi = new Ext.data.ArrayStore({
 		fields		: k3pl.record.Seksi
 	,	url			: _g_root +'/module/ref_organisasi/data_seksi.jsp'
 	,	autoLoad	: false
-	,	idIndex		: 2
+	,	idIndex		: 4
 	});
 
 k3pl.store.Wilayah = new Ext.data.ArrayStore({
 		fields		: k3pl.record.Wilayah
-	,	url		: _g_root +'/module/ref_area/data_wilayah.jsp'
+	,	url			: _g_root +'/module/ref_area/data_wilayah.jsp'
 	,	autoLoad	: false
 	,	idIndex		: 0
 	});
@@ -373,19 +404,19 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 		Ext.apply (this
 		,	config
 		,	{
-				fieldLabel	:'Seksi'
-			,	store		:k3pl.store.Seksi
-			,	width		:300
-			,	listWidth	:400
-			,	valueField	:'id'
+				fieldLabel		:'Seksi'
+			,	store			:k3pl.store.Seksi
+			,	width			:300
+			,	listWidth		:400
+			,	valueField		:'id'
 			,	displayField	:'name'
-			,	emptyText	:'Nama Seksi'
-			,	allowBlank	:false
+			,	emptyText		:'Nama Seksi'
+			,	allowBlank		:false
 			,	triggerAction	:'all'
-			,	mode		:'local'
-			,	typeAhead	:true
-			,	itemAll		:false
-			,	itemAllText	:'Semua Seksi'
+			,	mode			:'local'
+			,	typeAhead		:true
+			,	itemAll			:false
+			,	itemAllText		:'Semua Seksi'
 			,	itemAllRecord	:undefined
 			}
 		);
@@ -403,10 +434,12 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.itemAll) {
 					this.itemAllRecord = new k3pl.record.Seksi({
-						id_departemen	:0
-					,	id_dinas	:0
-					,	id		:0
-					,	name		:this.itemAllText
+						id_direktorat	:0
+					,	id_divprosbu	:0
+					,	id_departemen	:0
+					,	id_dinas		:0
+					,	id				:0
+					,	name			:this.itemAllText
 					});
 
 					this.store.insert(0, this.itemAllRecord);
@@ -425,19 +458,19 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 		Ext.apply (this
 		,	config
 		,	{
-				fieldLabel	:'Dinas'
-			,	store		:k3pl.store.Dinas
-			,	valueField	:'id'
+				fieldLabel		:'Dinas'
+			,	store			:k3pl.store.Dinas
+			,	valueField		:'id'
 			,	displayField	:'name'
-			,	emptyText	:'Nama Dinas'
-			,	allowBlank	:false
+			,	emptyText		:'Nama Dinas'
+			,	allowBlank		:false
 			,	triggerAction	:'all'
-			,	mode		:'local'
-			,	width		:300
-			,	listWidth	:400
-			,	formSeksi	:undefined
-			,	itemAll		:false
-			,	itemAllText	:'Semua Dinas'
+			,	mode			:'local'
+			,	width			:300
+			,	listWidth		:400
+			,	formSeksi		:undefined
+			,	itemAll			:false
+			,	itemAllText		:'Semua Dinas'
 			,	itemAllRecord	:undefined
 			}
 		);
@@ -449,20 +482,26 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 				return;
 			}
 
-			this.id_dep	= record.get('id_departemen');
+			this.id_dir		= record.get('id_direktorat');
+			this.id_div		= record.get('id_divprosbu');
+			this.id_dep		= record.get('id_departemen');
 			this.id_dinas	= record.get('id');
 			this.formSeksi.clearFilter(true);
 
 			this.formSeksi.filterBy (function (r, id)
 			{
-				var id_dep	= r.get('id_departemen');
+				var id_dir		= r.get('id_direktorat');
+				var id_div		= r.get('id_div');
+				var id_dep		= r.get('id_departemen');
 				var id_dinas	= r.get('id_dinas');
 				var id_seksi	= r.get('id');
 
 				if (this.id_dep		== 0
 				|| this.id_dinas	== 0
 				|| id_seksi		== 0
-				|| (id_dep	== this.id_dep
+				|| (id_dir	== this.id_dir
+				&& id_div	== this.id_div
+				&& id_dep	== this.id_dep
 				&& id_dinas	== this.id_dinas)) {
 					return true;
 				}
@@ -484,9 +523,11 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.itemAll) {
 					this.itemAllRecord = new k3pl.record.Dinas({
-						id_departemen	:0
-					,	id		:0
-					,	name		:this.itemAllText
+						id_direktorat	:0
+					,	id_divprosbu	:0
+					,	id_departemen	:0
+					,	id				:0
+					,	name			:this.itemAllText
 					});
 
 					this.store.insert(0, this.itemAllRecord);
@@ -509,21 +550,21 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 		Ext.apply (this
 		,	config
 		,	{
-				fieldLabel	:'Departemen'
-			,	store		:k3pl.store.Departemen
-			,	valueField	:'id'
+				fieldLabel		:'Departemen'
+			,	store			:k3pl.store.Departemen
+			,	valueField		:'id'
 			,	displayField	:'name'
-			,	emptyText	:'Nama Departemen'
-			,	allowBlank	:false
+			,	emptyText		:'Nama Departemen'
+			,	allowBlank		:false
 			,	triggerAction	:'all'
-			,	mode		:'local'
-			,	typeAhead	:true
-			,	width		:300
-			,	listWidth	:400
-			,	formSeksi	:undefined
-			,	formDinas	:undefined
-			,	itemAll		:false
-			,	itemAllText	:'Semua Departemen'
+			,	mode			:'local'
+			,	typeAhead		:true
+			,	width			:300
+			,	listWidth		:400
+			,	formSeksi		:undefined
+			,	formDinas		:undefined
+			,	itemAll			:false
+			,	itemAllText		:'Semua Departemen'
 			,	itemAllRecord	:undefined
 			}
 		);
@@ -540,17 +581,23 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 				return;
 			}
 
-			this.id_dep = record.get('id');
+			this.id_dir	= record.get('id_direktorat');
+			this.id_div	= record.get('id_divprosbu');
+			this.id_dep	= record.get('id');
 			this.formDinas.clearFilter(true);
 
 			this.formDinas.filterBy(function (r, id)
 			{
 				var id_dinas	= r.get('id');
-				var id_dep	= r.get('id_departemen');
+				var id_dep		= r.get('id_departemen');
+				var id_div		= r.get('id_divprosbu');
+				var id_dir		= r.get('id_direktorat');
 
 				if (this.id_dep	== 0
 				|| id_dinas	== 0
-				|| id_dep	== this.id_dep) {
+				|| (id_dep	== this.id_dep
+				&& id_div	== this.id_div
+				&& id_dir	== this.id_dir)) {
 					return true;
 				}
 				return false;
@@ -571,8 +618,10 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.itemAll) {
 					this.itemAllRecord = new k3pl.record.Departemen ({
-						id		:0
-					,	name		:this.itemAllText
+						id_direktorat	:0
+					,	id_divprosbu	:0
+					,	id				:0
+					,	name			:this.itemAllText
 					});
 
 					this.store.insert(0, this.itemAllRecord);
@@ -580,6 +629,188 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.formDinas != undefined) {
 					this.formDinas.do_load();
+				}
+
+				if (this.store.getTotalCount() > 0) {
+					this.setValue(this.store.getAt(0).get('id'));
+				}
+			}
+		});
+	}
+});
+
+k3pl.form.DivProSBU = Ext.extend (Ext.form.ComboBox, {
+	constructor: function (config) {
+		Ext.apply (this
+		,	config
+		,	{
+				fieldLabel		:'Divisi/Proyek/SBU'
+			,	store			:k3pl.store.DivProSBU
+			,	valueField		:'id'
+			,	displayField	:'name'
+			,	emptyText		:'Nama Divisi/Proyek/SBU'
+			,	allowBlank		:false
+			,	triggerAction	:'all'
+			,	mode			:'local'
+			,	typeAhead		:true
+			,	width			:300
+			,	listWidth		:400
+			,	formSeksi		:undefined
+			,	formDinas		:undefined
+			,	itemAll			:false
+			,	itemAllText		:'Semua Divisi/Proyek/SBU'
+			,	itemAllRecord	:undefined
+			}
+		);
+
+		k3pl.form.DivProSBU.superclass.constructor.apply(this, arguments);
+
+		this.on('select', function(cb, record, id) {
+			if (this.formSeksi != undefined) {
+				this.formSeksi.clearFilter(true);
+				this.formSeksi.setValue(this.formSeksi.store.getAt(0).get('id'));
+			}
+
+			if (this.formDinas != undefined) {
+				this.formDinas.clearFilter(true);
+				this.formDinas.setValue(this.formDinas.store.getAt(0).get('id'));
+			}
+
+			this.id_dir	= record.get('id_direktorat');
+			this.id_div	= record.get('id');
+
+			this.formDepartemen.clearFilter(true);
+			this.formDepartemen.filterBy(function (r, id)
+			{
+				var id_div	= r.get('id_divprosbu');
+				var id_dir	= r.get('id_direktorat');
+
+				if (id_dir	== 0
+				|| id_div	== 0
+				|| (id_dir	== this.id_dir
+				&& id_div	== this.id_div)) {
+					return true;
+				}
+				return false;
+			}
+			, this);
+
+			this.formDepartemen.setValue(this.formDepartemen.store.getAt(0).get('id'));
+		});
+	}
+,	do_load: function()
+	{
+		this.store.load({
+			scope	:this
+		,	callback:function (r, options, success) {
+				if (!success) {
+					return;
+				}
+
+				if (this.itemAll) {
+					this.itemAllRecord = new k3pl.record.DivProSBU ({
+						id_direktorat	:0
+					,	id				:0
+					,	name			:this.itemAllText
+					});
+
+					this.store.insert(0, this.itemAllRecord);
+				}
+
+				if (this.formDepartemen != undefined) {
+					this.formDepartemen.do_load();
+				}
+
+				if (this.store.getTotalCount() > 0) {
+					this.setValue(this.store.getAt(0).get('id'));
+				}
+			}
+		});
+	}
+});
+
+k3pl.form.Direktorat = Ext.extend (Ext.form.ComboBox, {
+	constructor: function (config) {
+		Ext.apply (this
+		,	config
+		,	{
+				fieldLabel		:'Direktorat'
+			,	store			:k3pl.store.Direktorat
+			,	valueField		:'id'
+			,	displayField	:'name'
+			,	emptyText		:'Nama Direktorat'
+			,	allowBlank		:false
+			,	triggerAction	:'all'
+			,	mode			:'local'
+			,	typeAhead		:true
+			,	width			:300
+			,	listWidth		:400
+			,	formSeksi		:undefined
+			,	formDinas		:undefined
+			,	itemAll			:false
+			,	itemAllText		:'Semua Direktorat'
+			,	itemAllRecord	:undefined
+			}
+		);
+
+		k3pl.form.Direktorat.superclass.constructor.apply(this, arguments);
+
+		this.on('select', function(cb, record, id) {
+			if (this.formSeksi != undefined) {
+				this.formSeksi.clearFilter(true);
+				this.formSeksi.setValue(this.formSeksi.store.getAt(0).get('id'));
+			}
+
+			if (this.formDinas != undefined) {
+				this.formDinas.clearFilter(true);
+				this.formDinas.setValue(this.formDinas.store.getAt(0).get('id'));
+			}
+
+			if (this.formDepartemen != undefined) {
+				this.formDepartemen.clearFilter(true);
+				this.formDepartemen.setValue(this.formDepartemen.store.getAt(0).get('id'));
+			}
+
+			this.id_dir	= record.get('id');
+
+			this.formDivProSBU.clearFilter(true);
+			this.formDivProSBU.filterBy(function (r, id)
+			{
+				var id_dir	= r.get('id_direktorat');
+				var id_div	= r.get('id');
+
+				if (id_dir	== 0
+				|| id_div	== 0
+				|| id_dir	== this.id_dir) {
+					return true;
+				}
+				return false;
+			}
+			, this);
+
+			this.formDivProSBU.setValue(this.formDivProSBU.store.getAt(0).get('id'));
+		});
+	}
+,	do_load: function()
+	{
+		this.store.load({
+			scope	:this
+		,	callback:function (r, options, success) {
+				if (!success) {
+					return;
+				}
+
+				if (this.itemAll) {
+					this.itemAllRecord = new k3pl.record.Direktorat ({
+						id				:0
+					,	name			:this.itemAllText
+					});
+
+					this.store.insert(0, this.itemAllRecord);
+				}
+
+				if (this.formDivProSBU != undefined) {
+					this.formDivProSBU.do_load();
 				}
 
 				if (this.store.getTotalCount() > 0) {
@@ -788,28 +1019,38 @@ k3pl.form.SetOrganisasi = Ext.extend (Ext.form.FieldSet, {
 		config.formSeksi	= new k3pl.form.Seksi(config);
 		config.formDinas	= new k3pl.form.Dinas(config);
 		config.formDepartemen	= new k3pl.form.Departemen(config);
+		config.formDivProSBU	= new k3pl.form.DivProSBU (config);
+		config.formDirektorat	= new k3pl.form.Direktorat (config);
 
 		Ext.apply(this
 		, config
 		,	{
-				title		:'Organisasi'
+				title			:'Organisasi'
 			,	checkboxToggle	:true
-			,	autoHeight	:true
-			,	collapsed	:false
-			,	scope		:this
+			,	autoHeight		:true
+			,	collapsed		:false
+			,	scope			:this
+			,	formDirektorat	:undefined
+			,	formDivProSBU	:undefined
 			,	formDepartemen	:undefined
-			,	formDinas	:undefined
-			,	formSeksi	:undefined
+			,	formDinas		:undefined
+			,	formSeksi		:undefined
 			}
 		);
 
 		k3pl.form.SetOrganisasi.superclass.constructor.apply(this, arguments);
 
+		this.add(config.formDirektorat);
+		this.add(config.formDivProSBU);
 		this.add(config.formDepartemen);
 		this.add(config.formDinas);
 		this.add(config.formSeksi);
 
 		this.on('collapse', function(panel) {
+			this.formDirektorat.setValue (0);
+			this.formDivProSBU.clearFilter ();
+			this.formDivProSBU.setValue (0);
+			this.formDepartemen.clearFilter ();
 			this.formDepartemen.setValue(0);
 			this.formDinas.clearFilter();
 			this.formDinas.setValue(0);
@@ -820,7 +1061,7 @@ k3pl.form.SetOrganisasi = Ext.extend (Ext.form.FieldSet, {
 
 ,	do_load: function()
 	{
-		this.formDepartemen.do_load();
+		this.formDirektorat.do_load();
 	}
 });
 

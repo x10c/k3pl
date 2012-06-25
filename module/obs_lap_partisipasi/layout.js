@@ -14,7 +14,7 @@ var m_obs_lap_partisipasi_d	= _g_root +'/module/obs_lap_partisipasi/';
  */
 function M_ObsLapPartForm(grid, displayBulan)
 {
-	this.ref_grid		= grid;
+	this.ref_grid = grid;
 
 	this.set_org = new k3pl.form.SetOrganisasi({
 			itemAll		:true
@@ -42,8 +42,10 @@ function M_ObsLapPartForm(grid, displayBulan)
 	,	listeners	: {
 			scope	: this
 		,	click	: function(btn, e) {
-				this.ref_grid.do_load(
-						this.set_org.formDepartemen.getValue()
+				this.ref_grid.do_load (
+						this.set_org.formDirektorat.getValue ()
+					,	this.set_org.formDivProSBU.getValue ()
+					,	this.set_org.formDepartemen.getValue()
 					,	this.set_org.formDinas.getValue()
 					,	this.set_org.formSeksi.getValue()
 					,	this.set_wil.formWilayah.getValue()
@@ -58,8 +60,9 @@ function M_ObsLapPartForm(grid, displayBulan)
 
 	this.panel = new Ext.form.FormPanel({
 		frame		: true
-	,	width		: 450
+	,	width		: 500
 	,	labelAlign	: 'right'
+	,	labelWidth	: 150
 	,	buttonAlign	: 'center'
 	,	buttons		: [
 			this.btn_submit
@@ -148,7 +151,7 @@ function M_ObsLapPartPegGrid()
 	]);
 
 	this.store = new Ext.data.ArrayStore({
-		url		: m_obs_lap_partisipasi_d +'data_part_peg.jsp'
+		url			: m_obs_lap_partisipasi_d +'data_part_peg.jsp'
 	,	fields		: this.records
 	,	autoLoad	: false
 	});
@@ -393,13 +396,15 @@ function M_ObsLapPartPegGrid()
 		this.store.add(sum);
 	}
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah
 				, id_area, year)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah
@@ -601,8 +606,8 @@ function M_ObsLapPartOrg()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah
-				, id_area, year, month, is_in_org)
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi
+				, id_wilayah, id_area, year, month, is_in_org)
 	{
 		var sub		= '';
 		var record;
@@ -612,15 +617,23 @@ function M_ObsLapPartOrg()
 			if (id_seksi != 0) {
 				combo	= this.form.set_org.formSeksi;
 				record	= combo.findRecord(combo.valueField, id_seksi);
-				sub	= 'Seksi '+ record.get(combo.displayField);
+				sub		= 'Seksi '+ record.get(combo.displayField);
 			} else if (id_dinas != 0) {
 				combo	= this.form.set_org.formDinas;
 				record	= combo.findRecord(combo.valueField, id_dinas);
-				sub	= 'Dinas '+ record.get(combo.displayField);
+				sub		= 'Dinas '+ record.get(combo.displayField);
 			} else if (id_dep != 0) {
 				combo	= this.form.set_org.formDepartemen;
 				record	= combo.findRecord(combo.valueField, id_dep);
-				sub	= 'Departemen '+ record.get(combo.displayField);
+				sub		= 'Departemen '+ record.get(combo.displayField);
+			} else if (id_div != 0) {
+				combo	= this.form.set_org.formDivProSBU;
+				record	= combo.findRecord (combo.valueField, id_div);
+				sub		= 'Divisi/Proyek/SBU '+ record.get (combo.displayField);
+			} else if (id_dir != 0) {
+				combo	= this.form.set_org.formDirektorat;
+				record	= combo.findRecord (combo.valueField, id_dir);
+				sub		= 'Direktorat '+ record.get (combo.displayField);
 			}
 		} else {
 			if (id_area != 0) {
@@ -650,6 +663,8 @@ function M_ObsLapPartOrg()
 			scope		: this
 		,	params		: {
 				is_in_org	: is_in_org
+			,	id_dir		: id_dir
+			,	id_div		: id_div
 			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
