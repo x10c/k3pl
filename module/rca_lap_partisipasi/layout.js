@@ -44,7 +44,9 @@ function M_RCALapPartForm(grid, displayBulan)
 			scope	: this
 		,	click	: function(btn, e) {
 				this.ref_grid.do_load(
-						this.set_org.formDepartemen.getValue()
+						this.set_org.formDirektorat.getValue ()
+					,	this.set_org.formDivProSBU.getValue ()
+					,	this.set_org.formDepartemen.getValue()
 					,	this.set_org.formDinas.getValue()
 					,	this.set_org.formSeksi.getValue()
 					,	this.set_wil.formWilayah.getValue()
@@ -59,8 +61,9 @@ function M_RCALapPartForm(grid, displayBulan)
 
 	this.panel = new Ext.form.FormPanel({
 			frame		: true
-		,	width		: 450
+		,	width		: 500
 		,	labelAlign	: 'right'
+		,	labelWidth	: 150
 		,	buttonAlign	: 'center'
 		,	buttons		: [
 				this.btn_submit
@@ -393,13 +396,15 @@ function M_RCALapPartPegGrid()
 		this.store.add(sum);
 	}
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah
 				, id_area, year)
 	{
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: id_dep
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
 			,	id_wilayah	: id_wilayah
@@ -603,8 +608,8 @@ function M_RCALapPartOrg()
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah
-				, id_area, year, month, is_in_org)
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi
+				, id_wilayah, id_area, year, month, is_in_org)
 	{
 		var sub		= '';
 		var record;
@@ -623,6 +628,14 @@ function M_RCALapPartOrg()
 				combo	= this.form.set_org.formDepartemen;
 				record	= combo.findRecord(combo.valueField, id_dep);
 				sub	= 'Departemen '+ record.get(combo.displayField);
+			} else if (id_div != 0) {
+				combo	= this.form.set_org.formDivProSBU;
+				record	= combo.findRecord (combo.valueField, id_div);
+				sub		= 'Divisi/Proyek/SBU '+ record.get (combo.displayField);
+			} else if (id_dir != 0) {
+				combo	= this.form.set_org.formDirektorat;
+				record	= combo.findRecord (combo.valueField, id_dir);
+				sub		= 'Direktorat '+ record.get (combo.displayField);
 			}
 		} else {
 			if (id_area != 0) {
@@ -652,6 +665,8 @@ function M_RCALapPartOrg()
 			scope		: this
 		,	params		: {
 				is_in_org	: is_in_org
+			,	id_dir		: id_dir
+			,	id_div		: id_div
 			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi

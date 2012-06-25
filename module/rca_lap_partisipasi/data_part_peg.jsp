@@ -27,6 +27,8 @@ try {
 	Statement	db_stmt2= db_con.createStatement();
 	ResultSet	rs;
 	ResultSet	rs2;
+	String		id_dir;
+	String		id_div;
 	String		id_dep;
 	String		id_dinas;
 	String		id_seksi;
@@ -35,8 +37,10 @@ try {
 	String		year;
 	String		data	= "[";
 	String		nipg;
-	int		i,x;
+	int			i,x;
 
+	id_dir		= request.getParameter("id_dir");
+	id_div		= request.getParameter("id_div");
 	id_dep		= request.getParameter("id_dep");
 	id_dinas	= request.getParameter("id_dinas");
 	id_seksi	= request.getParameter("id_seksi");
@@ -46,6 +50,8 @@ try {
 
 	q	=" select	C.nipg"
 		+" ,		B.nama_pegawai"
+		+" ,		B.id_direktorat"
+		+" ,		B.id_divprosbu"
 		+" ,		B.id_departemen"
 		+" ,		B.id_dinas"
 		+" ,		B.id_seksi"
@@ -72,6 +78,14 @@ try {
 		+" and		C.nipg				= B.nipg"
 		+" and		B.id_seksi			= D.id_seksi";
 
+	if (id_dir != null
+	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
+		q += " and B.id_direktorat = "+ id_dir;
+	}
+	if (id_div != null
+	&& !(id_div.equals ("0") || id_div.equals (""))) {
+		q += " and B.id_divprosbu = "+ id_div;
+	}
 	if (id_dep != null
 	&& !(id_dep.equals("0") || id_dep.equals(""))) {
 		q += " and	B.id_departemen	= "+ id_dep;
@@ -108,6 +122,8 @@ try {
 
 		data	+="["
 			+"\""+ rs.getString("nama_pegawai") +"\""
+			+",'"+ rs.getString("id_direktorat") +"'"
+			+",'"+ rs.getString("id_divprosbu") +"'"
 			+",'"+ rs.getString("id_departemen") +"'"
 			+",'"+ rs.getString("id_dinas") +"'"
 			+",'"+ rs.getString("id_seksi") +"'"
