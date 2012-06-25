@@ -29,14 +29,14 @@ try {
 			+" values ('"+ nama_direktorat +"', '"+ id_user +"') ";
 		break;
 	case 3:
-		q	=" update	r_departemen "
+		q	=" update	r_direktorat "
 			+" set		nama_direktorat	= '"+ nama_direktorat +"' "
 			+" ,		id_user			= '"+ id_user +"' "
 			+" ,		tanggal_akses	= getdate() "
 			+" where	id_direktorat   = "+ id_direktorat;
 		break;
 	case 4:
-		q	=" delete from	r_departemen "
+		q	=" delete from	r_direktorat "
 			+" where	id_direktorat =  "+ id_direktorat;
 		break;
 	default:

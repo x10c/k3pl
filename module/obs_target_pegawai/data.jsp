@@ -17,6 +17,7 @@ try {
 	}
 
 	Statement	db_stmt		= db_con.createStatement();
+	String		id_divprosbu= (String) session.getAttribute ("user.divprosbu");
 	String		year		= (String) request.getParameter("year");
 	String		data		= "{rows:[";
 	ResultSet	rs		= null;
@@ -44,12 +45,14 @@ try {
 		+" ,		isnull(A.dec,0) as dec"
 		+" from"
 		+" 		r_pegawai		B"
-		+" ,		__user_grup		C"
-		+" left join	t_stop_target_pegawai	A"
+		+" ,	__user_grup		C"
+		+" left join"
+		+"		t_stop_target_pegawai	A"
 		+"	on	C.nipg		= A.nipg"
 		+"	and	A.year		= "+ year
-		+" where	C.id_grup	= 2"
-		+" and		C.nipg		= B.nipg";
+		+" where	C.id_grup		= 2"
+		+" and		C.nipg			= B.nipg"
+		+" and		B.id_divprosbu	= "+ id_divprosbu;
 
 	rs = db_stmt.executeQuery(q);
 

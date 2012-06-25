@@ -30,7 +30,7 @@ try {
 			+" values ("+ id_direktorat +",'"+ nama_divprosbu +"', '"+ id_user +"') ";
 		break;
 	case 3:
-		q	=" update	r_departemen "
+		q	=" update	r_divprosbu"
 			+" set		nama_divprosbu	= '"+ nama_divprosbu +"' "
 			+" ,		id_user		= '"+ id_user +"' "
 			+" ,		tanggal_akses	= getdate() "
@@ -38,7 +38,7 @@ try {
 			+" and		id_direktorat	= "+ id_direktorat;
 		break;
 	case 4:
-		q	=" delete from	r_departemen "
+		q	=" delete from	r_divprosbu"
 			+" where	id_divprosbu	= "+ id_divprosbu
 			+" and		id_direktorat	= "+ id_direktorat;
 		break;
