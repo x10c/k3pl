@@ -19,6 +19,8 @@ try {
 	Statement	db_stmt = db_con.createStatement();
 
 	int dml = Integer.parseInt(request.getParameter("dml_type"));
+	String id_dir		= request.getParameter("id_direktorat");
+	String id_div		= request.getParameter("id_divprosbu");
 	String id_dep		= request.getParameter("id_departemen");
 	String id_dinas		= request.getParameter("id_dinas");
 	String id_wilayah	= request.getParameter("id_wilayah");
@@ -30,13 +32,17 @@ try {
 	switch (dml) {
 	case 2:
 		q	=" insert into r_seksi ("
-			+"	id_departemen"
+			+"		id_direktorat"
+			+" ,	id_divprosbu"
+			+" ,	id_departemen"
 			+" ,	id_dinas"
 			+" ,	id_wilayah"
 			+" ,	nama_seksi"
 			+" ,	id_user)"
 			+" values ("
-			+"  "+ id_dep
+			+"  "+ id_dir
+			+", "+ id_div
+			+", "+ id_dep
 			+", "+ id_dinas
 			+", "+ id_wilayah
 			+",'"+ nama_area +"'"
@@ -45,10 +51,10 @@ try {
 		break;
 	case 3:
 		q	=" update	r_seksi"
-			+" set		nama_seksi	= '"+ nama_area +"'"
-			+" ,		id_user		= '"+ id_user +"'"
+			+" set		nama_seksi		= '"+ nama_area +"'"
+			+" ,		id_user			= '"+ id_user +"'"
 			+" ,		tanggal_akses	= getdate() "
-			+" where	id_seksi	= "+ id_seksi;
+			+" where	id_seksi		= "+ id_seksi;
 		break;
 	case 4:
 		q	=" delete from	r_seksi"

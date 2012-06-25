@@ -23,14 +23,16 @@ try {
 		id_wilayah ="0 or 1 = 1 ";
 	}
 
-	String q=" select	id_departemen"
-		+" ,		id_dinas"
-		+" ,		id_wilayah"
-		+" ,		id_seksi"
-		+" ,		nama_seksi"
-		+" from		r_seksi"
-		+" where	id_wilayah = "+ id_wilayah
-		+" order by	nama_seksi";
+	String q=" select	id_direktorat"
+			+" ,		id_divprosbu"
+			+" ,		id_departemen"
+			+" ,		id_dinas"
+			+" ,		id_wilayah"
+			+" ,		id_seksi"
+			+" ,		nama_seksi"
+			+" from		r_seksi"
+			+" where	id_wilayah = "+ id_wilayah
+			+" order by	nama_seksi";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;
@@ -42,12 +44,14 @@ try {
 		} else {
 			i++;
 		}
-		data	+="["+ rs.getString("id_departemen")
-			+ ","+ rs.getString("id_dinas")
-			+ ","+ rs.getString("id_wilayah")
-			+ ","+ rs.getString("id_seksi")
-			+ ",\""+ rs.getString("nama_seksi") +"\""
-			+ "]";
+		data	+="["+ rs.getString("id_direktorat")
+				+ ","+ rs.getString("id_divprosbu")
+				+ ","+ rs.getString("id_departemen")
+				+ ","+ rs.getString("id_dinas")
+				+ ","+ rs.getString("id_wilayah")
+				+ ","+ rs.getString("id_seksi")
+				+ ",\""+ rs.getString("nama_seksi") +"\""
+				+ "]";
 	}
 
 	data += "]";

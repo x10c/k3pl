@@ -224,9 +224,9 @@ function M_RefAreaArea()
  */
 	this.store = new Ext.data.ArrayStore({
 			fields	: k3pl.record.Area
-		,	url	: m_ref_area_d +'data_area.jsp'
+		,	url		: m_ref_area_d +'data_area.jsp'
 		,	autoLoad: false
-		});
+	});
 /*
  * forms
  */
@@ -257,17 +257,33 @@ function M_RefAreaArea()
 		});
 
 	this.form_seksi	= new k3pl.form.Seksi();
+	
 	this.form_dinas	= new k3pl.form.Dinas({
 			formSeksi	:this.form_seksi
 		});
+		
 	this.form_dep	= new k3pl.form.Departemen({
 			formSeksi	:this.form_seksi
 		,	formDinas	:this.form_dinas
 		});
 
+	this.form_div	= new k3pl.form.DivProSBU({
+			formSeksi		:this.form_seksi
+		,	formDinas		:this.form_dinas
+		,	formDepartemen	:this.form_dep
+		});
+
+	this.form_dir	= new k3pl.form.Direktorat({
+			formSeksi		:this.form_seksi
+		,	formDinas		:this.form_dinas
+		,	formDepartemen	:this.form_dep
+		,	formDivProSBU	:this.form_div
+		});
+
 	this.form = new Ext.form.FormPanel({
 			title		:'Tambah Area'
 		,	labelAlign	:'right'
+		,	labelWidth	: 150
 		,	padding		:'6'
 		,	tbar		:[
 				this.btn_cancel
@@ -278,7 +294,9 @@ function M_RefAreaArea()
 				msgTarget	:'side'
 			}
 		,	items		:[
-				this.form_dep
+				this.form_dir
+			,	this.form_div
+			,	this.form_dep
 			,	this.form_dinas
 			,	this.form_nama_area
 			]
@@ -402,6 +420,12 @@ function M_RefAreaArea()
 
 		var r = data[0];
 
+		this.form_dir.setValue(r.get('id_direktorat'));
+		this.form_dir.setDisabled(true);
+
+		this.form_div.setValue(r.get('id_divprosbu'));
+		this.form_div.setDisabled(true);
+
 		this.form_dep.setValue(r.get('id_departemen'));
 		this.form_dep.setDisabled(true);
 
@@ -426,12 +450,14 @@ function M_RefAreaArea()
 	{
 		Ext.Ajax.request({
 			params  : {
-				id_departemen	: this.form_dep.getValue()
-			,	id_dinas	: this.form_dinas.getValue()
-			,	id_wilayah	: m_ref_area_id_wil
-			,	id_seksi	: this.form_seksi.getValue()
-			,	nama_area	: this.form_nama_area.getValue()
-			,       dml_type	: this.dml_type
+				id_direktorat	: this.form_dir.getValue()
+			,	id_divprosbu	: this.form_div.getValue()
+			,	id_departemen	: this.form_dep.getValue()
+			,	id_dinas		: this.form_dinas.getValue()
+			,	id_wilayah		: m_ref_area_id_wil
+			,	id_seksi		: this.form_seksi.getValue()
+			,	nama_area		: this.form_nama_area.getValue()
+			,	dml_type		: this.dml_type
 			}
 		,	url	: m_ref_area_d +'submit_area.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
@@ -443,6 +469,8 @@ function M_RefAreaArea()
 					Ext.Msg.alert('Pesan', msg.info);
 
 					if (this.dml_type == 3) {
+						this.form_dir.setDisabled(false)
+						this.form_div.setDisabled(false)
 						this.form_dep.setDisabled(false)
 						this.form_dinas.setDisabled(false);
 						this.form_seksi.setDisabled(false);
@@ -467,6 +495,12 @@ function M_RefAreaArea()
 		}
 
 		var r = data[0];
+
+		this.form_dir.setValue(r.get('id_direktorat'));
+		this.form_dir.setDisabled(true);
+
+		this.form_div.setValue(r.get('id_divprosbu'));
+		this.form_div.setDisabled(true);
 
 		this.form_dep.setValue(r.get('id_departemen'));
 		this.form_dep.setDisabled(true);
@@ -502,7 +536,7 @@ function M_RefAreaArea()
 			this.btn_add.setDisabled(true);
 		}
 
-		this.form_dep.do_load();
+		this.form_dir.do_load();
 	}
 }
 

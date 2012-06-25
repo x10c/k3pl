@@ -339,7 +339,9 @@ k3pl.record.Wilayah = new Ext.data.Record.create([
 	]);
 
 k3pl.record.Area = new Ext.data.Record.create([
-		{name:'id_departemen'}
+		{name:'id_direktorat'}
+	,	{name:'id_divprosbu'}
+	,	{name:'id_departemen'}
 	,	{name:'id_dinas'}
 	,	{name:'id_wilayah'}
 	,	{name:'id'}
