@@ -25,6 +25,8 @@ try {
 	String email		= request.getParameter("email");
 	String id_klas		= request.getParameter("id_klasifikasi_pegawai");
 	String id_jabatan	= request.getParameter("id_jabatan");
+	String id_direktorat	= request.getParameter("id_direktorat");
+	String id_divprosbu		= request.getParameter("id_divprosbu");
 	String id_departemen	= request.getParameter("id_departemen");
 	String id_dinas		= request.getParameter("id_dinas");
 	String id_seksi		= request.getParameter("id_seksi");
@@ -40,6 +42,8 @@ try {
 			+",	email"
 			+",	id_klasifikasi_pegawai"
 			+",	id_jabatan"
+			+",	id_direktorat "
+			+",	id_divprosbu "
 			+",	id_departemen "
 			+",	id_dinas "
 			+",	id_seksi "
@@ -51,6 +55,8 @@ try {
 			+", '"+ email		+"' "
 			+",  "+ id_klas		+" "
 			+",  "+ id_jabatan	+" "
+			+",  "+ id_direktorat
+			+",  "+ id_divprosbu
 			+",  "+ id_departemen
 			+",  "+ id_dinas
 			+",  "+ id_seksi
@@ -63,6 +69,8 @@ try {
 			+" ,		email			= '"+ email +"' "
 			+" ,		id_klasifikasi_pegawai	= "+ id_klas
 			+" ,		id_jabatan		= "+ id_jabatan
+			+" ,		id_direktorat		= "+ id_direktorat
+			+" ,		id_divprosbu		= "+ id_divprosbu
 			+" ,		id_departemen		= "+ id_departemen
 			+" ,		id_dinas		= "+ id_dinas
 			+" ,		id_seksi		= "+ id_seksi

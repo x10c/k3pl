@@ -13,6 +13,8 @@ function M_RefPegawai()
 {
 	this.dml_type		= 0;
 	this.ha_level		= 0;
+	this.id_direktorat	= '0';
+	this.id_divprosbu	= '0';
 	this.id_departemen	= '0';
 	this.id_dinas		= '0';
 	this.id_seksi		= '0';
@@ -23,6 +25,8 @@ function M_RefPegawai()
 		{ name: 'nipg' }
 	,	{ name: 'id_klasifikasi_pegawai' }
 	,	{ name: 'id_jabatan' }
+	,	{ name: 'id_direktorat' }
+	,	{ name: 'id_divprosbu' }
 	,	{ name: 'id_departemen' }
 	,	{ name: 'id_dinas' }
 	,	{ name: 'id_seksi' }
@@ -53,64 +57,104 @@ function M_RefPegawai()
 
 	this.store_jabatan = new Ext.data.ArrayStore({
 			fields		: ['id','name']
-		,	url		: _g_root +'/module/ref_jabatan/data_jabatan.jsp'
+		,	url			: _g_root +'/module/ref_jabatan/data_jabatan.jsp'
 		,	autoLoad	: false
 		,	idIndex		: 0
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
-					this.store_departemen.load();
+					this.store_direktorat.load();
 				}
 			}
 		});
 
-	this.store_departemen = new Ext.data.ArrayStore({
+	this.store_direktorat = new Ext.data.ArrayStore({
 			fields		: ['id', 'name']
-		,	url		: _g_root +'/module/ref_organisasi/data_departemen.jsp'
+		,	url			: _g_root +'/module/ref_organisasi/data_direktorat.jsp'
 		,	autoLoad	: false
 		,	idIndex		: 0
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
-					this.store_dinas.load({
+					this.store_divprosbu.load({
 						params	: {
-							id_departemen : this.id_departemen
+							id_direktorat : this.id_direktorat
 						}
 					});
 				}
 			}
-		});
+	});
 
-	this.store_dinas = new Ext.data.ArrayStore({
-			fields		: ['id_departemen', 'id', 'name']
-		,	url		: _g_root +'/module/ref_organisasi/data_dinas.jsp'
+	this.store_divprosbu = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_divprosbu.jsp'
 		,	autoLoad	: false
 		,	idIndex		: 1
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
-					this.store_seksi.load({
+					this.store_departemen.load({
 						params	: {
-							id_departemen	: this.id_departemen
-						,	id_dinas	: this.id_dinas
+							id_direktorat	: this.id_direktorat
+						,	id_divprosbu	: this.id_divprosbu
 						}
 					});
 				}
 			}
-		});
+	});
 
-	this.store_seksi = new Ext.data.ArrayStore({
-			fields		: ['id_departemen', 'id_dinas', 'id', 'name']
-		,	url		: _g_root +'/module/ref_organisasi/data_seksi.jsp'
+	this.store_departemen = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id_divprosbu', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_departemen.jsp'
 		,	autoLoad	: false
 		,	idIndex		: 2
+		,	listeners	: {
+				scope	: this
+			,	load	: function(store, records, options) {
+					this.store_dinas.load({
+						params	: {
+							id_direktorat	: this.id_direktorat
+						,	id_divprosbu	: this.id_divprosbu
+						,	id_departemen	: this.id_departemen
+						}
+					});
+				}
+			}
+	});
+
+	this.store_dinas = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id_divprosbu', 'id_departemen', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_dinas.jsp'
+		,	autoLoad	: false
+		,	idIndex		: 3
+		,	listeners	: {
+				scope	: this
+			,	load	: function(store, records, options) {
+					this.store_seksi.load({
+						params	: {
+							id_direktorat	: this.id_direktorat
+						,	id_divprosbu	: this.id_divprosbu
+						,	id_departemen	: this.id_departemen
+						,	id_dinas		: this.id_dinas
+						}
+					});
+				}
+			}
+	});
+
+	this.store_seksi = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id_divprosbu', 'id_departemen', 'id_dinas', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_seksi.jsp'
+		,	autoLoad	: false
+		,	idIndex		: 4
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
 					this.do_load();
 				}
 			}
-		});
+	});
+	
 /*
  * forms
  */
@@ -118,98 +162,134 @@ function M_RefPegawai()
 			fieldLabel	: 'NIPG'
 		,	allowBlank	: false
 		,	width		: 200
-		});
+	});
 
 	this.form_name = new Ext.form.TextField({
 			fieldLabel	: 'Nama Pegawai'
 		,	allowBlank	: false
 		,	width		: 200
-		});
+	});
 
 	this.form_email = new Ext.form.TextField({
 			fieldLabel	: 'E-mail'
 		,	vtype		: 'email'
 		,	vtypeText	: 'Format email: nama@domain.tld'
 		,	width		: 200
-		});
+	});
 
 	this.form_klas = new Ext.form.ComboBox({
-			fieldLabel	: 'Klasifikasi'
-		,	store		: this.store_klas
-		,	valueField	: 'id'
+			fieldLabel		: 'Klasifikasi'
+		,	store			: this.store_klas
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	typeAhead	: true
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
 		,	triggerAction	: 'all'
-		,	width		: 200
-		});
+		,	width			: 200
+	});
 
 	this.form_jabatan = new Ext.form.ComboBox({
-			fieldLabel	: 'Jabatan'
-		,	store		: this.store_jabatan
-		,	valueField	: 'id'
+			fieldLabel		: 'Jabatan'
+		,	store			: this.store_jabatan
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	typeAhead	: true
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
 		,	triggerAction	: 'all'
-		,	width		: 200
-		});
+		,	width			: 200
+	});
 
 	this.form_seksi = new Ext.form.ComboBox({
-			fieldLabel	: 'Seksi'
-		,	store		: this.store_seksi
-		,	valueField	: 'id'
+			fieldLabel		: 'Seksi'
+		,	store			: this.store_seksi
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	typeAhead	: true
-		,	editable	: false
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
+		,	editable		: false
 		,	triggerAction	: 'all'
-		,	width		: 400
-		});
+		,	width			: 400
+	});
 
 	this.form_dinas = new Ext.form.ComboBox({
-			fieldLabel	: 'Dinas'
-		,	store		: this.store_dinas
-		,	valueField	: 'id'
+			fieldLabel		: 'Dinas'
+		,	store			: this.store_dinas
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	typeAhead	: true
-		,	editable	: false
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
+		,	editable		: false
 		,	triggerAction	: 'all'
-		,	width		: 400
-		,	listeners	: {
+		,	width			: 400
+		,	listeners		: {
 				scope	: this
 			,	select	: function(cb, record, index) {
 					this.form_dinas_on_select(record.get('id'));
 				}
 			}
-		});
+	});
 
 	this.form_departemen = new Ext.form.ComboBox({
-			fieldLabel	: 'Departemen'
-		,	store		: this.store_departemen
-		,	valueField	: 'id'
+			fieldLabel		: 'Departemen'
+		,	store			: this.store_departemen
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	typeAhead	: true
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
 		,	triggerAction	: 'all'
-		,	width		: 400
-		,	listeners	: {
+		,	width			: 400
+		,	listeners		: {
 				scope	: this
 			,	select	: function(cb, record, index) {
 					this.form_departemen_on_select(record.get('id'));
 				}
 			}
-		});
+	});
+
+	this.form_divprosbu = new Ext.form.ComboBox({
+			fieldLabel		: 'Divisi/Proyek/SBU'
+		,	store			: this.store_divprosbu
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
+		,	triggerAction	: 'all'
+		,	width			: 400
+		,	listeners		: {
+				scope	: this
+			,	select	: function(cb, record, index) {
+					this.form_divprosbu_on_select(record.get('id'));
+				}
+			}
+	});
+
+	this.form_direktorat = new Ext.form.ComboBox({
+			fieldLabel		: 'Direktorat'
+		,	store			: this.store_direktorat
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	typeAhead		: true
+		,	triggerAction	: 'all'
+		,	width			: 400
+		,	listeners		: {
+				scope	: this
+			,	select	: function(cb, record, index) {
+					this.form_direktorat_on_select(record.get('id'));
+				}
+			}
+	});
 
 	this.form_status = new Ext.form.Checkbox({
 			fieldLabel	: 'Status Aktif'
-		});
+	});
 /*
  * Buttons
  */
@@ -220,7 +300,7 @@ function M_RefPegawai()
 		,	handler	: function() {
 				this.do_add();
 			}
-		});
+	});
 
 	this.btn_edit = new Ext.Button({
 			text		: 'Ubah'
@@ -230,7 +310,7 @@ function M_RefPegawai()
 		,	handler		: function() {
 				this.do_edit();
 			}
-		});
+	});
 
 	this.btn_ref = new Ext.Button({
 			text		: 'Refresh'
@@ -239,7 +319,7 @@ function M_RefPegawai()
 		,	handler		: function() {
 				this.do_load();
 			}
-		});
+	});
 
 	this.btn_del = new Ext.Button({
 			text		: 'Hapus'
@@ -249,7 +329,7 @@ function M_RefPegawai()
 		,	handler		: function() {
 				this.do_del();
 			}
-		});
+	});
 
 	this.btn_cancel = new Ext.Button({
 			text		: 'Cancel'
@@ -258,7 +338,7 @@ function M_RefPegawai()
 		,	handler		: function() {
 				this.do_cancel();
 			}
-		});
+	});
 
 	this.btn_save = new Ext.Button({
 			text		: 'Simpan'
@@ -267,7 +347,8 @@ function M_RefPegawai()
 		,	handler		: function() {
 				this.do_save();
 			}
-		});
+	});
+	
 /*
  * grid
  */
@@ -314,6 +395,30 @@ function M_RefPegawai()
 		,	filter		: {
 				type		: 'list'
 			,	store		: this.store_jabatan
+			,	labelField	: 'name'
+			,	phpMode		: false
+			}
+		},{
+			header		: 'Direktorat'
+		,	dataIndex	: 'id_direktorat'
+		,	sortable	: true
+		,	width		: 250
+		,	renderer	: combo_renderer(this.form_direktorat)
+		,	filter		: {
+				type		: 'list'
+			,	store		: this.store_direktorat
+			,	labelField	: 'name'
+			,	phpMode		: false
+			}
+		},{
+			header		: 'Divisi/Proyek/SBU'
+		,	dataIndex	: 'id_divprosbu'
+		,	sortable	: true
+		,	width		: 250
+		,	renderer	: combo_renderer(this.form_divprosbu)
+		,	filter		: {
+				type		: 'list'
+			,	store		: this.store_divprosbu
 			,	labelField	: 'name'
 			,	phpMode		: false
 			}
@@ -455,6 +560,8 @@ function M_RefPegawai()
 		,	this.form_name
 		,	this.form_klas
 		,	this.form_jabatan
+		,	this.form_direktorat
+		,	this.form_divprosbu
 		,	this.form_departemen
 		,	this.form_dinas
 		,	this.form_seksi
@@ -464,7 +571,7 @@ function M_RefPegawai()
 	});
 
 	this.panel = new Ext.Container({
-		id		: 'ref_pegawai_panel'
+		id			: 'ref_pegawai_panel'
 	,	layout		: 'card'
 	,	activeItem	: 0
 	,	items		: [
@@ -477,8 +584,12 @@ function M_RefPegawai()
  */
 	this.form_seksi_filter = function(r,id)
 	{
-		return (r.get('id_departemen') == this.id_departemen
-			&& r.get('id_dinas') == this.id_dinas);
+		return (
+			r.get('id_direktorat')	== this.id_direktorat
+		&&	r.get('id_divprosbu') 	== this.id_divprosbu
+		&&	r.get('id_departemen') 	== this.id_departemen
+		&&	r.get('id_dinas') 		== this.id_dinas
+		);
 	}
 
 	this.form_dinas_on_select = function(id_dinas)
@@ -496,7 +607,11 @@ function M_RefPegawai()
 
 	this.form_dinas_filter = function(r,id)
 	{
-		return (r.get('id_departemen') == this.id_departemen);
+		return (
+			r.get('id_direktorat')	== this.id_direktorat
+		&&	r.get('id_divprosbu') 	== this.id_divprosbu
+		&&	r.get('id_departemen') 	== this.id_departemen
+		);
 	}
 
 	this.form_departemen_on_select = function(id_departemen)
@@ -517,10 +632,63 @@ function M_RefPegawai()
 		}
 	}
 
+	this.form_departemen_filter = function(r,id)
+	{
+		return (
+			r.get('id_direktorat')	== this.id_direktorat
+		&&	r.get('id_divprosbu') 	== this.id_divprosbu
+		);
+	}
+
+	this.form_divprosbu_on_select = function(id_divprosbu)
+	{
+		this.id_divprosbu = id_divprosbu;
+
+		if (this.id_divprosbu != 'undefined'
+		&&  this.id_divprosbu != '') {
+			this.form_departemen.clearFilter(true);
+			this.form_departemen.filterBy(this.form_departemen_filter, this);
+
+			var id = this.store_departemen.getAt(0).get('id');
+
+			this.form_departemen.setValue(id);
+			this.form_departemen_on_select(id);
+		} else {
+			this.form_departemen.clearFilter(true);
+		}
+	}
+
+	this.form_divprosbu_filter = function(r,id)
+	{
+		return (
+			r.get('id_direktorat')	== this.id_direktorat
+		);
+	}
+
+	this.form_direktorat_on_select = function(id_direktorat)
+	{
+		this.id_direktorat = id_direktorat;
+
+		if (this.id_direktorat != 'undefined'
+		&&  this.id_direktorat != '') {
+			this.form_divprosbu.clearFilter(true);
+			this.form_divprosbu.filterBy(this.form_divprosbu_filter, this);
+
+			var id = this.store_divprosbu.getAt(0).get('id');
+
+			this.form_divprosbu.setValue(id);
+			this.form_divprosbu_on_select(id);
+		} else {
+			this.form_divprosbu.clearFilter(true);
+		}
+	}
+
 	this.do_reset = function()
 	{
 		this.form_seksi.clearFilter(true);
 		this.form_dinas.clearFilter(true);
+		this.form_departemen.clearFilter(true);
+		this.form_divprosbu.clearFilter(true);
 
 		this.form_nipg.setDisabled(false);
 		this.form_nipg.setValue('');
@@ -531,9 +699,9 @@ function M_RefPegawai()
 		this.form_klas.setValue(this.store_klas.getAt(0).get('id'));
 		this.form_jabatan.setValue(this.store_jabatan.getAt(0).get('id'));
 
-		var id = this.store_departemen.getAt(0).get('id');
-		this.form_departemen.setValue(id);
-		this.form_departemen_on_select(id);
+		var id = this.store_direktorat.getAt(0).get('id');
+		this.form_direktorat.setValue(id);
+		this.form_direktorat_on_select(id);
 	}
 
 	this.do_add = function()
@@ -560,6 +728,8 @@ function M_RefPegawai()
 
 	this.do_cancel = function()
 	{
+		this.form_divprosbu.clearFilter(true);
+		this.form_departemen.clearFilter(true);
 		this.form_dinas.clearFilter(true);
 		this.form_seksi.clearFilter(true);
 		this.panel.layout.setActiveItem(this.grid);
@@ -597,6 +767,8 @@ function M_RefPegawai()
 			,	email			: this.form_email.getValue()
 			,	id_klasifikasi_pegawai	: this.form_klas.getValue()
 			,	id_jabatan		: this.form_jabatan.getValue()
+			,	id_direktorat		: this.form_direktorat.getValue()
+			,	id_divprosbu		: this.form_divprosbu.getValue()
 			,	id_departemen		: this.form_departemen.getValue()
 			,	id_dinas		: this.form_dinas.getValue()
 			,	id_seksi		: this.form_seksi.getValue()
@@ -616,6 +788,8 @@ function M_RefPegawai()
 						return;
 					}
 
+					this.form_divprosbu.clearFilter(true);
+					this.form_departemen.clearFilter(true);
 					this.form_dinas.clearFilter(true);
 					this.form_seksi.clearFilter(true);
 					this.do_load();
@@ -634,10 +808,18 @@ function M_RefPegawai()
 		this.form_klas.setValue(record.data['id_klasifikasi_pegawai']);
 		this.form_jabatan.setValue(record.data['id_jabatan']);
 
-		var id = record.data['id_departemen'];
+		var id = record.data['id_direktorat'];
+		this.form_direktorat.setValue(id);
+		this.form_direktorat_on_select(id);
+
+		id = record.data['id_divprosbu'];
+		this.form_divprosbu.setValue(id);
+		this.form_divprosbu_on_select(id);
+
+		id = record.data['id_departemen'];
 		this.form_departemen.setValue(id);
 		this.form_departemen_on_select(id);
-
+		
 		id = record.data['id_dinas'];
 		this.form_dinas.setValue(id);
 		this.form_dinas_on_select(id);

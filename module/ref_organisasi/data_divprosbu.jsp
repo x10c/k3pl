@@ -18,35 +18,21 @@ try {
 
 	Statement	db_stmt			= db_con.createStatement();
 	String		id_direktorat	= request.getParameter("id_direktorat");
-	String		id_divprosbu	= request.getParameter("id_divprosbu");
-	String		id_departemen	= request.getParameter("id_departemen");
 
 	if (id_direktorat == null || id_direktorat.equals("0")) {
 		id_direktorat ="0 or 1 = 1 ";
 	}
 
-	if (id_direktorat == null || id_divprosbu == null || id_divprosbu.equals("0")) {
-		id_divprosbu ="0 or 1 = 1 ";
-	}
-
-	if (id_direktorat == null || id_divprosbu == null || id_departemen == null || id_departemen.equals("0")) {
-		id_departemen ="0 or 1 = 1 ";
-	}
-
 	String q= " select   id_direktorat"
 			+ " ,        id_divprosbu"
-			+ " ,        id_departemen"
-			+ " ,        id_dinas"
-			+ " ,        nama_dinas"
-			+ " from     r_dinas"
-			+ " where    id_direktorat	= "+ id_direktorat
-			+ " and    	 id_divprosbu 	= "+ id_divprosbu
-			+ " and    	 id_departemen	= "+ id_departemen
-			+ " order by id_dinas, id_departemen, id_divprosbu, id_direktorat";
+			+ " ,        nama_divprosbu"
+			+ " from     r_divprosbu"
+			+ " where    id_direktorat = "+ id_direktorat
+			+ " order by id_divprosbu, id_direktorat";
 
-	ResultSet	rs 		= db_stmt.executeQuery(q);
-	int			i 		= 0;
-	String		data 	= "[";
+	ResultSet	rs = db_stmt.executeQuery(q);
+	int		i = 0;
+	String		data = "[";
 
 	while (rs.next()) {
 		if (i > 0) {
@@ -56,9 +42,7 @@ try {
 		}
 		data	+="["+ rs.getString("id_direktorat")
 				+ ","+ rs.getString("id_divprosbu")
-				+ ","+ rs.getString("id_departemen")
-				+ ","+ rs.getString("id_dinas")
-				+ ",'"+ rs.getString("nama_dinas") +"'"
+				+ ",'"+ rs.getString("nama_divprosbu") +"'"
 				+ "]";
 	}
 

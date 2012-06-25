@@ -1,9 +1,10 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
+ %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
 <%@ page import="java.sql.*" %>
@@ -15,16 +16,29 @@ try {
 		return;
 	}
 
-	Statement	db_stmt	= db_con.createStatement();
+	Statement	db_stmt			= db_con.createStatement();
+	String		id_direktorat	= request.getParameter("id_direktorat");
+	String		id_divprosbu	= request.getParameter("id_divprosbu");
 
-	String q= " select   id_departemen"
-		+ " ,        nama_departemen"
-		+ " from     r_departemen"
-		+ " order by id_departemen";
+	if (id_direktorat == null || id_direktorat.equals("0")) {
+		id_direktorat ="0 or 1 = 1";
+	}
+	if (id_direktorat == null || id_divprosbu == null || id_divprosbu.equals("0")) {
+		id_divprosbu = "0 or 1 = 1";
+	}
 
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int		i = 0;
-	String		data = "[";
+	String q=" select   id_direktorat"
+		+" ,        id_divprosbu"
+		+" ,        id_departemen"
+		+" ,        nama_departemen"
+		+" from		r_departemen"
+		+" where	id_direktorat	= "+ id_direktorat
+		+" and		id_divprosbu	= "+ id_divprosbu
+		+" order by id_departemen, id_divprosbu, id_direktorat";
+
+	ResultSet	rs 		= db_stmt.executeQuery(q);
+	int			i 		= 0;
+	String		data 	= "[";
 
 	while (rs.next()) {
 		if (i > 0) {
@@ -32,9 +46,11 @@ try {
 		} else {
 			i++;
 		}
-		data	+= "[ "+ rs.getString("id_departemen")
-			+  ",'"+ rs.getString("nama_departemen") +"'"
-			+  "]";
+		data	+="["+ rs.getString("id_direktorat")
+				+ ","+ rs.getString("id_divprosbu")
+				+ ","+ rs.getString("id_departemen")
+				+ ",'"+ rs.getString("nama_departemen") +"'"
+				+ "]";
 	}
 
 	data += "]";

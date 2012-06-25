@@ -113,7 +113,7 @@ rs.close();
 	<div id="header" class="clearfloat">
 		<img src="<%=cpath%>/images/logo_new.png"/>
 		<h1> PT. Perusahaan Gas Negara (Persero) Tbk.</h1>
-		<h2> Sistem Informasi K3PL - SBU Distribusi Wilayah I </h2>
+		<h2> Sistem Informasi K3PL</h2>
 	</div><!--end #header-->
 
 	<div id="wrap" class="clearfloat">

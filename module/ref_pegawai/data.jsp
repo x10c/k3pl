@@ -22,6 +22,8 @@ try {
 	String q=" select	nipg "
 		+" ,		id_klasifikasi_pegawai "
 		+" ,		id_jabatan "
+		+" ,		id_direktorat "
+		+" ,		id_divprosbu "
 		+" ,		id_departemen "
 		+" ,		id_dinas "
 		+" ,		id_seksi "
@@ -44,6 +46,8 @@ try {
 		data	+="['"+ rs.getString("nipg") +"'"
 			+ ","+ rs.getString("id_klasifikasi_pegawai")
 			+ ","+ rs.getString("id_jabatan")
+			+ ","+ rs.getString("id_direktorat")
+			+ ","+ rs.getString("id_divprosbu")
 			+ ","+ rs.getString("id_departemen")
 			+ ","+ rs.getString("id_dinas")
 			+ ","+ rs.getString("id_seksi")

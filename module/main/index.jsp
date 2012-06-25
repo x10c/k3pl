@@ -123,7 +123,7 @@ if (null == user_nipg || null == db_url) {
 <div id='header'>
 	<img class='header_logo' src='<%=cpath%>/images/logo_new.png'/>
 	<span class='title'>Sistem Informasi K3PL</span>
-	<span class='subtitle'>SBU Distribusi Wilayah I</span>
+	<span class='subtitle'>PT. Perusahaan Gas Negara (Persero) Tbk.</span>
 </div>
 
 <div class='user'>
