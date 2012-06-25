@@ -13,6 +13,8 @@ var m_rca_lap_severity_month = ''
 function M_RCALapSeverity()
 {
 	this.ha_level		= 0;
+	this.id_direktorat	= '0';
+	this.id_divprosbu	= '0';
 	this.id_departemen	= '0';
 	this.id_dinas		= '0';
 	this.id_seksi		= '0';
@@ -103,6 +105,10 @@ function M_RCALapSeverity()
 		,	{ name: 'nama_dinas' }
 		,	{ name: 'penanggung_jawab_departemen' }
 		,	{ name: 'nama_departemen' }
+		,	{ name: 'penanggung_jawab_divprosbu' }
+		,	{ name: 'nama_divprosbu' }
+		,	{ name: 'penanggung_jawab_direktorat' }
+		,	{ name: 'nama_direktorat' }
 		,	{ name: 'completion_date_target' }
 		,	{ name: 'status' }
 		,	{ name: 'nama_status' }
@@ -124,22 +130,59 @@ function M_RCALapSeverity()
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
-					this.store_departemen.load();
+					this.store_direktorat.load();
 				}
 			}
 	});
 
-	this.store_departemen = new Ext.data.ArrayStore({
+	this.store_direktorat = new Ext.data.ArrayStore({
 			fields		: ['id', 'name']
-		,	url			: _g_root +'/module/ref_organisasi/data_departemen.jsp'
+		,	url			: _g_root +'/module/ref_organisasi/data_direktorat.jsp'
 		,	autoLoad	: false
 		,	idIndex		: 0
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
+					this.store_divprosbu.load({
+						params	: {
+							id_direktorat : this.id_direktorat
+						}
+					});
+				}
+			}
+	});
+
+	this.store_divprosbu = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_divprosbu.jsp'
+		,	autoLoad	: false
+		,	idIndex		: 1
+		,	listeners	: {
+				scope	: this
+			,	load	: function(store, records, options) {
+					this.store_departemen.load({
+						params	: {
+							id_direktorat 	: this.id_direktorat
+						,	id_divprosbu	: this.id_divprosbu
+						}
+					});
+				}
+			}
+	});
+
+	this.store_departemen = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id_divprosbu', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_departemen.jsp'
+		,	autoLoad	: false
+		,	idIndex		: 2
+		,	listeners	: {
+				scope	: this
+			,	load	: function(store, records, options) {
 					this.store_dinas.load({
 						params	: {
-							id_departemen : this.id_departemen
+							id_direktorat 	: this.id_direktorat
+						,	id_divprosbu	: this.id_divprosbu
+						,	id_departemen 	: this.id_departemen
 						}
 					});
 				}
@@ -147,16 +190,18 @@ function M_RCALapSeverity()
 	});
 
 	this.store_dinas = new Ext.data.ArrayStore({
-			fields		: ['id_departemen', 'id', 'name']
+			fields		: ['id_direktorat', 'id_divprosbu', 'id_departemen', 'id', 'name']
 		,	url			: _g_root +'/module/ref_organisasi/data_dinas.jsp'
 		,	autoLoad	: false
-		,	idIndex		: 1
+		,	idIndex		: 3
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
 					this.store_seksi.load({
 						params	: {
-							id_departemen	: this.id_departemen
+							id_direktorat 	: this.id_direktorat
+						,	id_divprosbu	: this.id_divprosbu
+						,	id_departemen	: this.id_departemen
 						,	id_dinas		: this.id_dinas
 						}
 					});
@@ -165,10 +210,10 @@ function M_RCALapSeverity()
 	});
 
 	this.store_seksi = new Ext.data.ArrayStore({
-			fields		: ['id_departemen', 'id_dinas', 'id', 'name']
+			fields		: ['id_direktorat', 'id_divprosbu', 'id_departemen', 'id_dinas', 'id', 'name']
 		,	url			: _g_root +'/module/ref_organisasi/data_seksi.jsp'
 		,	autoLoad	: false
-		,	idIndex		: 2
+		,	idIndex		: 4
 		,	listeners	: {
 				scope	: this
 			,	load	: function(store, records, options) {
@@ -220,6 +265,24 @@ function M_RCALapSeverity()
 
 	this.form_departemen = new Ext.form.ComboBox({
 			store			: this.store_departemen
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	typeAhead		: true
+		,	triggerAction	: 'all'
+	});
+
+	this.form_divprosbu = new Ext.form.ComboBox({
+			store			: this.store_divprosbu
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	typeAhead		: true
+		,	triggerAction	: 'all'
+	});
+
+	this.form_direktorat = new Ext.form.ComboBox({
+			store			: this.store_direktorat
 		,	valueField		: 'id'
 		,	displayField	: 'name'
 		,	mode			: 'local'
@@ -286,6 +349,30 @@ function M_RCALapSeverity()
 		,	sortable	: true
 		,	width		: 200
 		,	filterable	: true
+		},{
+			header		: 'Direktorat Owner'
+		,	dataIndex	: 'penanggung_jawab_direktorat'
+		,	sortable	: true
+		,	width		: 250
+		,	renderer	: combo_renderer(this.form_direktorat)
+		,	filter		: {
+				type		: 'list'
+			,	store		: this.store_direktorat
+			,	labelField	: 'name'
+			,	phpMode		: false
+			}
+		},{
+			header		: 'Divisi/Proyek/SBU Owner'
+		,	dataIndex	: 'penanggung_jawab_divprosbu'
+		,	sortable	: true
+		,	width		: 250
+		,	renderer	: combo_renderer(this.form_divprosbu)
+		,	filter		: {
+				type		: 'list'
+			,	store		: this.store_divprosbu
+			,	labelField	: 'name'
+			,	phpMode		: false
+			}
 		},{
 			header		: 'Departemen Owner'
 		,	dataIndex	: 'penanggung_jawab_departemen'

@@ -33,6 +33,10 @@ try {
 	+"		,	c.nama_dinas "
 	+"		,	a.penanggung_jawab_departemen "
 	+"		,	d.nama_departemen "
+	+"		,	a.penanggung_jawab_divprosbu "
+	+"		,	e.nama_divprosbu "
+	+"		,	a.penanggung_jawab_direktorat "
+	+"		,	f.nama_direktorat "
 	+"		,	a.completion_date_target "
 	+"		,	a.status "
 	+"		,	case a.status when '1' then 'Open' when '2' then 'Process' else 'Closed' end as nama_status "
@@ -41,11 +45,15 @@ try {
 	+"	,		r_seksi						as b"
 	+"	,		r_dinas						as c"
 	+"	,		r_departemen				as d"
+	+"	,		r_divprosbu					as e"
+	+"	,		r_direktorat				as f"
 	+"	where	year(a.tanggal_rca)				= " + year
 	+"	and		month(a.tanggal_rca)			= " + month
 	+"	and		a.penanggung_jawab_seksi		= b.id_seksi "
 	+"	and		a.penanggung_jawab_dinas		= c.id_dinas "
 	+"	and		a.penanggung_jawab_departemen	= d.id_departemen "
+	+"	and		a.penanggung_jawab_divprosbu	= e.id_divprosbu "
+	+"	and		a.penanggung_jawab_direktorat	= f.id_direktorat "
 	+"	order by a.tanggal_rca";
 
 	ResultSet	rs 		= db_stmt.executeQuery(q);
@@ -68,6 +76,10 @@ try {
 			+  ",'"+ rs.getString("nama_dinas") + "'"
 			+  ","+ rs.getString("penanggung_jawab_departemen")
 			+  ",'"+ rs.getString("nama_departemen") + "'"
+			+  ","+ rs.getString("penanggung_jawab_divprosbu")
+			+  ",'"+ rs.getString("nama_divprosbu") + "'"
+			+  ","+ rs.getString("penanggung_jawab_direktorat")
+			+  ",'"+ rs.getString("nama_direktorat") + "'"
 			+  ",'"+ rs.getString("completion_date_target") +"'"
 			+  ",'"+ rs.getString("status") +"'"
 			+  ",'"+ rs.getString("nama_status") +"'"
