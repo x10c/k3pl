@@ -17,7 +17,9 @@ try {
 
 	Statement	db_stmt	= db_con.createStatement();
 
-	int dml = Integer.parseInt(request.getParameter("dml_type"));
+	int dml					= Integer.parseInt(request.getParameter("dml_type"));
+	String id_direktorat	= request.getParameter("id_direktorat");
+	String id_divprosbu		= request.getParameter("id_divprosbu");
 	String id_departemen	= request.getParameter("id_departemen");
 	String id_dinas		= request.getParameter("id_dinas");
 	String id_seksi		= request.getParameter("id_seksi");
@@ -28,15 +30,19 @@ try {
 	switch (dml) {
 	case 2:
 		q	=" insert into r_seksi ("
-			+"	id_departemen"
+			+" 		id_direktorat"
+			+" ,	id_divprosbu"
+			+" ,	id_departemen"
 			+" ,	id_dinas"
 			+" ,	nama_seksi"
 			+" ,	id_user ) "
 			+" values ("
-			+ id_departemen +", "
-			+ id_dinas +", '"
-			+ nama_seksi +"', '"
-			+ id_user +"' )";
+			+ id_direktorat +","
+			+ id_divprosbu +","
+			+ id_departemen +","
+			+ id_dinas +",'"
+			+ nama_seksi +"','"
+			+ id_user +"')";
 		break;
 	case 3:
 		q	=" update	r_seksi "

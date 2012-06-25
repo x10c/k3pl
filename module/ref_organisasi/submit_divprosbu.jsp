@@ -17,36 +17,29 @@ try {
 
 	Statement	db_stmt		= db_con.createStatement();
 
-	int dml = Integer.parseInt(request.getParameter("dml_type"));
+	int dml					= Integer.parseInt(request.getParameter("dml_type"));
 	String id_direktorat	= request.getParameter("id_direktorat");
 	String id_divprosbu		= request.getParameter("id_divprosbu");
-	String id_departemen	= request.getParameter("id_departemen");
-	String nama_departemen	= request.getParameter("nama_departemen");
+	String nama_divprosbu	= request.getParameter("nama_divprosbu");
 	String id_user			= (String) session.getAttribute("user.nipg");
 	String q;
 
 	switch (dml) {
 	case 2:
-		q	=" insert into	r_departemen (id_direktorat, id_divprosbu, nama_departemen, id_user) "
-			+" values ("
-			+ id_direktorat +","
-			+ id_divprosbu +","
-			+ "'"+ nama_departemen +"',"
-			+ "'"+ id_user +"') ";
+		q	=" insert into	r_divprosbu (id_direktorat, nama_divprosbu, id_user) "
+			+" values ("+ id_direktorat +",'"+ nama_divprosbu +"', '"+ id_user +"') ";
 		break;
 	case 3:
 		q	=" update	r_departemen "
-			+" set		nama_departemen	= '"+ nama_departemen +"' "
+			+" set		nama_divprosbu	= '"+ nama_divprosbu +"' "
 			+" ,		id_user		= '"+ id_user +"' "
 			+" ,		tanggal_akses	= getdate() "
-			+" where	id_departemen   = "+ id_departemen
-			+" and		id_divprosbu	= "+ id_divprosbu
+			+" where	id_divprosbu	= "+ id_divprosbu
 			+" and		id_direktorat	= "+ id_direktorat;
 		break;
 	case 4:
 		q	=" delete from	r_departemen "
-			+" where	id_departemen =  "+ id_departemen
-			+" and		id_divprosbu	= "+ id_divprosbu
+			+" where	id_divprosbu	= "+ id_divprosbu
 			+" and		id_direktorat	= "+ id_direktorat;
 		break;
 	default:

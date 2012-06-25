@@ -241,6 +241,40 @@ Ext.override(Ext.grid.GridPanel,{
 });
 
 /**
+ * Fix for horizontal scroll in hbox layout
+ */
+Ext.override (Ext.layout.BoxLayout, {
+	updateInnerCtSize: function(tSize, calcs) {
+		var align   = this.align
+		,	padding = this.padding
+		,	width   = tSize.width
+		,	height  = tSize.height;
+
+		if (this.type == 'hbox') {
+			var innerCtWidth  = Math.max(width, calcs.meta.minimumWidth)
+			,	innerCtHeight = calcs.meta.maxHeight + padding.top + padding.bottom;
+
+			if (align == 'stretch') {
+				innerCtHeight = height;
+			} else if (align == 'middle') {
+				innerCtHeight = Math.max(height, innerCtHeight);
+			}
+		} else {
+			var innerCtHeight = height
+			,	innerCtWidth  = calcs.meta.maxWidth + padding.left + padding.right;
+
+			if (align == 'stretch') {
+				innerCtWidth = width;
+			} else if (align == 'center') {
+				innerCtWidth = Math.max(width, innerCtWidth);
+			}
+		}
+
+		this.innerCt.setSize(innerCtWidth || undefined, innerCtHeight || undefined);
+	}
+});
+
+/**
  * Highchart
  * - set default export url.
  * - disabled print button and credits.
