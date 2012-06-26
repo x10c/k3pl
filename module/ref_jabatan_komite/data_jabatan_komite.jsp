@@ -26,6 +26,7 @@ try {
 	String q= " select   id_jabatan_komite "
 		+ " ,        id_kel_jabatan_komite_sub_komite "
 		+ " ,        nama_jabatan_komite "
+		+ " ,        notulen "
 		+ " from     r_jabatan_komite_sub_komite "
 		+ " where id_kel_jabatan_komite_sub_komite = "+ id_kel_jabatan_komite
 		+ " order by id_jabatan_komite ";
@@ -45,6 +46,7 @@ try {
 		data	+= "{ id : '"+ rs.getString("id_jabatan_komite") +"' "
 			+  ", id_kel : '"+ rs.getString("id_kel_jabatan_komite_sub_komite") +"' "
 			+  ", nama : '"+ rs.getString("nama_jabatan_komite") +"' "
+			+  ", notulen : '"+ rs.getString("notulen") +"' "
 			+  "} ";
 	}
 

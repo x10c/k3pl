@@ -115,6 +115,10 @@ function M_RefKelJabatanKomite()
 
 function M_ListPegawai()
 {
+	this.id_dep		= 0;
+	this.id_dinas		= 0;
+	this.id_seksi		= 0;
+	
 	this.record = new Ext.data.Record.create([
 			{name:'nipg'}
 		,	{name:'nama_klasifikasi_pegawai'}
@@ -126,7 +130,14 @@ function M_ListPegawai()
 		,	{name:'email'}
 		,	{name:'status_pegawai'}
 		]);
-
+	
+	this.set_org = new k3pl.form.SetOrganisasi({
+			itemAll		:true
+		,	scope		:this
+		,	onCheckClick	:function() {
+				this.scope.set_checked()
+			}
+		});
 	this.reader = new Ext.data.JsonReader({
 			id	: 'nipg'
 		,	root: 'rows'
@@ -222,9 +233,40 @@ function M_ListPegawai()
 			}
 		});
 
-	this.panel = new Ext.grid.GridPanel({
-			id			: 'list_pegawai_panel'
-		,	title		: 'Daftar Pegawai'
+	this.btn_filter = new Ext.Button({
+		text		: 'Filter'
+	,	listeners	: {
+			scope	: this
+		,	click	: function(btn, e) {
+				this.grid.do_load(
+						this.set_org.formDepartemen.getValue()
+					,	this.set_org.formDinas.getValue()
+					,	this.set_org.formSeksi.getValue()
+				);
+			}
+		}
+	});
+	
+	this.filterOrg = new Ext.form.FormPanel({
+		frame		: true
+	,	region		: 'center'
+	,	width		: 450
+	,	autoHeight	: true
+	,	autoScroll	: true
+	,	labelAlign	: 'right'
+	,	items		: [
+			this.set_org
+		]
+	,	buttonAlign	: 'center'
+	,	buttons		: [
+			this.btn_filter
+		]
+	});
+
+	this.grid = new Ext.grid.GridPanel({
+			title		: 'Daftar Pegawai'
+		,	region		: 'south'
+		,	height		: 300
 		,	store		: this.store
 		,	sm			: this.sm
 		,	cm			: this.cm
@@ -236,7 +278,24 @@ function M_ListPegawai()
 			,	this.btn_pilih
 			]
 		});
-
+	
+	this.panel = new Ext.Container({
+			id			: 'list_pegawai_panel'
+		,	layout		: 'border'
+		,	bodyBorder	: false
+		,	autoScroll	: true
+		,	defaults	: {
+				loadMask		: {msg: 'Pemuatan...'}
+			,	split			: true
+			,	autoScroll		: true
+			,	animCollapse	: true
+    		}
+		,	items		: [
+				this.filterOrg
+			,	this.grid
+			]
+		});
+		
 	this.do_load = function()
 	{
 		this.store.load();
@@ -246,6 +305,7 @@ function M_ListPegawai()
 	{
 		this.ha_level = ha_level;
 		this.do_load();
+		this.set_org.do_load();
 	}
 }
 

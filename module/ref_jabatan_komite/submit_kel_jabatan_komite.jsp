@@ -21,6 +21,7 @@ try {
 	int dml = Integer.parseInt(request.getParameter("dml_type"));
 	String id_kel_jabatan_komite	= request.getParameter("id");
 	String nama_kel_jabatan_komite	= request.getParameter("nama");
+	String level_komite	= request.getParameter("level_komite");
 	String id_user			= (String) session.getAttribute("user.nipg");
 	String q;
 
@@ -29,16 +30,19 @@ try {
 		q	=" insert into r_kel_jabatan_komite_sub_komite ("
 			+"	id_kel_jabatan_komite_sub_komite "
 			+",	nama_kel_jabatan_komite_sub_komite "
+			+",	level_komite "
 			+",	id_user "
 			+") values ("
 			+ id_kel_jabatan_komite +", '"
 			+ nama_kel_jabatan_komite +"', '"
+			+ level_komite +"', '"
 			+ id_user
 			+"' )";
 		break;
 	case 3:
 		q	=" update	r_kel_jabatan_komite_sub_komite "
 			+" set		nama_kel_jabatan_komite_sub_komite	= '"+ nama_kel_jabatan_komite +"' "
+			+" ,		level_komite			= '"+ level_komite +"' "
 			+" ,		id_user			= '"+ id_user +"' "
 			+" ,		tanggal_akses		= getdate() "
 			+" where	id_kel_jabatan_komite_sub_komite	=  "+ id_kel_jabatan_komite;

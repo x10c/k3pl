@@ -20,6 +20,7 @@ try {
 
 	String q= " select   id_kel_jabatan_komite_sub_komite "
 		+ " ,        nama_kel_jabatan_komite_sub_komite "
+		+ " ,        level_komite "
 		+ " from     r_kel_jabatan_komite_sub_komite "
 		+ " order by id_kel_jabatan_komite_sub_komite ";
 
@@ -35,6 +36,7 @@ try {
 		}
 		data	+= "{ id : '"+ rs.getString("id_kel_jabatan_komite_sub_komite") +"' "
 			+  ", nama : '"+ rs.getString("nama_kel_jabatan_komite_sub_komite") +"' "
+			+  ", level_komite : '"+ rs.getString("level_komite") +"' "
 			+  "} ";
 	}
 

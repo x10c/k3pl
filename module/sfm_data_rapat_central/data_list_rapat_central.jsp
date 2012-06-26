@@ -19,7 +19,8 @@ try {
 	String q=" select	A.id_kel_jabatan_komite_sub_komite "
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
-		+" where B.nipg = "+ id_user +" and B.id_jabatan_komite in ('16','17') "
+		+" left join R_KEL_JABATAN_KOMITE_SUB_KOMITE C on (C.ID_KEL_JABATAN_KOMITE_SUB_KOMITE = A.ID_KEL_JABATAN_KOMITE_SUB_KOMITE) "
+		+" where B.nipg = "+ id_user +" and A.notulen in ('1','3') and C.LEVEL_KOMITE = '1' "
 		+" order by	A.id_kel_jabatan_komite_sub_komite ";
 		
 	ResultSet	rs_kel = db_stmt.executeQuery(q);
@@ -40,7 +41,7 @@ try {
 			+" from		t_rapat		A"
 			+" left join	r_kel_jabatan_komite_sub_komite	B"
 			+" on		A.id_kel_jabatan_komite_sub_komite = B.id_kel_jabatan_komite_sub_komite "
-			+" where	A.id_kel_jabatan_komite_sub_komite	= "+ tipe_rapat
+			+" where	B.level_komite	= "+ tipe_rapat
 			+" order by	A.id_rapat ";
 	}
 	else {

@@ -22,6 +22,7 @@ try {
 	String id_jabatan_komite	= request.getParameter("id");
 	String id_kel_jabatan_komite	= request.getParameter("id_kel");
 	String nama_jabatan_komite	= request.getParameter("nama");
+	String notulen	= request.getParameter("notulen");
 	String id_user			= (String) session.getAttribute("user.nipg");
 	String q;
 
@@ -29,16 +30,19 @@ try {
 	case 2:
 		q	=" insert into r_jabatan_komite_sub_komite ("
 			+"	nama_jabatan_komite "
+			+"	notulen "
 			+" ,	id_kel_jabatan_komite_sub_komite "
 			+" ,	id_user "
 			+" ) values ('"
 			+ nama_jabatan_komite +"', '"
+			+ notulen +"', '"
 			+ id_kel_jabatan_komite +"', '"
 			+ id_user +"' )";
 		break;
 	case 3:
 		q	=" update	r_jabatan_komite_sub_komite "
 			+" set		nama_jabatan_komite	= '"+ nama_jabatan_komite +"' "
+			+" ,		notulen			= '"+ notulen +"' "
 			+" ,		id_user			= '"+ id_user +"' "
 			+" ,		tanggal_akses		= getdate() "
 			+" where	id_jabatan_komite	=  "+ id_jabatan_komite +" and id_kel_jabatan_komite_sub_komite = "+ id_kel_jabatan_komite;

@@ -41,6 +41,7 @@ function M_RefJabatanKomite()
 			{name:'id'}
 		,	{name:'id_kel'}
 		,	{name:'nama'}
+		,	{name:'notulen'}
 		]);
 
 	this.reader = new Ext.data.JsonReader({
@@ -63,6 +64,28 @@ function M_RefJabatanKomite()
 		});
 	this.form_name = new Ext.form.TextField({
 			allowBlank	: false
+		});
+	
+	this.store_notulen_level = new Ext.data.ArrayStore({
+			fields	: ['id', 'name']
+		,	data	: [
+				['0', 'No Access']
+			,	['1', 'Notulen']
+			,	['2', 'Penanggung Jawab']
+			,	['3', 'Notulen & Penanggung Jawab']
+			]
+		})
+
+	this.cb_notulen_level = new Ext.form.ComboBox({
+			store		: this.store_notulen_level
+		,	valueField	: 'id'
+		,	displayField	: 'name'
+		,	mode		: 'local'
+		,	allowBlank	: true
+		,	forceSelection	: true
+		,	typeAhead	: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
 		});
 
 	this.columns = [
@@ -87,6 +110,14 @@ function M_RefJabatanKomite()
 			, sortable	: true
 			, editor	: this.form_name
 			, width 	: 400
+			}
+		,	{ id		: 'notulen'
+			, header	: 'Level'
+			, dataIndex	: 'notulen'
+			, sortable	: true
+			, editor	: this.cb_notulen_level
+			,	renderer	: combo_renderer(this.cb_notulen_level)
+			, width 	: 100
 			}
 		];
 
@@ -169,6 +200,7 @@ function M_RefJabatanKomite()
 				id		: ''
 			,	id_kel	: m_ref_jab_kel_id
 			,	nama	: ''
+			,	notulen	: ''
 			});
 
 			this.editor.stopEditing();
@@ -206,6 +238,7 @@ function M_RefJabatanKomite()
 				id		: record.data['id']
 			,	id_kel	: record.data['id_kel']
 			,	nama	: record.data['nama']
+			,	notulen	: record.data['notulen']
 			,	dml_type: this.dml_type
 			}
 		,	url		:  m_ref_jab_komite_d +'submit_jabatan_komite.jsp'
@@ -263,6 +296,7 @@ function M_RefKelJabatanKomite()
 	this.record = new Ext.data.Record.create([
 		{name: 'id'}
 	,	{name: 'nama'}
+	,	{name: 'level_komite'}
 	]);
 
 	this.reader = new Ext.data.JsonReader({
@@ -284,6 +318,26 @@ function M_RefKelJabatanKomite()
 	this.form_nama_jabatan_sub_komite = new Ext.form.TextField({
 			allowBlank	: false
 		});
+		
+	this.store_level_komite = new Ext.data.ArrayStore({
+			fields	: ['id', 'name']
+		,	data	: [
+				['1', 'CSC']
+			,	['2', 'SC']
+			]
+		})
+
+	this.cb_level_komite = new Ext.form.ComboBox({
+			store		: this.store_level_komite
+		,	valueField	: 'id'
+		,	displayField	: 'name'
+		,	mode		: 'local'
+		,	allowBlank	: false
+		,	forceSelection	: true
+		,	typeAhead	: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		});
 
 	this.columns = [
 			{ id		: 'id'
@@ -299,6 +353,14 @@ function M_RefKelJabatanKomite()
 			, width		: 100
 			, sortable	: true
 			, editor	: this.form_nama_jabatan_sub_komite
+			}
+		,	{ id		: 'level_komite'
+			, header	: 'Level'
+			, dataIndex	: 'level_komite'
+			, width		: 100
+			, sortable	: true
+			, editor	: this.cb_level_komite
+			, renderer	: combo_renderer(this.cb_level_komite)
 			}
 		];
 
@@ -388,6 +450,7 @@ function M_RefKelJabatanKomite()
 		this.record_new = new this.record({
 				id	: ''
 			,	nama: ''
+			,	level_komite: ''
 			});
 
 		this.editor.stopEditing();
@@ -423,6 +486,7 @@ function M_RefKelJabatanKomite()
 			params :{
 				id		: record.data['id']
 			,	nama	: record.data['nama']
+			,	level_komite	: record.data['level_komite']
 			,	dml_type: this.dml_type
 			}
 		,	url		: m_ref_jab_komite_d +'submit_kel_jabatan_komite.jsp'
