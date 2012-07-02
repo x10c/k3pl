@@ -21,19 +21,21 @@ try {
 	String id_direktorat	= request.getParameter("id_direktorat");
 	String id_divprosbu		= request.getParameter("id_divprosbu");
 	String nama_divprosbu	= request.getParameter("nama_divprosbu");
+	String status_divprosbu	= request.getParameter("status_divprosbu");
 	String id_user			= (String) session.getAttribute("user.nipg");
 	String q;
 
 	switch (dml) {
 	case 2:
-		q	=" insert into	r_divprosbu (id_direktorat, nama_divprosbu, id_user) "
-			+" values ("+ id_direktorat +",'"+ nama_divprosbu +"', '"+ id_user +"') ";
+		q	=" insert into	r_divprosbu (id_direktorat, nama_divprosbu, status_divprosbu, id_user) "
+			+" values ("+ id_direktorat +",'"+ nama_divprosbu +","+ status_divprosbu +", '"+ id_user +"') ";
 		break;
 	case 3:
 		q	=" update	r_divprosbu"
-			+" set		nama_divprosbu	= '"+ nama_divprosbu +"' "
-			+" ,		id_user		= '"+ id_user +"' "
-			+" ,		tanggal_akses	= getdate() "
+			+" set		nama_divprosbu		= '"+ nama_divprosbu +"' "
+			+" ,		status_divprosbu	=  "+ status_divprosbu
+			+" ,		id_user				= '"+ id_user +"' "
+			+" ,		tanggal_akses		= getdate() "
 			+" where	id_divprosbu	= "+ id_divprosbu
 			+" and		id_direktorat	= "+ id_direktorat;
 		break;

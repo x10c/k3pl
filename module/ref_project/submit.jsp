@@ -26,12 +26,14 @@ try{
 	String durasi			= request.getParameter("durasi");
 	String keterangan		= request.getParameter("keterangan");
 	String id_user			= (String) session.getAttribute("user.nipg");
+	String id_divprosbu		= (String) session.getAttribute ("user.divprosbu");
+	String id_direktorat	= (String) session.getAttribute ("user.direktorat");
 	String q;
 
 	switch (dml) {
 	case 2:
-		q	=" insert into r_project (no_project, nama_project, tanggal_mulai, durasi, keterangan, id_user)"
-			+" values ('"+ no_project +"'" +" ,'"+ nama_project +"'" +" ,'"+tanggal_mulai+"'" +" ,'"+ durasi +"'" +" ,'"+keterangan +"'" +" ,'"+id_user +"')";
+		q	=" insert into r_project (no_project, nama_project, tanggal_mulai, durasi, keterangan, id_user, id_divprosbu, id_direktorat)"
+			+" values ('"+ no_project +"'" +" ,'"+ nama_project +"'" +" ,'"+tanggal_mulai+"'" +" ,'"+ durasi +"'" +" ,'"+keterangan +"'" +" ,'"+id_user +"'" +" ,"+ id_divprosbu +" ,"+ id_direktorat + ")";
 		break;
 	case 3:
 		q	=" update	r_project"
@@ -40,6 +42,8 @@ try{
 			+" ,		tanggal_mulai	= '"+ tanggal_mulai +"'"
 			+" ,		durasi			= '"+ durasi +"'"
 			+" ,		keterangan		= '"+ keterangan +"'"
+			+" ,		id_divprosbu	=  "+ id_divprosbu
+			+" ,		id_direktorat	=  "+ id_direktorat
 			+" ,		id_user			= '"+ id_user +"'"
 			+" ,		tanggal_akses	= getdate()"
 			+" where	id_project	= "+ id_project;

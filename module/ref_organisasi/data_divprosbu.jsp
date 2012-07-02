@@ -26,6 +26,7 @@ try {
 	String q= " select   id_direktorat"
 			+ " ,        id_divprosbu"
 			+ " ,        nama_divprosbu"
+			+ " ,        status_divprosbu"
 			+ " from     r_divprosbu"
 			+ " where    id_direktorat = "+ id_direktorat
 			+ " order by id_divprosbu, id_direktorat";
@@ -43,6 +44,7 @@ try {
 		data	+="["+ rs.getString("id_direktorat")
 				+ ","+ rs.getString("id_divprosbu")
 				+ ",'"+ rs.getString("nama_divprosbu") +"'"
+				+ ","+ rs.getString("status_divprosbu")
 				+ "]";
 	}
 
