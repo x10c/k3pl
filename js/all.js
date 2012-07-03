@@ -397,7 +397,7 @@ k3pl.store.Area = new Ext.data.ArrayStore({
 		fields		: k3pl.record.Area
 	,	url			: _g_root +'/module/ref_area/data_area.jsp'
 	,	autoLoad	: false
-	,	idIndex		: 3
+	,	idIndex		: 5
 	});
 
 Ext.ns('k3pl.form');
