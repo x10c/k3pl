@@ -17,7 +17,7 @@ try {
 	String q=" select	A.id_kel_jabatan_komite_sub_komite "
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
-		+" where B.nipg = "+ id_user +" and B.id_jabatan_komite in ('2','5','8','11','14','17','20') "
+		+" where B.nipg = "+ id_user +" and A.notulen in ('0','1') "
 		+" order by	A.id_kel_jabatan_komite_sub_komite ";
 		
 
