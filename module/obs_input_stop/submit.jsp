@@ -3,7 +3,7 @@
  %
  % Author(s):
  % + PT. Awakami
- %   - m.shulhan (ms@kilabit.org)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
 
 <%@ page import="java.sql.Connection" %>
@@ -133,12 +133,16 @@ try {
 		q	=" insert into t_stop ("
 			+"   id_stop"
 			+" , nipg"
+			+" , id_divprosbu"
+			+" , id_direktorat"
 			+" , id_departemen"
 			+" , id_dinas"
 			+" , id_seksi"
 			+" , id_area_seksi"
 			+" , id_area_dinas"
 			+" , id_area_departemen"
+			+" , id_area_divprosbu"
+			+" , id_area_direktorat"
 			+" , tanggal"
 			+" , year"
 			+" , month"
@@ -155,12 +159,16 @@ try {
 			+" ) select"
 			+"   "+ id_stop
 			+" ,'"+ nipg +"'"
+			+" , A.id_direktorat"
+			+" , A.id_divprosbu"
 			+" , A.id_departemen"
 			+" , A.id_dinas"
 			+" , A.id_seksi"
 			+" , "+ id_area_seksi
 			+" , B.id_dinas"
 			+" , B.id_departemen"
+			+" , B.id_divprosbu"
+			+" , B.id_direktorat"
 			+" , cast('"+ tanggal +"' as datetime)"
 			+" , "+ year
 			+" , "+ month
@@ -228,7 +236,7 @@ try {
 	case 2:
 		/* insert stop detail */
 		q	=" insert into t_stop_detail ("
-			+"	id_stop "
+			+"		id_stop "
 			+" ,	id_kel_tipe_observasi "
 			+" ,	id_tipe_observasi "
 			+" ,	id_detail_tipe_observasi "
@@ -261,14 +269,14 @@ try {
 			o = data.getJSONObject(i);
 
 			q	+=" update	t_stop_detail "
-				+ " set		jumlah_safe	= "+ o.getString("safe")
+				+ " set		jumlah_safe		= "+ o.getString("safe")
 				+ " ,		jumlah_unsafe	= "+ o.getString("unsafe")
-				+ " ,		id_user		= '"+ user_nipg +"' "
+				+ " ,		id_user			= '"+ user_nipg +"' "
 				+ " ,		tanggal_akses	= getdate() "
 				+ " where	id_kel_tipe_observasi		= "+ o.getString("kel_id")
-				+ " and		id_tipe_observasi		= "+ o.getString("tipe_id")
+				+ " and		id_tipe_observasi			= "+ o.getString("tipe_id")
 				+ " and		id_detail_tipe_observasi	= "+ o.getString("detail_id")
-				+ " and		id_stop				= "+ id_stop
+				+ " and		id_stop						= "+ id_stop
 				+ ";";
 		}
 		break;
