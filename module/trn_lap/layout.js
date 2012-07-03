@@ -177,7 +177,8 @@ function M_TrnMatriks()
 		this.ha_level = ha_level;
 
 		this.store_jab.reload();
-		this.store.load({
+
+		this.store.reload({
 			params	: {
 				start	: 0
 			,	limit	: 50
@@ -242,8 +243,8 @@ function M_TrnLapPegawai()
 	});
 
 	this.set_org = new k3pl.form.SetOrganisasi({
-		itemAll		: true
-	,	scope		: this
+		itemAll			: true
+	,	scope			: this
 	,	onCheckClick	: function() {
 			this.toggleCollapse(true);
 			this.scope.set_pegawai.toggleCollapse(true);
@@ -302,7 +303,7 @@ function M_TrnLapPegawai()
 		,	this.set_waktu
 		]
 	,	labelAlign	:'right'
-	,	width		:450
+	,	width		:460
 	});
 /*
  * Grid
@@ -396,7 +397,9 @@ function M_TrnLapPegawai()
 	{
 		this.store.load({
 			params	:{
-				id_dep 		:this.set_org.formDepartemen.getValue()
+				id_dir		:this.set_org.formDirektorat.getValue ()
+			,	id_div		:this.set_org.formDivProSBU.getValue ()
+			,	id_dep 		:this.set_org.formDepartemen.getValue()
 			,	id_dinas	:this.set_org.formDinas.getValue()
 			,	id_seksi	:this.set_org.formSeksi.getValue()
 			,	nipg		:this.form_peg.getValue()

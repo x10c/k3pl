@@ -1019,11 +1019,12 @@ k3pl.form.Bulan = Ext.extend (Ext.form.ComboBox, {
 
 k3pl.form.SetOrganisasi = Ext.extend (Ext.form.FieldSet, {
 	constructor: function (config) {
-		config.formSeksi	= new k3pl.form.Seksi(config);
-		config.formDinas	= new k3pl.form.Dinas(config);
-		config.formDepartemen	= new k3pl.form.Departemen(config);
+		config.formSeksi		= new k3pl.form.Seksi (config);
+		config.formDinas		= new k3pl.form.Dinas (config);
+		config.formDepartemen	= new k3pl.form.Departemen (config);
 		config.formDivProSBU	= new k3pl.form.DivProSBU (config);
 		config.formDirektorat	= new k3pl.form.Direktorat (config);
+		config.labelWidth		= 120;
 
 		Ext.apply(this
 		, config

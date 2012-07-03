@@ -6,8 +6,12 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q = "";
 String o = "";
@@ -19,6 +23,8 @@ try {
 	}
 
 	Statement	db_stmt		= db_con.createStatement();
+	String		id_dir		= request.getParameter("id_dir");
+	String		id_div		= request.getParameter("id_div");
 	String		id_dep		= request.getParameter("id_dep");
 	String		id_dinas	= request.getParameter("id_dinas");
 	String		id_seksi	= request.getParameter("id_seksi");
@@ -27,12 +33,18 @@ try {
 	String		date_end	= request.getParameter("date_end");
 	String		q_org;
 	String		q_id;
-	int		i = 0;
+	int			i = 0;
 
 	q_org	=" select	nipg"
 			+" from		r_pegawai"
 			+" where	1=1";
 
+	if (id_dir != null && ! (id_dir.equals ("") || id_dir.equals ("0"))) {
+		q_org += " and id_direktorat = "+ id_dir;
+	}
+	if (id_div != null && ! (id_div.equals ("") || id_div.equals ("0"))) {
+		q_org += " and id_divprosbu = "+ id_div;
+	}
 	if (id_dep != null && !(id_dep.equals("") || id_dep.equals("0"))) {
 		q_org +=" and id_departemen = "+ id_dep;
 	}
@@ -61,15 +73,15 @@ try {
 	}
 
 	if (nipg != null && !nipg.equals("")) {
-		q_id	+=" and	B.id in ("
+		q_id+=" and	B.id in ("
 			+" 	select	id"
 			+" 	from	t_pelatihan_peserta"
 			+" 	where	nipg = '"+ nipg +"'"
 			+" )";
 	}
 
-	if (id_dep != null && !(id_dep.equals("") || id_dep.equals("0"))) {
-		q_id	+=" and	B.id in ("
+	if (id_dir != null && !(id_dir.equals("") || id_dir.equals("0"))) {
+		q_id+=" and	B.id in ("
 			+ "	select	id"
 			+ "	from	t_pelatihan_peserta"
 			+ "	where	nipg in ("+ q_org +")"
@@ -85,9 +97,9 @@ try {
 		+" ,		Z.tanggal"
 		+" ,		Z.tempat"
 		+" ,		Z.lama"
-		+" from	t_pelatihan_peserta	X"
-		+" ,	r_pegawai		Y"
-		+" ,("+ q_id +") Z"
+		+" from		t_pelatihan_peserta	X"
+		+" ,		r_pegawai			Y"
+		+" ,		("+ q_id +")		Z"
 		+" where	Z.id	= X.id"
 		+" and		X.nipg	= Y.nipg";
 

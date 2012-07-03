@@ -6,7 +6,9 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -15,12 +17,11 @@ try {
 		return;
 	}
 
-	Statement	db_stmt_grp = db_con.createStatement();
-	Statement	db_stmt = db_con.createStatement();
-
+	Statement	db_stmt_grp	= db_con.createStatement();
+	Statement	db_stmt		= db_con.createStatement();
 	String		q;
 	String		output;
-	int		i,j;
+	int			i,j;
 
 	q	=" select	id, nama"
 		+" from		r_pelatihan_kelompok"
