@@ -16,7 +16,9 @@ try{
 		return;
 	}
 
-	Statement	db_stmt = db_con.createStatement();
+	Statement	db_stmt 		= db_con.createStatement();
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
+	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 
 	String q=" select	id_project"
 		+" ,		no_project"
@@ -28,6 +30,8 @@ try{
 		+" ,(select count(id_project) from t_pssr as c where  r_project.id_project = c.id_project) as pssr "
 		+" ,(select count(id_project) from t_csm_proyek as d where  r_project.id_project = d.id_project) as csm "
 		+" from		r_project"
+		+" where	id_divprosbu	= " + id_divprosbu
+		+" and		id_direktorat	= " + id_direktorat
 		+" order by	id_project";
 	
 	ResultSet	rs	= db_stmt.executeQuery(q);

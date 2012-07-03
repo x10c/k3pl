@@ -20,7 +20,11 @@ if (db_con != null && !db_con.isClosed()) {
 session.removeAttribute("user.nipg");
 session.removeAttribute("user.name");
 session.removeAttribute("user.email");
+session.removeAttribute("user.direktorat");
 session.removeAttribute("user.divprosbu");
+session.removeAttribute("user.departemen");
+session.removeAttribute("user.dinas");
+session.removeAttribute("user.seksi");
 session.removeAttribute("db.con");
 session.removeAttribute("db.url");
 
@@ -30,7 +34,11 @@ if (cookies != null) {
 		if (c_name.equalsIgnoreCase ("user.nipg")
 		||  c_name.equalsIgnoreCase ("user.name")
 		||  c_name.equalsIgnoreCase ("user.email")
-		||  c_name.equalsIgnoreCase ("user.divprosbu")) {
+		||  c_name.equalsIgnoreCase ("user.direktorat")
+		||  c_name.equalsIgnoreCase ("user.divprosbu")
+		||  c_name.equalsIgnoreCase ("user.departemen")
+		||  c_name.equalsIgnoreCase ("user.dinas")
+		||  c_name.equalsIgnoreCase ("user.seksi")) {
 			cookies[i].setMaxAge (0);
 			cookies[i].setPath (c_path);
 			response.addCookie (cookies[i]);

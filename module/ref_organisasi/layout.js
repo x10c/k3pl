@@ -291,6 +291,8 @@ function M_RefOrgDivProSBU ()
 		name	: 'id_divprosbu'
 	},{
 		name	: 'nama_divprosbu'
+	},{
+		name	: 'status_divprosbu'
 	}]);
 
 	this.store = new Ext.data.ArrayStore ({
@@ -299,19 +301,50 @@ function M_RefOrgDivProSBU ()
 		,	autoLoad: false
 	});
 
+	this.store_status = new Ext.data.ArrayStore ({
+			fields	: ['id', 'name']
+		,	data	: [
+				[1, 'Divisi']
+			,	[2, 'Proyek']
+			,	[3, 'SBU']
+			]
+	});
+	
 	this.form_name = new Ext.form.TextField ({
 			allowBlank	: false
 		});
 
+	this.form_status = new Ext.form.ComboBox({
+			store			: this.store_status
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	forceSelection	: true
+		,	typeAhead		: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+	});
+
 	this.columns = [
 			new Ext.grid.RowNumberer()
-		,{
-			header		: 'Nama'
-		,	id			: 'nama_divprosbu'
-		,	dataIndex	: 'nama_divprosbu'
-		,	sortable	: true
-		,	editor		: this.form_name
-		}];
+		,	{
+				header		: 'Nama'
+			,	id			: 'nama_divprosbu'
+			,	dataIndex	: 'nama_divprosbu'
+			,	sortable	: true
+			,	editor		: this.form_name
+			}
+		,	{
+				header		: 'Status'
+			,	dataIndex	: 'status_divprosbu'
+			,	sortable	: true
+			,	editor		: this.form_status
+			,	renderer	: combo_renderer(this.form_status)
+			,	align		: 'center'
+			,	width		: 75
+			}
+	];
 
 	this.sm = new Ext.grid.RowSelectionModel({
 			singleSelect	: true
@@ -393,10 +426,11 @@ function M_RefOrgDivProSBU ()
 	this.do_add = function()
 	{
 		this.record_new = new this.record({
-				id_direktorat	: m_ref_org_id_dir
-			,	id_divprosbu	: ''
-			,	nama_divprosbu	: ''
-			});
+				id_direktorat		: m_ref_org_id_dir
+			,	id_divprosbu		: ''
+			,	nama_divprosbu		: ''
+			,	status_divprosbu	: ''
+		});
 
 		this.editor.stopEditing();
 		this.store.insert(0, this.record_new);
@@ -429,10 +463,11 @@ function M_RefOrgDivProSBU ()
 	{
 		Ext.Ajax.request({
 			params  : {
-				id_direktorat	: record.data['id_direktorat']
-			,	id_divprosbu	: record.data['id_divprosbu']
-			,	nama_divprosbu	: record.data['nama_divprosbu']
-			,	dml_type		: this.dml_type
+				id_direktorat		: record.data['id_direktorat']
+			,	id_divprosbu		: record.data['id_divprosbu']
+			,	nama_divprosbu		: record.data['nama_divprosbu']
+			,	status_divprosbu	: record.data['status_divprosbu']
+			,	dml_type			: this.dml_type
 			}
 		,	url		: m_ref_org_d +'submit_divprosbu.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'

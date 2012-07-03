@@ -29,14 +29,16 @@ try {
 	String tanggal_jsa						= request.getParameter("tanggal_jsa");
 	String alat_pelindung_diri_digunakan	= request.getParameter("alat_pelindung_diri_digunakan");
 	String id_user							= (String) session.getAttribute("user.nipg");
+	String id_divprosbu						= (String) session.getAttribute ("user.divprosbu");
+	String id_direktorat					= (String) session.getAttribute ("user.direktorat");
 	String q;
 
 	switch (dml) {
 	case 2:
 		q	=" insert into t_jsa (no_dokumen, revisi, no_kontrak, nama_perusahaan, nama_proyek, nama_pic, "
-			+" aktifitas_pekerjaan, tanggal_jsa, alat_pelindung_diri_digunakan, id_user) "
+			+" aktifitas_pekerjaan, tanggal_jsa, alat_pelindung_diri_digunakan, id_divprosbu, id_direktorat, id_user) "
 			+" values ('"+ no_dokumen +"' ,'"+ revisi +"' ,'"+ no_kontrak +"' ,'"+ nama_perusahaan +"' ,'"+ nama_proyek +"' ,'"+ nama_pic +"' , "
-			+" '"+ aktifitas_pekerjaan +"' ,'"+ tanggal_jsa +"' ,'"+ alat_pelindung_diri_digunakan +"' ,'"+ id_user +"' )";
+			+" '"+ aktifitas_pekerjaan +"' ,'"+ tanggal_jsa +"' ,'"+ alat_pelindung_diri_digunakan +"' ,"+ id_divprosbu +" ,"+ id_direktorat +" ,'"+ id_user +"' )";
 		break;
 
 	case 3:
@@ -51,6 +53,8 @@ try {
 			+" ,		tanggal_jsa						= '"+ tanggal_jsa +"' "
 			+" ,		alat_pelindung_diri_digunakan	= '"+ alat_pelindung_diri_digunakan +"' "
 			+" ,		id_user							= '"+ id_user +"' "
+			+" ,		id_divprosbu					=  "+ id_divprosbu
+			+" ,		id_direktorat					=  "+ id_direktorat
 			+" ,		tanggal_akses					= getdate() "
 			+" where	id_jsa							=  "+ id_jsa;
 		break;
