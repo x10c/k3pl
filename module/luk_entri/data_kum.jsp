@@ -6,7 +6,10 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q = "";
 try {
@@ -16,10 +19,18 @@ try {
 		return;
 	}
 
-	Statement	db_stmt		= db_con.createStatement();
-	String		data		= "{rows:[";
-	int		year		= Integer.parseInt((String) request.getParameter("year"));
-	int		month		= Integer.parseInt((String) request.getParameter("month"));
+	Cookie[]	cookies			= request.getCookies ();
+	String		user_div		= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+
+	if (user_div.equals ("")) {
+		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
+		return;
+	}
+
+	Statement	db_stmt			= db_con.createStatement();
+	String		data			= "{rows:[";
+	int			year			= Integer.parseInt((String) request.getParameter("year"));
+	int			month			= Integer.parseInt((String) request.getParameter("month"));
 	String		tanggal_skrg	= "cast('"+ year +"-"+ month +"-01' as datetime)";
 	String		tanggal_lalu;
 
@@ -30,7 +41,7 @@ try {
 	}
 
 	q
-=" if exists (select tanggal from t_insiden where status_reset = 1)"
+=" if exists (select tanggal from t_insiden where status_reset = 1 and id_divprosbu = "+ user_div +")"
 +" begin"
 +"	select	W.kum_hari_kerja"
 +"	,		W.kum_hari_absen"
@@ -43,9 +54,10 @@ try {
 +" 		from	t_unjuk_kerja	A"
 +"		,		t_insiden		B"
 +"		where"
-+"		B.status_reset	= 1"
-+"		and	A.tanggal	>= B.tanggal"
-+"		and A.tanggal	<= "+ tanggal_skrg
++"		B.status_reset		= 1"
++"		and	A.tanggal		>= B.tanggal"
++"		and A.tanggal		<= "+ tanggal_skrg
++"		and A.id_divprosbu	= "+ user_div
 +"	) W,"
 +"	("
 +"		select	isnull(sum(A.jml_jam_kerja),0)  as kum_jk_bulan_skrg"
@@ -55,6 +67,7 @@ try {
 +"			B.status_reset	= 1"
 +"		and	A.tanggal		>= B.tanggal"
 +"		and	A.tanggal		<= "+ tanggal_skrg
++"		and A.id_divprosbu	= "+ user_div
 +"	) X,"
 +"	(	select	isnull(sum(A.jml_jam_kerja),0) as kum_jk_bulan_lalu"
 +"		from	t_unjuk_kerja	A"
@@ -63,10 +76,12 @@ try {
 +"			B.status_reset	= 1"
 +"		and	A.tanggal		>= B.tanggal"
 +"		and	A.tanggal		<= "+ tanggal_lalu
++"		and A.id_divprosbu	= "+ user_div
 +"	) Y,"
 +"	(	select	tanggal"
 +"		from	t_insiden"
-+"		where	status_reset = 1"
++"		where	status_reset	= 1"
++"		and		id_divprosbu	= "+ user_div
 +"	) Z"
 +" end else begin"
 +"	select	W.kum_hari_kerja"
@@ -78,15 +93,18 @@ try {
 +"	(	select	isnull(sum(A.jml_hari_kerja),0) as kum_hari_kerja"
 +"		,		isnull(sum(A.jml_hari_absen),0) as kum_hari_absen"
 +"		from	t_unjuk_kerja	A"
++"		where	A.id_divprosbu	= "+ user_div
 +"	) W,"
 +"	("
 +"		select	isnull(sum(A.jml_jam_kerja),0)  as kum_jk_bulan_skrg"
 +"		from	t_unjuk_kerja	A"
-+"		where	A.tanggal		< "+ tanggal_skrg
++"		where	A.tanggal		<= "+ tanggal_skrg
++"		and		A.id_divprosbu	= "+ user_div
 +"	) X,"
 +"	(	select	isnull(sum(A.jml_jam_kerja),0) as kum_jk_bulan_lalu"
 +"		from	t_unjuk_kerja	A"
-+"		where	A.tanggal		< "+ tanggal_lalu
++"		where	A.tanggal		<= "+ tanggal_lalu
++"		and		A.id_divprosbu	= "+ user_div
 +"	) Y"
 +" end";
 
@@ -100,12 +118,12 @@ try {
 			i = 1;
 		}
 		
-		data	+="{"  
+		data+="{"
 			+ "   kum_hari_kerja	:'"+ rs.getString("kum_hari_kerja")
 			+ "', kum_hari_absen	:'"+ rs.getString("kum_hari_absen")
 			+ "', kum_jk_bulan_lalu	:'"+ rs.getString("kum_jk_bulan_lalu")
 			+ "', kum_jk_bulan_skrg	:'"+ rs.getString("kum_jk_bulan_skrg")
-			+ "', kum_tanggal	:'"+ rs.getString("tanggal")
+			+ "', kum_tanggal		:'"+ rs.getString("tanggal")
 			+ "'}";
 	}
 	data += "]}";

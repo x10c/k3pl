@@ -7,6 +7,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q = "";
 try {
@@ -16,12 +17,20 @@ try {
 		return;
 	}
 
-	Statement	db_stmt		= db_con.createStatement();
-	String		year		= (String) request.getParameter("year");
-	String		data		= "{rows:[";
-	int		year_before	= 0;
-	int		month		= Integer.parseInt((String) request.getParameter("month"));
-	int		month_before	= month - 1;
+	Cookie[]	cookies			= request.getCookies ();
+	String		user_div		= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+
+	if (user_div.equals ("")) {
+		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
+		return;
+	}
+
+	Statement	db_stmt			= db_con.createStatement();
+	String		year			= (String) request.getParameter("year");
+	String		data			= "{rows:[";
+	int			year_before		= 0;
+	int			month			= Integer.parseInt((String) request.getParameter("month"));
+	int			month_before	= month - 1;
 
 	if (year == null || year.isEmpty()) {
 		data += "]}";
@@ -31,7 +40,7 @@ try {
 
 	year_before = Integer.parseInt (year);
 	if (month == 1) {
-		year_before	= year_before - 1;
+		year_before		= year_before - 1;
 		month_before	= 12;
 	}
 
@@ -51,33 +60,35 @@ try {
 		+" ,		Y.jml_jk_bulan_skrg"
 		+" from ("
 		+" 	select	B.id_klasifikasi_pegawai"
-		+" 	,	B.nama_klasifikasi_pegawai"
-		+" 	,	isnull(A.tahun,"+ year_before +")	as tahun"
-		+" 	,	isnull(A.bulan,"+ month_before +")	as bulan"
-		+" 	,	isnull(A.jml_tenaga_kerja, 0)		as jml_tk_bulan_lalu"
-		+" 	,	isnull(A.jml_hari_kerja, 0)		as jml_hk_bulan_lalu"
-		+" 	,	isnull(A.jml_hari_absen, 0)		as jml_ha_bulan_lalu"
-		+" 	,	isnull(A.jml_jam_kerja, 0)		as jml_jk_bulan_lalu"
-		+" 	from		t_unjuk_kerja		A"
+		+" 	,		B.nama_klasifikasi_pegawai"
+		+" 	,		isnull(A.tahun,"+ year_before +")	as tahun"
+		+" 	,		isnull(A.bulan,"+ month_before +")	as bulan"
+		+" 	,		isnull(A.jml_tenaga_kerja, 0)		as jml_tk_bulan_lalu"
+		+" 	,		isnull(A.jml_hari_kerja, 0)			as jml_hk_bulan_lalu"
+		+" 	,		isnull(A.jml_hari_absen, 0)			as jml_ha_bulan_lalu"
+		+" 	,		isnull(A.jml_jam_kerja, 0)			as jml_jk_bulan_lalu"
+		+" 	from		t_unjuk_kerja			A"
 		+" 	right join	r_klasifikasi_pegawai	B"
-		+" 	on		A.id_klasifikasi_pegawai= B.id_klasifikasi_pegawai"
-		+" 	and		A.tahun			= "+ year_before
-		+" 	and		A.bulan			= "+ month_before
+		+" 	on		A.id_klasifikasi_pegawai	= B.id_klasifikasi_pegawai"
+		+" 	and		A.tahun						= "+ year_before
+		+" 	and		A.bulan						= "+ month_before
+		+"  and		A.id_divprosbu				= "+ user_div
 		+" ) X"
 		+" right join ("
 		+" 	select	D.id_klasifikasi_pegawai"
-		+" 	,	D.nama_klasifikasi_pegawai"
-		+" 	,	isnull(C.tahun,"+ year +")	as tahun"
-		+" 	,	isnull(C.bulan,"+ month +")	as bulan"
-		+" 	,	isnull(C.jml_tenaga_kerja, 0)	as jml_tk_bulan_skrg"
-		+" 	,	isnull(C.jml_hari_kerja, 0)	as jml_hk_bulan_skrg"
-		+" 	,	isnull(C.jml_hari_absen, 0)	as jml_ha_bulan_skrg"
-		+" 	,	isnull(C.jml_jam_kerja, 0)	as jml_jk_bulan_skrg"
-		+" 	from		t_unjuk_kerja		C"
+		+" 	,		D.nama_klasifikasi_pegawai"
+		+" 	,		isnull(C.tahun,"+ year +")	as tahun"
+		+" 	,		isnull(C.bulan,"+ month +")	as bulan"
+		+" 	,		isnull(C.jml_tenaga_kerja, 0)	as jml_tk_bulan_skrg"
+		+" 	,		isnull(C.jml_hari_kerja, 0)	as jml_hk_bulan_skrg"
+		+" 	,		isnull(C.jml_hari_absen, 0)	as jml_ha_bulan_skrg"
+		+" 	,		isnull(C.jml_jam_kerja, 0)	as jml_jk_bulan_skrg"
+		+" 	from		t_unjuk_kerja			C"
 		+" 	right join	r_klasifikasi_pegawai	D"
-		+" 	on	C.id_klasifikasi_pegawai= D.id_klasifikasi_pegawai"
-		+" 	and	C.tahun			= "+ year
-		+" 	and	C.bulan			= "+ month
+		+" 	on		C.id_klasifikasi_pegawai	= D.id_klasifikasi_pegawai"
+		+" 	and		C.tahun						= "+ year
+		+" 	and		C.bulan						= "+ month
+		+"  and		C.id_divprosbu				= "+ user_div
 		+" ) Y"
 		+" on X.id_klasifikasi_pegawai = Y.id_klasifikasi_pegawai";
 
@@ -91,8 +102,8 @@ try {
 			i = 1;
 		}
 		
-		data	+="{  id		:'"+ rs.getString("id_klasifikasi_pegawai")
-			+ "', name		:'"+ rs.getString("nama_klasifikasi_pegawai")
+		data+="{  id				:'"+ rs.getString("id_klasifikasi_pegawai")
+			+ "', name				:'"+ rs.getString("nama_klasifikasi_pegawai")
 			+ "', jml_tk_bulan_lalu	: "+ rs.getString("jml_tk_bulan_lalu")
 			+ " , jml_tenaga_kerja	: "+ rs.getString("jml_tk_bulan_skrg")
 			+ " , jml_hk_bulan_lalu	: "+ rs.getString("jml_hk_bulan_lalu")
@@ -100,7 +111,7 @@ try {
 			+ " , jml_ha_bulan_lalu	: "+ rs.getString("jml_ha_bulan_lalu")
 			+ " , jml_hari_absen	: "+ rs.getString("jml_ha_bulan_skrg")
 			+ " , jml_jk_bulan_lalu	: "+ rs.getString("jml_jk_bulan_lalu")
-			+ " , jml_jam_kerja	: "+ rs.getString("jml_jk_bulan_skrg")
+			+ " , jml_jam_kerja		: "+ rs.getString("jml_jk_bulan_skrg")
 			+ "}";
 	}
 	data += "]}";

@@ -166,7 +166,8 @@ Ext.override(Ext.chart.Chart, {
  * @ref: http://www.sencha.com/forum/showthread.php?53009-Adding-removing-fields-and-columns
  */
 Ext.override(Ext.data.Store,{
-	addField: function(field){
+	pruneModifiedRecords	: true
+,	addField: function(field){
 		field = new Ext.data.Field(field);
 		this.recordType.prototype.fields.replace(field);
 		if(typeof field.defaultValue != 'undefined'){
@@ -178,8 +179,8 @@ Ext.override(Ext.data.Store,{
 		}
 		delete this.reader.ef;
 		this.reader.buildExtractors();
-	},
-	removeField: function(name){
+	}
+,	removeField: function(name){
 		this.recordType.prototype.fields.removeKey(name);
 		this.each(function(r){
 			delete r.data[name];
