@@ -8,6 +8,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q = "";
 try {
@@ -17,8 +18,11 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
 	Statement	db_stmt			= db_con.createStatement();
-	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
 	String		year			= (String) request.getParameter("year");
 	String		data			= "{rows:[";
 	ResultSet	rs				= null;
@@ -53,6 +57,7 @@ try {
 		+" where	C.id_grup	= 5"
 		+" and		C.nipg		= B.nipg"
 		+" and		B.id_divprosbu	= "+ id_divprosbu
+		+" and		B.id_direktorat	= "+ id_direktorat
 		+" order by B.nama_pegawai";
 
 	rs = db_stmt.executeQuery(q);

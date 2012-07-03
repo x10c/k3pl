@@ -7,6 +7,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
@@ -15,11 +16,19 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies			= request.getCookies ();
+	String		nipg			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
 	Statement	db_stmt 		= db_con.createStatement();
 	String		load_type		= (String) request.getParameter("load_type");
-	String		nipg			= (String) session.getAttribute("user.nipg");
-	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
-	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 	
 	String q=" select	a.id_pha "
 			+" ,		(select b.nama_project from r_project as b where a.id_project = b.id_project) as project "

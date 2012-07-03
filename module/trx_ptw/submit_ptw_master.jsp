@@ -7,9 +7,16 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
+
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_user			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
 	Statement	db_stmt		= db_con.createStatement();	
 
 	int dml = Integer.parseInt(request.getParameter("dml_type"));
@@ -39,9 +46,6 @@ try {
 	String nama_pejabat_berwenang				= request.getParameter("nama_pejabat_berwenang");
 	String jabatan_pejabat_berwenang			= request.getParameter("jabatan_pejabat_berwenang");
 	String catatan								= request.getParameter("catatan");
-	String id_user								= (String) session.getAttribute("user.nipg");
-	String id_divprosbu							= (String) session.getAttribute ("user.divprosbu");
-	String id_direktorat						= (String) session.getAttribute ("user.direktorat");
 
 	String q;
 

@@ -12,6 +12,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -19,6 +20,10 @@ try {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
+
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
 	Statement	db_stmt = db_con.createStatement();
 	String		id_user = (String) session.getAttribute("user.nipg");
@@ -29,8 +34,6 @@ try {
 	String		lokasi			= request.getParameter("lokasi");
 	String		tanggal			= request.getParameter("tanggal");
 	String		proses_phr		= request.getParameter("proses_phr");
-	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
-	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 	
 	String		q 		= "";
 	Date		date	= new Date();

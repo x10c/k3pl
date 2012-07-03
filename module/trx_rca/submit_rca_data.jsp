@@ -12,6 +12,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -20,8 +21,10 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_user			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+
 	Statement	db_stmt = db_con.createStatement();
-	String		id_user = (String) session.getAttribute("user.nipg");
 
 	int			dml							= Integer.parseInt(request.getParameter("dml_type"));
 	String		id_rca						= request.getParameter("id_rca");

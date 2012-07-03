@@ -7,6 +7,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection db_con = (Connection) session.getAttribute("db.con");
@@ -15,12 +16,14 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies			= request.getCookies ();
+	String		nipg			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
 	Statement	db_stmt 		= db_con.createStatement();
 	String		jenis_ptw		= request.getParameter("jenis_ptw");
 	String		load_type		= (String) request.getParameter("load_type");
-	String		nipg			= (String) session.getAttribute("user.nipg");
-	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
-	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 
 	int		jenis = 0;
 
