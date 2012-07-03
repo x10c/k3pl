@@ -50,7 +50,7 @@ try {
 		+" 		,		t_rca			as b"
 		+" 		where	a.id_rca			= b.id_rca"
 		+"		and		a.status			in (1,2)"
-		+" 		and		year(b.tanggal_rca)	= "+ year;
+		+" 		and		year(b.tanggal_rca)		= "+ year;
 
 	q_part2	=" 	select	count(a.nipg) 	as total_part"
 		+" 		from	t_rca_auditor	as a"
@@ -72,9 +72,10 @@ try {
 		q_target +=") as target";
 	} else {
 		q_target=" select isnull(sum("+ months[month - 1]
-							+"),1) as target";
+							+"),0) as target";
 
 		q_part	+=" and month(b.tanggal_rca) = "+ month;
+		q_part2	+=" and month(b.tanggal_rca) = "+ month;
 	}
 
 	q_target
