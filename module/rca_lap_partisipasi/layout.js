@@ -556,6 +556,7 @@ function M_RCALapPartOrgChart(store, title, xField, xTitle, y1)
 				title	: {
 					text: '%'
 				}
+			,	max		: 100
 			}
 		,	legend	: {
 				display	: 'horizontal'
