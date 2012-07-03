@@ -32,11 +32,12 @@ try {
 	+" ,		id_tipe_kegiatan "
 	+" ,		nama_kegiatan "
 	+" from		t_kegiatan_detail "
-	+" where	tahun 	= " + tahun
-	+" and		bulan	= " + bulan;
+	+" where	tahun 		= "+ tahun
+	+" and		bulan		= "+ bulan
+	+" and		id_wilayah	= "+ wilayah;
 
-	if (!load_type.equals("all")) {
-		q+=" and	id_wilayah		= "+ wilayah;
+	if (! load_type.equals("all")) {
+		q +=" and	id_wilayah		= "+ wilayah;
 	}
 
 	q+=" order by	tahun, bulan";
@@ -52,12 +53,12 @@ try {
 		} else {
 			i++;
 		}
-		data	+= "[ "+ rs.getString("id_kegiatan_detail")
+		data+= "[ "+ rs.getString("id_kegiatan_detail")
 			+  ", "+ rs.getString("tahun")
 			+  ", "+ rs.getString("bulan")
 			+  ", "+ rs.getString("id_wilayah")
 			+  ", "+ rs.getString("id_tipe_kegiatan")
-			+  ", '"+ rs.getString("nama_kegiatan") +"' "
+			+  ",'"+ rs.getString("nama_kegiatan") +"' "
 			+  "]";
 	}
 
