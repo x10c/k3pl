@@ -18,7 +18,8 @@ try {
 	Statement	db_stmt 				= db_con.createStatement();
 	String		id_lingkungan_tahunan	= request.getParameter("id_lingkungan_tahunan");
 	
-	String q=" select	a.id_lingkungan_tahunan "
+	String q
+		=" select	a.id_lingkungan_tahunan "
 		+" ,		a.id_komponen_lingkungan "
 		+" ,		b.nama_komponen_lingkungan "
 		+" from		t_lingkungan_detail		as a "
@@ -37,7 +38,7 @@ try {
 		} else {
 			i++;
 		}
-		data	+="["+ rs.getString("id_lingkungan_tahunan")
+		data+="["+ rs.getString("id_lingkungan_tahunan")
 			+ ","+ rs.getString("id_komponen_lingkungan")
 			+ ",'"+ rs.getString("nama_komponen_lingkungan")
 			+ "']";

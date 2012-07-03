@@ -123,7 +123,7 @@
 
 	this.panel_user = new Ext.form.FormPanel({
 			labelAlign		: 'right'
-		,	labelWidth		: 150
+		,	labelWidth		: 170
 		,	autoWidth		: true
 		,	autoHeight		: true
 		,	style			: 'margin: 8px;'
@@ -158,6 +158,7 @@
 
 	this.panel = new Ext.Panel({
 			title		: this.title
+		,	layout		: 'fit'
 		,	autoScroll	: true
 		,	buttonAlign	: 'center'
 		,	tbar		: [
@@ -433,7 +434,7 @@
 
 	this.panel = new Ext.grid.GridPanel({
 			region				: 'center'
-		,	height				: 200
+		,	height				: 260
 		,	store				: this.store
 		,	cm					: this.cm
 		,	sm					: this.sm
@@ -1122,7 +1123,7 @@
 	this.panel_master = new Ext.Panel({
 			layout			: 'card'
 		,	region			: 'north'
-		,	height			: 200
+		,	height			: 260
 		,	activeItem		: 0
 		,	autoScroll		: true
 		,	items			: [
@@ -1245,7 +1246,7 @@
 
 	this.panel_user = new Ext.form.FormPanel({
 			labelAlign		: 'right'
-		,	labelWidth		: 150
+		,	labelWidth		: 170
 		,	autoWidth		: true
 		,	autoHeight		: true
 		,	style			: 'margin: 8px;'
@@ -1555,7 +1556,7 @@
 
 	this.panel = new Ext.grid.GridPanel({
 			region				: 'center'
-		,	height				: 200
+		,	height				: 260
 		,	store				: this.store
 		,	cm					: this.cm
 		,	sm					: this.sm
@@ -2229,7 +2230,7 @@
 	this.panel_master = new Ext.Panel({
 			layout			: 'card'
 		,	region			: 'north'
-		,	height			: 200
+		,	height			: 260
 		,	activeItem		: 0
 		,	autoScroll		: true
 		,	items			: [
