@@ -40,6 +40,9 @@ try {
 	String jabatan_pejabat_berwenang			= request.getParameter("jabatan_pejabat_berwenang");
 	String catatan								= request.getParameter("catatan");
 	String id_user								= (String) session.getAttribute("user.nipg");
+	String id_divprosbu							= (String) session.getAttribute ("user.divprosbu");
+	String id_direktorat						= (String) session.getAttribute ("user.direktorat");
+
 	String q;
 
 	switch (dml) {
@@ -48,12 +51,12 @@ try {
 			+" lokasi_pekerjaan, pelaksana_pekerjaan, uraian_pekerjaan, nama_perusahaan, no_lisensi, sumber_radioaktif,"
 			+" proyektor, survey_meter, tanggal_service, tanggal_kalibrasi, nama_petugas_isolasi_listrik, jabatan_petugas_isolasi_listrik, "
 			+" nama_petugas_uji_kandungan_gas, jabatan_petugas_uji_kandungan_gas, nama_pelaksana_pekerjaan, jabatan_pelaksana_pekerjaan, "
-			+" nama_pejabat_berwenang, jabatan_pejabat_berwenang, catatan, id_user) "
+			+" nama_pejabat_berwenang, jabatan_pejabat_berwenang, catatan, id_user, id_divprosbu, id_direktorat) "
 			+" values ('"+ id_jsa +"' ,'"+ jenis_ptw +"' ,'"+ nomor +"' ,'"+ tgl_pengesahan +"' ,'"+ masa_berlaku_awal +"' ,'"+ masa_berlaku_akhir +"' , "
 			+" '"+ lokasi_pekerjaan +"' ,'"+ pelaksana_pekerjaan +"' ,'"+ uraian_pekerjaan +"' ,'"+ nama_perusahaan +"' ,'"+ no_lisensi +"' ,'"+ sumber_radioaktif +"' , "
 			+" '"+ proyektor +"' ,'"+ survey_meter +"' ,'"+ tanggal_service +"' ,'"+ tanggal_kalibrasi +"' ,'"+ nama_petugas_isolasi_listrik +"' ,'"+ jabatan_petugas_isolasi_listrik +"' ,"
 			+" '"+ nama_petugas_uji_kandungan_gas +"' ,'"+ jabatan_petugas_uji_kandungan_gas +"' ,'"+ nama_pelaksana_pekerjaan +"' ,'"+ jabatan_pelaksana_pekerjaan +"' ,"
-			+" '"+ nama_pejabat_berwenang +"' ,'"+ jabatan_pejabat_berwenang +"' ,'"+ catatan +"' ,'"+ id_user +"' )";
+			+" '"+ nama_pejabat_berwenang +"' ,'"+ jabatan_pejabat_berwenang +"' ,'"+ catatan +"' ,'"+ id_user +"' ," + id_divprosbu + " ," + id_direktorat + ")";
 		break;
 
 	case 3:
@@ -83,6 +86,8 @@ try {
 			+" ,		jabatan_pejabat_berwenang			= '"+ jabatan_pejabat_berwenang +"' "
 			+" ,		catatan								= '"+ catatan +"' "
 			+" ,		id_user								= '"+ id_user +"' "
+			+" ,		id_divprosbu						=  "+ id_divprosbu
+			+" ,		id_direktorat						=  "+ id_direktorat
 			+" ,		tanggal_akses						= getdate() "
 			+" where	id_ptw								=  "+ id_ptw;
 		break;
