@@ -6,7 +6,9 @@
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
@@ -19,7 +21,8 @@ try {
 	String		tahun		= request.getParameter("tahun");
 	String		bulan		= request.getParameter("bulan");
 	
-	String q=" select	id_lingkungan_bulanan_detail "
+	String q
+		=" select	id_lingkungan_bulanan_detail "
 		+" ,		tipe_kegiatan "
 		+" ,		nama_kegiatan "
 		+" ,		replace(convert(varchar, tanggal_awal, 111), '/', '-') as tanggal_awal "

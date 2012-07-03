@@ -6,8 +6,9 @@
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
@@ -39,14 +40,31 @@ try {
 
 	switch (dml) {
 	case 2:
-		id_lingkungan_bulanan_detail	= Long.toString(date.getTime());
+		id_lingkungan_bulanan_detail = Long.toString(date.getTime());
 
-		q	=" insert into t_lingkungan_bulanan_detail (id_lingkungan_bulanan_detail, tahun, bulan, tipe_kegiatan,"
-			+" nama_kegiatan, tanggal_awal, tanggal_akhir, uraian_kegiatan,"
-			+" keterangan, id_user)"
-			+" values ("+ id_lingkungan_bulanan_detail +", "+ tahun +", "+ bulan +", "+ tipe_kegiatan +","
-			+" '"+ nama_kegiatan +"', '"+ tanggal_awal +"', '"+ tanggal_akhir +"', '"+ uraian_kegiatan +"',"
-			+" '"+ keterangan +"', '"+ id_user + "')";
+		q	=" insert into t_lingkungan_bulanan_detail ("
+			+"   id_lingkungan_bulanan_detail"
+			+" , tahun"
+			+" , bulan"
+			+" , tipe_kegiatan"
+			+" , nama_kegiatan"
+			+" , tanggal_awal"
+			+" , tanggal_akhir"
+			+" , uraian_kegiatan"
+			+" , keterangan"
+			+" , id_user"
+			+" ) values ("
+			+      id_lingkungan_bulanan_detail
+			+", "+ tahun
+			+", "+ bulan
+			+", "+ tipe_kegiatan
+			+",'"+ nama_kegiatan +"'"
+			+",'"+ tanggal_awal +"'"
+			+",'"+ tanggal_akhir +"'"
+			+",'"+ uraian_kegiatan +"'"
+			+",'"+ keterangan +"'"
+			+",'"+ id_user +"'"
+			+")";
 
 		break;
 	case 3:
@@ -61,7 +79,6 @@ try {
 			+" , id_user			= '"+ id_user +"'"
 			+" , tanggal_akses		= getdate() "
 			+" where id_lingkungan_bulanan_detail	=  "+ id_lingkungan_bulanan_detail;
-			
 		break;
 	case 4:
 		q	=" delete from t_lingkungan_bulanan_detail "
