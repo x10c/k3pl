@@ -15,13 +15,18 @@ try {
 		return;
 	}
 
-	Statement	db_stmt		= db_con.createStatement();
+	Statement	db_stmt			= db_con.createStatement();
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
+	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
+
 
 	String	q	=" select	id_project "
-			+" ,		nama_project "
-			+" ,		replace(convert(varchar, tanggal_mulai, 111), '/', '-') tanggal_mulai"
-			+" from		r_project "
-			+" order by	nama_project ";
+				+" ,		nama_project "
+				+" ,		replace(convert(varchar, tanggal_mulai, 111), '/', '-') tanggal_mulai"
+				+" from		r_project "
+				+" where	id_divprosbu	= " + id_divprosbu
+				+" and		id_direktorat	= " + id_direktorat
+				+" order by	nama_project ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;

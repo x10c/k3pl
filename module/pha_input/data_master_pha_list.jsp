@@ -15,17 +15,21 @@ try {
 		return;
 	}
 
-	Statement	db_stmt 	= db_con.createStatement();
-	String		load_type	= (String) request.getParameter("load_type");
-	String		nipg		= (String) session.getAttribute("user.nipg");
+	Statement	db_stmt 		= db_con.createStatement();
+	String		load_type		= (String) request.getParameter("load_type");
+	String		nipg			= (String) session.getAttribute("user.nipg");
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
+	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 	
 	String q=" select	a.id_pha "
-		+" ,		(select b.nama_project from r_project as b where a.id_project = b.id_project) as project "
-		+" ,		(select replace(convert(varchar, b.tanggal_mulai, 111), '/', '-') from r_project as b where a.id_project = b.id_project) as tanggal_project "
-		+" ,		replace(convert(varchar, tanggal, 111), '/', '-') as tanggal "
-		+" ,		a.lokasi "
-		+" from		t_pha as a"
-		+" where	a.id_user = '"+ nipg +"'";
+			+" ,		(select b.nama_project from r_project as b where a.id_project = b.id_project) as project "
+			+" ,		(select replace(convert(varchar, b.tanggal_mulai, 111), '/', '-') from r_project as b where a.id_project = b.id_project) as tanggal_project "
+			+" ,		replace(convert(varchar, tanggal, 111), '/', '-') as tanggal "
+			+" ,		a.lokasi "
+			+" from		t_pha as a"
+			+" where	a.id_divprosbu	=  "+ id_divprosbu
+			+" and		a.id_direktorat =  "+ id_direktorat
+			+" and		a.id_user 		= '"+ nipg +"'";
 
 		if (load_type.equals("all")) {
 			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)";

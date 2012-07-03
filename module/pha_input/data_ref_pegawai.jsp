@@ -15,13 +15,17 @@ try {
 		return;
 	}
 
-	Statement	db_stmt		= db_con.createStatement();
+	Statement	db_stmt			= db_con.createStatement();
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
+	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 
 	String	q	=" select	a.nipg "
 			+" ,		a.nama_pegawai "
 			+" ,		(select b.nama_departemen from r_departemen as b where b.id_departemen = a.id_departemen) as departemen "
 			+" from		r_pegawai	as a"
 			+" where	a.status_pegawai	= '1' "
+			+" and		a.id_divprosbu		= " + id_divprosbu
+			+" and		a.id_direktorat		= " + id_direktorat
 			+" order by	a.nama_pegawai ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);

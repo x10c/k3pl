@@ -23,12 +23,14 @@ try {
 	Statement	db_stmt = db_con.createStatement();
 	String		id_user = (String) session.getAttribute("user.nipg");
 
-	int			dml			= Integer.parseInt(request.getParameter("dml_type"));
-	String		id_pha		= request.getParameter("id_pha");
-	String		id_project	= request.getParameter("id_project");
-	String		lokasi		= request.getParameter("lokasi");
-	String		tanggal		= request.getParameter("tanggal");
-	String		proses_phr	= request.getParameter("proses_phr");
+	int			dml				= Integer.parseInt(request.getParameter("dml_type"));
+	String		id_pha			= request.getParameter("id_pha");
+	String		id_project		= request.getParameter("id_project");
+	String		lokasi			= request.getParameter("lokasi");
+	String		tanggal			= request.getParameter("tanggal");
+	String		proses_phr		= request.getParameter("proses_phr");
+	String		id_divprosbu	= (String) session.getAttribute ("user.divprosbu");
+	String		id_direktorat	= (String) session.getAttribute ("user.direktorat");
 	
 	String		q 		= "";
 	Date		date	= new Date();
@@ -38,9 +40,9 @@ try {
 		id_pha	= Long.toString(date.getTime());
 
 		q	=" insert into t_pha (id_pha, id_project, lokasi, tanggal,"
-			+" proses_phr, id_user)"
+			+" proses_phr, id_user, id_divprosbu, id_direktorat)"
 			+" values ("+ id_pha +" ,"+ id_project +" ,'"+ lokasi +"' ,'"+ tanggal +"' ,"
-			+" '"+ proses_phr +"' ,'"+ id_user + "')";
+			+" '"+ proses_phr +"' ,'"+ id_user + "' ," + id_divprosbu + " ," + id_direktorat + ")";
 
 		break;
 	case 3:
@@ -51,6 +53,8 @@ try {
 			+" , tanggal			= cast('"+ tanggal +"' as datetime) "
 			+" , proses_phr			= '"+ proses_phr +"' "
 			+" , id_user			= '"+ id_user +"' "
+			+" , id_divprosbu		=  "+ id_divprosbu
+			+" , id_direktorat		=  "+ id_direktorat
 			+" , tanggal_akses		= getdate() "
 			+" where id_pha			=  "+ id_pha;
 			

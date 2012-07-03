@@ -58,7 +58,7 @@ try {
 				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><b>JOB SAFETY ANALISYS</b></p> "
 				+" 			</td> "
 				+" 			<td width=120 valign=center valign=middle> "
-				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ scheme + "://"+ serverName + ":" + serverPort + contextPath + "/images/SBU_I.png' width=60 height=42 align=center/> </p>"
+				+" 				<p align=center style=\"margin-top: 0px;margin-bottom:2px\"><img src='"+ scheme + "://"+ serverName + ":" + serverPort + contextPath + "/images/undefined.png' width=60 height=42 align=center/> </p>"
 				+" 			</td> "
 				+" 		</tr> "
 				+" 	</table> "
