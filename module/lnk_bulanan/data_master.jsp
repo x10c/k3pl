@@ -30,7 +30,6 @@ try {
 	}
 
 	Statement	db_stmt 	= db_con.createStatement();
-	String		load_type	= (String) request.getParameter("load_type");
 	
 	String q
 		=" select	tahun "
@@ -41,13 +40,9 @@ try {
 		+" ,		lokasi_proyek "
 		+" from		t_lingkungan_bulanan "
 		+" where	id_user 		= '"+ user_nipg +"'"
-		+" and		id_divprosbu	= "+ user_div;
-
-		if (load_type.equals("all")) {
-			q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)";
-		}
-
-		q+=" order by	tahun, bulan ";
+		+" and		id_divprosbu	= "+ user_div
+		+" and		id_direktorat	= "+ user_dir
+		+" order by	tahun, bulan ";
 
 	ResultSet	rs		= db_stmt.executeQuery(q);
 	int			i		= 0;

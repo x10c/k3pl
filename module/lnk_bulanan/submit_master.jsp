@@ -42,28 +42,30 @@ try {
 	switch (dml) {
 	case 2:
 		q	=" insert into t_lingkungan_bulanan ("
-			+"	tahun"
+			+" 	id_direktorat"
+			+", id_divprosbu"
+			+",	tahun"
 			+", bulan"
 			+", pekerjaan"
 			+", lokasi_proyek"
 			+", id_user"
-			+", id_divprosbu"
-			+", id_direktorat"
 			+") values ("
-			+ tahun
+			+ 	   user_dir
+			+", "+ user_div
+			+", "+ tahun
 			+", "+ bulan
 			+",'"+ pekerjaan +"'"
 			+",'"+ lokasi_proyek +"'"
 			+",'"+ user_nipg + "'"
-			+", "+ user_div
-			+", "+ user_dir
 			+")";
 
 		break;
 	case 3:
 		q	=" update t_lingkungan_bulanan "
 			+" set "
-			+"   tahun			= "+ tahun
+			+"   id_direktorat	= "+ user_dir
+			+" , id_divprosbu	= "+ user_div
+			+" , tahun			= "+ tahun
 			+" , bulan			= "+ bulan
 			+" , pekerjaan		= '"+ pekerjaan + "'"
 			+" , lokasi_proyek	= '"+ lokasi_proyek +"'"
@@ -76,9 +78,10 @@ try {
 		break;
 	case 4:
 		q	=" delete from t_lingkungan_bulanan "
-			+" where	tahun			= "+ tahun
+			+" where	id_direktorat	= "+ user_dir
+			+" and		id_divprosbu	= "+ user_div
+			+" and		tahun			= "+ tahun
 			+" and		bulan			= "+ bulan;
-			+" and		id_divprosbu	= "+ user_div;
 
 		break;
 	default:

@@ -9,10 +9,22 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
@@ -28,8 +40,10 @@ try {
 		+" ,		replace(convert(varchar, tanggal_awal, 111), '/', '-') as tanggal_awal "
 		+" ,		replace(convert(varchar, tanggal_akhir, 111), '/', '-') as tanggal_akhir "
 		+" from		t_lingkungan_bulanan_detail "
-		+" where	tahun 	= "+ tahun
-		+" and		bulan 	= "+ bulan
+		+" where	tahun 			= "+ tahun
+		+" and		bulan 			= "+ bulan
+		+" and		id_divprosbu 	= "+ user_div
+		+" and		id_direktorat 	= "+ user_dir
 		+" order by	tahun, bulan, id_lingkungan_bulanan_detail ";
 
 	ResultSet	rs	= db_stmt.executeQuery(q);
