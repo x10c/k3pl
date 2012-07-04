@@ -17,13 +17,17 @@ try {
 	}
 
 	Statement	db_stmt = db_con.createStatement();
+	String		id_kel_jabatan_csc	= request.getParameter("id_kel_csc");
 
 	String q= " select   id_kel_jabatan_komite_sub_komite "
 		+ " ,        nama_kel_jabatan_komite_sub_komite "
-		+ " ,        level_komite "
+		+ " ,        id_kel_jabatan_csc "
+		+ " ,        id_divprosbu "
+		+ " ,        id_direktorat "
 		+ " from     r_kel_jabatan_komite_sub_komite "
+		+ " where     id_kel_jabatan_csc = "+ id_kel_jabatan_csc
 		+ " order by id_kel_jabatan_komite_sub_komite ";
-
+//out.print(q);
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;
 	String		data = "{ rows : [";
@@ -36,7 +40,9 @@ try {
 		}
 		data	+= "{ id : '"+ rs.getString("id_kel_jabatan_komite_sub_komite") +"' "
 			+  ", nama : '"+ rs.getString("nama_kel_jabatan_komite_sub_komite") +"' "
-			+  ", level_komite : '"+ rs.getString("level_komite") +"' "
+			+  ", id_kel_jabatan_csc : '"+ rs.getString("id_kel_jabatan_csc") +"' "
+			+  ", id_divprosbu : '"+ rs.getString("id_divprosbu") +"' "
+			+  ", id_direktorat : '"+ rs.getString("id_direktorat") +"' "
 			+  "} ";
 	}
 

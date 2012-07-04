@@ -19,37 +19,46 @@ try {
 	Statement	db_stmt = db_con.createStatement();
 
 	int dml = Integer.parseInt(request.getParameter("dml_type"));
+	String id_kel_jabatan_csc	= request.getParameter("id_kel_jabatan_csc");
 	String id_kel_jabatan_komite	= request.getParameter("id");
 	String nama_kel_jabatan_komite	= request.getParameter("nama");
-	String level_komite	= request.getParameter("level_komite");
+	String id_divprosbu	= request.getParameter("id_divprosbu");
+	String id_direktorat	= request.getParameter("id_direktorat");
 	String id_user			= (String) session.getAttribute("user.nipg");
 	String q;
 
 	switch (dml) {
 	case 2:
 		q	=" insert into r_kel_jabatan_komite_sub_komite ("
-			+"	id_kel_jabatan_komite_sub_komite "
+			+"	id_kel_jabatan_csc "
+			+",	id_kel_jabatan_komite_sub_komite "
 			+",	nama_kel_jabatan_komite_sub_komite "
-			+",	level_komite "
+			+",	id_divprosbu "
+			+",	id_direktorat "
 			+",	id_user "
 			+") values ("
+			+ id_kel_jabatan_csc +", "
 			+ id_kel_jabatan_komite +", '"
-			+ nama_kel_jabatan_komite +"', '"
-			+ level_komite +"', '"
+			+ nama_kel_jabatan_komite +"', "
+			+ id_divprosbu +", "
+			+ id_direktorat +", '"
 			+ id_user
 			+"' )";
 		break;
 	case 3:
 		q	=" update	r_kel_jabatan_komite_sub_komite "
 			+" set		nama_kel_jabatan_komite_sub_komite	= '"+ nama_kel_jabatan_komite +"' "
-			+" ,		level_komite			= '"+ level_komite +"' "
+			+" ,		id_divprosbu			= "+ id_divprosbu 
+			+" ,		id_direktorat			= "+ id_direktorat 
 			+" ,		id_user			= '"+ id_user +"' "
 			+" ,		tanggal_akses		= getdate() "
-			+" where	id_kel_jabatan_komite_sub_komite	=  "+ id_kel_jabatan_komite;
+			+" where	id_kel_jabatan_komite_sub_komite	=  "+ id_kel_jabatan_komite
+			+" and	id_kel_jabatan_csc	=  "+ id_kel_jabatan_csc;
 		break;
 	case 4:
 		q	=" delete from	r_kel_jabatan_komite_sub_komite "
-			+" where	id_kel_jabatan_komite_sub_komite =  "+ id_kel_jabatan_komite;
+			+" where	id_kel_jabatan_komite_sub_komite =  "+ id_kel_jabatan_komite
+			+" and	id_kel_jabatan_csc =  "+ id_kel_jabatan_csc;
 		break;
 	default:
 		out.print("{success:false,info:'DML tipe tidak diketahui ("+dml+")!'}");
