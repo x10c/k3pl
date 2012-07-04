@@ -120,6 +120,8 @@ function M_RCALapPartPegGrid()
 
 	this.records = new Ext.data.Record.create([
 			{name: 'name'}
+		,	{name: 'id_dir'}
+		,	{name: 'id_div'}
 		,	{name: 'id_dep'}
 		,	{name: 'id_dinas'}
 		,	{name: 'id_seksi'}
@@ -554,6 +556,7 @@ function M_RCALapPartOrgChart(store, title, xField, xTitle, y1)
 				title	: {
 					text: '%'
 				}
+			,	max		: 100
 			}
 		,	legend	: {
 				display	: 'horizontal'
@@ -635,7 +638,7 @@ function M_RCALapPartOrg()
 			} else if (id_dir != 0) {
 				combo	= this.form.set_org.formDirektorat;
 				record	= combo.findRecord (combo.valueField, id_dir);
-				sub		= 'Direktorat '+ record.get (combo.displayField);
+				sub		= record.get (combo.displayField);
 			}
 		} else {
 			if (id_area != 0) {

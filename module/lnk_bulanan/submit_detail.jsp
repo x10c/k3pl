@@ -6,12 +6,14 @@
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -20,8 +22,18 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
 	Statement	db_stmt = db_con.createStatement();
-	String		id_user = (String) session.getAttribute("user.nipg");
 
 	int			dml								= Integer.parseInt(request.getParameter("dml_type"));
 	String		id_lingkungan_bulanan_detail	= request.getParameter("id_lingkungan_bulanan_detail");
@@ -39,14 +51,35 @@ try {
 
 	switch (dml) {
 	case 2:
-		id_lingkungan_bulanan_detail	= Long.toString(date.getTime());
+		id_lingkungan_bulanan_detail = Long.toString(date.getTime());
 
-		q	=" insert into t_lingkungan_bulanan_detail (id_lingkungan_bulanan_detail, tahun, bulan, tipe_kegiatan,"
-			+" nama_kegiatan, tanggal_awal, tanggal_akhir, uraian_kegiatan,"
-			+" keterangan, id_user)"
-			+" values ("+ id_lingkungan_bulanan_detail +", "+ tahun +", "+ bulan +", "+ tipe_kegiatan +","
-			+" '"+ nama_kegiatan +"', '"+ tanggal_awal +"', '"+ tanggal_akhir +"', '"+ uraian_kegiatan +"',"
-			+" '"+ keterangan +"', '"+ id_user + "')";
+		q	=" insert into t_lingkungan_bulanan_detail ("
+			+"   id_lingkungan_bulanan_detail"
+			+" , id_direktorat"
+			+" , id_divprosbu"
+			+" , tahun"
+			+" , bulan"
+			+" , tipe_kegiatan"
+			+" , nama_kegiatan"
+			+" , tanggal_awal"
+			+" , tanggal_akhir"
+			+" , uraian_kegiatan"
+			+" , keterangan"
+			+" , id_user"
+			+" ) values ("
+			+      id_lingkungan_bulanan_detail
+			+", "+ user_dir
+			+", "+ user_div
+			+", "+ tahun
+			+", "+ bulan
+			+", "+ tipe_kegiatan
+			+",'"+ nama_kegiatan +"'"
+			+",'"+ tanggal_awal +"'"
+			+",'"+ tanggal_akhir +"'"
+			+",'"+ uraian_kegiatan +"'"
+			+",'"+ keterangan +"'"
+			+",'"+ user_nipg +"'"
+			+")";
 
 		break;
 	case 3:
@@ -58,10 +91,9 @@ try {
 			+" , tanggal_akhir		= cast('"+ tanggal_akhir +"' as datetime)"
 			+" , uraian_kegiatan	= '"+ uraian_kegiatan +"'"
 			+" , keterangan			= '"+ keterangan +"'"
-			+" , id_user			= '"+ id_user +"'"
+			+" , id_user			= '"+ user_nipg +"'"
 			+" , tanggal_akses		= getdate() "
 			+" where id_lingkungan_bulanan_detail	=  "+ id_lingkungan_bulanan_detail;
-			
 		break;
 	case 4:
 		q	=" delete from t_lingkungan_bulanan_detail "

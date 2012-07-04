@@ -7,12 +7,24 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
 		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
 		return;
 	}
 
@@ -48,40 +60,40 @@ try {
 	+" ,		jml_kecelakaan_kendaraan"
 	+" ,		jml_kejadian_keamanan"
 	+" from		t_insiden"
-	+" where	id_insiden = "+ id;
+	+" where	id_insiden		= "+ id
+	+" and		id_divprosbu	= "+ user_div;
 
 	rs = db_stmt.executeQuery(q);
 
 	if (!rs.next()) {
-		out.print("{success:false"
-		+", info:'Data insiden tidak ditemukan!'}");
+		out.print("{success:false, info:'Data insiden tidak ditemukan!'}");
 		return;
 	}
 
-	data	="{  id_insiden				: '"+ id
-		+"', id_area_seksi			: '"+ rs.getString("id_area_seksi")
+	data="{  id_insiden					: '"+ id
+		+"', id_area_seksi				: '"+ rs.getString("id_area_seksi")
 		+"', id_klasifikasi_pegawai		: '"+ rs.getString("id_klasifikasi_pegawai")
-		+"', tanggal				: '"+ rs.getString("tanggal")
-		+"', uraian				: '"+ rs.getString("uraian")
+		+"', tanggal					: '"+ rs.getString("tanggal")
+		+"', uraian						: '"+ rs.getString("uraian")
 		+"', jml_korban_mati			: '"+ rs.getString("jml_korban_mati")
 		+"', jml_korban_berat			: '"+ rs.getString("jml_korban_berat")
 		+"', jml_korban_sedang			: '"+ rs.getString("jml_korban_sedang")
 		+"', jml_hari_kerja_hilang		: '"+ rs.getString("jml_hari_kerja_hilang")
 		+"', jml_korban_dampak			: '"+ rs.getString("jml_korban_dampak")
 		+"', jml_korban_medis			: '"+ rs.getString("jml_korban_medis")
-		+"', jml_korban_p3k			: '"+ rs.getString("jml_korban_p3k")
+		+"', jml_korban_p3k				: '"+ rs.getString("jml_korban_p3k")
 		+"', jml_hampir_celaka			: '"+ rs.getString("jml_hampir_celaka")
 		+"', jml_bakar_ledak_bocor		: '"+ rs.getString("jml_bakar_ledak_bocor")
 		+"', jml_rusak_jaringan			: '"+ rs.getString("jml_rusak_jaringan")
 		+"', jml_rusak_bangunan			: '"+ rs.getString("jml_rusak_bangunan")
 		+"', jml_rusak_kendaraan		: '"+ rs.getString("jml_rusak_kendaraan")
-		+"', jml_rusak_lain			: '"+ rs.getString("jml_rusak_lain")
+		+"', jml_rusak_lain				: '"+ rs.getString("jml_rusak_lain")
 		+"', nilai_rusak_jaringan		: '"+ rs.getString("nilai_rusak_jaringan")
 		+"', nilai_rusak_bangunan		: '"+ rs.getString("nilai_rusak_bangunan")
 		+"', nilai_rusak_kendaraan		: '"+ rs.getString("nilai_rusak_kendaraan")
 		+"', nilai_rusak_lain			: '"+ rs.getString("nilai_rusak_lain")
-		+"', jml_pencemaran_lingkungan		: '"+ rs.getString("jml_pencemaran_lingkungan")
-		+"', jml_kecelakaan_kendaraan		: '"+ rs.getString("jml_kecelakaan_kendaraan")
+		+"', jml_pencemaran_lingkungan	: '"+ rs.getString("jml_pencemaran_lingkungan")
+		+"', jml_kecelakaan_kendaraan	: '"+ rs.getString("jml_kecelakaan_kendaraan")
 		+"', jml_kejadian_keamanan		: '"+ rs.getString("jml_kejadian_keamanan")
 		+"'}";
 

@@ -128,6 +128,7 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 				title	: {
 					text: '%'
 				}
+			,	max		: 100
 			}
 		,	legend	: {
 				display	: 'horizontal'
@@ -234,31 +235,13 @@ function M_RCALapRCAGrid()
 		]
 	});
 
-	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
-							, year, month, is_in_org)
-	{
-		this.store.load({
-			scope		: this
-		,	params		: {
-				id_dir		: id_dir
-			,	id_div		: id_div
-			,	id_dep		: id_dep
-			,	id_dinas	: id_dinas
-			,	id_seksi	: id_seksi
-			,	id_wilayah	: id_wilayah
-			,	id_area		: id_area
-			,	year		: year
-			,	month		: month
-			,	is_in_org	: is_in_org
-			}
-		});
-	}
+
 }
 
 function M_RCALapperformance()
 {
 	this.grid		= new M_RCALapRCAGrid();
-	this.form		= new M_RCALapPerfForm(this.grid, true);
+	this.form		= new M_RCALapPerfForm(this, true);
 	this.chart		= new M_RCALapPerfChart(
 									this.grid.store
 								,	'Grafik Performance RCA'
@@ -287,12 +270,76 @@ function M_RCALapperformance()
 		]
 	});
 
-	this.do_proses = function(year, month)
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
+							, year, month, is_in_org)
 	{
-		this.grid.do_refresh(year, month);
-		this.chart.do_refresh(year, month);
-	}
+		var sub		= '';
+		var record;
+		var combo;
 
+		if (is_in_org) {
+			if (id_seksi != 0) {
+				combo	= this.form.set_org.formSeksi;
+				record	= combo.findRecord(combo.valueField, id_seksi);
+				sub	= 'Seksi '+ record.get(combo.displayField);
+			} else if (id_dinas != 0) {
+				combo	= this.form.set_org.formDinas;
+				record	= combo.findRecord(combo.valueField, id_dinas);
+				sub	= 'Dinas '+ record.get(combo.displayField);
+			} else if (id_dep != 0) {
+				combo	= this.form.set_org.formDepartemen;
+				record	= combo.findRecord(combo.valueField, id_dep);
+				sub	= 'Departemen '+ record.get(combo.displayField);
+			} else if (id_div != 0) {
+				combo	= this.form.set_org.formDivProSBU;
+				record	= combo.findRecord (combo.valueField, id_div);
+				sub		= 'Divisi/Proyek/SBU '+ record.get (combo.displayField);
+			} else if (id_dir != 0) {
+				combo	= this.form.set_org.formDirektorat;
+				record	= combo.findRecord (combo.valueField, id_dir);
+				sub		= record.get (combo.displayField);
+			}
+		} else {
+			if (id_area != 0) {
+				combo	= this.form.set_wil.formArea;
+				record	= combo.findRecord(combo.valueField, id_area);
+				sub	= 'Area '+ record.get(combo.displayField);
+			} else if (id_wilayah != 0) {
+				combo	= this.form.set_wil.formWilayah;
+				record	= combo.findRecord(combo.valueField, id_wilayah);
+				sub	= 'Wilayah '+ record.get(combo.displayField);
+			}
+		}
+
+		if (month != 0) {
+			combo	= this.form.set_waktu.formBulan;
+			record	= combo.findRecord(combo.valueField, month);
+			sub	+= ' - '+ record.get(combo.displayField);
+		} else if (sub != '') {
+			sub += ' - ';
+		}
+
+		sub += ' '+ year;
+
+		this.chart.chart.setSubTitle(sub);
+		
+		this.grid.store.load({
+			scope		: this
+		,	params		: {
+				id_dir		: id_dir
+			,	id_div		: id_div
+			,	id_dep		: id_dep
+			,	id_dinas	: id_dinas
+			,	id_seksi	: id_seksi
+			,	id_wilayah	: id_wilayah
+			,	id_area		: id_area
+			,	year		: year
+			,	month		: month
+			,	is_in_org	: is_in_org
+			}
+		});
+	}
+	
 	this.do_refresh = function(ha_level)
 	{
 		m_rca_lap_performance_ha = ha_level;

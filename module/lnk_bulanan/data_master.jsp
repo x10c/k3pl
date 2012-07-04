@@ -6,7 +6,10 @@
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
@@ -15,27 +18,34 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
 	Statement	db_stmt 	= db_con.createStatement();
-	String		load_type	= (String) request.getParameter("load_type");
-	String		nipg		= (String) session.getAttribute("user.nipg");
 	
-	String q=" select	tahun "
+	String q
+		=" select	tahun "
 		+" ,		tahun as tahun_old "
 		+" ,		bulan "
 		+" ,		bulan as bulan_old "
 		+" ,		pekerjaan "
 		+" ,		lokasi_proyek "
 		+" from		t_lingkungan_bulanan "
-		+" where	id_user 	= '"+ nipg +"'";
+		+" where	id_user 		= '"+ user_nipg +"'"
+		+" and		id_divprosbu	= "+ user_div
+		+" and		id_direktorat	= "+ user_dir
+		+" order by	tahun, bulan ";
 
-		if (load_type.equals("all")) {
-			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)";
-		}
-
-		q+=" order by	tahun, bulan ";
-
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
+	ResultSet	rs		= db_stmt.executeQuery(q);
+	int			i		= 0;
 	String		data	= "[";
 
 	while (rs.next()) {
@@ -44,12 +54,12 @@ try {
 		} else {
 			i++;
 		}
-		data	+="["+ rs.getString("tahun")
-			+ ","+ rs.getString("tahun_old")
-			+ ","+ rs.getString("bulan")
-			+ ","+ rs.getString("bulan_old")
-			+ ",'"+ rs.getString("pekerjaan")
-			+ "','"+ rs.getString("lokasi_proyek")
+		data+="[ "+ rs.getString("tahun")
+			+ ", "+ rs.getString("tahun_old")
+			+ ", "+ rs.getString("bulan")
+			+ ", "+ rs.getString("bulan_old")
+			+ ",'"+ rs.getString("pekerjaan") +"'"
+			+ ",'"+ rs.getString("lokasi_proyek")
 			+ "']";
 	}
 

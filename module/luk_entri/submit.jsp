@@ -6,9 +6,12 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page import="org.json.*" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q="";
 try {
@@ -18,38 +21,48 @@ try {
 		return;
 	}
 
-	Statement	db_stmt = db_con.createStatement();
-	String		id_user = (String) session.getAttribute("user.nipg");
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
-	String		id, v, q_where, q_update, q_fields, q_values, tanggal;
+	if (user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
+		return;
+	}
+
+	Statement	db_stmt	= db_con.createStatement();
+	String		id_user	= (String) session.getAttribute("user.nipg");
 	String		year	= (String) request.getParameter("year");
 	String		month	= (String) request.getParameter("month");
+	String		id, v, q_where, q_update, q_fields, q_values, tanggal;
 	JSONArray	data	= new JSONArray((String) request.getParameter("rows"));
 	JSONObject	col_change;
 	String[]	keys;
 	
 	JSONObject	row;
-	int		i,j,l;
+	int			i,j,l;
 
 	tanggal = "cast('"+ year +"-"+ month +"-01' as datetime)";
 
 	l = data.length();
 	for (i = 0; i < l; i++) {
-		row		= data.getJSONObject(i);
-		id		= row.getString("id");
+		row			= data.getJSONObject(i);
+		id			= row.getString("id");
 		col_change	= row.getJSONObject("data");
 		keys		= JSONObject.getNames(col_change);
 
-		q_where		=" where	tanggal			= "+ tanggal
-				+" and		tahun			= "+ year
-				+" and		bulan			= "+ month
-				+" and		id_klasifikasi_pegawai	= "+ id;
+		q_where	=" where	tanggal					= "+ tanggal
+				+" and		tahun					= "+ year
+				+" and		bulan					= "+ month
+				+" and		id_klasifikasi_pegawai	= "+ id
+				+" and		id_divprosbu			= "+ user_div
+				+" and		id_direktorat			= "+ user_dir;
 
-		q_update	=" id_user		= "+ id_user
+		q_update=" id_user			= "+ id_user
 				+",tanggal_akses	= getdate()";
 
-		q_fields	= " tanggal, tahun, bulan, id_klasifikasi_pegawai, id_user";
-		q_values	= tanggal +","+ year +","+ month +","+ id +","+ id_user;
+		q_fields	= " tanggal, tahun, bulan, id_klasifikasi_pegawai, id_user, id_divprosbu, id_direktorat";
+		q_values	= tanggal +","+ year +","+ month +","+ id +","+ id_user +","+ user_div +","+ user_dir;
 
 		for (j = 0; j < col_change.length(); j++) {
 			v	= col_change.getString(keys[j]);

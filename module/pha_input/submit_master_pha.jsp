@@ -12,6 +12,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -20,15 +21,19 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
 	Statement	db_stmt = db_con.createStatement();
 	String		id_user = (String) session.getAttribute("user.nipg");
 
-	int			dml			= Integer.parseInt(request.getParameter("dml_type"));
-	String		id_pha		= request.getParameter("id_pha");
-	String		id_project	= request.getParameter("id_project");
-	String		lokasi		= request.getParameter("lokasi");
-	String		tanggal		= request.getParameter("tanggal");
-	String		proses_phr	= request.getParameter("proses_phr");
+	int			dml				= Integer.parseInt(request.getParameter("dml_type"));
+	String		id_pha			= request.getParameter("id_pha");
+	String		id_project		= request.getParameter("id_project");
+	String		lokasi			= request.getParameter("lokasi");
+	String		tanggal			= request.getParameter("tanggal");
+	String		proses_phr		= request.getParameter("proses_phr");
 	
 	String		q 		= "";
 	Date		date	= new Date();
@@ -38,9 +43,9 @@ try {
 		id_pha	= Long.toString(date.getTime());
 
 		q	=" insert into t_pha (id_pha, id_project, lokasi, tanggal,"
-			+" proses_phr, id_user)"
+			+" proses_phr, id_user, id_divprosbu, id_direktorat)"
 			+" values ("+ id_pha +" ,"+ id_project +" ,'"+ lokasi +"' ,'"+ tanggal +"' ,"
-			+" '"+ proses_phr +"' ,'"+ id_user + "')";
+			+" '"+ proses_phr +"' ,'"+ id_user + "' ," + id_divprosbu + " ," + id_direktorat + ")";
 
 		break;
 	case 3:
@@ -51,6 +56,8 @@ try {
 			+" , tanggal			= cast('"+ tanggal +"' as datetime) "
 			+" , proses_phr			= '"+ proses_phr +"' "
 			+" , id_user			= '"+ id_user +"' "
+			+" , id_divprosbu		=  "+ id_divprosbu
+			+" , id_direktorat		=  "+ id_direktorat
 			+" , tanggal_akses		= getdate() "
 			+" where id_pha			=  "+ id_pha;
 			

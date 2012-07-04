@@ -296,17 +296,7 @@
 	
 	this.do_load = function()
 	{
-		var load_type = 'user';
-
-		if (m_lnk_bulanan_ha_level == 4) {
-			load_type = 'all';
-		}
-
-		this.store.load({
-			params	: {
-				load_type : load_type
-			}
-		});
+		this.store.load();
 	}
 
 	this.do_refresh = function()

@@ -23,6 +23,7 @@ String	q_tl_temuan	= "";
 String	q_avg		= "";
 String	q_sum		= "";
 String	q_where		= "";
+String	q_where2	= "";
 String	months[]	= {	"jan", "feb", "mar", "apr"
 					,	"may", "jun", "jul", "aug"
 					,	"sep", "oct", "nov", "dec"
@@ -61,77 +62,77 @@ try {
 			+"	,		r_seksi		B"
 			+"	where	A.status_pegawai = '1'";
 
-	q_nipg2	=" and b.nipg in ("
+	q_nipg2	=" and rca_auditor.nipg in ("
 			+"	select	A.nipg"
 			+"	from	r_pegawai	A"
 			+"	,		r_seksi		B"
 			+"	where	A.status_pegawai = '1'";
 
-	q_nipg3	=" and c.nipg in ("
+	q_nipg3	=" and rca_auditor.nipg in ("
 			+"	select	A.nipg"
 			+"	from	r_pegawai	A"
 			+"	,		r_seksi		B"
 			+"	where	A.status_pegawai = '1'";
 
-	q_part	=" select	count(b.nipg) 		as total_part"
-			+" from		t_rca				as a"
-			+" ,		t_rca_auditor		as b"
-			+" where	a.id_rca			= b.id_rca"
-			+" and		b.status			in (1,2)"
-			+" and		year(a.tanggal_rca)	= "+ year;
+	q_part	=" select	count(rca_auditor.nipg) as total_part"
+			+" from		t_rca				as rca"
+			+" ,		t_rca_auditor		as rca_auditor"
+			+" where	rca.id_rca			= rca_auditor.id_rca"
+			+" and		rca_auditor.status			in (1,2)"
+			+" and		year(rca.tanggal_rca)	= "+ year;
 
-	q_vio	=" select	cast(isnull(sum(a.number_of_violations),0) as varchar) as violation"
-			+" from		t_rca_detail		as a"
-			+" ,		t_rca				as b"
-			+" ,		t_rca_auditor		as c"
-			+" where	a.id_rca			= b.id_rca"
-			+" and		b.id_rca			= c.id_rca"
-			+" and		year(b.tanggal_rca)	= "+ year;
+	q_vio	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as violation"
+			+" from		t_rca_detail		as rca_detail"
+			+" ,		t_rca				as rca"
+			+" ,		t_rca_auditor		as rca_auditor"
+			+" where	rca_detail.id_rca	= rca.id_rca"
+			+" and		rca.id_rca			= rca_auditor.id_rca"
+			+" and		year(rca.tanggal_rca)	= "+ year;
 
-	q_temuan	=" select	count(a.id_rca) as temuan"
-				+" from		t_rca_detail		as a"
-				+" ,		t_rca				as b"
-				+" ,		t_rca_auditor		as c"
-				+" where	a.id_rca			= b.id_rca"
-				+" and		b.id_rca			= c.id_rca"
-				+" and		a.id_severity		in (4,5)"
-				+" and		year(b.tanggal_rca)	= "+ year;
+	q_temuan	=" select	count(rca_detail.id_rca) as temuan"
+				+" from		t_rca_detail		as rca_detail"
+				+" ,		t_rca				as rca"
+				+" ,		t_rca_auditor		as rca_auditor"
+				+" where	rca_detail.id_rca		= rca.id_rca"
+				+" and		rca.id_rca				= rca_auditor.id_rca"
+				+" and		rca_detail.id_severity	in (4,5)"
+				+" and		year(rca.tanggal_rca)	= "+ year;
 
-	q_sev	="select	cast(convert(decimal(18,2), case when sum(a.li_45) is null then 0 else (1.0 * (sum(a.li_45) * 100) / isnull(sum(a.number_of_violations),1)) end) as varchar) as severity"
-			+" from		t_rca_detail		as a"
-			+" ,		t_rca				as b"
-			+" ,		t_rca_auditor		as c"
-			+" where	a.id_rca			= b.id_rca"
-			+" and		b.id_rca			= c.id_rca"
-			+" and		year(b.tanggal_rca)	= "+ year;
+	q_sev	="select	cast(convert(decimal(18,2), case when sum(rca_detail.li_45) is null then 0 else (1.0 * (sum(rca_detail.li_45) * 100) / isnull(sum(rca_detail.number_of_violations),1)) end) as varchar) as severity"
+			+" from		t_rca_detail		as rca_detail"
+			+" ,		t_rca				as rca"
+			+" ,		t_rca_auditor		as rca_auditor"
+			+" where	rca_detail.id_rca		= rca.id_rca"
+			+" and		rca.id_rca				= rca_auditor.id_rca"
+			+" and		year(rca.tanggal_rca)	= "+ year;
 
-	q_get_temuan	="select	count(b.id_rca)		as jml"
-					+" from		r_seksi				as a"
-					+" ,		t_rca_detail		as b"
-					+" ,		t_rca				as c"
-					+" ,		t_rca_auditor		as d"
-					+" where	b.id_rca			= c.id_rca"
-					+" and		c.id_rca			= d.id_rca"
-					+" and		c.penanggung_jawab_departemen	= a.id_departemen"
-					+" and		year(c.tanggal_rca)	= "+ year;
+	q_get_temuan	="select	count(rca_detail.id_rca)	as jml"
+					+" from		r_seksi						as A"
+					+" ,		t_rca_detail				as rca_detail"
+					+" ,		t_rca						as rca"
+					+" ,		t_rca_auditor				as rca_auditor"
+					+" where	rca_detail.id_rca				= rca.id_rca"
+					+" and		rca.id_rca						= rca_auditor.id_rca"
+					+" and		rca.penanggung_jawab_direktorat	= A.id_direktorat"
+					+" and		year(rca.tanggal_rca)			= "+ year;
 			
-	q_tl_temuan	=" select	count(a.id_rca) as temuan"
-				+" from		t_rca_detail		as a"
-				+" ,		t_rca				as b"
-				+" ,		t_rca_auditor		as c"
-				+" where	a.id_rca			= b.id_rca"
-				+" and		b.id_rca			= c.id_rca"
-				+" and		a.id_severity		in (4,5)"
-				+" and		a.status			in ('2','3')"
-				+" and		year(b.tanggal_rca)	= "+ year;
+	q_tl_temuan	=" select	count(rca_detail.id_rca) as temuan"
+				+" from		t_rca_detail		as rca_detail"
+				+" ,		t_rca				as rca"
+				+" ,		t_rca_auditor		as rca_auditor"
+				+" where	rca_detail.id_rca		= rca.id_rca"
+				+" and		rca.id_rca				= rca_auditor.id_rca"
+				+" and		rca_detail.id_severity	in (4,5)"
+				+" and		rca_detail.status		in ('2','3')"
+				+" and		year(rca.tanggal_rca)	= "+ year;
 				
-	q_avg	="select cast(convert(decimal(18,2), case when sum(a.violation_x_severity) is null then 0 else (1.0 * sum(a.violation_x_severity) / isnull(sum(a.number_of_violations),1)) end) as varchar) as average"
-			+" from		t_rca_detail		as a"
-			+" ,		t_rca				as b"
-			+" ,		t_rca_auditor		as c"
-			+" where	a.id_rca			= b.id_rca"
-			+" and		b.id_rca			= c.id_rca"
-			+" and		year(b.tanggal_rca)	= "+ year;
+	q_avg	="select cast(convert(decimal(18,2), case when sum(rca_detail.violation_x_severity) is null then 0 else (1.0 * sum(rca_detail.violation_x_severity) / isnull(sum(rca_detail.number_of_violations),1)) end) as varchar) as average"
+			+" from		t_rca_detail		as rca_detail"
+			+" ,		t_rca				as rca"
+			+" ,		t_rca_auditor		as rca_auditor"
+			+" where	rca_detail.id_rca		= rca.id_rca"
+			+" and		rca.id_rca				= rca_auditor.id_rca"
+			+" and		year(rca.tanggal_rca)	= "+ year;
 	
 	/* filter/aggregate by month */
 	if (month == 0) {
@@ -147,13 +148,13 @@ try {
 		q_target +=") as target";
 	} else {
 		q_target	=" select isnull(sum("+ months[month - 1] +"),1) as target";
-		q_part		+=" and month(a.tanggal_rca) = "+ month;
-		q_vio		+=" and month(b.tanggal_rca) = "+ month;
-		q_temuan	+=" and month(b.tanggal_rca) = "+ month;
-		q_sev		+=" and month(b.tanggal_rca) = "+ month;
-		q_get_temuan+=" and month(c.tanggal_rca) = "+ month;
-		q_tl_temuan	+=" and month(b.tanggal_rca) = "+ month;
-		q_avg		+=" and month(b.tanggal_rca) = "+ month;
+		q_part		+=" and month(rca.tanggal_rca) = "+ month;
+		q_vio		+=" and month(rca.tanggal_rca) = "+ month;
+		q_temuan	+=" and month(rca.tanggal_rca) = "+ month;
+		q_sev		+=" and month(rca.tanggal_rca) = "+ month;
+		q_get_temuan+=" and month(rca.tanggal_rca) = "+ month;
+		q_tl_temuan	+=" and month(rca.tanggal_rca) = "+ month;
+		q_avg		+=" and month(rca.tanggal_rca) = "+ month;
 	}
 
 	q_target	+=" from	t_rca_target_pegawai"
@@ -239,6 +240,8 @@ try {
 				q_where =" and A.id_seksi = B.id_seksi"
 						+" and B.id_wilayah = ";
 
+				q_where2 =" and A.id_wilayah = ";
+
 				q_org	=" select	id_wilayah	as id"
 						+" ,		nama_wilayah	as name"
 						+" from		r_wilayah";
@@ -268,7 +271,7 @@ try {
 			+" ,	("+ q_vio		+ q_where + id +")) V"
 			+" ,	("+ q_temuan	+ q_where + id +")) TEMUAN"
 			+" ,	("+ q_sev		+ q_where + id +")) SEV"
-			+" ,	("+ q_get_temuan+ q_where + id +") GET_TEMUAN"
+			+" ,	("+ q_get_temuan+ q_where2 + id +") GET_TEMUAN"
 			+" ,	("+ q_tl_temuan	+ q_where + id +")) TL_TEMUAN"
 			+" ,	("+ q_avg		+ q_where + id +")) AVERAGE";
 
@@ -300,7 +303,6 @@ try {
 	out.print(data);
 
 } catch (Exception e) {
-	out.print(q);
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }
 %>

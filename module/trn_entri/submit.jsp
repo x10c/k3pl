@@ -3,12 +3,16 @@
  %
  % Author(s):
  % + PT. Awakami
- %   - m.shulhan (ms@kilabit.org)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q 	= "";
 String q2	= "";
@@ -20,19 +24,27 @@ try {
 		return;
 	}
 
-	Statement	db_stmt = db_con.createStatement();
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
-	String		id_user = (String) session.getAttribute("user.nipg");
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
 
-	int			dml		= Integer.parseInt(request.getParameter("dml_type"));
-	String		id		= request.getParameter("id");
-	String		id_pel		= request.getParameter("id_pelatihan");
+	Statement	db_stmt			= db_con.createStatement();
+	int			dml				= Integer.parseInt(request.getParameter("dml_type"));
+	String		id				= request.getParameter("id");
+	String		id_pel			= request.getParameter("id_pelatihan");
 	String		penyelenggara	= request.getParameter("penyelenggara");
-	String		tempat		= request.getParameter("tempat");
-	String		tanggal		= request.getParameter("tanggal");
-	String		lama		= request.getParameter("lama");
-	JSONArray	peserta		= new JSONArray((String)request.getParameter("peserta"));
-	Date		date		= new Date();
+	String		tempat			= request.getParameter("tempat");
+	String		tanggal			= request.getParameter("tanggal");
+	String		lama			= request.getParameter("lama");
+	JSONArray	peserta			= new JSONArray((String)request.getParameter("peserta"));
+	Date		date			= new Date();
 	int			i, l;
 
 	penyelenggara	= penyelenggara.replace("'", "''");
@@ -42,7 +54,7 @@ try {
 	case 2:
 		id = Long.toString(date.getTime());
 
-		q	=" insert into t_pelatihan("
+		q	=" insert into t_pelatihan ("
 			+"   id"
 			+" , id_pelatihan"
 			+" , penyelenggara"
@@ -57,7 +69,7 @@ try {
 			+",'"+ tempat +"'"
 			+", cast('"+ tanggal +"' as datetime)"
 			+", "+ lama
-			+",'"+ id_user +"'"
+			+",'"+ user_nipg +"'"
 			+");";
 
 		l = peserta.length();
@@ -66,7 +78,7 @@ try {
 			for (i = 0; i < l; i++) {
 				q2	+=" select "+ id
 					+",'"+ peserta.getString(i) +"'"
-					+",'"+ id_user +"'";
+					+",'"+ user_nipg +"'";
 
 				if (i < (l-1)) {
 					q2 +=" union all";
@@ -93,7 +105,7 @@ try {
 			for (i = 0; i < l; i++) {
 				q3	+=" select "+ id
 					+",'"+ peserta.getString(i) +"'"
-					+",'"+ id_user +"'";
+					+",'"+ user_nipg +"'";
 
 				if (i < (l-1)) {
 					q3 +=" union all";

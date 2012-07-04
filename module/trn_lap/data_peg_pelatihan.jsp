@@ -6,11 +6,25 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
-	Connection	db_con		= (Connection) session.getAttribute("db.con");
+	Connection db_con = (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
@@ -18,11 +32,8 @@ try {
 	Statement	db_stmt_peg	= db_con.createStatement();
 	Statement	db_stmt_trn	= db_con.createStatement();
 
-	String		q
-		,	o
-		,	nipg;
-	
-	int		i = 0;
+	String		q, o, nipg;
+	int			i = 0;
 
 	q	=" select	a.nipg"
 		+" ,		a.nama_pegawai"
@@ -30,7 +41,9 @@ try {
 		+" ,		b.nama_jabatan"
 		+" from		r_pegawai as a, "
 		+" 			r_jabatan as b "
-		+" where	a.status_pegawai = '1' and a.id_jabatan = b.id_jabatan"
+		+" where	a.status_pegawai	= '1'"
+		+" and		a.id_jabatan		= b.id_jabatan"
+		+" and		a.id_divprosbu		= "+ user_div
 		+" order by	nama_pegawai";
 
 	ResultSet rs = db_stmt_peg.executeQuery(q);

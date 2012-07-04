@@ -6,13 +6,27 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q	= "";
 String q2	= "";
 try {
 	Connection db_con = (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
@@ -35,14 +49,15 @@ try {
 		+" ,		A.tempat"
 		+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal"
 		+" ,		A.lama"
-		+" from		t_pelatihan	A";
+		+" from		t_pelatihan	A"
+		+" where	id_divprosbu = "+ user_div;
 
 	if (gid != null && !gid.equals("")) {
-		q += " where	A.id = "+ gid;
+		q += " A.id = "+ gid;
 	}
 
-	q	+=" order by	A.tanggal	DESC"
-		 +" ,		A.id_pelatihan	ASC";
+	q	+=" order by	A.tanggal		DESC"
+		 +" ,			A.id_pelatihan	ASC";
 
 	rs = db_stmt.executeQuery(q);
 
@@ -78,13 +93,13 @@ try {
 		}
 		peserta += "]";
 
-		o	+="{id			:"+ id
+		o	+="{id				:"+ id
 			+ ",id_pelatihan	:"+ rs.getString("id_pelatihan")
 			+ ",penyelenggara	:\""+ rs.getString("penyelenggara") +"\""
-			+ ",tempat		:\""+ rs.getString("tempat") +"\""
-			+ ",tanggal		:\""+ rs.getString("tanggal") +"\""
-			+ ",lama		:"+ rs.getString("lama")
-			+ ",peserta		:"+ peserta
+			+ ",tempat			:\""+ rs.getString("tempat") +"\""
+			+ ",tanggal			:\""+ rs.getString("tanggal") +"\""
+			+ ",lama			:"+ rs.getString("lama")
+			+ ",peserta			:"+ peserta
 			+ "}";
 	}
 	o += "]}";

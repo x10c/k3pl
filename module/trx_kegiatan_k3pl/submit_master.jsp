@@ -19,6 +19,15 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
+		return;
+	}
+
 	Statement	db_stmt = db_con.createStatement();
 	String		id_user = (String) session.getAttribute("user.nipg");
 
@@ -28,8 +37,8 @@ try {
 
 	switch (dml) {
 	case 2:
-		q	=" insert into t_kegiatan (tahun, bulan, id_user)"
-			+" values ("+ tahun +" ,"+ bulan +" ,'"+ id_user +"')";
+		q	=" insert into t_kegiatan (tahun, bulan, id_user, id_divprosbu, id_direktorat)"
+			+" values ("+ tahun +" ,"+ bulan +" ,'"+ id_user +"',"+ user_div +","+ user_dir +")";
 		break;
 
 	case 3:
@@ -40,7 +49,9 @@ try {
 			+" , id_user		= '"+ id_user +"' "
 			+" , tanggal_akses	= getdate() "
 			+" where 	tahun	= "+ tahun
-			+" and		bulan	= "+ bulan;
+			+" and		bulan	= "+ bulan
+			+" and		id_divprosbu	= "+ user_div
+			+" and		id_direktorat	= "+ user_dir
 		break;
 
 	case 4:
@@ -54,7 +65,9 @@ try {
 
 		q3	=" delete from t_kegiatan "
 			+" where  	tahun = "+ tahun
-			+" and		bulan = "+ bulan;
+			+" and		bulan = "+ bulan
+			+" and		id_divprosbu	= "+ user_div
+			+" and		id_direktorat	= "+ user_dir;
 
 		break;
 

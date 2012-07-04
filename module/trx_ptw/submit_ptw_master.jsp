@@ -7,9 +7,16 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
+
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_user			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
 	Statement	db_stmt		= db_con.createStatement();	
 
 	int dml = Integer.parseInt(request.getParameter("dml_type"));
@@ -39,7 +46,7 @@ try {
 	String nama_pejabat_berwenang				= request.getParameter("nama_pejabat_berwenang");
 	String jabatan_pejabat_berwenang			= request.getParameter("jabatan_pejabat_berwenang");
 	String catatan								= request.getParameter("catatan");
-	String id_user								= (String) session.getAttribute("user.nipg");
+
 	String q;
 
 	switch (dml) {
@@ -48,12 +55,12 @@ try {
 			+" lokasi_pekerjaan, pelaksana_pekerjaan, uraian_pekerjaan, nama_perusahaan, no_lisensi, sumber_radioaktif,"
 			+" proyektor, survey_meter, tanggal_service, tanggal_kalibrasi, nama_petugas_isolasi_listrik, jabatan_petugas_isolasi_listrik, "
 			+" nama_petugas_uji_kandungan_gas, jabatan_petugas_uji_kandungan_gas, nama_pelaksana_pekerjaan, jabatan_pelaksana_pekerjaan, "
-			+" nama_pejabat_berwenang, jabatan_pejabat_berwenang, catatan, id_user) "
+			+" nama_pejabat_berwenang, jabatan_pejabat_berwenang, catatan, id_user, id_divprosbu, id_direktorat) "
 			+" values ('"+ id_jsa +"' ,'"+ jenis_ptw +"' ,'"+ nomor +"' ,'"+ tgl_pengesahan +"' ,'"+ masa_berlaku_awal +"' ,'"+ masa_berlaku_akhir +"' , "
 			+" '"+ lokasi_pekerjaan +"' ,'"+ pelaksana_pekerjaan +"' ,'"+ uraian_pekerjaan +"' ,'"+ nama_perusahaan +"' ,'"+ no_lisensi +"' ,'"+ sumber_radioaktif +"' , "
 			+" '"+ proyektor +"' ,'"+ survey_meter +"' ,'"+ tanggal_service +"' ,'"+ tanggal_kalibrasi +"' ,'"+ nama_petugas_isolasi_listrik +"' ,'"+ jabatan_petugas_isolasi_listrik +"' ,"
 			+" '"+ nama_petugas_uji_kandungan_gas +"' ,'"+ jabatan_petugas_uji_kandungan_gas +"' ,'"+ nama_pelaksana_pekerjaan +"' ,'"+ jabatan_pelaksana_pekerjaan +"' ,"
-			+" '"+ nama_pejabat_berwenang +"' ,'"+ jabatan_pejabat_berwenang +"' ,'"+ catatan +"' ,'"+ id_user +"' )";
+			+" '"+ nama_pejabat_berwenang +"' ,'"+ jabatan_pejabat_berwenang +"' ,'"+ catatan +"' ,'"+ id_user +"' ," + id_divprosbu + " ," + id_direktorat + ")";
 		break;
 
 	case 3:
@@ -83,6 +90,8 @@ try {
 			+" ,		jabatan_pejabat_berwenang			= '"+ jabatan_pejabat_berwenang +"' "
 			+" ,		catatan								= '"+ catatan +"' "
 			+" ,		id_user								= '"+ id_user +"' "
+			+" ,		id_divprosbu						=  "+ id_divprosbu
+			+" ,		id_direktorat						=  "+ id_direktorat
 			+" ,		tanggal_akses						= getdate() "
 			+" where	id_ptw								=  "+ id_ptw;
 		break;

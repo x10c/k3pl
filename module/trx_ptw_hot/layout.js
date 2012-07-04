@@ -646,9 +646,16 @@ function M_TrxPTWHotMaster(title)
 
 	this.do_load = function()
 	{
+		var load_type = 'user';
+		
+		if (m_trx_ptw_hot_ha_level == 4) {
+			load_type = 'all';
+		}
+
 		this.store.load({
 			params		: {
 				jenis_ptw	: m_trx_ptw_hot_jenis_ptw
+			,	load_type	: load_type
 			}
 		});
 	}

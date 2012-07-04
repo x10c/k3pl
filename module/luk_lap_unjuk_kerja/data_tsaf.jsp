@@ -6,46 +6,50 @@
 %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String tsaf_months
 ="[{"
 +"	id	: '1'"
-+",	name	: 'Jan'"
++",	name: 'Jan'"
 +"},{"
 +"	id	: '2'"
-+",	name	: 'Feb'"
++",	name: 'Feb'"
 +"},{"
 +"	id	: '3'"
-+",	name	: 'Mar'"
++",	name: 'Mar'"
 +"},{"
 +"	id	: '4'"
-+",	name	: 'Apr'"
++",	name: 'Apr'"
 +"},{"
 +"	id	: '5'"
-+",	name	: 'Mei'"
++",	name: 'Mei'"
 +"},{"
 +"	id	: '6'"
-+",	name	: 'Jun'"
++",	name: 'Jun'"
 +"},{"
 +"	id	: '7'"
-+",	name	: 'Jul'"
++",	name: 'Jul'"
 +"},{"
 +"	id	: '8'"
-+",	name	: 'Agu'"
++",	name: 'Agu'"
 +"},{"
 +"	id	: '9'"
-+",	name	: 'Sep'"
++",	name: 'Sep'"
 +"},{"
 +"	id	: '10'"
-+",	name	: 'Okt'"
++",	name: 'Okt'"
 +"},{"
 +"	id	: '11'"
-+",	name	: 'Nov'"
++",	name: 'Nov'"
 +"},{"
 +"	id	: '12'"
-+",	name	: 'Des'"
++",	name: 'Des'"
 +"}]";
 
 try {
@@ -54,13 +58,22 @@ try {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
-	Statement	db_stmt	= db_con.createStatement();
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
 
+	Statement	db_stmt		= db_con.createStatement();
 	String		year		= (String) request.getParameter ("year");
 	String		month_start	= (String) request.getParameter ("month_start");
 	String		month_end	= (String) request.getParameter ("month_end");
-	int		start, end;
+	int			start, end;
 
 	if (month_start == null) {
 		start = 0;
@@ -81,7 +94,7 @@ try {
 
 	ResultSet	rs;
 	String		q, klas, month;
-	int		i, a;
+	int			i, a;
 
 	for (i = 0; i < tsaf.length(); i++) {
 		if (i < start || i > end) {
@@ -106,8 +119,9 @@ try {
 +" 	/	100.00),4,1)		as tsaf"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 1"
-+" 	and	tahun			= "+ year
-+" 	and	bulan			= "+ month
++" 	and		tahun					= "+ year
++" 	and		bulan					= "+ month
++"	and		id_divprosbu			= "+ user_div
 +" ) TEK,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
@@ -115,8 +129,9 @@ try {
 +" 	/	100.00),4,1)		as tsaf"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 2"
-+" 	and	tahun			= "+ year
-+" 	and	bulan			= "+ month
++" 	and		tahun					= "+ year
++" 	and		bulan					= "+ month
++"	and		id_divprosbu			= "+ user_div
 +" ) SER,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
@@ -124,8 +139,9 @@ try {
 +" 	/	100.00),4,1)		as tsaf"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 3"
-+" 	and	tahun			= "+ year
-+" 	and	bulan			= "+ month
++" 	and		tahun					= "+ year
++" 	and		bulan					= "+ month
++"	and		id_divprosbu			= "+ user_div
 +" ) KON,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
@@ -133,7 +149,8 @@ try {
 +" 	/	100.00),4,1)		as tsaf"
 +" 	from	t_unjuk_kerja"
 +" 	where	tahun			= "+ year
-+" 	and	bulan			= "+ month
++" 	and		bulan			= "+ month
++"	and		id_divprosbu	= "+ user_div
 +" ) KUM";
 
 		rs = db_stmt.executeQuery(q);

@@ -18,16 +18,17 @@ try {
 
 	Statement db_stmt = db_con.createStatement();
 
-	String	q	=" select	B.id_seksi"
+	String	q
+			=" select	B.id_seksi"
 			+" ,		(A.nama_wilayah+' - '+B.nama_seksi) as nama_area"
 			+" from		r_wilayah	A"
 			+" ,		r_seksi		B"
 			+" where	A.id_wilayah = B.id_wilayah "
 			+" order by	A.nama_wilayah, B.nama_seksi";
 
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int			i = 0;
-	String		data = "[";
+	ResultSet	rs		= db_stmt.executeQuery(q);
+	int			i		= 0;
+	String		data	= "[";
 
 	while (rs.next()) {
 		if (i > 0) {
@@ -35,7 +36,7 @@ try {
 		} else {
 			i++;
 		}
-		data	+="["+ rs.getString("id_seksi")
+		data+="["+ rs.getString("id_seksi")
 			+ ",'"+ rs.getString("nama_area") +"' "
 			+ "]";
 	}

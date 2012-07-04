@@ -49,9 +49,10 @@ function M_LUKTenagaHariJam()
 	);
 
 	this.store = new Ext.data.Store({
-		url		: m_luk_entri_d +'data_jka.jsp'
-	,	reader		: this.reader
-	,	autoLoad	: false
+		url						: m_luk_entri_d +'data_jka.jsp'
+	,	reader					: this.reader
+	,	autoLoad				: false
+	,	pruneModifiedRecords	: true
 	});
 
 	this.store_kum = new Ext.data.Store({
@@ -98,39 +99,43 @@ function M_LUKTenagaHariJam()
 			,	dataIndex	: 'jml_tenaga_kerja'
 			,	summaryType	: 'sum'
 			,	editor		: this.form_number
+			,	width		: 80
 			},{
 				header		: 'Lalu'
 			,	dataIndex	: 'jml_jk_bulan_lalu'
 			,	editable	: false
-			,	css		: 'background-color: #f0f0f0;'
+			,	css			: 'background-color: #f0f0f0;'
 			,	summaryType	: 'sum'
 			},{
 				header		: 'Sekarang'
 			,	dataIndex	: 'jml_jam_kerja'
 			,	summaryType	: 'sum'
 			,	editor		: this.form_float
+			,	width		: 80
 			},{
 				header		: 'Lalu'
 			,	dataIndex	: 'jml_hk_bulan_lalu'
 			,	editable	: false
-			,	css		: 'background-color: #f0f0f0;'
+			,	css			: 'background-color: #f0f0f0;'
 			,	summaryType	: 'sum'
 			},{
 				header		: 'Sekarang'
 			,	dataIndex	: 'jml_hari_kerja'
 			,	summaryType	: 'sum'
 			,	editor		: this.form_number
+			,	width		: 80
 			},{
 				header		: 'Lalu'
 			,	dataIndex	: 'jml_ha_bulan_lalu'
 			,	editable	: false
-			,	css		: 'background-color: #f0f0f0;'
+			,	css			: 'background-color: #f0f0f0;'
 			,	summaryType	: 'sum'
 			},{
 				header		: 'Sekarang'
 			,	dataIndex	: 'jml_hari_absen'
 			,	summaryType	: 'sum'
 			,	editor		: this.form_number
+			,	width		: 80
 			}]
 	,	defaults : {
 			align		: 'center'
@@ -241,7 +246,7 @@ function M_LUKTenagaHariJam()
 	});
 
 	this.panel_kumulatif = new Ext.form.FormPanel({
-		labelWidth	: 220
+		labelWidth	: 260
 	,	labelAlign	: 'right'
 	,	padding		: 5
 	,	defaults	: {
@@ -324,7 +329,7 @@ function M_LUKTenagaHariJam()
 				data += ",";
 			}
 
-			data	+="{ id: '"+ mods[i].get('id') +"' "
+			data+="{ id: '"+ mods[i].get('id') +"' "
 				+ ", data: {";
 
 			changes = mods[i].getChanges();
@@ -344,7 +349,7 @@ function M_LUKTenagaHariJam()
 		data +="]";
 
 		Ext.Ajax.request({
-			url	: m_luk_entri_d +'submit.jsp'
+			url		: m_luk_entri_d +'submit.jsp'
 		,	params	: {
 				year	: this.form_year.getValue()
 			,	month	: this.form_month.getValue()
@@ -396,16 +401,17 @@ function M_LUKJarakBerkendaraan()
 	];
 
 	this.reader = new Ext.data.JsonReader(
-		{	id	: 'id'
+		{	id		: 'id'
 		,	root	: 'rows'
 		}
 		, this.fields
 	);
 
 	this.store = new Ext.data.Store({
-		url		: m_luk_entri_d +'data_jarak_tempuh.jsp'
-	,	reader		: this.reader
-	,	autoLoad	: false
+		url						: m_luk_entri_d +'data_jarak_tempuh.jsp'
+	,	reader					: this.reader
+	,	autoLoad				: false
+	,	pruneModifiedRecords	: true
 	});
 
 	this.fields_kum = [
@@ -420,16 +426,16 @@ function M_LUKJarakBerkendaraan()
 	);
 
 	this.store_kum = new Ext.data.Store({
-		url		: m_luk_entri_d +'data_kum_jarak.jsp'
+		url			: m_luk_entri_d +'data_kum_jarak.jsp'
 	,	reader		: this.reader_kum
 	,	autoLoad	: false
 	});
 
 	this.form_number = new Ext.form.NumberField({
-		allowBlank	: false
+		allowBlank		: false
 	,	allowDecimals	: false
 	,	allowNegative	: false
-	,	value		: '0'
+	,	value			: '0'
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
@@ -556,7 +562,7 @@ function M_LUKJarakBerkendaraan()
 	});
 
 	this.panel_kumulatif = new Ext.form.FormPanel({
-		labelWidth	: 250
+		labelWidth	: 260
 	,	labelAlign	: 'right'
 	,	padding		: 5
 	,	defaults	: {

@@ -7,6 +7,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
@@ -15,13 +16,19 @@ try {
 		return;
 	}
 
-	Statement	db_stmt		= db_con.createStatement();
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	Statement	db_stmt			= db_con.createStatement();
 
 	String	q	=" select	id_project "
-			+" ,		nama_project "
-			+" ,		replace(convert(varchar, tanggal_mulai, 111), '/', '-') tanggal_mulai"
-			+" from		r_project "
-			+" order by	nama_project ";
+				+" ,		nama_project "
+				+" ,		replace(convert(varchar, tanggal_mulai, 111), '/', '-') tanggal_mulai"
+				+" from		r_project "
+				+" where	id_divprosbu	= " + id_divprosbu
+				+" and		id_direktorat	= " + id_direktorat
+				+" order by	nama_project ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;

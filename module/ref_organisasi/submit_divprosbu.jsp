@@ -28,7 +28,7 @@ try {
 	switch (dml) {
 	case 2:
 		q	=" insert into	r_divprosbu (id_direktorat, nama_divprosbu, status_divprosbu, id_user) "
-			+" values ("+ id_direktorat +",'"+ nama_divprosbu +","+ status_divprosbu +", '"+ id_user +"') ";
+			+" values ("+ id_direktorat +",'"+ nama_divprosbu +"',"+ status_divprosbu +", '"+ id_user +"') ";
 		break;
 	case 3:
 		q	=" update	r_divprosbu"
