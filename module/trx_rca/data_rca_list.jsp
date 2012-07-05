@@ -49,9 +49,9 @@ try {
 		+" or		'"+ nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca)";
 
 		if (load_type.equals("all")) {
-			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)";
-			q+=" and	a.auditor_divprosbu		= "+ id_divprosbu
-			q+=" and	a.auditor_direktorat	= "+ id_direktorat;
+			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)"
+			 +" and	a.auditor_divprosbu		= "+ id_divprosbu
+			 +" and	a.auditor_direktorat	= "+ id_direktorat;
 		}
 
 		q+=" order by	a.tanggal_rca desc ";

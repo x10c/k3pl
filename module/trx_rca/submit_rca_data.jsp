@@ -6,13 +6,16 @@
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ page import="java.util.Properties" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -21,8 +24,24 @@ try {
 		return;
 	}
 
-	Cookie[]	cookies			= request.getCookies ();
-	String		id_user			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	Cookie[]	cookies		= request.getCookies ();
+	String		c_name		= "";
+	String		user_nipg	= null;
+	String		user_name	= null;
+	String		user_email	= null;
+
+	if (cookies != null) {
+		for (int i = 0; i < cookies.length; i++) {
+			c_name = cookies[i].getName ();
+			if (c_name.equalsIgnoreCase ("user.nipg")) {
+				user_nipg = cookies[i].getValue ();
+			} else if (c_name.equalsIgnoreCase ("user.name")) {
+				user_name = cookies[i].getValue ();
+			} else if (c_name.equalsIgnoreCase ("user.email")) {
+				user_email = cookies[i].getValue ();
+			}
+		}
+	}
 
 	Statement	db_stmt = db_con.createStatement();
 
@@ -73,7 +92,7 @@ try {
 			+" penanggung_jawab_nipg, waktu_audit, lama_audit, cuaca, id_user)"
 			+" values ("+ id_rca +" ,'"+ tanggal_rca +"' ,"+ auditor_direktorat +" ,"+ auditor_divprosbu +" ,"+ auditor_departemen +" ,"+ auditor_dinas +" ,"+ auditor_seksi +" ,"
 			+" '"+ nama_tempat_rca +"' ,"+ penanggung_jawab_direktorat +" ,"+ penanggung_jawab_divprosbu +" ,"+ penanggung_jawab_departemen +" ,"+ penanggung_jawab_dinas +" ,"+ penanggung_jawab_seksi +" ,"
-			+" '"+ penanggung_jawab_nipg + "' ,'"+ waktu_audit +"' ,"+ lama_audit +" ,'"+ cuaca +"' ,'"+ id_user + "')";
+			+" '"+ penanggung_jawab_nipg + "' ,'"+ waktu_audit +"' ,"+ lama_audit +" ,'"+ cuaca +"' ,'"+ user_nipg + "')";
 
 		l = auditor.length();
 		if (l > 0) {
@@ -129,7 +148,7 @@ try {
 				q2	+=" select "+ id_rca
 					+",'"+ auditor.getString(i) +"'"
 					+","+ status
-					+",'"+ id_user +"'";
+					+",'"+ user_nipg +"'";
 
 				if (i < (l-1)) {
 					q2 +=" union all";
@@ -161,7 +180,7 @@ try {
 					+",'"+ detail.getString("completion_date_target") +"'"
 					+",'"+ detail.getString("completion_date_actual") +"'"
 					+",'"+ detail.getString("note") +"'"
-					+",'"+ id_user +"'";
+					+",'"+ user_nipg +"'";
 
 				if (i < (k-1)) {
 					q3 +=" union all";
@@ -189,7 +208,7 @@ try {
 			+" , waktu_audit					= '"+ waktu_audit +"' "
 			+" , lama_audit						= "+ lama_audit +" "
 			+" , cuaca							= '"+ cuaca +"' "
-			+" , id_user						= '"+ id_user +"' "
+			+" , id_user						= '"+ user_nipg +"' "
 			+" , tanggal_akses					= getdate() "
 			+" where id_rca						=  "+ id_rca;
 			
@@ -250,7 +269,7 @@ try {
 				q3	+=" select "+ id_rca
 					+",'"+ auditor.getString(i) +"'"
 					+","+ status
-					+",'"+ id_user +"'";
+					+",'"+ user_nipg +"'";
 
 				if (i < (l-1)) {
 					q3 +=" union all";

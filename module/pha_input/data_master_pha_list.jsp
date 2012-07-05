@@ -21,7 +21,7 @@ try {
 	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
 	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+	if (nipg.equals ("") || id_divprosbu.equals ("") || id_direktorat.equals ("")) {
 		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
 		response.sendRedirect(request.getContextPath());
 		return;
