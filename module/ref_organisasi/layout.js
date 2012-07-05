@@ -10,17 +10,26 @@ var m_ref_org_d = _g_root +'/module/ref_organisasi/';
 var m_ref_org_dep;
 var m_ref_org_dinas;
 var m_ref_org_seksi;
-var m_ref_org_id_dir	= '';
-var m_ref_org_id_div	= '';
-var m_ref_org_id_dep	= '';
-var m_ref_org_id_dinas	= '';
+var m_ref_org_id_dir	= 0;
+var m_ref_org_id_div	= 0;
+var m_ref_org_id_dep	= 0;
+var m_ref_org_id_dinas	= 0;
 var m_ref_org_ha_level	= 0;
+
+function disable_add_button ()
+{
+	console.log (m_ref_org_id_dir +","+ m_ref_org_id_div +","+ m_ref_org_id_dep +","+ m_ref_org_id_dinas);
+	m_ref_org_dir.btn_add.setDisabled (0);
+	m_ref_org_div.btn_add.setDisabled (m_ref_org_id_dir == 0);
+	m_ref_org_dep.btn_add.setDisabled (m_ref_org_id_div == 0);
+	m_ref_org_dinas.btn_add.setDisabled (m_ref_org_id_dep == 0);
+	m_ref_org_seksi.btn_add.setDisabled (m_ref_org_id_dinas == 0);
+}
 
 function dir_on_select_load_div ()
 {
 	if (typeof m_ref_org_dir == 'undefined'
-	||  typeof m_ref_org_div == 'undefined'
-	||  m_ref_org_id_dir == '') {
+	||  typeof m_ref_org_div == 'undefined') {
 		return;
 	}
 
@@ -28,15 +37,15 @@ function dir_on_select_load_div ()
 	m_ref_org_dep.store.removeAll();
 	m_ref_org_dinas.store.removeAll();
 	m_ref_org_seksi.store.removeAll();
+
+	disable_add_button ();
 }
 
 function div_on_select_load_dep ()
 {
 	if (typeof m_ref_org_dir == 'undefined'
 	||  typeof m_ref_org_div == 'undefined'
-	||  typeof m_ref_org_dep == 'undefined'
-	||  m_ref_org_id_dir == ''
-	||  m_ref_org_id_div == '')
+	||  typeof m_ref_org_dep == 'undefined')
 	{
 		return;
 	}
@@ -44,6 +53,8 @@ function div_on_select_load_dep ()
 	m_ref_org_dep.do_load();
 	m_ref_org_dinas.store.removeAll();
 	m_ref_org_seksi.store.removeAll();
+
+	disable_add_button ();
 }
 
 function dep_on_select_load_dinas()
@@ -51,28 +62,29 @@ function dep_on_select_load_dinas()
 	if (typeof m_ref_org_dir == 'undefined'
 	||	typeof m_ref_org_div == 'undefined'
 	||	typeof m_ref_org_dep == 'undefined'
-	||  typeof m_ref_org_dinas == 'undefined'
-	||  m_ref_org_id_dir == ''
-	||  m_ref_org_id_div == ''
-	||  m_ref_org_id_dep == '') {
+	||  typeof m_ref_org_dinas == 'undefined')
+	{
 		return;
 	}
 
 	m_ref_org_dinas.do_load();
 	m_ref_org_seksi.store.removeAll();
+
+	disable_add_button ();
 }
 
 function dinas_on_select_load_seksi()
 {
 	if (typeof m_ref_org_dep == 'undefined'
 	||  typeof m_ref_org_dinas == 'undefined'
-	||  typeof m_ref_org_seksi == 'undefined'
-	||  m_ref_org_id_dep == ''
-	||  m_ref_org_id_dinas == '') {
+	||  typeof m_ref_org_seksi == 'undefined')
+	{
 		return;
 	}
 
 	m_ref_org_seksi.do_load();
+
+	disable_add_button ();
 }
 
 function M_RefOrgDirektorat ()
@@ -118,7 +130,7 @@ function M_RefOrgDirektorat ()
 						m_ref_org_id_dir = data[0].data['id_direktorat'];
 					} else {
 						this.btn_del.setDisabled(true);
-						m_ref_org_id_dir = '';
+						m_ref_org_id_dir = 0;
 					}
 
 					dir_on_select_load_div();
@@ -359,7 +371,7 @@ function M_RefOrgDivProSBU ()
 						m_ref_org_id_div = data[0].data['id_divprosbu'];
 					} else {
 						this.btn_del.setDisabled(true);
-						m_ref_org_id_div = '';
+						m_ref_org_id_div = 0;
 					}
 
 					div_on_select_load_dep ();
@@ -373,6 +385,7 @@ function M_RefOrgDivProSBU ()
 			text	: 'Tambah'
 		,	iconCls	: 'add16'
 		,	scope	: this
+		,	disabled: true
 		,	handler	: function() {
 				this.do_add();
 			}
@@ -577,7 +590,7 @@ function M_RefOrgDepartement(title)
 						m_ref_org_id_dep = data[0].data['id_departemen'];
 					} else {
 						this.btn_del.setDisabled(true);
-						m_ref_org_id_dep = '';
+						m_ref_org_id_dep = 0;
 					}
 
 					dep_on_select_load_dinas();
@@ -591,6 +604,7 @@ function M_RefOrgDepartement(title)
 			text	: 'Tambah'
 		,	iconCls	: 'add16'
 		,	scope	: this
+		,	disabled: true
 		,	handler	: function() {
 				this.do_add();
 			}
@@ -800,7 +814,7 @@ function M_RefOrgDinas(title)
 						m_ref_org_id_dinas = data[0].data['id_dinas'];
 					} else {
 						this.btn_del.setDisabled(true);
-						m_ref_org_id_dinas = '';
+						m_ref_org_id_dinas = 0;
 					}
 
 					dinas_on_select_load_seksi();
@@ -814,6 +828,7 @@ function M_RefOrgDinas(title)
 			text	: 'Tambah'
 		,	iconCls	: 'add16'
 		,	scope	: this
+		,	disabled: true
 		,	handler	: function() {
 				this.do_add();
 			}
@@ -868,7 +883,7 @@ function M_RefOrgDinas(title)
 
 	this.do_add = function()
 	{
-		if (m_ref_org_id_dep == '') {
+		if (m_ref_org_id_dep == 0) {
 			Ext.Msg.alert("Kesalahan Operasi"
 		, "Silahkan pilih salah satu departemen terlebih dahulu!");
 			return;
@@ -1044,6 +1059,7 @@ function M_RefOrgSeksi(title)
 			text	: 'Tambah'
 		,	iconCls	: 'add16'
 		,	scope	: this
+		,	disabled: true
 		,	handler	: function() {
 				this.do_add();
 			}
@@ -1098,7 +1114,7 @@ function M_RefOrgSeksi(title)
 
 	this.do_add = function()
 	{
-		if (m_ref_org_id_dinas == '') {
+		if (m_ref_org_id_dinas == 0) {
 			Ext.Msg.alert("Kesalahan Operasi"
 		, "Silahkan pilih salah satu dinas terlebih dahulu!");
 			return;
@@ -1280,10 +1296,10 @@ function M_ReferensiOrganisasi()
 	this.do_refresh = function(ha_level)
 	{
 		m_ref_org_ha_level	= ha_level;
-		m_ref_org_id_dir 	= '';
-		m_ref_org_id_div 	= '';
-		m_ref_org_id_dep 	= '';
-		m_ref_org_id_dinas	= '';
+		m_ref_org_id_dir 	= 0;
+		m_ref_org_id_div 	= 0;
+		m_ref_org_id_dep 	= 0;
+		m_ref_org_id_dinas	= 0;
 
 		m_ref_org_dir.do_refresh();
 		m_ref_org_div.do_refresh();
