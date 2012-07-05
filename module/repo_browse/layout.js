@@ -1,9 +1,9 @@
 /**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ * Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  *
  * Author(s):
  * + PT. Awakami
- *   - m.shulhan (ms@kilabit.org)
+ *   - mhd.sulhan (ms@kilabit.org)
  */
 
 var m_repo_browse;
@@ -90,9 +90,9 @@ function MRepoBrowseContent()
 		,	dataIndex	:"name"
 		,	renderer	:function (v, md, r) {
 				if (r.get("type") != 0) {
-					return "<a class='doc' target='_blank' href='"
-						+ _g_root + m_repo_browse_path +"/"+ v
-						+"'>"+ v +"</a>";
+					return "<a class='doc' target='_blank'"
+						+" href='" + _g_root + "/module/repo_browse/download.jsp?id="+ r.get("id") +"'>"
+						+ v +"</a>";
 				}
 
 				if (r.get("name") == "..") {

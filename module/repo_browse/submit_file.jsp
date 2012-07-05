@@ -1,14 +1,16 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
- %   - m.shulhan (ms@kilabit.org)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Iterator"%>
-<%@ page import="java.io.File"%>
+<%@ page import="java.io.InputStream"%>
 <%@ page import="org.apache.commons.fileupload.servlet.ServletFileUpload"%>
 <%@ page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>
 <%@ page import="org.apache.commons.fileupload.*"%>
@@ -36,7 +38,6 @@ try {
 	List				items	= upload.parseRequest(request);
 	Iterator			itr		= items.iterator();
 
-	File				file	= null;
 	FileItem			item	= null;
 	FileItem			item_up	= null;
 	String				k		= null;
@@ -44,7 +45,6 @@ try {
 	String				id		="";
 	String				path	="";
 	String				name	="";
-	String				filename="";
 	long				filesize=0;
 
 	/* parse request */
@@ -67,17 +67,11 @@ try {
 		}
 	}
 
-	/* save file stream to filesystem */
-	filename = rpath + path +"/"+ name;
-
-	log("upload: "+ filename);
-
-	file = new File(filename);
-
-	item_up.write(file);
+	InputStream ins = item_up.getInputStream ();
 
 	/* save file attribute to database */
-	q	=" insert into t_repo ("
+	PreparedStatement pstmt = db_con.prepareStatement (
+		" insert into t_repo ("
 		+"		pid"
 		+" ,	type"
 		+" ,	name"
@@ -85,6 +79,7 @@ try {
 		+" ,	group_owner"
 		+" ,	size"
 		+" ,	uploader"
+		+" ,	berkas"
 		+" ) select "
 		+		id
 		+" ,	1"
@@ -93,8 +88,16 @@ try {
 		+" , group_owner"
 		+" , "+ filesize
 		+" ,'"+ user +"'"
+		+" , ?"
 		+" from		t_repo"
-		+" where	id = "+ id;
+		+" where	id = "+ id
+	);
+
+	pstmt.setBinaryStream (1, ins);
+
+	pstmt.executeUpdate ();
+
+	ins.close ();
 
 	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
 		+ user +"','"+ session.getAttribute("menu.id") +"','2')";
