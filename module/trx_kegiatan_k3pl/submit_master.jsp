@@ -7,6 +7,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String	q 	= "";
 String	q2 	= "";
@@ -51,7 +52,7 @@ try {
 			+" where 	tahun	= "+ tahun
 			+" and		bulan	= "+ bulan
 			+" and		id_divprosbu	= "+ user_div
-			+" and		id_direktorat	= "+ user_dir
+			+" and		id_direktorat	= "+ user_dir;
 		break;
 
 	case 4:
