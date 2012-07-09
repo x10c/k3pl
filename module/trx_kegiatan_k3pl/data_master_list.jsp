@@ -20,6 +20,7 @@ try {
 
 	Cookie[]	cookies		= request.getCookies ();
 	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
 
 	if (user_div.equals ("")) {
 		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
@@ -27,9 +28,7 @@ try {
 	}
 
 	Statement	db_stmt = db_con.createStatement();
-	String		nipg	= (String) session.getAttribute("user.nipg");
-
-	String q;
+	String		q;
 
 	q=" select	tahun "
 	+" 	,		bulan "
@@ -37,7 +36,7 @@ try {
 	+"				from	r_seksi		A"
 	+"				,		r_pegawai	B"
 	+"				where	A.id_seksi	= B.id_seksi"
-	+"				and		B.nipg		= '" + nipg + "'"
+	+"				and		B.nipg		= '" + user_nipg + "'"
 	+"			) as wilayah"
 	+" from		t_kegiatan "
 	+" where	id_divprosbu = "+ user_div

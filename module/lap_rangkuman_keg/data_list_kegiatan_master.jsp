@@ -4,9 +4,13 @@
  % Author(s):
  % + PT. Awakami
  %   - agus sugianto (agus.delonge@gmail.com)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -15,9 +19,20 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
+
 	Statement	db_stmt = db_con.createStatement();
-	
-	String q;
+	String		q;
 	
 	q=" select	tahun "
 	+" 		,	bulan "
@@ -36,10 +51,11 @@ try {
 	+"				else	'Desember' "
 	+"			end as nama_bulan "
 	+" from		t_kegiatan "
+	+" where	id_divprosbu = "+ user_div
 	+" order by	tahun, bulan";
 
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
+	ResultSet	rs		= db_stmt.executeQuery(q);
+	int			i		= 0;
 	String		data	= "[";
 
 	while (rs.next()) {
