@@ -10,6 +10,7 @@ var m_pssr_entry;
 var m_pssr_entry_master;
 var m_pssr_entry_master_add;
 var m_pssr_entry_detail;
+var m_pssr_entry_checklist;
 var m_pssr_entry_id_pssr	= '';
 var m_pssr_entry_ha_level	= 0;
 var m_fill_form_pssr	= [];
@@ -24,6 +25,7 @@ function pssr_master_on_select_load_detail()
 
 	m_pssr_entry_detail.do_refresh();
 	m_pssr_entry_anggota.do_refresh();
+	m_pssr_entry_checklist.do_refresh();
 }
 
 function M_PssrEntryMaster(title)
@@ -175,7 +177,7 @@ function M_PssrEntryMaster(title)
 
 	this.grid = new Ext.grid.GridPanel({
 			title				: this.title
-		,	region				: 'center'
+		,	region				: 'north'
 		,	height				: 200
 		,	store				: this.store
 		,	cm					: this.cm
@@ -300,7 +302,7 @@ function M_PssrEntryMasterAdd(title)
 		,	style		: 'margin: 8px;'
 		,	tbar				: [
 				this.btn_cancel
-			,	'-'
+			,	'->'
 			,	this.btn_save
 			]
 		,	items :[
@@ -647,10 +649,10 @@ function M_PssrEntryAnggota(title)
 	});
 	
 	this.store_departemen = new Ext.data.ArrayStore({
-			fields		: ['id', 'name']
-		,	url		: _g_root +'/module/ref_organisasi/data_departemen.jsp'
+			fields		: ['id_direktorat', 'id_divprosbu', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_departemen.jsp'
 		,	autoLoad	: false
-		,	idIndex		: 0
+		,	idIndex		: 2
 		});
 	
 	this.form_departemen = new Ext.form.ComboBox({
@@ -1239,8 +1241,6 @@ function M_PssrEntryChecklist(title)
 		});
 	}
 	
-	this.get_pssr_form();
-	
 	this.panel = new Ext.Panel({
 		id			: 'tab 2'
 	,	title		: this.title
@@ -1406,6 +1406,11 @@ function M_PssrEntryChecklist(title)
 		
 		this.dml_type = 3;
 	}
+	
+	this.do_refresh = function()
+	{
+		this.get_pssr_form();
+	}
 }
 
 function M_PssrEntry()
@@ -1417,7 +1422,7 @@ function M_PssrEntry()
 	m_pssr_entry_checklist	= new M_PssrEntryChecklist ('Entry Checklist PSSR');
 
 	m_pssr_master_con = new Ext.Container({
-			region		: 'center'
+			region		: 'north'
 		,	title		: 'PSSR Master'
 		,	layout		: 'card'
 		,	activeItem	: 0
@@ -1440,7 +1445,7 @@ function M_PssrEntry()
 	this.panel_detil = new Ext.TabPanel({
 			autoScroll	: true
 		,	enableTabScroll	: true
-		,	region		: 'south'
+		,	region		: 'center'
 		,	activeTab	: 0
 		,	items			: [
 				m_pssr_entry_detail.grid

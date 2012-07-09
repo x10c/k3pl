@@ -345,6 +345,7 @@
 	
 	this.form_applicable = new Ext.form.ComboBox({
 			store		: this.store_applicable
+		,	fieldLabel	: 'Applicable'
 		,	valueField	: 'id'
 		,	displayField	: 'name'
 		,	mode		: 'local'
@@ -370,6 +371,7 @@
 		
 	this.form_confirm = new Ext.form.ComboBox({
 			store		: this.store_confirm
+		,	fieldLabel	: 'Confirm'
 		,	valueField	: 'id'
 		,	displayField	: 'name'
 		,	mode		: 'local'
@@ -382,6 +384,7 @@
 
 	this.form_punchlist = new Ext.form.ComboBox({
 			store		: this.store_punchlist
+		,	fieldLabel	: 'Punchlist'
 		,	valueField	: 'id'
 		,	displayField	: 'name'
 		,	mode		: 'local'
@@ -401,12 +404,14 @@
 	});
 
 	this.panel_form = new Ext.form.FormPanel({
-		autoHeight	:true
+		title		: 'Filter'
+	,	autoHeight	:true
 	,	buttonAlign	:'center'
 	,	buttons		:[
 			this.btn_submit
 		]
 	,	frame		: true
+	,	labelWidth	: 150
 	,	items		:[
 			this.form_applicable
 		,	this.form_confirm
