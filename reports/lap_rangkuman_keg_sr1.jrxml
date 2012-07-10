@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr1" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\apache-tomcat-7.0.28\\webapps\\k3pl\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIVPROSBU" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     sum(T_INSIDEN."JML_KORBAN_MATI") AS JML_KORBAN_MATI,
+     sum(T_INSIDEN."JML_KORBAN_SEDANG") AS JML_KORBAN_SEDANG,
+     sum(T_INSIDEN."JML_HARI_KERJA_HILANG") AS JML_HARI_KERJA_HILANG,
+     sum(T_INSIDEN."JML_KORBAN_DAMPAK") AS JML_KORBAN_DAMPAK,
+     sum(T_INSIDEN."JML_KORBAN_MEDIS") AS JML_KORBAN_MEDIS,
+     sum(T_INSIDEN."JML_KORBAN_P3K") AS JML_KORBAN_P3K,
+     sum(T_INSIDEN."JML_HAMPIR_CELAKA") AS JML_HAMPIR_CELAKA,
+     sum(T_INSIDEN."JML_BAKAR_LEDAK_BOCOR") AS JML_BAKAR_LEDAK_BOCOR,
+     sum(T_INSIDEN."JML_RUSAK_BANGUNAN") AS JML_RUSAK_BANGUNAN,
+     sum(T_INSIDEN."JML_RUSAK_KENDARAAN") AS JML_RUSAK_KENDARAAN,
+     sum(T_INSIDEN."JML_RUSAK_LAIN") AS JML_RUSAK_LAIN,
+     sum(T_INSIDEN."JML_PENCEMARAN_LINGKUNGAN") AS JML_PENCEMARAN_LINGKUNGAN,
+     sum(T_INSIDEN."JML_KECELAKAAN_KENDARAAN") AS JML_KECELAKAAN_KENDARAAN,
+     sum(T_INSIDEN."JML_KEJADIAN_KEAMANAN") AS JML_KEJADIAN_KEAMANAN
+FROM
+     "dbo"."T_INSIDEN" T_INSIDEN
+WHERE
+     T_INSIDEN."TAHUN" = $P{YEAR}
+ AND T_INSIDEN."BULAN" = $P{MONTH}
+ AND T_INSIDEN."ID_DIVPROSBU" = $P{ID_DIVPROSBU}
+GROUP BY
+     T_INSIDEN."TAHUN",
+     T_INSIDEN."BULAN"]]>
+	</queryString>
+	<field name="JML_KORBAN_MATI" class="java.lang.Integer"/>
+	<field name="JML_KORBAN_SEDANG" class="java.lang.Integer"/>
+	<field name="JML_HARI_KERJA_HILANG" class="java.lang.Integer"/>
+	<field name="JML_KORBAN_DAMPAK" class="java.lang.Integer"/>
+	<field name="JML_KORBAN_MEDIS" class="java.lang.Integer"/>
+	<field name="JML_KORBAN_P3K" class="java.lang.Integer"/>
+	<field name="JML_HAMPIR_CELAKA" class="java.lang.Integer"/>
+	<field name="JML_BAKAR_LEDAK_BOCOR" class="java.lang.Integer"/>
+	<field name="JML_RUSAK_BANGUNAN" class="java.lang.Integer"/>
+	<field name="JML_RUSAK_KENDARAAN" class="java.lang.Integer"/>
+	<field name="JML_RUSAK_LAIN" class="java.lang.Integer"/>
+	<field name="JML_PENCEMARAN_LINGKUNGAN" class="java.lang.Integer"/>
+	<field name="JML_KECELAKAAN_KENDARAAN" class="java.lang.Integer"/>
+	<field name="JML_KEJADIAN_KEAMANAN" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="90">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[1. KECELAKAAN BULAN INI/ INCIDENTS FOR THE MONTH (Pilih yang sesuai/ Tick where applicable)]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="20" width="210" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_KORBAN_MATI} > 0 ? (char) 10003 : "o") + " Kematian / Fatality"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="20" width="305" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_HARI_KERJA_HILANG} > 0 ? (char) 10003 : "o") + " Kecelakaan dengan Kehilangan Hari Kerja / Injurious LTI"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="515" y="20" width="287" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_HARI_KERJA_HILANG} == 0 ? (char) 10003 : "o") + " Kecelakaan Tanpa Kehilangan Hari Kerja / Injurious Non LTI"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="40" width="210" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_KORBAN_MATI} + $F{JML_KORBAN_SEDANG} + $F{JML_HARI_KERJA_HILANG} + $F{JML_KORBAN_DAMPAK} + $F{JML_KORBAN_MEDIS} + $F{JML_KORBAN_P3K} + $F{JML_HAMPIR_CELAKA} + $F{JML_BAKAR_LEDAK_BOCOR} + $F{JML_RUSAK_BANGUNAN} + $F{JML_RUSAK_KENDARAAN} + $F{JML_RUSAK_LAIN} + $F{JML_PENCEMARAN_LINGKUNGAN} + $F{JML_KECELAKAAN_KENDARAAN} + $F{JML_KEJADIAN_KEAMANAN} > 0 ? (char) 10003 : "o") + " Tanpa Kecelakaan / Non-injurious"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="40" width="305" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_KORBAN_P3K} > 0 ? (char) 10003 : "o") + " Kesehatan Kerja / Occupational Health"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="515" y="40" width="287" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_PENCEMARAN_LINGKUNGAN} > 0 ? (char) 10003 : "o") + " Lingkungan / Environment"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="60" width="210" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_HAMPIR_CELAKA} > 0 ? (char) 10003 : "o") + " Nyaris Celaka / Near Misses"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="60" width="305" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{JML_KEJADIAN_KEAMANAN} > 0 ? (char) 10003 : "o") + " Keamanan / Security"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="20">
+			<frame>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="802" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="0" width="802" height="20"/>
+					<subreportParameter name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="ID_DIVPROSBU">
+						<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="YEAR">
+						<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="MONTH">
+						<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr1_detail.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</summary>
+</jasperReport>

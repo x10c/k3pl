@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr1_detail" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="ID_DIVPROSBU" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     R_WILAYAH."NAMA_WILAYAH" AS R_WILAYAH_NAMA_WILAYAH,
+     T_INSIDEN."TANGGAL" AS T_INSIDEN_TANGGAL,
+     T_INSIDEN."URAIAN" AS T_INSIDEN_URAIAN
+FROM
+     "dbo"."R_SEKSI" R_SEKSI INNER JOIN "dbo"."T_INSIDEN" T_INSIDEN ON R_SEKSI."ID_SEKSI" = T_INSIDEN."ID_AREA_SEKSI"
+     AND R_SEKSI."ID_DIREKTORAT" = T_INSIDEN."ID_AREA_DIREKTORAT"
+     AND R_SEKSI."ID_DINAS" = T_INSIDEN."ID_AREA_DINAS"
+     AND R_SEKSI."ID_DIVPROSBU" = T_INSIDEN."ID_AREA_DIVPROSBU"
+     AND R_SEKSI."ID_DEPARTEMEN" = T_INSIDEN."ID_AREA_DEPARTEMEN"
+     INNER JOIN "dbo"."R_WILAYAH" R_WILAYAH ON R_SEKSI."ID_WILAYAH" = R_WILAYAH."ID_WILAYAH"
+WHERE
+     T_INSIDEN."TAHUN" = $P{YEAR}
+ AND T_INSIDEN."BULAN" = $P{MONTH}
+ AND R_SEKSI."ID_DIVPROSBU" = $P{ID_DIVPROSBU}
+ORDER BY
+     R_WILAYAH."NAMA_WILAYAH" ASC]]>
+	</queryString>
+	<field name="R_WILAYAH_NAMA_WILAYAH" class="java.lang.String"/>
+	<field name="T_INSIDEN_TANGGAL" class="java.sql.Timestamp"/>
+	<field name="T_INSIDEN_URAIAN" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="120" height="20"/>
+				<textElement>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_WILAYAH_NAMA_WILAYAH}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="120" y="0" width="5" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="677" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{T_INSIDEN_URAIAN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

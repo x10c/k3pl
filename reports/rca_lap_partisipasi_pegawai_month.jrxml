@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_pegawai_month" pageWidth="61" pageHeight="20" columnWidth="61" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="NIPG" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     count(T_RCA_AUDITOR."NIPG") AS COUNT_NIPG
+FROM
+     "dbo"."T_RCA" T_RCA INNER JOIN "dbo"."T_RCA_AUDITOR" T_RCA_AUDITOR ON T_RCA."ID_RCA" = T_RCA_AUDITOR."ID_RCA"
+WHERE
+     T_RCA_AUDITOR."NIPG" = $P{NIPG}
+ AND T_RCA_AUDITOR."STATUS" IN (1,2)
+ AND year(T_RCA."TANGGAL_RCA") = $P{YEAR}
+ AND month(T_RCA."TANGGAL_RCA") = $P{MONTH}]]>
+	</queryString>
+	<field name="COUNT_NIPG" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph rightIndent="2"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{COUNT_NIPG}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

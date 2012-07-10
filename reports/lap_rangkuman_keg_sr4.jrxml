@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr4" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     T_AREA_PERHATIAN_DETAIL."ID_TIPE_AREA_PERHATIAN" AS T_AREA_PERHATIAN_DETAIL_ID_TIPE_AREA_PERHATIAN
+FROM
+     "dbo"."T_AREA_PERHATIAN_DETAIL" T_AREA_PERHATIAN_DETAIL
+WHERE
+     T_AREA_PERHATIAN_DETAIL."TAHUN" = 2012
+ AND T_AREA_PERHATIAN_DETAIL."BULAN" = 7
+GROUP BY
+     T_AREA_PERHATIAN_DETAIL."ID_TIPE_AREA_PERHATIAN"]]>
+	</queryString>
+	<field name="T_AREA_PERHATIAN_DETAIL_ID_TIPE_AREA_PERHATIAN" class="java.lang.Short"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

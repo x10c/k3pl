@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr3_detail2" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_WILAYAH" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_TIPE_KEGIATAN" class="java.lang.Short">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     T_KEGIATAN_DETAIL."NAMA_KEGIATAN" AS T_KEGIATAN_DETAIL_NAMA_KEGIATAN
+FROM
+     "dbo"."T_KEGIATAN_DETAIL" T_KEGIATAN_DETAIL
+WHERE
+     T_KEGIATAN_DETAIL."TAHUN" = $P{YEAR}
+ AND T_KEGIATAN_DETAIL."BULAN" = $P{MONTH}
+ AND T_KEGIATAN_DETAIL."ID_WILAYAH" = $P{ID_WILAYAH}
+ AND T_KEGIATAN_DETAIL."ID_TIPE_KEGIATAN" = $P{ID_TIPE_KEGIATAN}]]>
+	</queryString>
+	<field name="T_KEGIATAN_DETAIL_NAMA_KEGIATAN" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="802" height="20"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+					<paragraph leftIndent="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["- " + $F{T_KEGIATAN_DETAIL_NAMA_KEGIATAN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

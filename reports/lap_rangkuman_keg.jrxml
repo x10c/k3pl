@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="ID_DIVPROSBU" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORT_DATE" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new SimpleDateFormat("MM/yyyy").parse($P{MONTH}+"/"+$P{YEAR})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     R_DIVPROSBU."NAMA_DIVPROSBU" AS R_DIVPROSBU_NAMA_DIVPROSBU
+FROM
+     "dbo"."R_DIVPROSBU" R_DIVPROSBU INNER JOIN "dbo"."T_KEGIATAN" T_KEGIATAN ON R_DIVPROSBU."ID_DIVPROSBU" = T_KEGIATAN."ID_DIVPROSBU"
+     AND R_DIVPROSBU."ID_DIREKTORAT" = T_KEGIATAN."ID_DIREKTORAT"
+WHERE
+     R_DIVPROSBU."ID_DIVPROSBU" = $P{ID_DIVPROSBU}
+ AND T_KEGIATAN."TAHUN" = $P{YEAR}
+ AND T_KEGIATAN."BULAN" = $P{MONTH}]]>
+	</queryString>
+	<field name="R_DIVPROSBU_NAMA_DIVPROSBU" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="95">
+			<frame>
+				<reportElement x="0" y="0" width="121" height="75"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<image scaleImage="RealSize" hAlign="Center" vAlign="Middle">
+					<reportElement x="30" y="0" width="58" height="70"/>
+					<imageExpression><![CDATA["./logo.jpg"]]></imageExpression>
+				</image>
+			</frame>
+			<frame>
+				<reportElement x="121" y="0" width="681" height="75"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement x="0" y="0" width="681" height="17"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="13" isBold="true"/>
+					</textElement>
+					<text><![CDATA[PT Perusahaan Gas Negara (Persero) Tbk]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="17" width="681" height="18"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="13" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{R_DIVPROSBU_NAMA_DIVPROSBU}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="35" width="681" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" size="16" isBold="true"/>
+					</textElement>
+					<text><![CDATA[RANGKUMAN LAPORAN BULANAN K3PL /]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="55" width="681" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Times New Roman" size="16" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[MONTHLY HSE SUMARRY OF REPORT]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="80">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="401" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Lokasi / Location : " + $F{R_DIVPROSBU_NAMA_DIVPROSBU}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="401" y="0" width="401" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Laporan untuk bulan / Report for the month of : " + new SimpleDateFormat("MMMM yyyy", new Locale("in_ID")).format($P{REPORT_DATE})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="0" y="20" width="401" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tanggal pelaporan / Date of the report : " + new SimpleDateFormat("dd MMMM yyyy", new Locale("in_ID")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="401" y="20" width="401" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Disiapkan oleh / Prepared by : Tim K3PL " + $F{R_DIVPROSBU_NAMA_DIVPROSBU}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="40" width="401" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<text><![CDATA[Ditinjau oleh / Reviewed by : Staff K3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="401" y="40" width="401" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<text><![CDATA[Dilengkapi sebelum tanggal 15 setiap bulan/ To be completed by 15th day of every month]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="200">
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="10"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIVPROSBU">
+					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr1.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="30" width="802" height="10"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIVPROSBU">
+					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr32.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="60" width="802" height="10"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIVPROSBU">
+					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[Integer.parseInt($P{MONTH}) + 1 > 12 ? Integer.toString(Integer.parseInt($P{YEAR}) + 1) : $P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[Integer.parseInt($P{MONTH}) + 1 > 12 ? "1" : Integer.toString(Integer.parseInt($P{MONTH}) + 1)]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr3.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

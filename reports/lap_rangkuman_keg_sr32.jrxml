@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr3" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2012"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["8"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIVPROSBU" class="java.lang.String">
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\apache-tomcat-7.0.28\\webapps\\k3pl\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     T_KEGIATAN_DETAIL."ID_TIPE_KEGIATAN" AS T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN
+FROM
+     "dbo"."T_KEGIATAN" T_KEGIATAN INNER JOIN "dbo"."T_KEGIATAN_DETAIL" T_KEGIATAN_DETAIL ON T_KEGIATAN."TAHUN" = T_KEGIATAN_DETAIL."TAHUN"
+     AND T_KEGIATAN."BULAN" = T_KEGIATAN_DETAIL."BULAN"
+WHERE
+     T_KEGIATAN_DETAIL."TAHUN" = $P{YEAR}
+ AND T_KEGIATAN_DETAIL."BULAN" = $P{MONTH}
+ AND T_KEGIATAN."ID_DIVPROSBU" = $P{ID_DIVPROSBU}
+GROUP BY
+     T_KEGIATAN_DETAIL."ID_TIPE_KEGIATAN"]]>
+	</queryString>
+	<field name="T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN" class="java.lang.Short"/>
+	<variable name="AUDIT" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 1 ? $V{AUDIT} + 1 : $V{AUDIT} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="PELATIHAN" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 2 ? $V{PELATIHAN} + 1 : $V{PELATIHAN} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="RAPAT" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 3 ? $V{RAPAT} + 1 : $V{RAPAT} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="INSPEKSI" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 4 ? $V{INSPEKSI} + 1 : $V{INSPEKSI} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="JSA" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 5 ? $V{JSA} + 1 : $V{JSA} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="INSTITUSI" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 6 ? $V{INSTITUSI} + 1 : $V{INSTITUSI} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="INVESTIGASI" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 7 ? $V{INVESTIGASI} + 1 : $V{INVESTIGASI} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="PEMANTAUAN" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 8 ? $V{PEMANTAUAN} + 1 : $V{PEMANTAUAN} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="LAINNYA" class="java.lang.Integer">
+		<variableExpression><![CDATA[$F{T_KEGIATAN_DETAIL_ID_TIPE_KEGIATAN} == 9 ? $V{LAINNYA} + 1 : $V{LAINNYA} + 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="802" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[2. KEGIATAN K3PL BULAN INI/ HSE ACTIVITIES FOR THE MONTH (Pilih yang sesuai/ Tick where applicable)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="90" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{AUDIT} > 0 ? (char) 10003 : "o") + " Audit / Audit"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{INSPEKSI} > 0 ? (char) 10003 : "o") + " Inspeksi / Inspection"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="534" y="0" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{INVESTIGASI} > 0 ? (char) 10003 : "o") + " Investigasi Kecelakaan / Incident Investigation"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{PELATIHAN} > 0 ? (char) 10003 : "o") + " Pelatihan/Induksi / Safety Induction/Training"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="20" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{JSA} > 0 ? (char) 10003 : "o") + " JSA/HAZOP/Safety Review"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="534" y="20" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{PEMANTAUAN} > 0 ? (char) 10003 : "o") + " Pemantauan/Pengamatan / Monitoring/Surveillance"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="40" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{RAPAT} > 0 ? (char) 10003 : "o") + " Rapat / Meettings"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="40" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{INSTITUSI} > 0 ? (char) 10003 : "o") + " Institusi Pemerintah / Statutory Bodies"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="534" y="40" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{LAINNYA} > 0 ? (char) 10003 : "o") + " Lainnya / Others"]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="70" width="802" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<subreport>
+					<reportElement x="0" y="0" width="802" height="20"/>
+					<subreportParameter name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="ID_DIVPROSBU">
+						<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="YEAR">
+						<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="MONTH">
+						<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr3_detail.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</summary>
+</jasperReport>
