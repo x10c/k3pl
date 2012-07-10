@@ -6,7 +6,9 @@
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
 <%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String	q 	= "";
@@ -21,16 +23,17 @@ try {
 	}
 
 	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
 	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
 	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
-	if (user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
 		return;
 	}
 
 	Statement	db_stmt = db_con.createStatement();
-	String		id_user = (String) session.getAttribute("user.nipg");
 
 	int			dml		= Integer.parseInt(request.getParameter("dml_type"));
 	String		tahun	= request.getParameter("tahun");
@@ -39,7 +42,7 @@ try {
 	switch (dml) {
 	case 2:
 		q	=" insert into t_kegiatan (tahun, bulan, id_user, id_divprosbu, id_direktorat)"
-			+" values ("+ tahun +" ,"+ bulan +" ,'"+ id_user +"',"+ user_div +","+ user_dir +")";
+			+" values ("+ tahun +" ,"+ bulan +" ,'"+ user_nipg +"',"+ user_div +","+ user_dir +")";
 		break;
 
 	case 3:
@@ -47,7 +50,7 @@ try {
 			+" set "
 			+"   tahun			= "+ tahun
 			+" , bulan			= "+ bulan
-			+" , id_user		= '"+ id_user +"' "
+			+" , id_user		= '"+ user_nipg +"' "
 			+" , tanggal_akses	= getdate() "
 			+" where 	tahun	= "+ tahun
 			+" and		bulan	= "+ bulan
