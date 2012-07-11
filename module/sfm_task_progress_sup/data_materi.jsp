@@ -14,16 +14,38 @@ try {
 	
 	String id_user		= (String) session.getAttribute("user.nipg");
 	
-	String q=" select	A.id_kel_jabatan_komite_sub_komite "
+	String where_clause = "";
+	int	found = 0;
+	int	it = 0;
+	
+	String q=" select	A.id_kel_jabatan_csc "
+		+" ,		A.id_kel_jabatan_komite_sub_komite"
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
-		+" where B.nipg = "+ id_user +" and B.id_jabatan_komite in ('2','5','8','11','14','17','20') "
+		+" where B.nipg = "+ id_user +" and A.notulen in ('2','3') "
 		+" order by	A.id_kel_jabatan_komite_sub_komite ";
-		
 
 	ResultSet	rs_kel = db_stmt.executeQuery(q);
+	it = 0;
+	while(rs_kel.next()){
+		if (it>0){
+			where_clause +=" or ";
+		}
+		where_clause += " (C.id_kel_jabatan_csc = "+ rs_kel.getString("id_kel_jabatan_csc");
+		if (rs_kel.getString("id_kel_jabatan_komite_sub_komite") != null
+			&& !rs_kel.getString("id_kel_jabatan_komite_sub_komite").equals("0")
+			&& !rs_kel.getString("id_kel_jabatan_komite_sub_komite").equals("")){
+				where_clause +=" and C.id_kel_jabatan_komite_sub_komite = "+ rs_kel.getString("id_kel_jabatan_komite_sub_komite");
+				where_clause += " )";
+		}else{
+			where_clause += " and C.id_kel_jabatan_komite_sub_komite is null ";
+			where_clause += " )";
+		}
+		found= 1;
+		it ++;
+	}
 	
-	if (rs_kel.next()){
+	if (found == 1){
 		q= " select	B.nipg_pelaksana "
 		+" ,		B.nipg_supervisor "
 		+" ,		A.id_rapat_materi "
@@ -35,7 +57,7 @@ try {
 		+" from		t_rapat_materi A"
 		+" left join  t_pic_rapat_materi B on (B.id_rapat = A.id_rapat and B.id_rapat_materi = B.id_rapat_materi) "
 		+" left join  t_rapat C on (C.id_rapat = A.id_rapat) "
-		+" where C.id_kel_jabatan_komite_sub_komite = "+ rs_kel.getString("id_kel_jabatan_komite_sub_komite") 
+		+" where "+ where_clause 
 		+" order by	B.id_rapat_materi ";
 	}
 	else {

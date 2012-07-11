@@ -17,10 +17,15 @@ try {
 
 	Statement	db_stmt = db_con.createStatement();
 	String		id_kel_jabatan_komite	= request.getParameter("id_kel");
-
-	if ( id_kel_jabatan_komite.equals("0")
+	String		id_kel_jabatan_csc	= request.getParameter("id_kel_csc");
+	String	where_clause = "";
+	
+	if ( id_kel_jabatan_komite == null 
+		|| id_kel_jabatan_komite.equals("0")
 		|| id_kel_jabatan_komite.equals("")) {
-		id_kel_jabatan_komite ="0 or 1 = 1 ";
+		where_clause = " and C.id_kel_jabatan_komite_sub_komite is null ";
+	} else {
+		where_clause = " and C.id_kel_jabatan_komite_sub_komite ="+ id_kel_jabatan_komite ;
 	}
 
 	String q=" select	A.nipg "
@@ -32,7 +37,8 @@ try {
 		+" 		r_pegawai	B on A.nipg = B.nipg "
 		+" left join "
 		+" 		r_jabatan_komite_sub_komite	C on A.id_jabatan_komite = C.id_jabatan_komite "
-		+" where C.id_kel_jabatan_komite_sub_komite = "+ id_kel_jabatan_komite
+		+" where C.id_kel_jabatan_csc = "+ id_kel_jabatan_csc 
+		+ where_clause
 		+" order by	A.nipg";
 
 	ResultSet	rs = db_stmt.executeQuery(q);

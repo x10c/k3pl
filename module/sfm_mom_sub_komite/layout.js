@@ -1410,7 +1410,7 @@ function M_SfmAbsenRapatMomSub (title){
 		,	sm		: this.sm
 		,	columns		: this.columns
 		,	autoExpandColumn: 'title'
-		,	tbar : [this.btn_print,'-','Sub Committee : ',this.cb_tipe_rapat_tbar ]
+		,	tbar : [this.btn_print]
 		,	width		: '33%'
 		,	height		: 150 
 		,       listeners       : {

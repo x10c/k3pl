@@ -20,6 +20,7 @@ try{
 	int dml						= Integer.parseInt(request.getParameter("dml_type"));
 	String nipg					= request.getParameter("nipg");
 	String id_jabatan_komite	= request.getParameter("id_jabatan_komite");
+	String id_jabatan_komite_old	= request.getParameter("id_jabatan_komite_old");
 	String id_kel				= request.getParameter("id_kel");
 	String id_user				= (String) session.getAttribute("user.nipg");
 	String id_grup				= "";
@@ -54,17 +55,17 @@ try{
 			+" set		id_jabatan_komite	= "+ id_jabatan_komite +" "
 			+" ,		id_user		= '"+ id_user +"' "
 			+" ,		tanggal_akses	= getdate() "
-			+" where	nipg	= '"+ nipg +"' ";
+			+" where	nipg	= '"+ nipg +"' and id_jabatan_komite =" + id_jabatan_komite_old;
 		break;
 	case 4:
-		q = " delete from t_pegawai_komite_sub_komite where nipg = '"+ nipg +"' ";
+		q = " delete from t_pegawai_komite_sub_komite where nipg = '"+ nipg +"' and id_jabatan_komite = "+ id_jabatan_komite;
 		p = " delete from __user_grup where nipg = +'"+nipg+"' and id_grup ="+id_grup;
 		break;
 	default:
 		out.print("{success:false,info:'DML tipe tidak diketahui ("+ dml +")!'}");
 		return;
 	}
-
+ 
 	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
 		+ session.getAttribute("user.nipg") +"','"
 		+ session.getAttribute("menu.id") +"','"+ dml +"')";

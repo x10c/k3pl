@@ -14,6 +14,7 @@ var m_ref_ha_level	= 0;
 var m_list_pegawai_komite_id	= '';
 var m_kel_jabatan_komite_id = '';
 var m_kel_jabatan_csc_id = '';
+var m_jabatan_komite_old = '';
 
 function keljab_on_select_load_peg_komite()
 {
@@ -277,9 +278,14 @@ function M_RefKelJabatanCSC()
 
 	this.do_load = function()
 	{
-		this.store.reload();
 		this.store_direktorat.load();
-		this.store_divprosbu.load();
+		this.store_divprosbu.load({
+					callback : function(){
+						this.store.load();
+					}
+				,	scope : this
+		});
+		
 	}
 
 	this.do_refresh = function()
@@ -567,8 +573,10 @@ function M_RefPegawaiKomite()
 					if (data.length
 					&&  m_ref_jab_kom_ha_level == 4) {
 						this.btn_del.setDisabled(false);
+						m_jabatan_komite_old = data[0].data.id_jabatan_komite;
 					} else {
 						this.btn_del.setDisabled(true);
+						m_jabatan_komite_old ='';
 					}
 				}
 			}
@@ -684,6 +692,7 @@ function M_RefPegawaiKomite()
 			params  : {
 				nipg				: record.data['nipg']
 			,	id_jabatan_komite	: record.data['id_jabatan_komite']
+			,	id_jabatan_komite_old	: m_jabatan_komite_old
 			,	id_kel				: m_kel_jabatan_komite_id
 			,   dml_type			: this.dml_type
 			}
@@ -697,6 +706,7 @@ function M_RefPegawaiKomite()
 					if (msg.success == false) {
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
+					this.do_load();
 				}
 		,	scope	: this
 		});
@@ -742,6 +752,7 @@ function M_RefPegawaiKomite()
 		this.store.load({
 			params		:{
 				id_kel	: m_kel_jabatan_komite_id
+			,	id_kel_csc	: m_kel_jabatan_csc_id
 			}
 		});
 	}

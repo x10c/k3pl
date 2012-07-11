@@ -42,6 +42,7 @@ try {
 			+" left join	r_kel_jabatan_csc	B"
 			+" on		A.id_kel_jabatan_csc = B.id_kel_jabatan_csc "
 			+" where	A.id_kel_jabatan_komite_sub_komite is null "
+			+" and	 A.id_kel_jabatan_csc = "+ rs_kel.getString("id_kel_jabatan_csc") 
 			+" order by	A.id_rapat ";
 	}
 	else {
