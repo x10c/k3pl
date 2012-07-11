@@ -50,6 +50,7 @@ try {
 	+"				when	11	then	'November' "
 	+"				else	'Desember' "
 	+"			end as nama_bulan "
+	+"		,	id_divprosbu "
 	+" from		t_kegiatan "
 	+" where	id_divprosbu = "+ user_div
 	+" order by	tahun, bulan";
@@ -67,7 +68,8 @@ try {
 		data	+="[ '"+ rs.getString("tahun")
 			+ "','"+ rs.getString("bulan")
 			+ "','"+ rs.getString("nama_bulan")
-			+ "']";
+			+ "',"+ rs.getString("id_divprosbu")
+			+ "]";
 	}
 
 	data += "]";

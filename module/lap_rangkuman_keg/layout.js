@@ -18,6 +18,7 @@ var m_lap_kegiatan_bulan = '';
 var m_lap_area_perhatian_tahun = '';
 var m_lap_area_perhatian_bulan = '';
 var m_lap_kegiatan_ha_level = 0;
+var m_lap_kegiatan_id_divprosbu = 0;
 
 function M_LapKegiatanMaster(title)
 {
@@ -31,23 +32,7 @@ function M_LapKegiatanMaster(title)
 		},{
 			name	: 'nama_bulan'
 		},{
-			name	: 'is_audit'
-		},{
-			name	: 'is_pelatihan'
-		},{
-			name	: 'is_rapat'
-		},{
-			name	: 'is_inspeksi'
-		},{
-			name	: 'is_jsa'
-		},{
-			name	: 'is_institusi'
-		},{
-			name	: 'is_investigasi'
-		},{
-			name	: 'is_pemantauan'
-		},{
-			name	: 'is_lainnya'
+			name	: 'id_divprosbu'
 		}
 	]);
 
@@ -87,12 +72,14 @@ function M_LapKegiatanMaster(title)
 			,	selectionchange	: function(sm) {
 					var data = sm.getSelections();
 					if (data.length) {
-						m_lap_kegiatan_tahun = data[0].data['tahun'];
-						m_lap_kegiatan_bulan = data[0].data['bulan'];
+						m_lap_kegiatan_tahun 		= data[0].data['tahun'];
+						m_lap_kegiatan_bulan 		= data[0].data['bulan'];
+						m_lap_kegiatan_id_divprosbu = data[0].data['id_divprosbu'];
 						this.btn_print.setDisabled(false);
 					} else {
-						m_lap_kegiatan_tahun = '';
-						m_lap_kegiatan_bulan = '';
+						m_lap_kegiatan_tahun 		= '';
+						m_lap_kegiatan_bulan 		= '';
+						m_lap_kegiatan_id_divprosbu = 0;
 						this.btn_print.setDisabled(true);
 					}
 				}
@@ -131,23 +118,45 @@ function M_LapKegiatanMaster(title)
 
 	this.do_print = function(){
 		var form;
+		var id_report	= '16';
+		var tipe_report	= 'pdf';
+
 		form = document.createElement('form');
 		
 		form.setAttribute('method', 'post');
-		form.setAttribute('action', _g_root +'/module/lap_rangkuman_keg/data_lapkeg_export.jsp');
+		form.setAttribute('target', '_blank');
+		form.setAttribute('action', _g_root +'/report');
 		
 		var hiddenField1 = document.createElement ('input');
         hiddenField1.setAttribute('type', 'hidden');
-        hiddenField1.setAttribute('name', 'tahun');
-        hiddenField1.setAttribute('value', m_lap_kegiatan_tahun);
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
 		
 		var hiddenField2 = document.createElement ('input');
         hiddenField1.setAttribute('type', 'hidden');
-		hiddenField2.setAttribute('name', 'bulan');
-        hiddenField2.setAttribute('value', m_lap_kegiatan_bulan);
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'month');
+        hiddenField3.setAttribute('value', m_lap_kegiatan_bulan);
+
+		var hiddenField4= document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField4.setAttribute('name', 'year');
+        hiddenField4.setAttribute('value', m_lap_kegiatan_tahun);
+
+		var hiddenField5= document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField5.setAttribute('name', 'id_divprosbu');
+        hiddenField5.setAttribute('value', m_lap_kegiatan_id_divprosbu);
 		
 		form.appendChild(hiddenField1);
 		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		form.appendChild(hiddenField4);
+		form.appendChild(hiddenField5);
 		document.body.appendChild(form);
 		form.submit();
 	}
@@ -165,7 +174,7 @@ function M_LapKegiatanMaster(title)
 
 function M_LapKegiatanK3PL()
 {
-	m_lap_kegiatan_master				= new M_LapKegiatanMaster('Data Kegiatan K3PL Master');
+	m_lap_kegiatan_master	= new M_LapKegiatanMaster('Data Kegiatan K3PL');
 
 	this.panel = new Ext.Panel({
 			id				: 'lap_rangkuman_keg_panel'
@@ -187,6 +196,7 @@ function M_LapKegiatanK3PL()
 		m_lap_kegiatan_ha_level		= ha_level;
 		m_lap_kegiatan_tahun 		= '';
 		m_lap_kegiatan_bulan 		= '';
+		m_lap_kegiatan_id_divprosbu	= 0;
 
 		m_lap_kegiatan_master.do_refresh();
 	}
