@@ -9,9 +9,11 @@
 
 var m_list_pegawai_komite;
 var m_list_kel_jabatan_komite;
+var m_list_kel_jabatan_csc;
 var m_ref_ha_level	= 0;
 var m_list_pegawai_komite_id	= '';
 var m_kel_jabatan_komite_id = '';
+var m_kel_jabatan_csc_id = '';
 
 function keljab_on_select_load_peg_komite()
 {
@@ -21,6 +23,25 @@ function keljab_on_select_load_peg_komite()
 	}
 
 	m_list_pegawai_komite.do_load();
+}
+
+function keljabcsc_on_select_load_peg_komite()
+{
+	if (typeof m_list_kel_jabatan_komite == 'undefined'
+	||  typeof m_list_kel_jabatan_csc == 'undefined' 
+	||  m_kel_jabatan_csc_id == '') {
+		return;
+	}
+	m_list_kel_jabatan_komite.do_load();
+	m_list_pegawai_komite.do_load();
+}
+
+function M_ValidatePegawaiKomite(){
+	if (typeof m_ref_peg_con == 'undefined'
+		||  (m_kel_jabatan_komite_id == '' && m_kel_jabatan_csc_id == '')) {
+			return 0;
+		}
+	return 1;
 }
 
 function M_RefKelJabatanKomite()
@@ -91,8 +112,160 @@ function M_RefKelJabatanKomite()
 		});
 
 	this.grid = new Ext.grid.GridPanel({
-			title			: "Daftar Kelompok Komite"
-		,	region			: 'west'
+			title			: "Daftar Sub Komite"
+		,	region			: 'south'
+		,	store			: this.store
+		,	sm				: this.sm
+		,	columns			: this.columns
+		,	plugins			: this.editor
+		,	tbar			: this.toolbar
+		,	width			: '35%'
+		,	autoExpandColumn: 'nama'
+		});
+
+	this.do_load = function()
+	{
+		this.store.load({
+			params	: {
+							id_kel_csc : m_kel_jabatan_csc_id
+						}
+			});
+	}
+
+	this.do_refresh = function()
+	{
+	}
+}
+
+function M_RefKelJabatanCSC()
+{
+	this.id_direktorat 	= '0';
+	this.id_divprosbu	= '0';
+	this.record = new Ext.data.Record.create([
+			{name:'id'}
+		,	{name:'nama'}
+		,	{name:'id_direktorat'}
+		,	{name:'id_divprosbu'}
+		]);
+
+	this.reader = new Ext.data.JsonReader({
+			id	: 'id'
+		,	root: 'rows'
+		}
+		, this.record);
+
+	this.store = new Ext.data.Store({
+			url		: _g_root +'/module/ref_pegawai_komite/data_kel_jabatan_csc.jsp'
+		,	reader	: this.reader
+		,	autoLoad: false
+		});
+	
+	this.store_direktorat = new Ext.data.ArrayStore({
+			fields		: ['id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_direktorat.jsp'
+		,	autoLoad	: false
+		,	idIndex		: 0
+		,	listeners	: {
+				scope	: this
+			,	load	: function(store, records, options) {
+					this.store_divprosbu.load({
+						params	: {
+							id_direktorat : this.id_direktorat
+						}
+					});
+				}
+			}
+	});
+
+	this.store_divprosbu = new Ext.data.ArrayStore({
+			fields		: ['id_direktorat', 'id', 'name']
+		,	url			: _g_root +'/module/ref_organisasi/data_divprosbu.jsp'
+		,	autoLoad	: false
+		,	idIndex		: 1
+	});
+
+	this.form_divprosbu = new Ext.form.ComboBox({
+			fieldLabel		: 'Divisi/Proyek/SBU'
+		,	store			: this.store_divprosbu
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	typeAhead		: true
+		,	triggerAction	: 'all'
+		,	width			: 400
+	});
+
+	this.form_direktorat = new Ext.form.ComboBox({
+			fieldLabel		: 'Direktorat'
+		,	store			: this.store_direktorat
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	typeAhead		: true
+		,	triggerAction	: 'all'
+		,	width			: 400
+	});
+	
+	this.columns = [
+			new Ext.grid.RowNumberer()
+		,	{ id		: 'nama'
+			, header	: 'Nama'
+			, dataIndex	: 'nama'
+			, sortable	: true
+			}
+		,	{ id		: 'id_direktorat'
+			, header	: 'Direktorat'
+			, dataIndex	: 'id_direktorat'
+			, width		: 100
+			, sortable	: true
+			, renderer	: combo_renderer(this.form_direktorat)
+			}
+		,	{ id		: 'id_divprosbu'
+			, header	: 'Divisi/ Proyek/ SBU'
+			, dataIndex	: 'id_divprosbu'
+			, width		: 100
+			, sortable	: true
+			, renderer	: combo_renderer(this.form_divprosbu)
+			}
+		];
+
+	this.sm = new Ext.grid.RowSelectionModel({
+			singleSelect	: true
+		,	listeners		: {
+				scope		: this
+			,	selectionchange	: function(sm) {
+					var data = sm.getSelections();
+
+					if (data.length) {
+						m_kel_jabatan_csc_id = data[0].data.id;
+					} else {
+						m_kel_jabatan_csc_id = '';
+					}
+					keljabcsc_on_select_load_peg_komite();
+				}
+			}
+		});
+
+	this.editor = new MyRowEditor(this);
+
+	this.btn_ref = new Ext.Button({
+			text	: 'Refresh'
+		,	iconCls	: 'refresh16'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_load();
+			}
+		});
+
+	this.toolbar = new Ext.Toolbar({
+			items	: [
+				this.btn_ref
+			]
+		});
+
+	this.grid = new Ext.grid.GridPanel({
+			title			: "Daftar Central Komite"
+		,	region			: 'center'
 		,	store			: this.store
 		,	sm				: this.sm
 		,	columns			: this.columns
@@ -105,6 +278,8 @@ function M_RefKelJabatanKomite()
 	this.do_load = function()
 	{
 		this.store.reload();
+		this.store_direktorat.load();
+		this.store_divprosbu.load();
 	}
 
 	this.do_refresh = function()
@@ -238,8 +413,10 @@ function M_ListPegawai()
 	,	listeners	: {
 			scope	: this
 		,	click	: function(btn, e) {
-				this.grid.do_load(
-						this.set_org.formDepartemen.getValue()
+				this.store_load_param(
+						this.set_org.formDirektorat.getValue()
+					,	this.set_org.formDivProSBU.getValue()
+					,	this.set_org.formDepartemen.getValue()
 					,	this.set_org.formDinas.getValue()
 					,	this.set_org.formSeksi.getValue()
 				);
@@ -266,7 +443,7 @@ function M_ListPegawai()
 	this.grid = new Ext.grid.GridPanel({
 			title		: 'Daftar Pegawai'
 		,	region		: 'south'
-		,	height		: 300
+		,	height		: 250
 		,	store		: this.store
 		,	sm			: this.sm
 		,	cm			: this.cm
@@ -295,7 +472,19 @@ function M_ListPegawai()
 			,	this.grid
 			]
 		});
-		
+	
+	this.store_load_param = function (id_direktorat,id_divprosbu,id_departemen,id_dinas,id_seksi){
+		this.store.load({
+			scope		: this
+		,	params		: {
+				id_direktorat		: id_direktorat
+			,	id_divprosbu		: id_divprosbu
+			,	id_departemen		: id_departemen
+			,	id_dinas			: id_dinas
+			,	id_seksi			: id_seksi
+			}
+		});
+	}
 	this.do_load = function()
 	{
 		this.store.load();
@@ -458,13 +647,13 @@ function M_RefPegawaiKomite()
 
 	this.do_add = function()
 	{	
-		if (typeof m_ref_peg_con == 'undefined'
-		||  m_kel_jabatan_komite_id == '') {
+		if (!M_ValidatePegawaiKomite()){
 			return;
 		}
 		this.dml_type = 2;
 
 		this.do_load_peg();
+		this.do_load_jab_komite();
 	}
 
 	this.do_del = function()
@@ -537,14 +726,19 @@ function M_RefPegawaiKomite()
 		,	scope	: this
 		});
 	}
-
-	this.do_load = function()
-	{
+	
+	this.do_load_jab_komite = function (){
 		this.store_jabatan_komite.load({
 			params		:{
-				id_kel	: m_kel_jabatan_komite_id
+				id_kel_csc	: m_kel_jabatan_csc_id
+			,	id_kel		: m_kel_jabatan_komite_id
 			}
 		});
+	}
+	
+	this.do_load = function()
+	{
+		this.do_load_jab_komite();
 		this.store.load({
 			params		:{
 				id_kel	: m_kel_jabatan_komite_id
@@ -565,9 +759,27 @@ function M_RefPegawaiKomite()
 
 function M_PegawaiKomite()
 {
+	m_list_kel_jabatan_csc		= new M_RefKelJabatanCSC();
 	m_list_kel_jabatan_komite	= new M_RefKelJabatanKomite();
 	m_list_pegawai_komite		= new M_RefPegawaiKomite();
 	m_list_pegawai				= new M_ListPegawai();
+
+	this.col_left = new Ext.Container({
+		region		: 'west'
+	,	layout		: 'border'
+	,	width		: '50%'
+	,	align		: 'scretch'
+	,	defaults	: {
+			loadMask	: {msg: 'Pemuatan...'}
+		,	split		: true
+		,	autoScroll	: true
+		,	animCollapse	: true
+			}
+	,	items	: [
+			m_list_kel_jabatan_csc.grid
+		,	m_list_kel_jabatan_komite.grid
+		]
+	});
 
 	m_ref_peg_con = new Ext.Panel({
 			region		: 'center'
@@ -593,7 +805,7 @@ function M_PegawaiKomite()
 			,	animCollapse: true
 			}
 		,	items		: [
-				m_list_kel_jabatan_komite.grid
+				this.col_left
 			 ,	m_ref_peg_con
 			]
 		});
@@ -602,6 +814,7 @@ function M_PegawaiKomite()
 	{
 		m_ref_ha_level = ha_level;
 		m_list_pegawai.do_refresh(m_ref_ha_level);
+		m_list_kel_jabatan_csc.do_refresh(m_ref_ha_level);
 		m_list_kel_jabatan_komite.do_refresh(m_ref_ha_level);
 		m_list_pegawai_komite.do_refresh(m_ref_ha_level);
 	}

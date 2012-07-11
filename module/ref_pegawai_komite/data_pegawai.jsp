@@ -16,7 +16,29 @@ try {
 	}
 
 	Statement	db_stmt = db_con.createStatement();
-
+	String id_direktorat	= request.getParameter("id_direktorat");
+	String id_divprosbu		= request.getParameter("id_divprosbu");
+	String id_departemen	= request.getParameter("id_departemen");
+	String id_dinas	= request.getParameter("id_dinas");
+	String id_seksi	= request.getParameter("id_seksi");
+	String where_clause = "";
+	
+	if (id_direktorat != null && (!id_direktorat.equals("0") && !id_direktorat.equals("null"))){
+		where_clause += " and A.id_direktorat = "+ id_direktorat;
+	}
+	if (id_divprosbu != null && (!id_divprosbu.equals("0") && !id_divprosbu.equals("null"))){
+		where_clause += " and A.id_divprosbu = "+ id_divprosbu;
+	}
+	if (id_departemen != null && (!id_departemen.equals("0") && !id_departemen.equals("null"))){
+		where_clause += " and A.id_departemen = "+ id_departemen;
+	}
+	if (id_dinas != null && (!id_dinas.equals("0") && !id_dinas.equals("null"))){
+		where_clause += " and A.id_dinas = "+ id_dinas;
+	}
+	if (id_seksi != null && (!id_seksi.equals("0") && !id_seksi.equals("null"))){
+		where_clause += " and A.id_seksi = "+ id_seksi;
+	}
+	
 	String q=" select	A.nipg "
 		+" ,		B.nama_klasifikasi_pegawai "
 		+" ,		C.nama_jabatan "
@@ -37,7 +59,7 @@ try {
 		+" 		r_dinas E on E.id_dinas = A.id_dinas "
 		+" left join "
 		+" 		r_seksi F on F.id_seksi = A.id_seksi "
-		+" where A.status_pegawai = '1' "
+		+" where A.status_pegawai = '1' "+ where_clause
 		+" order by	A.nipg";
 
 	ResultSet	rs = db_stmt.executeQuery(q);

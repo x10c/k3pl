@@ -18,11 +18,15 @@
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
+	if (db_con == null || (db_con != null && db_con.isClosed())) {
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
 	Statement	db_stmt = db_con.createStatement();
 
 	String dml			= request.getParameter("dml_type");
 	String id_rapat		= request.getParameter("id");
-	String id_kel_jabatan_komite_sub_komite	= request.getParameter("type");
+	String id_kel_jabatan_csc	= "";
 	String no_rapat	= request.getParameter("sfm_no");
 	String judul_rapat	= request.getParameter("title");
 	String tanggal_rapat		= request.getParameter("date");
@@ -33,6 +37,22 @@ try {
 	String q, p;
 	Date		date	= new Date();
 	
+	q=" select	A.id_kel_jabatan_csc "
+		+" from		r_jabatan_komite_sub_komite A"
+		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
+		+" left join R_KEL_JABATAN_CSC C on (C.ID_KEL_JABATAN_CSC = A.ID_KEL_JABATAN_CSC) "
+		+" where B.nipg = "+ id_user +" and A.notulen in ('1','3') "
+		+" order by	A.id_kel_jabatan_csc ";
+	
+	ResultSet	rs_kel = db_stmt.executeQuery(q);
+	q=" ";
+	
+	if (rs_kel.next()){
+		id_kel_jabatan_csc = rs_kel.getString("id_kel_jabatan_csc");
+	}else {
+		out.print("{ success:false,info: tidak dapat menemukan anda dalam daftar anggota CSC");
+	}
+	
 	if (id_rapat.equals("")){
 		id_rapat = Long.toString(date.getTime());
 	}
@@ -40,7 +60,7 @@ try {
 	if (dml.equals("insert")) {
 		q	=" insert into t_rapat ("
 			+"		id_rapat "
-			+" ,	id_kel_jabatan_komite_sub_komite "
+			+" ,	id_kel_jabatan_csc "
 			+" ,	no_rapat "
 			+" ,	judul_rapat "
 			+" ,	tanggal_rapat "
@@ -50,7 +70,7 @@ try {
 			+" ,	id_user "
 			+" ) values ( "
 			+ 		id_rapat 		
-			+", "+ 	id_kel_jabatan_komite_sub_komite 	
+			+", "+ 	id_kel_jabatan_csc 	
 			+", '"+ no_rapat 		+"' "
 			+", '"+	judul_rapat 	+"' "
 			+", 	cast('"+  tanggal_rapat +"' as datetime)  "
@@ -70,24 +90,23 @@ try {
 			+" ,		nama_notulis		= '"+ nama_notulis +"' "
 			+" ,		id_user				= '"+ id_user +"' "
 			+" ,		tanggal_akses		= getdate() "
-			+" where	id_rapat			=  "+ id_rapat +" and id_kel_jabatan_komite_sub_komite = "+ id_kel_jabatan_komite_sub_komite;
+			+" where	id_rapat			=  "+ id_rapat;
 
 	} else if (dml.equals("delete")) {
 		q	=" delete from	t_rapat "
-			+" where	id_rapat   =  "+ id_rapat +" and id_kel_jabatan_komite_sub_komite = "+ id_kel_jabatan_komite_sub_komite;
+			+" where	id_rapat   =  "+ id_rapat;
 	} else {
 		out.print("{ success:false"
 			+ ", info   :'DML tipe tidak diketahui ("+ dml +")!'}");
 		return;
 	}
-	
 	db_stmt.executeUpdate(q);
 	
 	if (dml.equals("insert")) {
 				/* GET ID_RAPAT BEFORE new.tanggal_rapat*/
 		q	=" SELECT TOP 1 TANGGAL_RAPAT, ID_RAPAT "
 			+" FROM T_RAPAT "
-			+" WHERE TANGGAL_RAPAT < '"+ tanggal_rapat +"' "
+			+" WHERE TANGGAL_RAPAT < '"+ tanggal_rapat +"' and id_kel_jabatan_csc = "+ id_kel_jabatan_csc
 			+" ORDER BY TANGGAL_RAPAT DESC ";
 
 			ResultSet	rs	= db_stmt.executeQuery(q);
@@ -116,7 +135,7 @@ try {
 					+" left join r_pegawai b on b.nipg = a.nipg "
 					+" left join r_jabatan_komite_sub_komite c on c.id_jabatan_komite = a.id_jabatan_komite "
 					+" left join t_rapat_absensi_komite_sub_komite d on d.nipg = a.nipg and id_rapat = "+ rs.getString("id_rapat")
-					+" where c.id_kel_jabatan_komite_sub_komite = 1 ";
+					+" where c.id_kel_jabatan_csc = "+ id_kel_jabatan_csc +" and c.id_kel_jabatan_komite_sub_komite is null";
 			}
 			else {
 				p  =" insert into t_rapat_absensi_komite_sub_komite ("
@@ -140,10 +159,9 @@ try {
 					+" from t_pegawai_komite_sub_komite a"
 					+" left join r_pegawai b on b.nipg = a.nipg "
 					+" left join r_jabatan_komite_sub_komite c on c.id_jabatan_komite = a.id_jabatan_komite "
-					+" where c.id_kel_jabatan_komite_sub_komite = 1 ";
-
-			}
-			
+					+" where c.id_kel_jabatan_csc = "+ id_kel_jabatan_csc +" and c.id_kel_jabatan_komite_sub_komite is null ";
+				//out.print(p);
+			}		
 			db_stmt.executeUpdate(p);
 			rs.close();
 			

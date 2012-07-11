@@ -106,7 +106,7 @@ if (null == user_nipg || null == db_url) {
 <%-- all module --%>
 <script type='text/javascript' src='<%=cpath%>/module/app_home/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/pssr_laporan/layout.js'></script>
-<script type='text/javascript' src='<%=cpath%>/module/ref_pegawai_komite/layout.js'></script>
+<script type='text/javascript' src='<%=cpath%>/module/sfm_data_rapat_sub/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/main/layout.js'></script>
 </head>
 

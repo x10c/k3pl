@@ -16,12 +16,12 @@ try {
 	String tipe_rapat = request.getParameter("type");
 	
 	String id_user		= (String) session.getAttribute("user.nipg");
-	String q=" select	A.id_kel_jabatan_komite_sub_komite "
+	String q=" select	A.id_kel_jabatan_csc "
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
-		+" left join R_KEL_JABATAN_KOMITE_SUB_KOMITE C on (C.ID_KEL_JABATAN_KOMITE_SUB_KOMITE = A.ID_KEL_JABATAN_KOMITE_SUB_KOMITE) "
-		+" where B.nipg = "+ id_user +" and A.notulen in ('1','3') and C.LEVEL_KOMITE = '1' "
-		+" order by	A.id_kel_jabatan_komite_sub_komite ";
+		+" left join R_KEL_JABATAN_CSC C on (C.ID_KEL_JABATAN_CSC = A.ID_KEL_JABATAN_CSC) "
+		+" where B.nipg = "+ id_user +" and A.notulen in ('1','3') and A.id_kel_jabatan_komite_sub_komite is null"
+		+" order by	A.id_kel_jabatan_csc ";
 		
 	ResultSet	rs_kel = db_stmt.executeQuery(q);
 	q=" ";
@@ -29,8 +29,8 @@ try {
 	if (rs_kel.next()){
 
 		q=" select	A.id_rapat"
-			+" ,		A.id_kel_jabatan_komite_sub_komite"
-			+" , 		B.nama_kel_jabatan_komite_sub_komite"
+			+" ,		A.id_kel_jabatan_csc"
+			+" , 		B.nama_kel_jabatan_csc"
 			+" ,		A.no_rapat"
 			+" ,		A.judul_rapat"
 			+" ,		replace(convert(varchar, A.tanggal_rapat, 111), '/', '-') tanggal"
@@ -39,15 +39,15 @@ try {
 			+" ,		A.tanggal_notulen"
 			+" , 		A.nama_notulis"
 			+" from		t_rapat		A"
-			+" left join	r_kel_jabatan_komite_sub_komite	B"
-			+" on		A.id_kel_jabatan_komite_sub_komite = B.id_kel_jabatan_komite_sub_komite "
-			+" where	B.level_komite	= "+ tipe_rapat
+			+" left join	r_kel_jabatan_csc	B"
+			+" on		A.id_kel_jabatan_csc = B.id_kel_jabatan_csc "
+			+" where	A.id_kel_jabatan_komite_sub_komite is null "
 			+" order by	A.id_rapat ";
 	}
 	else {
 		q=" select	A.id_rapat"
-			+" ,		A.id_kel_jabatan_komite_sub_komite"
-			+" , 		B.nama_kel_jabatan_komite_sub_komite"
+			+" ,		A.id_kel_jabatan_csc"
+			+" , 		B.nama_kel_jabatan_csc"
 			+" ,		A.no_rapat"
 			+" ,		A.judul_rapat"
 			+" ,		replace(convert(varchar, A.tanggal_rapat, 111), '/', '-') tanggal"
@@ -56,8 +56,8 @@ try {
 			+" ,		A.tanggal_notulen"
 			+" , 		A.nama_notulis"
 			+" from		t_rapat		A"
-			+" left join	r_kel_jabatan_komite_sub_komite	B"
-			+" on		A.id_kel_jabatan_komite_sub_komite = B.id_kel_jabatan_komite_sub_komite "
+			+" left join	r_kel_jabatan_csc	B"
+			+" on		A.id_kel_jabatan_csc = B.id_kel_jabatan_csc  "
 			+" where	1=2 "
 			+" order by	A.id_rapat ";
 	}
@@ -73,8 +73,8 @@ try {
 			i++;
 		}
 		data	+="[ '"+ rs.getString("id_rapat")
-			+ "','"+ rs.getString("id_kel_jabatan_komite_sub_komite")
-			+ "','"+ rs.getString("nama_kel_jabatan_komite_sub_komite")
+			+ "','"+ rs.getString("id_kel_jabatan_csc")
+			+ "','"+ rs.getString("nama_kel_jabatan_csc")
 			+ "','"+ rs.getString("no_rapat")
 			+ "','"+ rs.getString("judul_rapat")
 			+ "','"+ rs.getString("tanggal")

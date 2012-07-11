@@ -12,6 +12,26 @@ try {
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
 	Statement	db_stmt		= db_con.createStatement();
 	
+	String id_user		= (String) session.getAttribute("user.nipg");
+	String p=" select	A.id_kel_jabatan_komite_sub_komite "
+		+" ,		C.id_direktorat "
+		+" ,		C.id_divprosbu "
+		+" from		r_jabatan_komite_sub_komite A "
+		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
+		+" left join R_KEL_JABATAN_KOMITE_SUB_KOMITE C on (C.ID_KEL_JABATAN_KOMITE_SUB_KOMITE = A.ID_KEL_JABATAN_CSC) "
+		+" where B.nipg = "+ id_user +" and A.notulen in ('1','3') and A.id_kel_jabatan_komite_sub_komite is not null "
+		+" order by	A.id_kel_jabatan_komite_sub_komite ";
+		
+	ResultSet	rs_kel = db_stmt.executeQuery(p);
+	
+	String id_direktorat = "";
+	String id_divprosbu = "";
+	if (rs_kel.next()){
+		id_direktorat = rs_kel.getString("id_direktorat");
+		id_divprosbu = rs_kel.getString("id_divprosbu");
+	}else {
+		out.print("{ success:false,info: tidak dapat menemukan anda dalam daftar anggota CSC");
+	}
 	String	q	=" "
 			+"	select		a.id_seksi "
 			+" 		,		a.id_dinas "
@@ -30,6 +50,7 @@ try {
 			+"					where	row_num between 1 and 1 "
 			+" 				)	as kepala_seksi "
 			+"	from		r_seksi as a "
+			+"	where		a.id_direktorat = "+id_direktorat +" and a.id_divprosbu = "+ id_divprosbu
 			+" 	order by	a.nama_seksi ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);

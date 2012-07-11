@@ -27,13 +27,13 @@ var m_sfm_data_rapat_sub_master;
 
 var store_pic_seksi_sub = new Ext.data.ArrayStore({
 		fields	: ['id_seksi','id_dinas','id_departemen','nama_seksi','kepala_seksi']
-	,	url	: m_sfm_central_d +'data_ref_pic_seksi.jsp'
+	,	url	: m_sfm_sub_d +'data_ref_pic_seksi.jsp'
 	,	autoLoad: false
 	});
 
 var store_pic_dinas_sub = new Ext.data.ArrayStore({
 		fields	: ['id_dinas','id_departemen','nama_dinas','kepala_dinas']
-	,	url	: m_sfm_central_d +'data_ref_pic_dinas.jsp'
+	,	url	: m_sfm_sub_d +'data_ref_pic_dinas.jsp'
 	,	autoLoad: false
 	});
 	
@@ -196,7 +196,7 @@ function M_SfmSubMateriRapatSub (title){
 		
 	this.form_pic_seksi = new Ext.form.ComboBox({
 			fieldLabel		: 'Penanggung Jawab'
-		,	store			: store_pic_seksi
+		,	store			: store_pic_seksi_sub
 		,	valueField		: 'id_seksi'
 		,	displayField	: 'nama_seksi'
 		,	mode			: 'local'
@@ -218,7 +218,7 @@ function M_SfmSubMateriRapatSub (title){
 
 	this.form_pic_dinas = new Ext.form.ComboBox({
 			fieldLabel		: 'Supervisor'
-		,	store			: store_pic_dinas
+		,	store			: store_pic_dinas_sub
 		,	valueField		: 'id_dinas'
 		,	displayField	: 'nama_dinas'
 		,	mode			: 'local'
@@ -763,7 +763,7 @@ function M_SfmMateriRapatSub (title){
 		
 	this.form_pic_seksi = new Ext.form.ComboBox({
 			fieldLabel		: 'Penanggung Jawab'
-		,	store			: store_pic_seksi
+		,	store			: store_pic_seksi_sub
 		,	valueField		: 'id_seksi'
 		,	displayField	: 'nama_seksi'
 		,	mode			: 'local'
@@ -785,7 +785,7 @@ function M_SfmMateriRapatSub (title){
 	
 	this.form_pic_dinas = new Ext.form.ComboBox({
 			fieldLabel		: 'Supervisor'
-		,	store			: store_pic_dinas
+		,	store			: store_pic_dinas_sub
 		,	valueField		: 'id_dinas'
 		,	displayField	: 'nama_dinas'
 		,	mode			: 'local'
@@ -1201,8 +1201,8 @@ function M_SfmMateriRapatSub (title){
 		// m_sfm_central_submateri.modified = []; // not necessary if you have pruneModifiedRecords set to true
 		m_sfm_data_sub_materi_sub.store.removed = [];
 		}
-		store_pic_seksi.load();
-		store_pic_dinas.load();
+		store_pic_seksi_sub.load();
+		store_pic_dinas_sub.load();
 	}
 
 	this.do_refresh = function(ha_level)
@@ -1638,31 +1638,12 @@ function M_SfmAbsenRapatSub (title){
 	,	url	: m_sfm_sub_d +'data_list_rapat_central.jsp'
 	,	autoLoad: false
 	});
-	
-	this.store_type = new Ext.data.ArrayStore({
-			fields	: ['id_kel_jabatan_komite_sub_komite','nama_kel_jabatan_komite_sub_komite']
-		,	url	: m_sfm_sub_d +'data_kel_jabatan_komite.jsp'
-		,	autoLoad: false
-		});
 		
 	/* Data Rapat */
 	this.form_id_rapat = new Ext.form.TextField({
 			fieldLabel	: 'Id Rapat'
 		,	disabled	: false
 		, 	hidden		: true
-		});
-	
-	this.form_type_rapat = new Ext.form.ComboBox({
-			fieldLabel	: 'Tipe Rapat'
-		,	store		: this.store_type
-		,	valueField	: 'id_kel_jabatan_komite_sub_komite'
-		,	displayField	: 'nama_kel_jabatan_komite_sub_komite'
-		,	mode		: 'local'
-		,	triggerAction	: 'all'
-		,	allowBlank	: false
-		,	editable	: false
-		,	width		: 150
-		,	listWidth	: 300
 		});
 
 	this.form_no_rapat = new Ext.form.TextField({
@@ -1741,8 +1722,7 @@ function M_SfmAbsenRapatSub (title){
 		,	this.btn_save
 		]
 	,	items		: [
-			this.form_type_rapat
-		,	this.form_no_rapat
+			this.form_no_rapat
 		,	this.form_judul_rapat
 		,	this.form_tanggal_rapat
 		,	this.form_lokasi_rapat
@@ -1753,10 +1733,8 @@ function M_SfmAbsenRapatSub (title){
 	
 
 	this.do_add = function()
-	{	this.store_type.load();
-	
+	{	
 		this.form_no_rapat.setValue('');
-		this.form_type_rapat.setValue('');
 		this.form_judul_rapat.setValue('');
 		this.form_tanggal_rapat.setValue('');
 		this.form_lokasi_rapat.setValue('');
@@ -1776,8 +1754,7 @@ function M_SfmAbsenRapatSub (title){
 	{
 		Ext.Ajax.request({
 			params  : {
-				id		: this.form_id_rapat.getValue()
-			,	type		: this.form_type_rapat.getValue()				
+				id		: this.form_id_rapat.getValue()			
 			,	sfm_no 		: this.form_no_rapat.getValue()
 			,	title 		: this.form_judul_rapat.getValue()
 			,	date 		: this.form_tanggal_rapat.getValue()
@@ -1798,13 +1775,9 @@ function M_SfmAbsenRapatSub (title){
 						
 						
 					}
-					if (this.dml_type == 'insert'){
-						this.do_add();
-					}
-					else{
-						m_sfm_sub_master_con.layout.setActiveItem(m_sfm_data_rapat_sub_master.panel);
-						m_sfm_data_rapat_sub_master.do_load();
-					}
+					m_sfm_sub_master_con.layout.setActiveItem(m_sfm_data_rapat_sub_master.panel);
+					m_sfm_data_rapat_sub_master.do_load();
+					
 				}
 		,	scope	: this
 		});
@@ -1812,9 +1785,7 @@ function M_SfmAbsenRapatSub (title){
 
 	this.do_edit = function(record)
 	{	
-		this.store_type.load();
-		this.form_id_rapat.setValue(record[0].data.id);
-		this.form_type_rapat.setValue(record[0].data.type); 	
+		this.form_id_rapat.setValue(record[0].data.id);	
 		this.form_no_rapat.setValue(record[0].data.sfm_no);
 		this.form_judul_rapat.setValue(record[0].data.title);
 		this.form_tanggal_rapat.setValue(record[0].data.date);
@@ -1936,22 +1907,20 @@ function M_SfmFormMasterRapatSub()
 		,	width		: 100
 		});
 
-
-	/* observation data */
 	this.panel = new Ext.form.FormPanel({
-		title		: 'Central Safety Committee Meeting'
+		title		: 'Sub Committee Meeting'
 	,	labelAlign	: 'right'
 	,	autoWidth	: true
 	,	autoHeight	: true
 	,	style		: 'margin: 2px;'
 	,	bodyCssClass	: 'stop-panel-form'
 	,	items		: [
-		 this.form_no_rapat
-										,	this.form_judul_rapat
-										,	this.form_tanggal_rapat
-					,this.form_lokasi_rapat
-										,	this.form_nama_notulis
-										,	this.form_tanggal_notulen
+				this.form_no_rapat
+			,	this.form_judul_rapat
+			,	this.form_tanggal_rapat
+			,	this.form_lokasi_rapat
+			,	this.form_nama_notulis
+			,	this.form_tanggal_notulen
 		]
 		});
 	
@@ -2442,6 +2411,7 @@ function M_SfmFormMasterRapatSub()
 		m_sfm_data_sub_materi_sub.do_refresh(ha_level);
 		this.panel.getItem(1).setDisabled(true);
 		this.panel.getItem(2).setDisabled(true);
+		this.panel.setActiveTab(0);
 	}
  }
  

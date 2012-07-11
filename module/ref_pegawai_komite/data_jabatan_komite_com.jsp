@@ -17,17 +17,23 @@ try {
 
 	Statement	db_stmt = db_con.createStatement();
 	String		id_kel_jabatan_komite	= request.getParameter("id_kel");
+	String		id_kel_jabatan_csc	= request.getParameter("id_kel_csc");
+	String		where_clause = "";
 	
 	if ( id_kel_jabatan_komite.equals("0")
-		|| id_kel_jabatan_komite.equals("")) {
-		id_kel_jabatan_komite ="0 or 1 = 1 ";
+		|| id_kel_jabatan_komite.equals("")
+		|| id_kel_jabatan_komite.equals("null")) {
+		where_clause =" and id_kel_jabatan_komite_sub_komite is null ";
+	}else{
+		where_clause =" and id_kel_jabatan_komite_sub_komite ="+ id_kel_jabatan_komite;
 	}
 
 	String q= " select   id_jabatan_komite "
 		+ " ,        id_kel_jabatan_komite_sub_komite "
 		+ " ,        nama_jabatan_komite "
 		+ " from     r_jabatan_komite_sub_komite "
-		+ " where id_kel_jabatan_komite_sub_komite = "+ id_kel_jabatan_komite
+		+ " where  id_kel_jabatan_csc = "+ id_kel_jabatan_csc
+		+ where_clause
 		+ " order by id_jabatan_komite ";
 	
 	//out.print(q);

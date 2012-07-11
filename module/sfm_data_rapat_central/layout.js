@@ -37,8 +37,7 @@ var store_pic_dinas = new Ext.data.ArrayStore({
 	,	autoLoad: false
 	});
 	
-function checkbox_renderer(checkbox)
-{
+function checkbox_renderer(checkbox){
 	return function(value) {
 		if (value == '1' || value == 'true' || value == true) {
 			return 'Hadir';
@@ -643,7 +642,7 @@ function M_SfmSubMateriRapatCentral(){
 	}
 }
 
-function M_SfmMateriRapatCentral() {
+function M_SfmMateriRapatCentral(){
 	this.dml_type	= '';
 	this.ha_level	= 0;
 		this.pic_seksi	= '';
@@ -1196,7 +1195,7 @@ function M_SfmMateriRapatCentral() {
 	}
 }
 
-function M_SfmAbsenRapatCentral() {
+function M_SfmAbsenRapatCentral(){
 	this.dml_type		= '';
 	this.nipg_old		= '';
 	this.nama_peserta	= '';
@@ -1525,13 +1524,20 @@ function M_SfmAbsenRapatCentral() {
 					id_rapat  : m_sfm_rapat_id
 				,	tgl_rapat : m_sfm_rapat_tgl
 				}
-			});
-			this.store_jabatan_komite.load({
-				params	: {
-					id_kel : '0 or 1=1'
+			,	callback	: function(){
+					this.store_peg.load({
+						callback : function(){
+							this.store_jabatan_komite.load({
+								params	: {
+									id_kel : '0 or 1=1'
+								}
+							});
+						}
+						, scope : this
+					});
 				}
+			,	scope		: this		
 			});
-			this.store_peg.load();
 		}
 	}
 
@@ -1548,17 +1554,16 @@ function M_SfmAbsenRapatCentral() {
 
 }
 
-function M_SfmFormRapatCentral()
-{
+function M_SfmFormRapatCentral(){
 	this.data_rapat	= '';
-	this.dml_type	= '';
+	this.dml_type	= 0;
 	this.id_stop	= '';
 	this.nipg	= '';
 
 	this.record = new Ext.data.Record.create([
 		{name	: 'id'}
-	,	{name	: 'type'}
-	,	{name	: 'type_name'}
+	,	{name	: 'type_csc'}
+	,	{name	: 'type_csc_name'}
 	,	{name	: 'sfm_no'}
 	,	{name	: 'title'}
 	,	{name	: 'date'}
@@ -1690,8 +1695,7 @@ function M_SfmFormRapatCentral()
 	{
 		Ext.Ajax.request({
 			params  : {
-				id		: this.form_id_rapat.getValue()
-			,	type		: '1' 								// default  type_id for central safety committee meeting
+				id		: this.form_id_rapat.getValue()							// default  type_id for central safety committee meeting
 			,	sfm_no 		: this.form_no_rapat.getValue()
 			,	title 		: this.form_judul_rapat.getValue()
 			,	date 		: this.form_tanggal_rapat.getValue()
@@ -1712,13 +1716,10 @@ function M_SfmFormRapatCentral()
 						
 						
 					}
-					if (this.dml_type == 'insert'){
-						this.do_add();
-					}
-					else{
-						m_sfm_central_master_con.layout.setActiveItem(m_sfm_central_master.panel);
-						m_sfm_central_master.do_load();
-					}
+					
+					m_sfm_central_master_con.layout.setActiveItem(m_sfm_central_master.panel);
+					m_sfm_central_master.do_load();
+					
 				}
 		,	scope	: this
 		});
@@ -1758,8 +1759,7 @@ function M_SfmFormRapatCentral()
 	}
 }
 
-function M_SfmFormMasterRapatCentral()
-{
+function M_SfmFormMasterRapatCentral(){
 	this.data_rapat	= '';
 	this.dml_type	= '';
 	this.id_stop	= '';
@@ -1871,8 +1871,7 @@ function M_SfmFormMasterRapatCentral()
 
 }
 
-function M_SfmInputRapatCentral()
-{
+function M_SfmInputRapatCentral(){
 	this.data_rapat	= '';
 	this.dml_type	= '';
 	this.id_stop	= '';
@@ -1880,8 +1879,8 @@ function M_SfmInputRapatCentral()
 
 	this.record = new Ext.data.Record.create([
 		{name	: 'id'}
-	,	{name	: 'type'}
-	,	{name	: 'type_name'}
+	,	{name	: 'type_csc'}
+	,	{name	: 'type_csc_name'}
 	,	{name	: 'sfm_no'}
 	,	{name	: 'title'}
 	,	{name	: 'date'}
@@ -1937,7 +1936,7 @@ function M_SfmInputRapatCentral()
 			new Ext.grid.RowNumberer()
 		,{
 			header		: 'Tipe Rapat'
-		,	dataIndex	: 'type_name'
+		,	dataIndex	: 'type_csc_name'
 		,	width		: 100
 		,	hidden		: true
 		},{
@@ -2104,7 +2103,7 @@ function M_SfmInputRapatCentral()
 		Ext.Ajax.request({
 			params  : {
 				id		: record.data['id']
-			,	type		: record.data['type']
+			,	id_kel_csc	: record.data['type_csc']
 			,	sfm_no 		: record.data['sfm_no']
 			,	title 		: record.data['title']
 			,	date 		: record.data['date']
@@ -2167,7 +2166,7 @@ function M_SfmInputRapatCentral()
 	}
 }
 
-function M_SfmDataRapat() {
+function M_SfmDataRapat(){
 	m_sfm_central_master	= new M_SfmInputRapatCentral();
 	m_sfm_central_absen	= new M_SfmAbsenRapatCentral()
 	m_sfm_central_materi	= new M_SfmMateriRapatCentral();
@@ -2319,6 +2318,7 @@ function M_SfmDataRapat() {
 		m_sfm_central_submateri.do_refresh(ha_level);
 		this.panel.getItem(1).setDisabled(true);
 		this.panel.getItem(2).setDisabled(true);
+		this.panel.setActiveTab(0);
 	}
 }
 
