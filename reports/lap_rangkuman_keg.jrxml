@@ -180,7 +180,7 @@ WHERE
 		</band>
 	</columnHeader>
 	<summary>
-		<band height="200">
+		<band height="100">
 			<subreport>
 				<reportElement x="0" y="0" width="802" height="10"/>
 				<subreportParameter name="SUBREPORT_DIR">
@@ -231,6 +231,23 @@ WHERE
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr3.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="90" width="802" height="10"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIVPROSBU">
+					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr4.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</summary>

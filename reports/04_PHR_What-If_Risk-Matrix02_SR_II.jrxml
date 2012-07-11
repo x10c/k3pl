@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="04_PHR_What-If_Risk-Matrix02_SR_II" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="BG_COLOR" fontName="Calibri" fontSize="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "I" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "II" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFF00"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "III" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#6666FF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "IV" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#00FF00"/>
+		</conditionalStyle>
+	</style>
+	<queryString>
+		<![CDATA[SELECT
+     R_RISK_DEFINITION."RISK_SCORE" AS R_RISK_DEFINITION_RISK_SCORE,
+     R_RISK_DEFINITION."DESCRIPTION" AS R_RISK_DEFINITION_DESCRIPTION,
+     R_RISK_DEFINITION."NOTE" AS R_RISK_DEFINITION_NOTE
+FROM
+     "dbo"."R_RISK_DEFINITION" R_RISK_DEFINITION
+ORDER BY
+     R_RISK_DEFINITION."RISK_SCORE" ASC]]>
+	</queryString>
+	<field name="R_RISK_DEFINITION_RISK_SCORE" class="java.lang.String"/>
+	<field name="R_RISK_DEFINITION_DESCRIPTION" class="java.lang.String"/>
+	<field name="R_RISK_DEFINITION_NOTE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="BG_COLOR" positionType="Float" stretchType="RelativeToBandHeight" x="20" y="0" width="50" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="BG_COLOR" positionType="Float" stretchType="RelativeToBandHeight" x="70" y="0" width="180" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_DEFINITION_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="BG_COLOR" positionType="Float" stretchType="RelativeToBandHeight" x="250" y="0" width="350" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_DEFINITION_NOTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="02_HazardIdentification_SR_CIM" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="ID_PHA" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT
+     T_CIM."INTERACTION" AS T_CIM_INTERACTION,
+     R_MATERIAL."NAMA_MATERIAL" AS R_MATERIAL_NAMA_MATERIAL,
+     R_MATERIAL_INTERACTION."NAMA_MATERIAL_INTERACTION" AS R_MATERIAL_INTERACTION_NAMA_MATERIAL_INTERACTION
+FROM
+     "dbo"."R_MATERIAL" R_MATERIAL INNER JOIN "dbo"."T_CIM" T_CIM ON R_MATERIAL."ID_MATERIAL" = T_CIM."ID_MATERIAL"
+     INNER JOIN "dbo"."R_MATERIAL_INTERACTION" R_MATERIAL_INTERACTION ON T_CIM."ID_MATERIAL_INTERACTION" = R_MATERIAL_INTERACTION."ID_MATERIAL_INTERACTION"
+WHERE
+     T_CIM."ID_MATERIAL" IN ( SELECT T_PHA_CHEMICAL_HAZARD."ID_MATERIAL" AS T_PHA_CHEMICAL_HAZARD_ID_MATERIAL FROM "dbo"."T_PHA_CHEMICAL_HAZARD" T_PHA_CHEMICAL_HAZARD WHERE T_PHA_CHEMICAL_HAZARD."ID_PHA" = $P{ID_PHA} )
+ AND T_CIM."ID_MATERIAL_INTERACTION" IN ( SELECT T_PHA_CHEMICAL_HAZARD."ID_MATERIAL" AS T_PHA_CHEMICAL_HAZARD_ID_MATERIAL FROM "dbo"."T_PHA_CHEMICAL_HAZARD" T_PHA_CHEMICAL_HAZARD WHERE T_PHA_CHEMICAL_HAZARD."ID_PHA" = $P{ID_PHA} )]]>
+	</queryString>
+	<field name="T_CIM_INTERACTION" class="java.lang.String"/>
+	<field name="R_MATERIAL_NAMA_MATERIAL" class="java.lang.String"/>
+	<field name="R_MATERIAL_INTERACTION_NAMA_MATERIAL_INTERACTION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="35">
+			<crosstab>
+				<reportElement x="0" y="0" width="555" height="35"/>
+				<crosstabDataset isDataPreSorted="true"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<staticText>
+							<reportElement style="Crosstab Data Text" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="70" height="30"/>
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textElement/>
+							<text><![CDATA[]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="R_MATERIAL_NAMA_MATERIAL" width="70">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{R_MATERIAL_NAMA_MATERIAL}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement style="Crosstab Data Text" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="70" height="25"/>
+								<textElement>
+									<font fontName="Arial" size="11" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{R_MATERIAL_NAMA_MATERIAL}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="R_MATERIAL_INTERACTION_NAMA_MATERIAL_INTERACTION" height="30">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{R_MATERIAL_INTERACTION_NAMA_MATERIAL_INTERACTION}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement style="Crosstab Data Text" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="80" height="30"/>
+								<textElement>
+									<font fontName="Arial" size="11" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{R_MATERIAL_INTERACTION_NAMA_MATERIAL_INTERACTION}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents/>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="T_CIM_INTERACTIONMeasure" class="java.lang.String">
+					<measureExpression><![CDATA[$F{T_CIM_INTERACTION}]]></measureExpression>
+				</measure>
+				<crosstabCell width="80" height="25">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="80" height="25"/>
+							<textElement textAlignment="Left">
+								<font fontName="Arial" size="9"/>
+								<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="1"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{T_CIM_INTERACTIONMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>

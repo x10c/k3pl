@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="04_PHR_What-If_Risk-Matrix_SR_WI_DETAIL" pageWidth="802" pageHeight="555" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="BG_COLOR" fontName="Calibri" fontSize="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "I" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000" hAlign="Center" vAlign="Middle"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "II" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFF00" hAlign="Center" vAlign="Middle"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "III" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#6666FF" hAlign="Center" vAlign="Middle"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}.equalsIgnoreCase( "IV" )]]></conditionExpression>
+			<style mode="Opaque" backcolor="#00FF00" hAlign="Center" vAlign="Middle"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="ID_PHA" class="java.lang.Long"/>
+	<parameter name="PROCESS_STEP" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     T_PHA_PHR."CONSEQUENCE" AS T_PHA_PHR_CONSEQUENCE,
+     T_PHA_PHR."PROTECTION_NOW" AS T_PHA_PHR_PROTECTION_NOW,
+     T_PHA_PHR."RESP" AS T_PHA_PHR_RESP,
+     T_PHA_PHR."STATUS_OF_QUESTION" AS T_PHA_PHR_STATUS_OF_QUESTION,
+     T_PHA_PHR."WHAT_IF" AS T_PHA_PHR_WHAT_IF,
+     R_RISK_DEFINITION."RISK_SCORE" AS R_RISK_DEFINITION_RISK_SCORE,
+     R_RISK_CATEGORY."CONSEQUENCE_CATEGORY" AS R_RISK_CATEGORY_CONSEQUENCE_CATEGORY,
+     R_RISK_FREQUENCY."FREQUENCY_CATEGORY" AS R_RISK_FREQUENCY_FREQUENCY_CATEGORY,
+     T_PHA_PHR."ID_PHA_PHR" AS T_PHA_PHR_ID_PHA_PHR
+FROM
+     "dbo"."R_RISK_FREQUENCY" R_RISK_FREQUENCY INNER JOIN "dbo"."T_PHA_PHR" T_PHA_PHR ON R_RISK_FREQUENCY."FREQUENCY_CATEGORY" = T_PHA_PHR."FREQUENCY_CATEGORY"
+     INNER JOIN "dbo"."R_RISK_DEFINITION" R_RISK_DEFINITION ON T_PHA_PHR."RISK_SCORE" = R_RISK_DEFINITION."RISK_SCORE"
+     INNER JOIN "dbo"."R_RISK_CATEGORY" R_RISK_CATEGORY ON T_PHA_PHR."CONSEQUENCE_CATEGORY" = R_RISK_CATEGORY."CONSEQUENCE_CATEGORY"
+WHERE
+     T_PHA_PHR."ID_PHA" = $P{ID_PHA}
+ AND T_PHA_PHR."PROCESS_STEP" = $P{PROCESS_STEP}]]>
+	</queryString>
+	<field name="T_PHA_PHR_CONSEQUENCE" class="java.lang.String"/>
+	<field name="T_PHA_PHR_PROTECTION_NOW" class="java.lang.String"/>
+	<field name="T_PHA_PHR_RESP" class="java.lang.String"/>
+	<field name="T_PHA_PHR_STATUS_OF_QUESTION" class="java.lang.String"/>
+	<field name="T_PHA_PHR_WHAT_IF" class="java.lang.String"/>
+	<field name="R_RISK_DEFINITION_RISK_SCORE" class="java.lang.String"/>
+	<field name="R_RISK_CATEGORY_CONSEQUENCE_CATEGORY" class="java.lang.String"/>
+	<field name="R_RISK_FREQUENCY_FREQUENCY_CATEGORY" class="java.lang.String"/>
+	<field name="T_PHA_PHR_ID_PHA_PHR" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PHA_PHR_WHAT_IF}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="85" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PHA_PHR_CONSEQUENCE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="170" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PHA_PHR_PROTECTION_NOW}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="440" y="0" width="35" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_CATEGORY_CONSEQUENCE_CATEGORY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="BG_COLOR" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="475" y="0" width="35" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_DEFINITION_RISK_SCORE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="405" y="0" width="35" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_FREQUENCY_FREQUENCY_CATEGORY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="510" y="0" width="55" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PHA_PHR_RESP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="565" y="0" width="82" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75" lineStyle="Solid"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75" lineStyle="Solid"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PHA_PHR_STATUS_OF_QUESTION}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="255" y="0" width="150" height="20"/>
+				<subreportParameter name="ID_PHA_PHR">
+					<subreportParameterExpression><![CDATA[$F{T_PHA_PHR_ID_PHA_PHR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_PHA">
+					<subreportParameterExpression><![CDATA[$P{ID_PHA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "04_PHR_What-If_Risk-Matrix_SR_WI_RR.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

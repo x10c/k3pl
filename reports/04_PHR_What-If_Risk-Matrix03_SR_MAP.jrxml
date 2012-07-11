@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="04_PHR_What-If_Risk-Matrix03_SR_MAP" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="BG_COLOR_C1" hAlign="Center" vAlign="Middle" fontName="Calibri" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C1}.equalsIgnoreCase( "I" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C1}.equalsIgnoreCase( "II" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFF00"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C1}.equalsIgnoreCase( "III" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#6666FF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C1}.equalsIgnoreCase( "IV" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#00FF00"/>
+		</conditionalStyle>
+	</style>
+	<style name="BG_COLOR_C2" hAlign="Center" vAlign="Middle" fontName="Calibri" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C2}.equalsIgnoreCase( "I" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C2}.equalsIgnoreCase( "II" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFF00"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C2}.equalsIgnoreCase( "III" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#6666FF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C2}.equalsIgnoreCase( "IV" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#00FF00"/>
+		</conditionalStyle>
+	</style>
+	<style name="BG_COLOR_C3" hAlign="Center" vAlign="Middle" fontName="Calibri" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C3}.equalsIgnoreCase( "I" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C3}.equalsIgnoreCase( "II" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFF00"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C3}.equalsIgnoreCase( "III" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#6666FF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C3}.equalsIgnoreCase( "IV" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#00FF00"/>
+		</conditionalStyle>
+	</style>
+	<style name="BG_COLOR_C4" hAlign="Center" vAlign="Middle" fontName="Calibri" fontSize="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C4}.equalsIgnoreCase( "I" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C4}.equalsIgnoreCase( "II" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFF00"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C4}.equalsIgnoreCase( "III" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#6666FF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{C4}.equalsIgnoreCase( "IV" ))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#00FF00"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="ID_PHA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     R_RISK_FREQUENCY."FREQUENCY_CATEGORY" AS R_RISK_FREQUENCY_FREQUENCY_CATEGORY,
+     ( SELECT R_RISK_DEFINITION."RISK_SCORE" AS R_RISK_DEFINITION_RISK_SCORE FROM "dbo"."R_RISK_DEFINITION" R_RISK_DEFINITION INNER JOIN "dbo"."R_RISK_RANKING_MATRIX" R_RISK_RANKING_MATRIX ON R_RISK_DEFINITION."RISK_SCORE" = R_RISK_RANKING_MATRIX."RISK_SCORE" WHERE R_RISK_RANKING_MATRIX."CONSEQUENCE_CATEGORY" = 'C1' AND R_RISK_RANKING_MATRIX."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" ) AS C1,
+     ( SELECT R_RISK_DEFINITION."RISK_SCORE" AS R_RISK_DEFINITION_RISK_SCORE FROM "dbo"."R_RISK_DEFINITION" R_RISK_DEFINITION INNER JOIN "dbo"."R_RISK_RANKING_MATRIX" R_RISK_RANKING_MATRIX ON R_RISK_DEFINITION."RISK_SCORE" = R_RISK_RANKING_MATRIX."RISK_SCORE" WHERE R_RISK_RANKING_MATRIX."CONSEQUENCE_CATEGORY" = 'C2' AND R_RISK_RANKING_MATRIX."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" ) AS C2,
+     ( SELECT R_RISK_DEFINITION."RISK_SCORE" AS R_RISK_DEFINITION_RISK_SCORE FROM "dbo"."R_RISK_DEFINITION" R_RISK_DEFINITION INNER JOIN "dbo"."R_RISK_RANKING_MATRIX" R_RISK_RANKING_MATRIX ON R_RISK_DEFINITION."RISK_SCORE" = R_RISK_RANKING_MATRIX."RISK_SCORE" WHERE R_RISK_RANKING_MATRIX."CONSEQUENCE_CATEGORY" = 'C3' AND R_RISK_RANKING_MATRIX."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" ) AS C3,
+     ( SELECT R_RISK_DEFINITION."RISK_SCORE" AS R_RISK_DEFINITION_RISK_SCORE FROM "dbo"."R_RISK_DEFINITION" R_RISK_DEFINITION INNER JOIN "dbo"."R_RISK_RANKING_MATRIX" R_RISK_RANKING_MATRIX ON R_RISK_DEFINITION."RISK_SCORE" = R_RISK_RANKING_MATRIX."RISK_SCORE" WHERE R_RISK_RANKING_MATRIX."CONSEQUENCE_CATEGORY" = 'C4' AND R_RISK_RANKING_MATRIX."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" ) AS C4,
+     ( SELECT COUNT(*) AS TOTAL FROM "dbo"."T_PHA_PHR" T_PHA_PHR WHERE T_PHA_PHR."ID_PHA" = $P{ID_PHA} AND T_PHA_PHR."CONSEQUENCE_CATEGORY" = 'C1' AND T_PHA_PHR."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" GROUP BY T_PHA_PHR."RISK_SCORE" ) AS TOTAL_F_C1,
+     ( SELECT COUNT(*) AS TOTAL FROM "dbo"."T_PHA_PHR" T_PHA_PHR WHERE T_PHA_PHR."ID_PHA" = $P{ID_PHA} AND T_PHA_PHR."CONSEQUENCE_CATEGORY" = 'C2' AND T_PHA_PHR."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" GROUP BY T_PHA_PHR."RISK_SCORE" ) AS TOTAL_F_C2,
+     ( SELECT COUNT(*) AS TOTAL FROM "dbo"."T_PHA_PHR" T_PHA_PHR WHERE T_PHA_PHR."ID_PHA" = $P{ID_PHA} AND T_PHA_PHR."CONSEQUENCE_CATEGORY" = 'C3' AND T_PHA_PHR."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" GROUP BY T_PHA_PHR."RISK_SCORE" ) AS TOTAL_F_C3,
+     ( SELECT COUNT(*) AS TOTAL FROM "dbo"."T_PHA_PHR" T_PHA_PHR WHERE T_PHA_PHR."ID_PHA" = $P{ID_PHA} AND T_PHA_PHR."CONSEQUENCE_CATEGORY" = 'C4' AND T_PHA_PHR."FREQUENCY_CATEGORY" = R_RISK_FREQUENCY."FREQUENCY_CATEGORY" GROUP BY T_PHA_PHR."RISK_SCORE" ) AS TOTAL_F_C4
+FROM
+     "dbo"."R_RISK_FREQUENCY" R_RISK_FREQUENCY
+ORDER BY
+     R_RISK_FREQUENCY."FREQUENCY_CATEGORY" ASC]]>
+	</queryString>
+	<field name="R_RISK_FREQUENCY_FREQUENCY_CATEGORY" class="java.lang.String"/>
+	<field name="C1" class="java.lang.String"/>
+	<field name="C2" class="java.lang.String"/>
+	<field name="C3" class="java.lang.String"/>
+	<field name="C4" class="java.lang.String"/>
+	<field name="TOTAL_F_C1" class="java.lang.Integer"/>
+	<field name="TOTAL_F_C2" class="java.lang.Integer"/>
+	<field name="TOTAL_F_C3" class="java.lang.Integer"/>
+	<field name="TOTAL_F_C4" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="30" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_FREQUENCY_FREQUENCY_CATEGORY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="BG_COLOR_C1" mode="Opaque" x="30" y="0" width="111" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C1} + ($F{TOTAL_F_C1} == null ? "" : "\n" + $F{TOTAL_F_C1}.toString() + " Data")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="BG_COLOR_C2" mode="Opaque" x="141" y="0" width="111" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C2} + ($F{TOTAL_F_C2} == null ? "" : "\n" + $F{TOTAL_F_C2}.toString() + " Data")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="BG_COLOR_C3" mode="Opaque" x="252" y="0" width="111" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C3} + ($F{TOTAL_F_C3} == null ? "" : "\n" + $F{TOTAL_F_C3}.toString() + " Data")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="BG_COLOR_C4" mode="Opaque" x="363" y="0" width="111" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C4} + ($F{TOTAL_F_C4} == null ? "" : "\n" + $F{TOTAL_F_C4}.toString() + " Data")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="30" y="0" width="111" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="0" width="111" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="0" width="111" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="0" width="111" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C4]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

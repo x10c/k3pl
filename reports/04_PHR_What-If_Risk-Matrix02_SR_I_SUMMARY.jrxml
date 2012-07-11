@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="04_PHR_What-If_Risk-Matrix02_SR_I_SUMMARY" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     R_RISK_CONSEQUENCE."CONSEQUENCE" AS R_RISK_CONSEQUENCE_CONSEQUENCE,
+     R_RISK_CONSEQUENCE."NOTE" AS R_RISK_CONSEQUENCE_NOTE,
+     ( SELECT R_RISK_CONSEQUENCE_CATEGORY."DESCRIPTION" AS R_RISK_CONSEQUENCE_CATEGORY_DESCRIPTION FROM "dbo"."R_RISK_CONSEQUENCE_CATEGORY" R_RISK_CONSEQUENCE_CATEGORY WHERE R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE_CATEGORY" = 'C1' AND R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE" = R_RISK_CONSEQUENCE."CONSEQUENCE" ) AS C1,
+     ( SELECT R_RISK_CONSEQUENCE_CATEGORY."DESCRIPTION" AS R_RISK_CONSEQUENCE_CATEGORY_DESCRIPTION FROM "dbo"."R_RISK_CONSEQUENCE_CATEGORY" R_RISK_CONSEQUENCE_CATEGORY WHERE R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE_CATEGORY" = 'C2' AND R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE" = R_RISK_CONSEQUENCE."CONSEQUENCE" ) AS C2,
+     ( SELECT R_RISK_CONSEQUENCE_CATEGORY."DESCRIPTION" AS R_RISK_CONSEQUENCE_CATEGORY_DESCRIPTION FROM "dbo"."R_RISK_CONSEQUENCE_CATEGORY" R_RISK_CONSEQUENCE_CATEGORY WHERE R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE_CATEGORY" = 'C3' AND R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE" = R_RISK_CONSEQUENCE."CONSEQUENCE" ) AS C3,
+     ( SELECT R_RISK_CONSEQUENCE_CATEGORY."DESCRIPTION" AS R_RISK_CONSEQUENCE_CATEGORY_DESCRIPTION FROM "dbo"."R_RISK_CONSEQUENCE_CATEGORY" R_RISK_CONSEQUENCE_CATEGORY WHERE R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE_CATEGORY" = 'C4' AND R_RISK_CONSEQUENCE_CATEGORY."CONSEQUENCE" = R_RISK_CONSEQUENCE."CONSEQUENCE" ) AS C4
+FROM
+     "dbo"."R_RISK_CONSEQUENCE" R_RISK_CONSEQUENCE
+ORDER BY
+     R_RISK_CONSEQUENCE."CONSEQUENCE" ASC]]>
+	</queryString>
+	<field name="R_RISK_CONSEQUENCE_CONSEQUENCE" class="java.lang.String"/>
+	<field name="R_RISK_CONSEQUENCE_NOTE" class="java.lang.String"/>
+	<field name="C1" class="java.lang.String"/>
+	<field name="C2" class="java.lang.String"/>
+	<field name="C3" class="java.lang.String"/>
+	<field name="C4" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="220" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_CONSEQUENCE_CONSEQUENCE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="220" y="0" width="100" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="320" y="0" width="100" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="420" y="0" width="100" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="520" y="0" width="100" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C4}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="620" y="0" width="122" height="20"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_RISK_CONSEQUENCE_NOTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

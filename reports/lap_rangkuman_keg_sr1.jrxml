@@ -3,12 +3,18 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="MONTH" class="java.lang.String"/>
-	<parameter name="YEAR" class="java.lang.String"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["D:\\apache-tomcat-7.0.28\\webapps\\k3pl\\reports\\"]]></defaultValueExpression>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["7"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="ID_DIVPROSBU" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2012"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIVPROSBU" class="java.lang.String">
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      sum(T_INSIDEN."JML_KORBAN_MATI") AS JML_KORBAN_MATI,
@@ -79,7 +85,7 @@ GROUP BY
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="40" width="210" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_KORBAN_MATI} + $F{JML_KORBAN_SEDANG} + $F{JML_HARI_KERJA_HILANG} + $F{JML_KORBAN_DAMPAK} + $F{JML_KORBAN_MEDIS} + $F{JML_KORBAN_P3K} + $F{JML_HAMPIR_CELAKA} + $F{JML_BAKAR_LEDAK_BOCOR} + $F{JML_RUSAK_BANGUNAN} + $F{JML_RUSAK_KENDARAAN} + $F{JML_RUSAK_LAIN} + $F{JML_PENCEMARAN_LINGKUNGAN} + $F{JML_KECELAKAAN_KENDARAAN} + $F{JML_KEJADIAN_KEAMANAN} > 0 ? (char) 10003 : "o") + " Tanpa Kecelakaan / Non-injurious"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_KORBAN_MATI} + $F{JML_KORBAN_SEDANG} + $F{JML_HARI_KERJA_HILANG} + $F{JML_KORBAN_DAMPAK} + $F{JML_KORBAN_MEDIS} + $F{JML_KORBAN_P3K} + $F{JML_HAMPIR_CELAKA} + $F{JML_BAKAR_LEDAK_BOCOR} + $F{JML_RUSAK_BANGUNAN} + $F{JML_RUSAK_KENDARAAN} + $F{JML_RUSAK_LAIN} + $F{JML_PENCEMARAN_LINGKUNGAN} + $F{JML_KECELAKAAN_KENDARAAN} + $F{JML_KEJADIAN_KEAMANAN} == 0 ? (char) 10003 : "o") + " Tanpa Kecelakaan / Non-injurious"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="40" width="305" height="20"/>

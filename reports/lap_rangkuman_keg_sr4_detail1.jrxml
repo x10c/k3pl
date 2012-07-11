@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr4_detail1" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIVPROSBU" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_WILAYAH" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     T_AREA_PERHATIAN_DETAIL."NAMA_AREA_PERHATIAN" AS T_AREA_PERHATIAN_DETAIL_NAMA_AREA_PERHATIAN,
+     T_AREA_PERHATIAN_DETAIL."ID_AREA_PERHATIAN_DETAIL" AS T_AREA_PERHATIAN_DETAIL_ID_AREA_PERHATIAN_DETAIL
+FROM
+     "dbo"."T_AREA_PERHATIAN_DETAIL" T_AREA_PERHATIAN_DETAIL
+WHERE
+     T_AREA_PERHATIAN_DETAIL."TAHUN" = $P{YEAR}
+ AND T_AREA_PERHATIAN_DETAIL."BULAN" = $P{MONTH}
+ AND T_AREA_PERHATIAN_DETAIL."ID_DIVPROSBU" = $P{ID_DIVPROSBU}
+ AND T_AREA_PERHATIAN_DETAIL."ID_WILAYAH" = $P{ID_WILAYAH}
+ORDER BY
+     T_AREA_PERHATIAN_DETAIL."ID_AREA_PERHATIAN_DETAIL" ASC]]>
+	</queryString>
+	<field name="T_AREA_PERHATIAN_DETAIL_NAMA_AREA_PERHATIAN" class="java.lang.String"/>
+	<field name="T_AREA_PERHATIAN_DETAIL_ID_AREA_PERHATIAN_DETAIL" class="java.lang.Long"/>
+	<variable name="NO" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{NO}]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="802" height="20"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+					<paragraph leftIndent="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{NO} + ". " + $F{T_AREA_PERHATIAN_DETAIL_NAMA_AREA_PERHATIAN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="01_CharterPHA_SR_ANGG" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_PHA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     R_PEGAWAI."NAMA_PEGAWAI" AS R_PEGAWAI_NAMA_PEGAWAI,
+     R_JABATAN_PHA."NAMA_JABATAN_PHA" AS R_JABATAN_PHA_NAMA_JABATAN_PHA
+FROM
+     "dbo"."R_JABATAN_PHA" R_JABATAN_PHA INNER JOIN "dbo"."T_PHA_KEANGGOTAAN" T_PHA_KEANGGOTAAN ON R_JABATAN_PHA."ID_JABATAN_PHA" = T_PHA_KEANGGOTAAN."ID_JABATAN_PHA"
+     INNER JOIN "dbo"."R_PEGAWAI" R_PEGAWAI ON T_PHA_KEANGGOTAAN."NIPG" = R_PEGAWAI."NIPG"
+WHERE
+     T_PHA_KEANGGOTAAN."ID_PHA" = $P{ID_PHA}]]>
+	</queryString>
+	<field name="R_PEGAWAI_NAMA_PEGAWAI" class="java.lang.String"/>
+	<field name="R_JABATAN_PHA_NAMA_JABATAN_PHA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="140" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="11"/>
+					<paragraph leftIndent="15" spacingBefore="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_JABATAN_PHA_NAMA_JABATAN_PHA} + " :"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="415" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="11"/>
+					<paragraph leftIndent="2" spacingBefore="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

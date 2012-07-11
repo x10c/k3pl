@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="04_PHR_What-If_Risk-Matrix_SR_WI" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_PHA" class="java.lang.Long"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     T_PHA_PHR."PROCESS_STEP" AS T_PHA_PHR_PROCESS_STEP,
+     T_PHA_PHR."ID_PHA_PHR" AS T_PHA_PHR_ID_PHA_PHR
+FROM
+     "dbo"."T_PHA_PHR" T_PHA_PHR
+WHERE
+     T_PHA_PHR."ID_PHA_PHR" IN ( SELECT min(TPP."ID_PHA_PHR") FROM "dbo"."T_PHA_PHR" TPP WHERE TPP."PROCESS_STEP" = T_PHA_PHR."PROCESS_STEP" )
+ AND T_PHA_PHR."ID_PHA" = $P{ID_PHA}
+ORDER BY
+     T_PHA_PHR."ID_PHA_PHR" ASC]]>
+	</queryString>
+	<field name="T_PHA_PHR_PROCESS_STEP" class="java.lang.String"/>
+	<field name="T_PHA_PHR_ID_PHA_PHR" class="java.lang.Long"/>
+	<variable name="NO" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{NO}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="35" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{NO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="35" y="0" width="120" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri" size="11"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PHA_PHR_PROCESS_STEP}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="155" y="0" width="647" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PROCESS_STEP">
+					<subreportParameterExpression><![CDATA[$F{T_PHA_PHR_PROCESS_STEP}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_PHA">
+					<subreportParameterExpression><![CDATA[$P{ID_PHA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "04_PHR_What-If_Risk-Matrix_SR_WI_DETAIL.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
