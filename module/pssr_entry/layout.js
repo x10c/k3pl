@@ -124,11 +124,9 @@ function M_PssrEntryMaster(title)
 					if (data.length) {
 						m_pssr_entry_id_pssr = data[0].data['id_pssr'];
 						m_pssr_entry_checklist.form_assign(data);
-						m_pssr_entry.panel.getItem(1).setDisabled(false);
 						// this.btn_print.setDisabled(false);
 					} else {
 						m_pssr_entry_id_pssr = '';
-						m_pssr_entry.panel.getItem(1).setDisabled(true);
 						// this.btn_print.setDisabled(true);
 					}
 					pssr_master_on_select_load_detail();
@@ -164,6 +162,14 @@ function M_PssrEntryMaster(title)
 				this.do_add();
 			}
 	});
+	
+	this.btn_pssr_checklist = new Ext.Button({
+			text	: 'Checklist PSSR'
+		,	scope	: this
+		,	handler	: function() {
+				this.entry_pssr_checklist();
+			}
+	});
 
 	this.toolbar = new Ext.Toolbar({
 		items	: [
@@ -172,6 +178,8 @@ function M_PssrEntryMaster(title)
 		,	this.btn_ref
 		,	'-'
 		,	this.btn_add
+		,	'->'
+		,	this.btn_pssr_checklist
 		]
 	});
 
@@ -186,7 +194,6 @@ function M_PssrEntryMaster(title)
 		,	tbar				: this.toolbar
 	});
 	
-	
 	this.do_edit = function()
 	{	
 		var data = this.sm.getSelections();
@@ -200,10 +207,15 @@ function M_PssrEntryMaster(title)
 
 	this.do_add = function()
 	{
-		m_pssr_master_con.layout.setActiveItem(m_pssr_entry_master_add.panel);
 		m_pssr_entry_master_add.form_add();
+		m_pssr_master_con.layout.setActiveItem(m_pssr_entry_master_add.panel);
 	}
 
+	this.entry_pssr_checklist = function (){
+		m_pssr_entry_checklist.form_edit();
+		m_pssr_entry.panel.layout.setActiveItem(m_pssr_entry_checklist.panel);
+	}
+	
 	this.do_load = function()
 	{
 		this.store_project.load();
@@ -1143,6 +1155,8 @@ function M_PssrEntryChecklist(title)
 				this.form_edit();
 			}
 		});
+	
+
 		
 	this.panel_pssr = new Ext.Panel({
 			layout		:'column'
@@ -1240,6 +1254,15 @@ function M_PssrEntryChecklist(title)
 		,	scope	: this
 		});
 	}
+
+	this.btn_back = new Ext.Button({
+			text		: 'Batal'
+		,	iconCls	: 'del16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_back();
+			}
+	});
 	
 	this.panel = new Ext.Panel({
 		id			: 'tab 2'
@@ -1248,7 +1271,9 @@ function M_PssrEntryChecklist(title)
 	,	autoScroll	: true
 	,	buttonAlign	: 'center'
 	,	tbar		: [
-			this.btn_refresh
+			this.btn_back
+		,	'-'
+		,	this.btn_refresh
 		,	'->'
 		,	this.btn_save
 		]
@@ -1269,7 +1294,11 @@ function M_PssrEntryChecklist(title)
 
 		this.dml_type = 2;
 	}
-
+	
+	this.do_back = function(){
+		m_pssr_entry.panel.layout.setActiveItem(0);
+	}
+	
 	this.do_cancel = function()
 	{
 		m_pssr_master_con.layout.setActiveItem(m_pssr_entry_master.grid);
@@ -1335,6 +1364,43 @@ function M_PssrEntryChecklist(title)
 		});
 	}
 	
+	this.reset_form = function(){
+		var i,j;
+		var grid_id;
+		var kat;
+		var item;
+		var detail;
+
+		kat = this.data_pssr;
+		for (i = 0; i < kat.length; i++) {
+			
+			/* create input detail observasi */
+			item = kat[i].item;
+
+			for (j = 0; j < item.length; j++) {
+				grid_id = 'pssr_input_detail_'+ kat[i].id +'_'+ item[j].id;
+
+				grid = Ext.getCmp(grid_id);
+				if (grid == undefined) {
+					console.log('Cannot get grid with id '+ grid_id +'!');
+					continue;
+				}
+
+				x = grid.store.find('detail_id', kat[i].detail_id);
+				if (x == -1) {
+					continue;
+				}
+
+				r = grid.store.getAt(x);
+				r.set('applicable', '0');
+				r.set('confirm_ok', '0');
+				r.set('punchlist', '0');
+				r.set('keterangan', '');
+				
+			}
+		}
+	}
+	
 	this.edit_fill_form = function(data)
 	{
 		var i, x;
@@ -1344,6 +1410,7 @@ function M_PssrEntryChecklist(title)
 		var r;
 		
 		if(d.length == 0){this.dml_type = 2;
+			this.reset_form();
 			return;}
 
 		for (i = 0; i < d.length; i++) {
@@ -1471,23 +1538,18 @@ function M_PssrEntry()
 		
 	});
 
-	this.panel = new Ext.TabPanel({
+	this.panel = new Ext.Container({
 			id				: 'pssr_entry_panel'
-		,	autoScroll	: true
-		,	enableTabScroll	: true
+		,	layout		: 'card'
+		,	activeItem	: 0
+		,	border		: false
+		,	autoResize	: true
+		,	autoWidth		: true
 		,	region		: 'center'
-		,	activeTab	: 0
 		,	items			: [
 				this.panel_master_detail
 			,	m_pssr_entry_checklist.panel
 			]
-		,	listeners: {
-				'tabchange': function (tabPanel, tab){
-					if (tab.id == 'tab 2'){
-						m_pssr_entry_checklist.form_edit();
-					}
-				}
-			}
 	});
 
 	this.do_refresh = function(ha_level)
@@ -1495,7 +1557,6 @@ function M_PssrEntry()
 		m_pssr_entry_ha_level	= ha_level;
 		m_pssr_entry_id_pssr 	= '';
 
-		this.panel.getItem(1).setDisabled(true);
 		m_pssr_entry_master.do_refresh();
 	}
 }
