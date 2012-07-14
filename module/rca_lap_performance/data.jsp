@@ -23,7 +23,6 @@ String	q_tl_temuan	= "";
 String	q_avg		= "";
 String	q_sum		= "";
 String	q_where		= "";
-String	q_where2	= "";
 String	months[]	= {	"jan", "feb", "mar", "apr"
 					,	"may", "jun", "jul", "aug"
 					,	"sep", "oct", "nov", "dec"
@@ -68,7 +67,7 @@ try {
 			+"	,		r_seksi		B"
 			+"	where	A.status_pegawai = '1'";
 
-	q_nipg3	=" and rca_auditor.nipg in ("
+	q_nipg3	=" and rca.penanggung_jawab_nipg in ("
 			+"	select	A.nipg"
 			+"	from	r_pegawai	A"
 			+"	,		r_seksi		B"
@@ -84,44 +83,33 @@ try {
 	q_vio	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as violation"
 			+" from		t_rca_detail		as rca_detail"
 			+" ,		t_rca				as rca"
-			+" ,		t_rca_auditor		as rca_auditor"
 			+" where	rca_detail.id_rca	= rca.id_rca"
-			+" and		rca.id_rca			= rca_auditor.id_rca"
 			+" and		year(rca.tanggal_rca)	= "+ year;
 
 	q_temuan	=" select	count(rca_detail.id_rca) as temuan"
 				+" from		t_rca_detail		as rca_detail"
 				+" ,		t_rca				as rca"
-				+" ,		t_rca_auditor		as rca_auditor"
 				+" where	rca_detail.id_rca		= rca.id_rca"
-				+" and		rca.id_rca				= rca_auditor.id_rca"
 				+" and		rca_detail.id_severity	in (4,5)"
 				+" and		year(rca.tanggal_rca)	= "+ year;
 
 	q_sev	="select	cast(convert(decimal(18,2), case when sum(rca_detail.li_45) is null then 0 else (1.0 * (sum(rca_detail.li_45) * 100) / isnull(sum(rca_detail.number_of_violations),1)) end) as varchar) as severity"
 			+" from		t_rca_detail		as rca_detail"
 			+" ,		t_rca				as rca"
-			+" ,		t_rca_auditor		as rca_auditor"
 			+" where	rca_detail.id_rca		= rca.id_rca"
-			+" and		rca.id_rca				= rca_auditor.id_rca"
 			+" and		year(rca.tanggal_rca)	= "+ year;
 
 	q_get_temuan	="select	count(rca_detail.id_rca)	as jml"
-					+" from		r_seksi						as A"
-					+" ,		t_rca_detail				as rca_detail"
+					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
-					+" ,		t_rca_auditor				as rca_auditor"
-					+" where	rca_detail.id_rca				= rca.id_rca"
-					+" and		rca.id_rca						= rca_auditor.id_rca"
-					+" and		rca.penanggung_jawab_direktorat	= A.id_direktorat"
-					+" and		year(rca.tanggal_rca)			= "+ year;
+					+" where	rca_detail.id_rca		= rca.id_rca"
+					+" and		rca_detail.id_severity	in (4,5)"
+					+" and		year(rca.tanggal_rca)	= "+ year;
 			
 	q_tl_temuan	=" select	count(rca_detail.id_rca) as temuan"
 				+" from		t_rca_detail		as rca_detail"
 				+" ,		t_rca				as rca"
-				+" ,		t_rca_auditor		as rca_auditor"
 				+" where	rca_detail.id_rca		= rca.id_rca"
-				+" and		rca.id_rca				= rca_auditor.id_rca"
 				+" and		rca_detail.id_severity	in (4,5)"
 				+" and		rca_detail.status		in ('2','3')"
 				+" and		year(rca.tanggal_rca)	= "+ year;
@@ -160,12 +148,13 @@ try {
 	q_target	+=" from	t_rca_target_pegawai"
 				+" where	year = "+ year + q_nipg;
 	
-	q_part		+= q_nipg2;
-	q_vio		+= q_nipg3;
-	q_temuan	+= q_nipg3;
-	q_sev		+= q_nipg3;
-	q_tl_temuan	+= q_nipg3;
-	q_avg		+= q_nipg3;
+	q_part			+= q_nipg2;
+	q_vio			+= q_nipg3;
+	q_temuan		+= q_nipg3;
+	q_sev			+= q_nipg3;
+	q_get_temuan	+= q_nipg3;
+	q_tl_temuan		+= q_nipg3;
+	q_avg			+= q_nipg3;
 
 	/* query by organisasi */
 	if (is_in_org.equals("1")) {
@@ -240,8 +229,6 @@ try {
 				q_where =" and A.id_seksi = B.id_seksi"
 						+" and B.id_wilayah = ";
 
-				q_where2 =" and A.id_wilayah = ";
-
 				q_org	=" select	id_wilayah	as id"
 						+" ,		nama_wilayah	as name"
 						+" from		r_wilayah";
@@ -264,14 +251,14 @@ try {
 			+" ,		TEMUAN.temuan"
 			+" ,		SEV.severity"
 			+" ,		TL_TEMUAN.temuan as jml_tl_temuan"
-			+" ,		round((TL_TEMUAN.temuan / (case GET_TEMUAN.jml when 0 then 1.00 else GET_TEMUAN.jml * 1.00 end)), 2, 1) as tl_temuan"
+			+" ,		round((TL_TEMUAN.temuan / cast(isnull(nullif(GET_TEMUAN.jml,0),1) as float)) * 100, 2, 1) as tl_temuan"
 			+" ,		AVERAGE.average"
 			+" from ("+ q_target	+ q_where + id +")) T"
 			+" ,	("+ q_part		+ q_where + id +")) P"
 			+" ,	("+ q_vio		+ q_where + id +")) V"
 			+" ,	("+ q_temuan	+ q_where + id +")) TEMUAN"
 			+" ,	("+ q_sev		+ q_where + id +")) SEV"
-			+" ,	("+ q_get_temuan+ q_where2 + id +") GET_TEMUAN"
+			+" ,	("+ q_get_temuan+ q_where + id +")) GET_TEMUAN"
 			+" ,	("+ q_tl_temuan	+ q_where + id +")) TL_TEMUAN"
 			+" ,	("+ q_avg		+ q_where + id +")) AVERAGE";
 
