@@ -25,7 +25,7 @@ function pssr_master_on_select_load_detail()
 
 	m_pssr_entry_detail.do_refresh();
 	m_pssr_entry_anggota.do_refresh();
-	m_pssr_entry_checklist.do_refresh();
+	//m_pssr_entry_checklist.do_refresh();
 }
 
 function M_PssrEntryMaster(title)
@@ -1055,7 +1055,7 @@ function M_PssrInputDetail(_i, _j, id, title, data)
 				dataIndex	: 'applicable'
 			,	header		: 'Applicable'
 			,	editor		: this.form_applicable
-			,	renderer	: combo_renderer(this.form_applicable)
+			 ,	renderer	: combo_renderer(this.form_applicable)
 			,	width		: 100
 			},{
 				dataIndex	: 'confirm_ok'
@@ -1155,8 +1155,6 @@ function M_PssrEntryChecklist(title)
 				this.form_edit();
 			}
 		});
-	
-
 		
 	this.panel_pssr = new Ext.Panel({
 			layout		:'column'
@@ -1291,7 +1289,7 @@ function M_PssrEntryChecklist(title)
 		this.form_project.setValue('');
 		this.form_lokasi.setValue('');
 		this.form_tanggal.setValue('');
-
+		this.reset_form();
 		this.dml_type = 2;
 	}
 	
@@ -1358,6 +1356,7 @@ function M_PssrEntryChecklist(title)
 					if (msg.success == false) {
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
+					this.form_edit();
 					main_load.hide();
 				}
 		,	scope	: this
@@ -1365,13 +1364,13 @@ function M_PssrEntryChecklist(title)
 	}
 	
 	this.reset_form = function(){
-		var i,j;
+		var i,j,k;
 		var grid_id;
 		var kat;
 		var item;
 		var detail;
-
 		kat = this.data_pssr;
+		
 		for (i = 0; i < kat.length; i++) {
 			
 			/* create input detail observasi */
@@ -1379,24 +1378,25 @@ function M_PssrEntryChecklist(title)
 
 			for (j = 0; j < item.length; j++) {
 				grid_id = 'pssr_input_detail_'+ kat[i].id +'_'+ item[j].id;
-
 				grid = Ext.getCmp(grid_id);
 				if (grid == undefined) {
 					console.log('Cannot get grid with id '+ grid_id +'!');
 					continue;
 				}
+				detail = item[j].details;
+				for (k =0; k < detail.length;k++){
+					x = grid.store.find('detail_id', detail[k].detail_id);
+					if (x == -1) {
+						continue;
+					}
 
-				x = grid.store.find('detail_id', kat[i].detail_id);
-				if (x == -1) {
-					continue;
+					r = grid.store.getAt(x);
+					r.set('applicable', '0');
+					r.set('confirm_ok', '0');
+					r.set('punchlist', '0');
+					r.set('keterangan', '');
+					r.commit();
 				}
-
-				r = grid.store.getAt(x);
-				r.set('applicable', '0');
-				r.set('confirm_ok', '0');
-				r.set('punchlist', '0');
-				r.set('keterangan', '');
-				
 			}
 		}
 	}
@@ -1408,7 +1408,6 @@ function M_PssrEntryChecklist(title)
 		var grid;
 		var grid_id;
 		var r;
-		
 		if(d.length == 0){this.dml_type = 2;
 			this.reset_form();
 			return;}
@@ -1425,13 +1424,17 @@ function M_PssrEntryChecklist(title)
 			if (x == -1) {
 				continue;
 			}
-
+			//	grid.store.reload();
 			r = grid.store.getAt(x);
-
-			r.set('applicable', d[i].applicable +'');
+			console.log('grid_id : '+ i +'. '+grid_id +'| detail_id'+ d[i].detail_id);
+			if (r == 'undefined'){
+				continue;
+			}
 			r.set('confirm_ok', d[i].confirm_ok +'');
 			r.set('punchlist', d[i].punchlist +'');
 			r.set('keterangan', d[i].keterangan +'');
+			r.set('applicable', d[i].applicable +'');
+			r.commit();
 		}
 	}
 	
@@ -1558,6 +1561,7 @@ function M_PssrEntry()
 		m_pssr_entry_id_pssr 	= '';
 
 		m_pssr_entry_master.do_refresh();
+		m_pssr_entry_checklist.do_refresh();
 	}
 }
 
