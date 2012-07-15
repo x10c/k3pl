@@ -100,12 +100,6 @@ function M_LapSafetyMetrics()
 		,	triggerAction	: 'all'
 		,	selectOnFocus	: true
 		,	width			: 150
-		,	listeners		: {
-				scope	: this
-			,	select	: function(cb, record, index) {
-					m_lap_safety_metrics_month = record.get('id');
-				}
-			}
 		});
 
 	this.form_month.setValue(this.store_month.getAt(0).data['id']);		
@@ -188,7 +182,7 @@ function M_LapSafetyMetrics()
 		]
 	});
 
-	this.do_print = function(year, month)
+	this.do_print = function()
 	{
 		this.tahun	= this.form_year.getValue();
 		this.bulan	= this.form_month.getValue();

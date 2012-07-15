@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="grafik_performance_rca_tl_temuan" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR_1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="YEAR_2" class="java.lang.String"/>
+	<parameter name="YEAR_3" class="java.lang.String"/>
+	<parameter name="MONTH_1" class="java.lang.String"/>
+	<parameter name="MONTH_2" class="java.lang.String"/>
+	<parameter name="MONTH_3" class="java.lang.String"/>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="QUERY_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["    select	1                   as NO_URUT " +
+"        ,	a.NAMA_DIREKTORAT	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DIREKTORAT	as a " +
+"    union " +
+"    select	2                   as NO_URUT " +
+"        ,	a.NAMA_DIREKTORAT	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DIREKTORAT	as a " +
+"    union " +
+"    select	3                   as NO_URUT " +
+"        ,	a.NAMA_DIREKTORAT	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DIREKTORAT	as a "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="QUERY_DIV" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["    select	1                   as NO_URUT " +
+"        ,	a.NAMA_DIVPROSBU	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DIVPROSBU as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    union " +
+"    select	2                   as NO_URUT " +
+"        ,	a.NAMA_DIVPROSBU	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DIVPROSBU	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    union " +
+"    select	3                   as NO_URUT " +
+"        ,	a.NAMA_DIVPROSBU	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DIVPROSBU	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="QUERY_DEP" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["    select	1                   as NO_URUT " +
+"        ,	a.NAMA_DEPARTEMEN	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DEPARTEMEN as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    and    a.ID_DIVPROSBU  = " + $P{ID_DIV} +
+"    union " +
+"    select	2                   as NO_URUT " +
+"        ,	a.NAMA_DEPARTEMEN	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DEPARTEMEN	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    and    a.ID_DIVPROSBU  = " + $P{ID_DIV} +
+"    union " +
+"    select	3                   as NO_URUT " +
+"        ,	a.NAMA_DEPARTEMEN	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
+"       ,   ( " +
+"           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
+"           from	( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		y.STATUS                        in ('2','3') " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   )	as TL_TEMUAN_45 " +
+"               ,   ( " +
+"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as x " +
+"                       ,	T_RCA_DETAIL	as y " +
+"                   where	x.ID_RCA                        = y.ID_RCA " +
+"                   and		y.ID_SEVERITY                   in (4,5) " +
+"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
+"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   )	as TEMUAN_45 " +
+"           )   as PERSENTASE " +
+"    from	R_DEPARTEMEN	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    and    a.ID_DIVPROSBU  = " + $P{ID_DIV}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR}.isEmpty() || $P{ID_DIR}.equalsIgnoreCase( "0" ) ? $P{QUERY_DIR} :
+$P{ID_DIV}.isEmpty() || $P{ID_DIV}.equalsIgnoreCase( "0" ) ? $P{QUERY_DIV} :
+$P{QUERY_DEP}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{DYNAMIC_QUERY}]]>
+	</queryString>
+	<field name="ITEM" class="java.lang.String"/>
+	<field name="BULAN" class="java.lang.String"/>
+	<field name="PERSENTASE" class="java.lang.Float"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="400" splitType="Stretch">
+			<lineChart>
+				<chart theme="default">
+					<reportElement x="5" y="5" width="790" height="395"/>
+					<chartTitle>
+						<font fontName="Calibri" size="14" isBold="true"/>
+						<titleExpression><![CDATA["GRAFIK TINDAK LANJUT TEMUAN 4/5 RCA"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font fontName="Calibri" size="12"/>
+						<subtitleExpression><![CDATA["3 Bulan Terakhir"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend>
+						<font fontName="Calibri" size="10"/>
+					</chartLegend>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{ITEM}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{BULAN}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PERSENTASE}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot/>
+					<rangeAxisMaxValueExpression><![CDATA[100]]></rangeAxisMaxValueExpression>
+				</linePlot>
+			</lineChart>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="grafik_performance_rca_partisipasi" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="YEAR_1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="YEAR_2" class="java.lang.String"/>
+	<parameter name="YEAR_3" class="java.lang.String"/>
+	<parameter name="MONTH_1" class="java.lang.String"/>
+	<parameter name="MONTH_2" class="java.lang.String"/>
+	<parameter name="MONTH_3" class="java.lang.String"/>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="QUERY_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["    select	1                   as NO_URUT " +
+"        ,	a.NAMA_DIREKTORAT	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_3} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_3} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_3} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_3} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DIREKTORAT	as a " +
+"    union " +
+"    select	2                   as NO_URUT " +
+"        ,	a.NAMA_DIREKTORAT	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_2} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_2} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_2} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_2} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DIREKTORAT	as a " +
+"    union " +
+"    select	3                   as NO_URUT " +
+"        ,	a.NAMA_DIREKTORAT	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_1} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_1} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_1} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_1} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DIREKTORAT	as a "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="QUERY_DIV" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["    select	1                   as NO_URUT " +
+"        ,	a.NAMA_DIVPROSBU	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_3} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_3} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    and    x.auditor_divprosbu     = a.id_divprosbu " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_3} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_3} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                    and    y.id_divprosbu          = a.id_divprosbu " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DIVPROSBU as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    union " +
+"    select	2                   as NO_URUT " +
+"        ,	a.NAMA_DIVPROSBU	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_2} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_2} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    and    x.auditor_divprosbu     = a.id_divprosbu " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_2} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_2} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   and     y.id_divprosbu          = a.id_divprosbu " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DIVPROSBU	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    union " +
+"    select	3                   as NO_URUT " +
+"        ,	a.NAMA_DIVPROSBU	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_1} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_1} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    and    x.auditor_divprosbu     = a.id_divprosbu " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_1} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_1} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   and     y.id_divprosbu          = a.id_divprosbu " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DIVPROSBU	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="QUERY_DEP" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["    select	1                   as NO_URUT " +
+"        ,	a.NAMA_DEPARTEMEN	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_3} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_3} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    and    x.auditor_divprosbu     = a.id_divprosbu " +
+"                    and    x.auditor_departemen    = a.id_departemen " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_3} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_3} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                    and    y.id_divprosbu          = a.id_divprosbu " +
+"                    and    y.id_departemen         = a.id_departemen " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DEPARTEMEN as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    and    a.ID_DIVPROSBU  = " + $P{ID_DIV} +
+"    union " +
+"    select	2                   as NO_URUT " +
+"        ,	a.NAMA_DEPARTEMEN	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_2} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_2} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    and    x.auditor_divprosbu     = a.id_divprosbu " +
+"                    and    x.auditor_departemen    = a.id_departemen " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_2} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_2} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   and     y.id_divprosbu          = a.id_divprosbu " +
+"                   and     y.id_departemen         = a.id_departemen " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DEPARTEMEN	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    and    a.ID_DIVPROSBU  = " + $P{ID_DIV} +
+"    union " +
+"    select	3                   as NO_URUT " +
+"        ,	a.NAMA_DEPARTEMEN	as ITEM " +
+"        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
+"        ,	( " +
+"            select	round((P.JML_PARTISIPASI / cast(isnull(nullif(T.JML_TARGET, 0), 1) as float)) * 100, 2) " +
+"            from	( " +
+"                    select	count(y.NIPG)	as JML_PARTISIPASI " +
+"                    from	T_RCA			as x " +
+"                       ,	T_RCA_AUDITOR	as y " +
+"                       ,	R_PEGAWAI		as z " +
+"                    where	x.ID_RCA				= y.ID_RCA " +
+"                    and    y.STATUS				in (1,2) " +
+"                    and    y.NIPG					= z.NIPG " +
+"                    and    z.STATUS_PEGAWAI		= '1' " +
+"                    and	YEAR(x.TANGGAL_RCA)		= " + $P{YEAR_1} +
+"                    and	MONTH(x.TANGGAL_RCA)	= " + $P{MONTH_1} +
+"                    and    x.auditor_direktorat    = a.id_direktorat " +
+"                    and    x.auditor_divprosbu     = a.id_divprosbu " +
+"                    and    x.auditor_departemen    = a.id_departemen " +
+"                    ) as P " +
+"                ,  ( " +
+"                    select	case " + $P{MONTH_1} +
+"                                when	1	then isnull(SUM(x.JAN),1) " +
+"                                when	2	then isnull(SUM(x.FEB),1) " +
+"                                when	3	then isnull(SUM(x.MAR),1) " +
+"                                when	4	then isnull(SUM(x.APR),1) " +
+"                                when	5	then isnull(SUM(x.MAY),1) " +
+"                                when	6	then isnull(SUM(x.JUN),1) " +
+"                                when	7	then isnull(SUM(x.JUL),1) " +
+"                                when	8	then isnull(SUM(x.AUG),1) " +
+"                                when	9	then isnull(SUM(x.SEP),1) " +
+"                                when	10	then isnull(SUM(x.OCT),1) " +
+"                                when	11	then isnull(SUM(x.NOV),1) " +
+"                                when	12	then isnull(SUM(x.DEC),1) " +
+"                            end as JML_TARGET " +
+"                    from	T_RCA_TARGET_PEGAWAI	as x " +
+"                       ,	R_PEGAWAI				as y " +
+"                   where	x.NIPG					= y.NIPG " +
+"                   and		x.YEAR					= " + $P{YEAR_1} +
+"                   and		y.STATUS_PEGAWAI		= '1' " +
+"                   and     y.id_direktorat         = a.id_direktorat " +
+"                   and     y.id_divprosbu          = a.id_divprosbu " +
+"                   and     y.id_departemen         = a.id_departemen " +
+"                   ) as T " +
+"            )   as PERSENTASE " +
+"    from	R_DEPARTEMEN	as a " +
+"    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
+"    and    a.ID_DIVPROSBU  = " + $P{ID_DIV}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR}.isEmpty() || $P{ID_DIR}.equalsIgnoreCase( "0" ) ? $P{QUERY_DIR} :
+$P{ID_DIV}.isEmpty() || $P{ID_DIV}.equalsIgnoreCase( "0" ) ? $P{QUERY_DIV} :
+$P{QUERY_DEP}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{DYNAMIC_QUERY}]]>
+	</queryString>
+	<field name="ITEM" class="java.lang.String"/>
+	<field name="BULAN" class="java.lang.String"/>
+	<field name="PERSENTASE" class="java.lang.Float"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="400" splitType="Stretch">
+			<lineChart>
+				<chart theme="default">
+					<reportElement x="5" y="5" width="790" height="395"/>
+					<chartTitle>
+						<font fontName="Calibri" size="14" isBold="true"/>
+						<titleExpression><![CDATA["GRAFIK PARTISIPASI RCA"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font fontName="Calibri" size="12"/>
+						<subtitleExpression><![CDATA["3 Bulan Terakhir"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend>
+						<font fontName="Calibri" size="10"/>
+					</chartLegend>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{ITEM}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{BULAN}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{PERSENTASE}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot/>
+					<rangeAxisMaxValueExpression><![CDATA[100]]></rangeAxisMaxValueExpression>
+				</linePlot>
+			</lineChart>
+		</band>
+	</summary>
+</jasperReport>
