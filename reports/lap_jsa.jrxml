@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_jsa" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="63"/>
 	<subDataset name="DETAIL_DS">
 		<parameter name="ID_JSA" class="java.lang.String" isForPrompting="false"/>
 		<queryString>
@@ -815,7 +815,7 @@ BASIC JOB STEP]]></text>
 				<text><![CDATA[RECOMMENDED ACTION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="670" y="0" width="132" height="30"/>
+				<reportElement x="670" y="0" width="130" height="30"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -831,9 +831,9 @@ BASIC JOB STEP]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<componentElement>
-				<reportElement positionType="Float" x="0" y="0" width="802" height="20"/>
+				<reportElement positionType="Float" x="0" y="0" width="802" height="22"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="DETAIL_DS">
 						<datasetParameter name="ID_JSA">
@@ -841,9 +841,9 @@ BASIC JOB STEP]]></text>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:listContents height="20" width="802">
-						<textField>
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="20"/>
+					<jr:listContents height="22" width="802">
+						<frame>
+							<reportElement x="0" y="0" width="800" height="21"/>
 							<box>
 								<pen lineWidth="1.0"/>
 								<topPen lineWidth="1.0"/>
@@ -851,74 +851,87 @@ BASIC JOB STEP]]></text>
 								<bottomPen lineWidth="1.0"/>
 								<rightPen lineWidth="1.0"/>
 							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="11"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
-						</textField>
-						<textField isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="30" y="0" width="120" height="20"/>
-							<box>
-								<pen lineWidth="1.0"/>
-								<topPen lineWidth="1.0"/>
-								<leftPen lineWidth="1.0"/>
-								<bottomPen lineWidth="1.0"/>
-								<rightPen lineWidth="1.0"/>
-							</box>
-							<textElement textAlignment="Left" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="11"/>
-								<paragraph leftIndent="2"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_URUTAN_LANGKAH_PEKERJAAN_DASAR}]]></textFieldExpression>
-						</textField>
-						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="150" y="0" width="220" height="20"/>
-							<box>
-								<pen lineWidth="1.0"/>
-								<topPen lineWidth="1.0"/>
-								<leftPen lineWidth="1.0"/>
-								<bottomPen lineWidth="1.0"/>
-								<rightPen lineWidth="1.0"/>
-							</box>
-							<textElement textAlignment="Left" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="11"/>
-								<paragraph leftIndent="2"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_POTENSI_BAHAYA}]]></textFieldExpression>
-						</textField>
-						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="370" y="0" width="300" height="20"/>
-							<box>
-								<pen lineWidth="1.0"/>
-								<topPen lineWidth="1.0"/>
-								<leftPen lineWidth="1.0"/>
-								<bottomPen lineWidth="1.0"/>
-								<rightPen lineWidth="1.0"/>
-							</box>
-							<textElement textAlignment="Left" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="11"/>
-								<paragraph leftIndent="2"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_REKOMENDASI_AKSI}]]></textFieldExpression>
-						</textField>
-						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="670" y="0" width="132" height="20"/>
-							<box>
-								<pen lineWidth="1.0"/>
-								<topPen lineWidth="1.0"/>
-								<leftPen lineWidth="1.0"/>
-								<bottomPen lineWidth="1.0"/>
-								<rightPen lineWidth="1.0"/>
-							</box>
-							<textElement textAlignment="Left" verticalAlignment="Middle">
-								<font fontName="Times New Roman" size="11"/>
-								<paragraph leftIndent="2"/>
-							</textElement>
-							<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_PENANGGUNG_JAWAB}]]></textFieldExpression>
-						</textField>
+							<textField>
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="20"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+							</textField>
+							<textField isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="30" y="0" width="120" height="20"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11"/>
+									<paragraph leftIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_URUTAN_LANGKAH_PEKERJAAN_DASAR}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="150" y="0" width="220" height="20"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11"/>
+									<paragraph leftIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_POTENSI_BAHAYA}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="370" y="0" width="300" height="20"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11"/>
+									<paragraph leftIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_REKOMENDASI_AKSI}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="670" y="0" width="130" height="20"/>
+								<box>
+									<pen lineWidth="0.0"/>
+									<topPen lineWidth="0.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="0.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11"/>
+									<paragraph leftIndent="2"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{T_JSA_DETAIL_PENANGGUNG_JAWAB}]]></textFieldExpression>
+							</textField>
+						</frame>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
 		</band>
 	</detail>
+	<summary>
+		<band height="5"/>
+	</summary>
 </jasperReport>

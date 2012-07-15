@@ -22,6 +22,22 @@ insert into R_REPORT (
 ,	REPORT_PARAMS
 )
 values (
+	'Laporan JSA'
+,	'doc'
+,	'reports/lap_jsa.jasper'
+,	'id_jsa'
+,	'ID_JSA'
+)
+go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
 	'Laporan Partisipasi RCA Organisasi'
 ,	'xls'
 ,	'reports/rca_lap_partisipasi_organisasi.jasper'

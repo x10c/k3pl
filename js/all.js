@@ -276,6 +276,15 @@ Ext.override (Ext.layout.BoxLayout, {
 });
 
 /**
+ * Add isChecked method to FieldSet
+ */
+Ext.override( Ext.form.FieldSet, {
+	isChecked: function() {
+		return this.getEl().child('legend').child('input').dom.checked;
+	}
+});
+
+/**
  * Highchart
  * - set default export url.
  * - disabled print button and credits.
