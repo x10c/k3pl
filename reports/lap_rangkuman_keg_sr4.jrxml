@@ -13,7 +13,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\apache-tomcat-7.0.28\\webapps\\k3pl\\reports\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
@@ -91,118 +91,60 @@ GROUP BY
 		</band>
 	</columnHeader>
 	<summary>
-		<band height="130">
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{PERILAKU_TIDAK_AMAN} > 0 ? (char) 10003 : "o") + " Perilaku tidak aman / Unsafe act"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KURANG_KOMUNIKASI} > 0 ? (char) 10003 : "o") + " Kurang komunikasi/ tanggung jawab tidak jelas / Poor communication/ unclear responsibilities"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="534" y="0" width="268" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KONDISI_TIDAK_AMAN} > 0 ? (char) 10003 : "o") + " Kondisi tidak aman / Unsafe condition/equipment"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="26" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KURANG_PENGAWASAN} > 0 ? (char) 10003 : "o") + " Kurang pengawasan/supervisi / Lact of control/supervision"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="267" y="26" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KURANG_SUMBER_DAYA} > 0 ? (char) 10003 : "o") + " Kurang sumber daya/kompetensi / Lack of resource/competency"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="534" y="26" width="268" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{PELANGGARAN} > 0 ? (char) 10003 : "o") + " Pelanggaran / Violation"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="52" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KURANG_PENGETAHUAN} > 0 ? (char) 10003 : "o") + " Kurang pengetahuan/kesadaran / Lack of knowledge/awareness"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="267" y="52" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KURANG_TEKAD} > 0 ? (char) 10003 : "o") + " Kurang tekad / Lack of commitment"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="534" y="52" width="268" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{HOUSEKEEPING_KURANG} > 0 ? (char) 10003 : "o") + " Housekeeping kurang / Poor housekeeping"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="78" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{TIDAK_MEMENUHI_PERATURAN} > 0 ? (char) 10003 : "o") + " Tidak memenuhi peraturan perundang-undangan / Non compliance to laws/regulations"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="267" y="78" width="267" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{KURANG_PROSEDUR} > 0 ? (char) 10003 : "o") + " Kurang prosedur / Lack of procedures"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="534" y="78" width="268" height="20"/>
-				<textElement>
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($V{LAINNYA_AR} > 0 ? (char) 10003 : "o") + " Lainnya / Others - training & sosialisasi"]]></textFieldExpression>
-			</textField>
-			<frame>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="110" width="802" height="20"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<subreport>
-					<reportElement x="0" y="0" width="802" height="20"/>
-					<subreportParameter name="SUBREPORT_DIR">
-						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="ID_DIVPROSBU">
-						<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="YEAR">
-						<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="MONTH">
-						<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
-					</subreportParameter>
-					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr4_detail.jasper"]]></subreportExpression>
-				</subreport>
-			</frame>
+		<band height="20">
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIVPROSBU">
+					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PERILAKU_TIDAK_AMAN">
+					<subreportParameterExpression><![CDATA[$V{PERILAKU_TIDAK_AMAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KURANG_PENGAWASAN">
+					<subreportParameterExpression><![CDATA[$V{KURANG_PENGAWASAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KURANG_PENGETAHUAN">
+					<subreportParameterExpression><![CDATA[$V{KURANG_PENGETAHUAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TIDAK_MEMENUHI_PERATURAN">
+					<subreportParameterExpression><![CDATA[$V{TIDAK_MEMENUHI_PERATURAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KURANG_KOMUNIKASI">
+					<subreportParameterExpression><![CDATA[$V{KURANG_KOMUNIKASI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KURANG_SUMBER_DAYA">
+					<subreportParameterExpression><![CDATA[$V{KURANG_SUMBER_DAYA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KURANG_TEKAD">
+					<subreportParameterExpression><![CDATA[$V{KURANG_TEKAD}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KURANG_PROSEDUR">
+					<subreportParameterExpression><![CDATA[$V{KURANG_PROSEDUR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="KONDISI_TIDAK_AMAN">
+					<subreportParameterExpression><![CDATA[$V{KONDISI_TIDAK_AMAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PELANGGARAN">
+					<subreportParameterExpression><![CDATA[$V{PELANGGARAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="HOUSEKEEPING_KURANG">
+					<subreportParameterExpression><![CDATA[$V{HOUSEKEEPING_KURANG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LAINNYA_AR">
+					<subreportParameterExpression><![CDATA[$V{LAINNYA_AR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr4_detail.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>

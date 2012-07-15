@@ -72,42 +72,42 @@ GROUP BY
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="20" width="210" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_KORBAN_MATI} != null && $F{JML_KORBAN_MATI} > 0 ? (char) 10003 : "o") + " Kematian / Fatality"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_KORBAN_MATI} != null && $F{JML_KORBAN_MATI} > 0 ? "V" : "o") + "  Kematian / Fatality"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="20" width="305" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_HARI_KERJA_HILANG} != null && $F{JML_HARI_KERJA_HILANG} > 0 ? (char) 10003 : "o") + " Kecelakaan dengan Kehilangan Hari Kerja / Injurious LTI"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_HARI_KERJA_HILANG} != null && $F{JML_HARI_KERJA_HILANG} > 0 ? "V" : "o") + "  Kecelakaan dengan Kehilangan Hari Kerja / Injurious LTI"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="515" y="20" width="287" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_HARI_KERJA_HILANG} != null && $F{JML_HARI_KERJA_HILANG} == 0 ? (char) 10003 : "o") + " Kecelakaan Tanpa Kehilangan Hari Kerja / Injurious Non LTI"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_HARI_KERJA_HILANG} != null && $F{JML_HARI_KERJA_HILANG} == 0 ? "V" : "o") + "  Kecelakaan Tanpa Kehilangan Hari Kerja / Injurious Non LTI"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="40" width="210" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{TOTAL} != null && $F{TOTAL} == 0 ? (char) 10003 : "o") + " Tanpa Kecelakaan / Non-injurious"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{TOTAL} != null && $F{TOTAL} == 0 ? "V" : "o") + "  Tanpa Kecelakaan / Non-injurious"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="40" width="305" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_KORBAN_P3K} != null && $F{JML_KORBAN_P3K} > 0 ? (char) 10003 : "o") + " Kesehatan Kerja / Occupational Health"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_KORBAN_P3K} != null && $F{JML_KORBAN_P3K} > 0 ? "V" : "o") + "  Kesehatan Kerja / Occupational Health"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="515" y="40" width="287" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_PENCEMARAN_LINGKUNGAN} != null && $F{JML_PENCEMARAN_LINGKUNGAN} > 0 ? (char) 10003 : "o") + " Lingkungan / Environment"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_PENCEMARAN_LINGKUNGAN} != null && $F{JML_PENCEMARAN_LINGKUNGAN} > 0 ? "V" : "o") + "  Lingkungan / Environment"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="60" width="210" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_HAMPIR_CELAKA} != null && $F{JML_HAMPIR_CELAKA} > 0 ? (char) 10003 : "o") + " Nyaris Celaka / Near Misses"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_HAMPIR_CELAKA} != null && $F{JML_HAMPIR_CELAKA} > 0 ? "V" : "o") + "  Nyaris Celaka / Near Misses"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="210" y="60" width="305" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[($F{JML_KEJADIAN_KEAMANAN} != null && $F{JML_KEJADIAN_KEAMANAN} > 0 ? (char) 10003 : "o") + " Keamanan / Security"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{JML_KEJADIAN_KEAMANAN} != null && $F{JML_KEJADIAN_KEAMANAN} > 0 ? "V" : "o") + "  Keamanan / Security"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

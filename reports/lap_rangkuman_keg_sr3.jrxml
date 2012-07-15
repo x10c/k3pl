@@ -80,79 +80,51 @@ GROUP BY
 		</band>
 	</columnHeader>
 	<summary>
-		<band height="90" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="267" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{AUDIT} > 0 ? (char) 10003 : "o") + " Audit / Audit"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="267" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{INSPEKSI} > 0 ? (char) 10003 : "o") + " Inspeksi / Inspection"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="534" y="0" width="268" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{INVESTIGASI} > 0 ? (char) 10003 : "o") + " Investigasi Kecelakaan / Incident Investigation"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="267" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{PELATIHAN} > 0 ? (char) 10003 : "o") + " Pelatihan/Induksi / Safety Induction/Training"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="267" y="20" width="267" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{JSA} > 0 ? (char) 10003 : "o") + " JSA/HAZOP/Safety Review"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="534" y="20" width="268" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{PEMANTAUAN} > 0 ? (char) 10003 : "o") + " Pemantauan/Pengamatan / Monitoring/Surveillance"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="40" width="267" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{RAPAT} > 0 ? (char) 10003 : "o") + " Rapat / Meettings"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="267" y="40" width="267" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{INSTITUSI} > 0 ? (char) 10003 : "o") + " Institusi Pemerintah / Statutory Bodies"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="534" y="40" width="268" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($V{LAINNYA} > 0 ? (char) 10003 : "o") + " Lainnya / Others"]]></textFieldExpression>
-			</textField>
-			<frame>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="70" width="802" height="20"/>
-				<box>
-					<pen lineWidth="1.0"/>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<subreport>
-					<reportElement x="0" y="0" width="802" height="20"/>
-					<subreportParameter name="SUBREPORT_DIR">
-						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="ID_DIVPROSBU">
-						<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="YEAR">
-						<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
-					</subreportParameter>
-					<subreportParameter name="MONTH">
-						<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
-					</subreportParameter>
-					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr3_detail.jasper"]]></subreportExpression>
-				</subreport>
-			</frame>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIVPROSBU">
+					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PELATIHAN">
+					<subreportParameterExpression><![CDATA[$V{PELATIHAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="AUDIT">
+					<subreportParameterExpression><![CDATA[$V{AUDIT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="JSA">
+					<subreportParameterExpression><![CDATA[$V{JSA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LAINNYA">
+					<subreportParameterExpression><![CDATA[$V{LAINNYA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="INVESTIGASI">
+					<subreportParameterExpression><![CDATA[$V{INVESTIGASI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="RAPAT">
+					<subreportParameterExpression><![CDATA[$V{RAPAT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="INSPEKSI">
+					<subreportParameterExpression><![CDATA[$V{INSPEKSI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="INSTITUSI">
+					<subreportParameterExpression><![CDATA[$V{INSTITUSI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PEMANTAUAN">
+					<subreportParameterExpression><![CDATA[$V{PEMANTAUAN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr3_detail.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>

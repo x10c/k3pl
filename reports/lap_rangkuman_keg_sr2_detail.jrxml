@@ -12,6 +12,15 @@
 	<parameter name="ID_DIVPROSBU" class="java.lang.String">
 		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="AUDIT" class="java.lang.Integer"/>
+	<parameter name="PELATIHAN" class="java.lang.Integer"/>
+	<parameter name="RAPAT" class="java.lang.Integer"/>
+	<parameter name="INSPEKSI" class="java.lang.Integer"/>
+	<parameter name="JSA" class="java.lang.Integer"/>
+	<parameter name="INSTITUSI" class="java.lang.Integer"/>
+	<parameter name="INVESTIGASI" class="java.lang.Integer"/>
+	<parameter name="PEMANTAUAN" class="java.lang.Integer"/>
+	<parameter name="LAINNYA" class="java.lang.Integer"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
@@ -38,36 +47,95 @@ ORDER BY
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<title>
+		<band height="70">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{AUDIT} != null && $P{AUDIT} > 0 ? "V" : "o") + "  Audit / Audit"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{INSPEKSI} != null && $P{INSPEKSI} > 0 ? "V" : "o") + "  Inspeksi / Inspection"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="534" y="0" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{INVESTIGASI} != null && $P{INVESTIGASI} > 0 ? "V" : "o") + "  Investigasi Kecelakaan / Incident Investigation"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{PELATIHAN} != null && $P{PELATIHAN} > 0 ? "V" : "o") + "  Pelatihan/Induksi / Safety Induction/Training"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="20" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{JSA} != null && $P{JSA} > 0 ? "V" : "o") + "  JSA/HAZOP/Safety Review"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="534" y="20" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{PEMANTAUAN} != null && $P{PEMANTAUAN} > 0 ? "V" : "o") + "  Pemantauan/Pengamatan / Monitoring/Surveillance"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="40" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{RAPAT} != null && $P{RAPAT} > 0 ? "V" : "o") + "  Rapat / Meettings"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="40" width="267" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{INSTITUSI} != null && $P{INSTITUSI} > 0 ? "V" : "o") + "  Institusi Pemerintah / Statutory Bodies"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="534" y="40" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{LAINNYA} != null && $P{LAINNYA} > 0 ? "V" : "o") + "  Lainnya / Others"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
 	<detail>
 		<band height="40" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="802" height="20"/>
-				<textElement>
-					<font fontName="Times New Roman" isBold="true"/>
-					<paragraph leftIndent="4" spacingBefore="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{R_WILAYAH_NAMA_WILAYAH}]]></textFieldExpression>
-			</textField>
-			<subreport>
-				<reportElement x="0" y="20" width="802" height="20"/>
-				<subreportParameter name="SUBREPORT_DIR">
-					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="ID_WILAYAH">
-					<subreportParameterExpression><![CDATA[$F{R_WILAYAH_ID_WILAYAH}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="ID_DIVPROSBU">
-					<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="YEAR">
-					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="MONTH">
-					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
-				</subreportParameter>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr2_detail1.jasper"]]></subreportExpression>
-			</subreport>
+			<frame>
+				<reportElement x="0" y="0" width="802" height="40"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textField>
+					<reportElement x="0" y="0" width="802" height="20"/>
+					<textElement>
+						<font fontName="Times New Roman" isBold="true"/>
+						<paragraph leftIndent="4" spacingBefore="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{R_WILAYAH_NAMA_WILAYAH}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement x="0" y="20" width="802" height="20"/>
+					<subreportParameter name="SUBREPORT_DIR">
+						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="ID_WILAYAH">
+						<subreportParameterExpression><![CDATA[$F{R_WILAYAH_ID_WILAYAH}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="ID_DIVPROSBU">
+						<subreportParameterExpression><![CDATA[$P{ID_DIVPROSBU}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="YEAR">
+						<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="MONTH">
+						<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lap_rangkuman_keg_sr2_detail1.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
 		</band>
 	</detail>
 </jasperReport>

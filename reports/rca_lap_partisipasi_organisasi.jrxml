@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_organisasi" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="New Dataset 1">
+		<parameter name="CLAUSE_MONTH" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="YEAR" class="java.lang.String"/>
+		<parameter name="CLAUSE_DIV" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="CLAUSE_DIR" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["SELECT " +
+"     R_DIREKTORAT.\"ID_DIREKTORAT\" AS ID, " +
+"     R_DIREKTORAT.\"NAMA_DIREKTORAT\" AS NAMA, " +
+"     ( SELECT sum( " +
+$P{CLAUSE_MONTH} +
+"                    ) AS TOTAL " +
+"       FROM " +
+"           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN " +
+"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI " +
+"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" " +
+"       WHERE " +
+"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} +
+"       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 " + $P{CLAUSE_DIV} +
+"       AND R_PEGAWAI.\"ID_DIREKTORAT\" = R_DIREKTORAT.\"ID_DIREKTORAT\" ) AS TARGET, " +
+"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART " +
+"       FROM " +
+"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN " +
+"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR " +
+"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN " +
+"               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI " +
+"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" " +
+"       WHERE " +
+"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) " + $P{CLAUSE_DIV} +
+"       AND year(T_RCA.\"TANGGAL_RCA\") =  " + $P{YEAR} +
+"       AND R_PEGAWAI.\"ID_DIREKTORAT\" = R_DIREKTORAT.\"ID_DIREKTORAT\" ) AS PARTISIPASI " +
+"FROM " +
+"     \"dbo\".\"R_DIREKTORAT\" R_DIREKTORAT " +
+"WHERE " + $P{CLAUSE_DIR} +
+" ORDER BY " +
+"     R_DIREKTORAT.\"ID_DIREKTORAT\" ASC"]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+     0 AS TARGET,
+     0 AS PARTISIPASI,
+     R_PEGAWAI."NIPG" AS ID,
+     R_PEGAWAI."NAMA_PEGAWAI" AS NAMA
+FROM
+     "dbo"."R_PEGAWAI" R_PEGAWAI INNER JOIN "dbo"."R_DIREKTORAT" R_DIREKTORAT ON R_PEGAWAI."ID_DIREKTORAT" = R_DIREKTORAT."ID_DIREKTORAT"
+WHERE
+     R_PEGAWAI."STATUS_PEGAWAI" = 1
+ AND R_DIREKTORAT."ID_DIREKTORAT" = 3]]>
+		</queryString>
+	</subDataset>
+	<subDataset name="New Dataset 2">
+		<queryString>
+			<![CDATA[SELECT
+     R_SEKSI."ID_SEKSI" AS R_SEKSI_ID_SEKSI,
+     R_SEKSI."NAMA_SEKSI" AS R_SEKSI_NAMA_SEKSI
+FROM
+     "dbo"."R_SEKSI" R_SEKSI
+WHERE
+     R_SEKSI."ID_WILAYAH" = 1]]>
+		</queryString>
+		<field name="R_SEKSI_ID_SEKSI" class="java.lang.Integer"/>
+		<field name="R_SEKSI_NAMA_SEKSI" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="FIELD_MONTH" class="java.util.List" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.ArrayList(
+    java.util.Arrays.asList(
+        new String[] {"JAN",
+                      "FEB",
+                      "MAR",
+                      "APR",
+                      "MAY",
+                      "JUN",
+                      "JUL",
+                      "AUG",
+                      "SEP",
+                      "OCT",
+                      "NOV",
+                      "DEC"}
+        )
+    )]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IS_IN_ORG" class="java.lang.String">
+		<parameterDescription><![CDATA[1=organisasi
+0=wilayah]]></parameterDescription>
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="ID_DEP" class="java.lang.String"/>
+	<parameter name="ID_DINAS" class="java.lang.String"/>
+	<parameter name="ID_SEKSI" class="java.lang.String"/>
+	<parameter name="ID_WILAYAH" class="java.lang.String"/>
+	<parameter name="ID_AREA" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
+"       T_RCA_TARGET_PEGAWAI.\"" + $P{FIELD_MONTH}.get( Integer.parseInt($P{MONTH}) - 1 ).toString() + "\"\n" :
+"       T_RCA_TARGET_PEGAWAI.\"JAN\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"FEB\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"MAR\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"APR\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"MAY\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"JUN\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"JUL\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"AUG\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"SEP\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"OCT\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"NOV\" + \n" +
+"		T_RCA_TARGET_PEGAWAI.\"DEC\" \n"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+" AND R_.\"ID_DIREKTORAT\" = " + $P{ID_DIR} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+" AND R_.\"ID_DIVPROSBU\" = " + $P{ID_DIV} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEP_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+" AND R_.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DINAS_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+" AND R_.\"ID_DINAS\" = " + $P{ID_DINAS} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+" AND R_.\"STATUS_PEGAWAI\" = 1 AND R_.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIR_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+"       AND R_PEGAWAI.\"ID_DIVPROSBU\" = R_.\"ID_DIVPROSBU\" \n" +
+"       AND R_PEGAWAI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} + " \n" :
+"       AND R_PEGAWAI.\"ID_DIREKTORAT\" = R_.\"ID_DIREKTORAT\" \n"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIV_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+"       AND R_PEGAWAI.\"ID_DEPARTEMEN\" = R_.\"ID_DEPARTEMEN\" \n" +
+"       AND R_PEGAWAI.\"ID_DIVPROSBU\" = " + $P{ID_DIV} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEP_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+"       AND R_PEGAWAI.\"ID_DINAS\" = R_.\"ID_DINAS\" \n" +
+"       AND R_PEGAWAI.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DINAS_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+"       AND R_PEGAWAI.\"ID_SEKSI\" = R_.\"ID_SEKSI\" \n" +
+"       AND R_PEGAWAI.\"ID_DINAS\" = " + $P{ID_DINAS} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEKSI_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+"       AND R_PEGAWAI.\"NIPG\" = R_.\"NIPG\" \n" +
+"       AND R_PEGAWAI.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ORG_SELECT_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"NIPG\" AS ID, \n" +
+    "     R_.\"NAMA_PEGAWAI\" AS NAMA, \n" :
+$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_SEKSI\" AS ID, \n" +
+    "     R_.\"NAMA_SEKSI\" AS NAMA, \n" :
+$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_DINAS\" AS ID, \n" +
+    "     R_.\"NAMA_DINAS\" AS NAMA, \n" :
+$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_DEPARTEMEN\" AS ID, \n" +
+    "     R_.\"NAMA_DEPARTEMEN\" AS NAMA, \n" :
+$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_DIVPROSBU\" AS ID, \n" +
+    "     R_.\"NAMA_DIVPROSBU\" AS NAMA, \n" :
+    "     R_.\"ID_DIREKTORAT\" AS ID, \n" +
+    "     R_.\"NAMA_DIREKTORAT\" AS NAMA, \n"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ORG_FROM_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_PEGAWAI\"" :
+$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_SEKSI\"" :
+$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_DINAS\"" :
+$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_DEPARTEMEN\"" :
+$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_DIVPROSBU\"" :
+    "     \"dbo\".\"R_DIREKTORAT\""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ORG_ORDER_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"NAMA_PEGAWAI\" " :
+$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_SEKSI\" " :
+$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_DINAS\" " :
+$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_DEPARTEMEN\" " :
+$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_DIVPROSBU\" " :
+    "     R_.\"ID_DIREKTORAT\" "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT \n" + $P{ORG_SELECT_CLAUSE} +
+"     ( SELECT sum( \n" + $P{MONTH_CLAUSE} +
+"                    ) AS TOTAL \n" +
+"       FROM \n" +
+"           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN \n" +
+"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI \n" +
+"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" \n" +
+"       WHERE \n" +
+"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
+"       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
+"     ) AS TARGET, \n" +
+"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART \n" +
+"       FROM \n" +
+"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
+"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
+"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" +
+"               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
+"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
+"       WHERE \n" +
+"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
+"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + "\n" +
+"     ) AS PARTISIPASI \n" +
+"FROM \n" + $P{ORG_FROM_CLAUSE} + " R_ \n" +
+"WHERE \n" +
+"     1 = 1 \n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE} +
+" ORDER BY \n" + $P{ORG_ORDER_CLAUSE} + " ASC"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} :
+" AND R_.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AREA_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+" AND R_.\"STATUS_PEGAWAI\" = 1 AND R_.\"ID_SEKSI\" = " + $P{ID_AREA} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WILAYAH_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+"       AND R_S.\"ID_SEKSI\" = R_.\"ID_SEKSI\" \n" +
+"       AND R_S.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} + " \n" :
+$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+"       AND R_S.\"ID_WILAYAH\" = R_SEKSI.\"ID_WILAYAH\" \n" :
+"       AND R_S.\"ID_WILAYAH\" = R_.\"ID_WILAYAH\" \n"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AREA_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+"       AND R_PEGAWAI.\"NIPG\" = R_.\"NIPG\" \n" +
+"       AND R_PEGAWAI.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WIL_SELECT_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"NIPG\" AS ID, \n" +
+    "     R_.\"NAMA_PEGAWAI\" AS NAMA, \n" :
+$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_SEKSI\" AS ID, \n" +
+    "     R_.\"NAMA_SEKSI\" AS NAMA, \n" :
+    "     R_.\"ID_WILAYAH\" AS ID, \n" +
+    "     R_.\"NAMA_WILAYAH\" AS NAMA, \n"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WIL_FROM_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_PEGAWAI\" R_ INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI \n" +
+    "     ON R_.\"ID_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" :
+$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+    "     \"dbo\".\"R_SEKSI\" R_ " :
+    "     \"dbo\".\"R_WILAYAH\" R_ "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WIL_ORDER_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"NAMA_PEGAWAI\" " :
+$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+    "     R_.\"ID_SEKSI\" " :
+    "     R_.\"ID_WILAYAH\" "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_WIL_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT \n" + $P{WIL_SELECT_CLAUSE} +
+"     ( SELECT sum( \n" + $P{MONTH_CLAUSE} +
+"                    ) AS TOTAL \n" +
+"       FROM \n" +
+"           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN \n" +
+"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI \n" +
+"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" \n" +
+"               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
+"               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
+"       WHERE \n" +
+"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
+"       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
+"     ) AS TARGET, \n" +
+"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART \n" +
+"       FROM \n" +
+"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
+"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
+"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" +
+"               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
+"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
+"               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
+"               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
+"       WHERE \n" +
+"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
+"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + "\n" +
+"     ) AS PARTISIPASI \n" +
+"FROM \n" + $P{WIL_FROM_CLAUSE} + " \n" +
+"WHERE \n" +
+"     1 = 1 \n" + $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} +
+" ORDER BY \n" + $P{WIL_ORDER_CLAUSE} + " ASC"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MAIN_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
+! $P{IS_IN_ORG}.isEmpty() &&
+$P{IS_IN_ORG}.equalsIgnoreCase( "0" ) ?
+$P{DYNAMIC_WIL_QUERY} :
+$P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{MAIN_QUERY}]]>
+	</queryString>
+	<field name="ID" class="java.lang.String"/>
+	<field name="NAMA" class="java.lang.String"/>
+	<field name="TARGET" class="java.lang.Integer"/>
+	<field name="PARTISIPASI" class="java.lang.Integer"/>
+	<variable name="PARTISIPASI_PERCENTAGE" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{TARGET} != null && $F{TARGET}.intValue() != 0 ? new BigDecimal($F{PARTISIPASI}.doubleValue()/$F{TARGET}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_TARGET" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{TARGET}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_PARTISIPASI" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{PARTISIPASI}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Partisipasi RCA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="215" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partisipasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% Partisipasi]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TARGET} == null ? 0 : $F{TARGET}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[1]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="215" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="215" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_TARGET}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_PARTISIPASI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="470" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_TARGET} != null && $V{TOTAL_TARGET} != 0 ? ($V{TOTAL_PARTISIPASI} != null ? $V{TOTAL_PARTISIPASI}.doubleValue() : 0.0)/$V{TOTAL_TARGET}.doubleValue() : 0]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
