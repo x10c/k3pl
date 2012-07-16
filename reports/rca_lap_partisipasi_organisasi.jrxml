@@ -3,69 +3,6 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<subDataset name="New Dataset 1">
-		<parameter name="CLAUSE_MONTH" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="YEAR" class="java.lang.String"/>
-		<parameter name="CLAUSE_DIV" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="CLAUSE_DIR" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
-			<defaultValueExpression><![CDATA["SELECT " +
-"     R_DIREKTORAT.\"ID_DIREKTORAT\" AS ID, " +
-"     R_DIREKTORAT.\"NAMA_DIREKTORAT\" AS NAMA, " +
-"     ( SELECT sum( " +
-$P{CLAUSE_MONTH} +
-"                    ) AS TOTAL " +
-"       FROM " +
-"           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN " +
-"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI " +
-"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" " +
-"       WHERE " +
-"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} +
-"       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 " + $P{CLAUSE_DIV} +
-"       AND R_PEGAWAI.\"ID_DIREKTORAT\" = R_DIREKTORAT.\"ID_DIREKTORAT\" ) AS TARGET, " +
-"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART " +
-"       FROM " +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN " +
-"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR " +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN " +
-"               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI " +
-"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" " +
-"       WHERE " +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) " + $P{CLAUSE_DIV} +
-"       AND year(T_RCA.\"TANGGAL_RCA\") =  " + $P{YEAR} +
-"       AND R_PEGAWAI.\"ID_DIREKTORAT\" = R_DIREKTORAT.\"ID_DIREKTORAT\" ) AS PARTISIPASI " +
-"FROM " +
-"     \"dbo\".\"R_DIREKTORAT\" R_DIREKTORAT " +
-"WHERE " + $P{CLAUSE_DIR} +
-" ORDER BY " +
-"     R_DIREKTORAT.\"ID_DIREKTORAT\" ASC"]]></defaultValueExpression>
-		</parameter>
-		<queryString>
-			<![CDATA[SELECT
-     0 AS TARGET,
-     0 AS PARTISIPASI,
-     R_PEGAWAI."NIPG" AS ID,
-     R_PEGAWAI."NAMA_PEGAWAI" AS NAMA
-FROM
-     "dbo"."R_PEGAWAI" R_PEGAWAI INNER JOIN "dbo"."R_DIREKTORAT" R_DIREKTORAT ON R_PEGAWAI."ID_DIREKTORAT" = R_DIREKTORAT."ID_DIREKTORAT"
-WHERE
-     R_PEGAWAI."STATUS_PEGAWAI" = 1
- AND R_DIREKTORAT."ID_DIREKTORAT" = 3]]>
-		</queryString>
-	</subDataset>
-	<subDataset name="New Dataset 2">
-		<queryString>
-			<![CDATA[SELECT
-     R_SEKSI."ID_SEKSI" AS R_SEKSI_ID_SEKSI,
-     R_SEKSI."NAMA_SEKSI" AS R_SEKSI_NAMA_SEKSI
-FROM
-     "dbo"."R_SEKSI" R_SEKSI
-WHERE
-     R_SEKSI."ID_WILAYAH" = 1]]>
-		</queryString>
-		<field name="R_SEKSI_ID_SEKSI" class="java.lang.Integer"/>
-		<field name="R_SEKSI_NAMA_SEKSI" class="java.lang.String"/>
-	</subDataset>
 	<parameter name="FIELD_MONTH" class="java.util.List" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new java.util.ArrayList(
     java.util.Arrays.asList(

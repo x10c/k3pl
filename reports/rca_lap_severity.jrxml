@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_severity" pageWidth="1805" pageHeight="595" orientation="Landscape" columnWidth="1765" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IS_IN_ORG" class="java.lang.String">
+		<parameterDescription><![CDATA[1: organisasi
+0: wilayah]]></parameterDescription>
+	</parameter>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="ID_DEP" class="java.lang.String"/>
+	<parameter name="ID_DINAS" class="java.lang.String"/>
+	<parameter name="ID_SEKSI" class="java.lang.String"/>
+	<parameter name="ID_WILAYAH" class="java.lang.String"/>
+	<parameter name="ID_AREA" class="java.lang.String"/>
+	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DIVPROSBU\" = " + $P{ID_DIV} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEP_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DINAS_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DINAS\" = " + $P{ID_DINAS} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AREA_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
+"     AND month(V_SEVERITY.\"tanggal_rca\") = " + $P{MONTH} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ORG_WIL_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
+! $P{IS_IN_ORG}.isEmpty() &&
+$P{IS_IN_ORG}.equalsIgnoreCase( "0" ) ?
+$P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} :
+$P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT \n" +
+"     V_SEVERITY.\"description\" AS V_SEVERITY_description, \n" +
+"     V_SEVERITY.\"id_severity\" AS V_SEVERITY_id_severity, \n" +
+"     V_SEVERITY.\"nama_tempat_rca\" AS V_SEVERITY_nama_tempat_rca, \n" +
+"     V_SEVERITY.\"penanggung_jawab_seksi\" AS V_SEVERITY_penanggung_jawab_seksi, \n" +
+"     R_SEKSI.\"NAMA_SEKSI\" AS R_SEKSI_NAMA_SEKSI, \n" +
+"     V_SEVERITY.\"penanggung_jawab_dinas\" AS V_SEVERITY_penanggung_jawab_dinas, \n" +
+"     R_DINAS.\"NAMA_DINAS\" AS R_DINAS_NAMA_DINAS, \n" +
+"     V_SEVERITY.\"penanggung_jawab_departemen\" AS V_SEVERITY_penanggung_jawab_departemen, \n" +
+"     R_DEPARTEMEN.\"NAMA_DEPARTEMEN\" AS R_DEPARTEMEN_NAMA_DEPARTEMEN, \n" +
+"     V_SEVERITY.\"penanggung_jawab_divprosbu\" AS V_SEVERITY_penanggung_jawab_divprosbu, \n" +
+"     R_DIVPROSBU.\"NAMA_DIVPROSBU\" AS R_DIVPROSBU_NAMA_DIVPROSBU, \n" +
+"     V_SEVERITY.\"penanggung_jawab_direktorat\" AS V_SEVERITY_penanggung_jawab_direktorat, \n" +
+"     R_DIREKTORAT.\"NAMA_DIREKTORAT\" AS R_DIREKTORAT_NAMA_DIREKTORAT, \n" +
+"     V_SEVERITY.\"completion_date_target\" AS V_SEVERITY_completion_date_target, \n" +
+"     V_SEVERITY.\"status\" AS V_SEVERITY_status, \n" +
+"     V_SEVERITY.\"note\" AS V_SEVERITY_note, \n" +
+"     V_SEVERITY.\"tanggal_rca\" AS V_SEVERITY_tanggal_rca \n" +
+"FROM \n" +
+"     \"dbo\".\"R_DINAS\" R_DINAS INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON R_DINAS.\"ID_DINAS\" = R_SEKSI.\"ID_DINAS\" \n" +
+"     AND R_DINAS.\"ID_DIREKTORAT\" = R_SEKSI.\"ID_DIREKTORAT\" \n" +
+"     AND R_DINAS.\"ID_DEPARTEMEN\" = R_SEKSI.\"ID_DEPARTEMEN\" \n" +
+"     AND R_DINAS.\"ID_DIVPROSBU\" = R_SEKSI.\"ID_DIVPROSBU\" \n" +
+"     INNER JOIN \"dbo\".\"R_DEPARTEMEN\" R_DEPARTEMEN ON R_DINAS.\"ID_DEPARTEMEN\" = R_DEPARTEMEN.\"ID_DEPARTEMEN\" \n" +
+"     AND R_DEPARTEMEN.\"ID_DIVPROSBU\" = R_DINAS.\"ID_DIVPROSBU\" \n" +
+"     AND R_DEPARTEMEN.\"ID_DIREKTORAT\" = R_DINAS.\"ID_DIREKTORAT\" \n" +
+"     INNER JOIN \"dbo\".\"R_DIVPROSBU\" R_DIVPROSBU ON R_DEPARTEMEN.\"ID_DIVPROSBU\" = R_DIVPROSBU.\"ID_DIVPROSBU\" \n" +
+"     AND R_DIVPROSBU.\"ID_DIREKTORAT\" = R_DEPARTEMEN.\"ID_DIREKTORAT\" \n" +
+"     INNER JOIN \"dbo\".\"R_DIREKTORAT\" R_DIREKTORAT ON R_DIVPROSBU.\"ID_DIREKTORAT\" = R_DIREKTORAT.\"ID_DIREKTORAT\" \n" +
+"     INNER JOIN \"dbo\".\"V_SEVERITY\" V_SEVERITY ON R_SEKSI.\"ID_SEKSI\" = V_SEVERITY.\"penanggung_jawab_seksi\" \n" +
+"     AND V_SEVERITY.\"penanggung_jawab_departemen\" = R_SEKSI.\"ID_DEPARTEMEN\" \n" +
+"     AND V_SEVERITY.\"penanggung_jawab_direktorat\" = R_SEKSI.\"ID_DIREKTORAT\" \n" +
+"     AND V_SEVERITY.\"penanggung_jawab_divprosbu\" = R_SEKSI.\"ID_DIVPROSBU\" \n" +
+"     AND V_SEVERITY.\"penanggung_jawab_dinas\" = R_SEKSI.\"ID_DINAS\" \n" +
+"WHERE \n" +
+"     year(V_SEVERITY.\"tanggal_rca\") = " + $P{YEAR} + " \n" +
+$P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
+"ORDER BY \n" +
+"     V_SEVERITY.\"tanggal_rca\" ASC \n"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{DYNAMIC_QUERY}]]>
+	</queryString>
+	<field name="V_SEVERITY_description" class="java.lang.String"/>
+	<field name="V_SEVERITY_id_severity" class="java.lang.Integer"/>
+	<field name="V_SEVERITY_nama_tempat_rca" class="java.lang.String"/>
+	<field name="V_SEVERITY_penanggung_jawab_seksi" class="java.lang.Integer"/>
+	<field name="R_SEKSI_NAMA_SEKSI" class="java.lang.String"/>
+	<field name="V_SEVERITY_penanggung_jawab_dinas" class="java.lang.Integer"/>
+	<field name="R_DINAS_NAMA_DINAS" class="java.lang.String"/>
+	<field name="V_SEVERITY_penanggung_jawab_departemen" class="java.lang.Integer"/>
+	<field name="R_DEPARTEMEN_NAMA_DEPARTEMEN" class="java.lang.String"/>
+	<field name="V_SEVERITY_penanggung_jawab_divprosbu" class="java.lang.Integer"/>
+	<field name="R_DIVPROSBU_NAMA_DIVPROSBU" class="java.lang.String"/>
+	<field name="V_SEVERITY_penanggung_jawab_direktorat" class="java.lang.Integer"/>
+	<field name="R_DIREKTORAT_NAMA_DIREKTORAT" class="java.lang.String"/>
+	<field name="V_SEVERITY_completion_date_target" class="java.lang.String"/>
+	<field name="V_SEVERITY_status" class="java.lang.String"/>
+	<field name="V_SEVERITY_note" class="java.lang.String"/>
+	<field name="V_SEVERITY_tanggal_rca" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="1765" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Severity RCA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="30" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="0" width="200" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deskripsi Severity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="55" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Severity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="0" width="75" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lokasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="180" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Direktorat Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="540" y="0" width="150" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Divisi/Proyek/SBU Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="690" y="0" width="250" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departemen Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="940" y="0" width="220" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dinas Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1160" y="0" width="260" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Seksi Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1420" y="0" width="120" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target Tindak Lanjut]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1540" y="0" width="55" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1595" y="0" width="170" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="30" y="0" width="200" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_SEVERITY_description}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="230" y="0" width="55" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_SEVERITY_id_severity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="285" y="0" width="75" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_SEVERITY_nama_tempat_rca}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="360" y="0" width="180" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_DIREKTORAT_NAMA_DIREKTORAT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="540" y="0" width="150" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_DIVPROSBU_NAMA_DIVPROSBU}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="690" y="0" width="250" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_DEPARTEMEN_NAMA_DEPARTEMEN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="940" y="0" width="220" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_DINAS_NAMA_DINAS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1160" y="0" width="260" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_SEKSI_NAMA_SEKSI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1420" y="0" width="120" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_SEVERITY_completion_date_target}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1540" y="0" width="55" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_SEVERITY_status} != null && ! $F{V_SEVERITY_status}.isEmpty() ?
+$F{V_SEVERITY_status}.equalsIgnoreCase( "1" ) ? "Open" :
+$F{V_SEVERITY_status}.equalsIgnoreCase( "2" ) ? "Process" :
+"Closed" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1595" y="0" width="170" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{V_SEVERITY_note}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
