@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_pelatihan" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="ID_DEP" class="java.lang.String"/>
+	<parameter name="ID_DIN" class="java.lang.String"/>
+	<parameter name="ID_SEK" class="java.lang.String"/>
+	<parameter name="NIPG" class="java.lang.String"/>
+	<parameter name="START_DATE" class="java.lang.String"/>
+	<parameter name="END_DATE" class="java.lang.String"/>
+	<parameter name="CLAUSE_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+    " and a.ID_DIREKTORAT = " + $P{ID_DIR} : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_DIV" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+    " and a.ID_DIVPROSBU = " + $P{ID_DIV} : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_DEP" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+    " and a.ID_DEPARTEMEN = " + $P{ID_DEP} : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_DIN" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIN} != null && ! $P{ID_DIN}.isEmpty() && ! $P{ID_DIN}.equalsIgnoreCase( "0" ) ?
+    " and a.ID_DINAS = " + $P{ID_DIN} : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_SEK" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEK} != null && ! $P{ID_SEK}.isEmpty() && ! $P{ID_SEK}.equalsIgnoreCase( "0" ) ?
+    " and a.ID_SEKSI = " + $P{ID_SEK} : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_NIPG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{NIPG} != null && ! $P{NIPG}.isEmpty() && ! $P{NIPG}.equalsIgnoreCase( "0" ) ?
+    " and a.NIPG = " + $P{NIPG} : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_START_DATE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{START_DATE} != null && ! $P{START_DATE}.isEmpty() ?
+    " and c.TANGGAL >= '" + $P{START_DATE} + "'" : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CLAUSE_END_DATE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{END_DATE} != null && ! $P{END_DATE}.isEmpty() ?
+    " and c.TANGGAL <= '" + $P{END_DATE} + "'" : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["select		a.NIPG				as NIPG " +
+"		,	a.NAMA_PEGAWAI		as NAMA_PEGAWAI " +
+"		,	( " +
+"			select	x.NAMA_DIREKTORAT " +
+"			from	R_DIREKTORAT	as x " +
+"			where	x.ID_DIREKTORAT	= a.ID_DIREKTORAT " +
+"			)	as DIREKTORAT " +
+"		,	( " +
+"			select	x.NAMA_DIVPROSBU " +
+"			from	R_DIVPROSBU		as x " +
+"			where	x.ID_DIREKTORAT	= a.ID_DIREKTORAT " +
+"			and		x.ID_DIVPROSBU	= a.ID_DIVPROSBU " +
+"			)	as DIVPROSBU " +
+"		,	( " +
+"			select	x.NAMA_DEPARTEMEN " +
+"			from	R_DEPARTEMEN	as x " +
+"			where	x.ID_DIREKTORAT	= a.ID_DIREKTORAT " +
+"			and		x.ID_DIVPROSBU	= a.ID_DIVPROSBU " +
+"			and		x.ID_DEPARTEMEN	= a.ID_DEPARTEMEN " +
+"			)	as DEPARTEMEN " +
+"		,	( " +
+"			select	x.NAMA_DINAS " +
+"			from	R_DINAS			as x " +
+"			where	x.ID_DIREKTORAT	= a.ID_DIREKTORAT " +
+"			and		x.ID_DIVPROSBU	= a.ID_DIVPROSBU " +
+"			and		x.ID_DEPARTEMEN	= a.ID_DEPARTEMEN " +
+"			and		x.ID_DINAS		= a.ID_DINAS " +
+"			)	as DINAS " +
+"		,	( " +
+"			select	x.NAMA_SEKSI " +
+"			from	R_SEKSI			as x " +
+"			where	x.ID_DIREKTORAT	= a.ID_DIREKTORAT " +
+"			and		x.ID_DIVPROSBU	= a.ID_DIVPROSBU " +
+"			and		x.ID_DEPARTEMEN	= a.ID_DEPARTEMEN " +
+"			and		x.ID_DINAS		= a.ID_DINAS " +
+"			and		x.ID_SEKSI		= a.ID_SEKSI " +
+"			)	as SEKSI " +
+"		,	( " +
+"			select	x.NAMA_PELATIHAN " +
+"			from	R_PELATIHAN		as x " +
+"			where	x.ID_PELATIHAN	= c.ID_PELATIHAN " +
+"			)	as NAMA_PELATIHAN " +
+"		,	c.TANGGAL			as TANGGAL " +
+"		,	c.TEMPAT			as TEMPAT " +
+"		,	c.LAMA				as DURASI " +
+"from		R_PEGAWAI			as a " +
+"		,	T_PELATIHAN_PESERTA	as b " +
+"		,	T_PELATIHAN			as c " +
+"where		b.NIPG				= a.NIPG " +
+"and		c.ID				= b.ID " +
+$P{CLAUSE_DIR} +
+$P{CLAUSE_DIV} +
+$P{CLAUSE_DEP} +
+$P{CLAUSE_DIN} +
+$P{CLAUSE_SEK} +
+$P{CLAUSE_NIPG} +
+$P{CLAUSE_START_DATE} +
+$P{CLAUSE_END_DATE}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{DYNAMIC_QUERY}]]>
+	</queryString>
+	<field name="NIPG" class="java.lang.String"/>
+	<field name="NAMA_PEGAWAI" class="java.lang.String"/>
+	<field name="DIREKTORAT" class="java.lang.String"/>
+	<field name="DIVPROSBU" class="java.lang.String"/>
+	<field name="DEPARTEMEN" class="java.lang.String"/>
+	<field name="DINAS" class="java.lang.String"/>
+	<field name="SEKSI" class="java.lang.String"/>
+	<field name="NAMA_PELATIHAN" class="java.lang.String"/>
+	<field name="TANGGAL" class="java.sql.Timestamp"/>
+	<field name="TEMPAT" class="java.lang.String"/>
+	<field name="DURASI" class="java.lang.Short"/>
+	<group name="DIREKTORAT">
+		<groupExpression><![CDATA[$F{DIREKTORAT}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="50" y="0" width="505" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DIREKTORAT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="50" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Direktorat :]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="DIVPROSBU">
+		<groupExpression><![CDATA[$F{DIVPROSBU}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="90" y="0" width="465" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DIVPROSBU}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="5" y="0" width="85" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Divisi/Proyek/SBU :]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="DEPARTEMEN">
+		<groupExpression><![CDATA[$F{DEPARTEMEN}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="70" y="0" width="485" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DEPARTEMEN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="10" y="0" width="60" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Departemen :]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="DINAS">
+		<groupExpression><![CDATA[$F{DINAS}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="47" y="0" width="508" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DINAS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="15" y="0" width="32" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Dinas :]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="SEKSI">
+		<groupExpression><![CDATA[$F{SEKSI}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<textField>
+					<reportElement x="52" y="0" width="503" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEKSI}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="20" y="0" width="32" height="20"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Seksi :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="520" y="20" width="35" height="30"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Durasi
+(Hari)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="25" y="20" width="65" height="30"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[NIPG]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="90" y="20" width="145" height="30"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nama Pegawai]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="235" y="20" width="115" height="30"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nama Pelatihan]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="350" y="20" width="60" height="30"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tanggal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="410" y="20" width="110" height="30"/>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Calibri" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tempat]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN PELATIHAN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="25" y="0" width="65" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NIPG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="0" width="145" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAMA_PEGAWAI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="0" width="115" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAMA_PELATIHAN}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyy">
+				<reportElement x="350" y="0" width="60" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TANGGAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="0" width="110" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TEMPAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="35" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DURASI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

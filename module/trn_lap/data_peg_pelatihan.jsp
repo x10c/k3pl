@@ -39,11 +39,14 @@ try {
 		+" ,		a.nama_pegawai"
 		+" ,		a.id_jabatan"
 		+" ,		b.nama_jabatan"
+		+" ,		a.id_direktorat"
+		+" ,		a.id_divprosbu"
 		+" from		r_pegawai as a, "
 		+" 			r_jabatan as b "
 		+" where	a.status_pegawai	= '1'"
 		+" and		a.id_jabatan		= b.id_jabatan"
 		+" and		a.id_divprosbu		= "+ user_div
+		+" and		a.id_direktorat		= "+ user_dir
 		+" order by	nama_pegawai";
 
 	ResultSet rs = db_stmt_peg.executeQuery(q);
@@ -61,7 +64,9 @@ try {
 		o	+="{ nipg			:\""+ nipg +"\""
 			+ ", nama_pegawai	:\""+ rs.getString("nama_pegawai") +"\""
 			+ ", id_jabatan		: "+ rs.getString("id_jabatan")
-			+ ", nama_jabatan	:\""+ rs.getString("nama_jabatan")+"\"";
+			+ ", nama_jabatan	:\""+ rs.getString("nama_jabatan")+"\""
+			+ ", id_direktorat	: "+ user_dir
+			+ ", id_divprosbu	: "+ user_div;
 
 		q	=" select	id_pelatihan"
 			+" ,		replace(convert(varchar, tanggal, 111), '/', '-') tanggal"

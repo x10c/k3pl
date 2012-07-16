@@ -61,3 +61,57 @@ values (
 ,	'YEAR_1;YEAR_2;YEAR_3;MONTH_1;MONTH_2;MONTH_3;ID_DIR;ID_DIV'
 )
 go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Matriks Pelatihan'
+,	5
+,	'xls'
+,	'reports/lap_pelatihan_matriks.jasper'
+,	'id_dir;id_div'
+,	'ID_DIR;ID_DIV'
+)
+go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Laporan Pelatihan'
+,	5
+,	'xls'
+,	'reports/lap_pelatihan.jasper'
+,	'id_dir;id_div;id_dep;id_din;id_sek;nipg;start_date;end_date'
+,	'ID_DIR;ID_DIV;ID_DEP;ID_DIN;ID_SEK;NIPG;START_DATE;END_DATE'
+)
+go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Laporan Severity'
+,	5
+,	'xls'
+,	'reports/rca_lap_severity.jasper'
+,	'is_in_org;year;month;id_dir;id_div;id_dep;id_dinas;id_seksi;id_wilayah;id_area'
+,	'IS_IN_ORG;YEAR;MONTH;ID_DIR;ID_DIV;ID_DEP;ID_DINAS;ID_SEKSI;ID_WILAYAH;ID_AREA'
+)
+go

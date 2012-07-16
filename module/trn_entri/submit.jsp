@@ -62,6 +62,8 @@ try {
 			+" , tanggal"
 			+" , lama"
 			+" , id_user"
+			+" , id_divprosbu"
+			+" , id_direktorat"
 			+") values ("
 			+ id
 			+", "+ id_pel
@@ -70,6 +72,8 @@ try {
 			+", cast('"+ tanggal +"' as datetime)"
 			+", "+ lama
 			+",'"+ user_nipg +"'"
+			+", "+ user_div
+			+", "+ user_dir
 			+");";
 
 		l = peserta.length();
