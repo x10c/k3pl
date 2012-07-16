@@ -119,6 +119,9 @@ function M_ObsLapPartPegGrid()
 
 	this.records = new Ext.data.Record.create([
 		{name: 'name'}
+	,	{name: 'id_dir'}
+	,	{name: 'id_div'}
+	,	{name: 'id_dep'}
 	,	{name: 'id_dep'}
 	,	{name: 'id_dinas'}
 	,	{name: 'id_seksi'}
