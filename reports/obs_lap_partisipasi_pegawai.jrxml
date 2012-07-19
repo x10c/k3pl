@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="obs_lap_partisipasi_pegawai" pageWidth="992" pageHeight="595" orientation="Landscape" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="309"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IS_IN_ORG" class="java.lang.String">
+		<parameterDescription><![CDATA[1=organisasi
+0=wilayah]]></parameterDescription>
+	</parameter>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="ID_DEP" class="java.lang.String"/>
+	<parameter name="ID_DINAS" class="java.lang.String"/>
+	<parameter name="ID_SEKSI" class="java.lang.String"/>
+	<parameter name="ID_WILAYAH" class="java.lang.String"/>
+	<parameter name="ID_AREA" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DIVPROSBU\" = " + $P{ID_DIV} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEP_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DINAS_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_DINAS\" = " + $P{ID_DINAS} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AREA_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+"     AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ORG_WIL_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
+! $P{IS_IN_ORG}.isEmpty() &&
+$P{IS_IN_ORG}.equalsIgnoreCase( "0" ) ?
+$P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} :
+$P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT \n" +
+"     R_PEGAWAI.\"NIPG\" AS R_PEGAWAI_NIPG, \n" +
+"     R_PEGAWAI.\"NAMA_PEGAWAI\" AS R_PEGAWAI_NAMA_PEGAWAI \n" +
+"FROM \n" +
+"     \"dbo\".\"R_SEKSI\" R_SEKSI INNER JOIN \"dbo\".\"R_PEGAWAI\" R_PEGAWAI ON R_SEKSI.\"ID_SEKSI\" = R_PEGAWAI.\"ID_SEKSI\" \n" +
+"     AND R_SEKSI.\"ID_DINAS\" = R_PEGAWAI.\"ID_DINAS\" \n" +
+"     AND R_SEKSI.\"ID_DEPARTEMEN\" = R_PEGAWAI.\"ID_DEPARTEMEN\" \n" +
+"     AND R_SEKSI.\"ID_DIVPROSBU\" = R_PEGAWAI.\"ID_DIVPROSBU\" \n" +
+"     AND R_SEKSI.\"ID_DIREKTORAT\" = R_PEGAWAI.\"ID_DIREKTORAT\" \n" +
+"     INNER JOIN \"dbo\".\"__USER_GRUP\" __USER_GRUP ON R_PEGAWAI.\"NIPG\" = __USER_GRUP.\"NIPG\" \n" +
+"WHERE \n" +
+"     __USER_GRUP.\"ID_GRUP\" = 2 \n" + $P{ORG_WIL_CLAUSE} +
+" ORDER BY \n" +
+"     R_PEGAWAI.\"NAMA_PEGAWAI\" ASC"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\apache-tomcat-7.0.28\\webapps\\k3pl\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{DYNAMIC_QUERY}]]>
+	</queryString>
+	<field name="R_PEGAWAI_NIPG" class="java.lang.String"/>
+	<field name="R_PEGAWAI_NAMA_PEGAWAI" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="952" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Partisipasi Observasi]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="220" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[January]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="281" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[February]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[March]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[April]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="464" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[May]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="525" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[June]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="586" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[July]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="647" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[August]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="708" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[September]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="769" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[October]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="830" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[November]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="891" y="0" width="61" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[December]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="220" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="220" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["1"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="281" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["2"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="342" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["3"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="403" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["4"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="464" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["5"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="525" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["6"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="586" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["7"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="647" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["8"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="708" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["9"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="769" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["10"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="830" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["11"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="891" y="0" width="61" height="20"/>
+				<subreportParameter name="NIPG">
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA["12"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

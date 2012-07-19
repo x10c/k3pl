@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_organisasi" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="obs_lap_partisipasi_organisasi" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -39,23 +39,23 @@
 	<parameter name="MONTH" class="java.lang.String"/>
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
-"       T_RCA_TARGET_PEGAWAI.\"" + $P{FIELD_MONTH}.get( Integer.parseInt($P{MONTH}) - 1 ).toString() + "\"\n" :
-"       T_RCA_TARGET_PEGAWAI.\"JAN\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"FEB\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"MAR\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"APR\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"MAY\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"JUN\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"JUL\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"AUG\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"SEP\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"OCT\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"NOV\" + \n" +
-"		T_RCA_TARGET_PEGAWAI.\"DEC\" \n"]]></defaultValueExpression>
+"       T_STOP_TARGET_PEGAWAI.\"" + $P{FIELD_MONTH}.get( Integer.parseInt($P{MONTH}) - 1 ).toString() + "\"\n" :
+"       T_STOP_TARGET_PEGAWAI.\"JAN\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"FEB\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"MAR\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"APR\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"MAY\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"JUN\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"JUL\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"AUG\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"SEP\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"OCT\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"NOV\" + \n" +
+"		T_STOP_TARGET_PEGAWAI.\"DEC\" \n"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PART_MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
-" AND month(T_RCA.\"TANGGAL_RCA\") = " + $P{MONTH} :
+" AND T_STOP.\"MONTH\" = " + $P{MONTH} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
@@ -164,22 +164,21 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "                    ) AS TOTAL \n" +
 "       FROM \n" +
 "           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI \n" +
-"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" \n" +
+"               \"dbo\".\"T_STOP_TARGET_PEGAWAI\" T_STOP_TARGET_PEGAWAI \n" +
+"               ON R_PEGAWAI.\"NIPG\" = T_STOP_TARGET_PEGAWAI.\"NIPG\" \n" +
 "       WHERE \n" +
-"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
+"           T_STOP_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
 "       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
 "     ) AS TARGET, \n" +
-"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART \n" +
+"     ( SELECT count(T_STOP.\"NIPG\") AS TOTAL_PART \n" +
 "       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" +
+"           \"dbo\".\"T_STOP\" T_STOP INNER JOIN \n" +
 "               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
-"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
+"               ON T_STOP.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
 "       WHERE \n" +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + $P{PART_MONTH_CLAUSE} + "\n" +
+"           T_STOP.\"STATUS\" IN (1, 2) \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
+"       AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{PART_MONTH_CLAUSE} + "\n" +
+"       AND T_STOP.\"STATUS_AKTIF\" = 1 \n" +
 "     ) AS PARTISIPASI \n" +
 "FROM \n" + $P{ORG_FROM_CLAUSE} + " R_ \n" +
 "WHERE \n" +
@@ -243,26 +242,25 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "                    ) AS TOTAL \n" +
 "       FROM \n" +
 "           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI \n" +
-"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" \n" +
+"               \"dbo\".\"T_STOP_TARGET_PEGAWAI\" T_STOP_TARGET_PEGAWAI \n" +
+"               ON R_PEGAWAI.\"NIPG\" = T_STOP_TARGET_PEGAWAI.\"NIPG\" \n" +
 "               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
 "               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
 "       WHERE \n" +
-"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
+"           T_STOP_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
 "       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
 "     ) AS TARGET, \n" +
-"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART \n" +
+"     ( SELECT count(T_STOP.\"NIPG\") AS TOTAL_PART \n" +
 "       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" +
+"           \"dbo\".\"T_STOP\" T_STOP INNER JOIN \n" +
 "               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
-"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
+"               ON T_STOP.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
 "               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
 "               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
 "       WHERE \n" +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + "\n" +
+"           T_STOP.\"STATUS\" IN (1, 2) \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
+"       AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{PART_MONTH_CLAUSE} + "\n" +
+"       AND T_STOP.\"STATUS_AKTIF\" = 1 \n" +
 "     ) AS PARTISIPASI \n" +
 "FROM \n" + $P{WIL_FROM_CLAUSE} + " \n" +
 "WHERE \n" +
@@ -302,7 +300,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Laporan Partisipasi RCA]]></text>
+				<text><![CDATA[Laporan Partisipasi Observasi]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -460,7 +458,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 		</band>
 	</detail>
 	<summary>
-		<band height="20">
+		<band height="20" splitType="Stretch">
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="0" width="215" height="20" backcolor="#CCCCCC"/>
 				<box>
