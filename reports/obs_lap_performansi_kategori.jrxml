@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="obs_lap_performansi_kategori" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IS_IN_ORG" class="java.lang.String">
+		<parameterDescription><![CDATA[1=organisasi
+0=wilayah]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="ID_DEP" class="java.lang.String"/>
+	<parameter name="ID_DINAS" class="java.lang.String"/>
+	<parameter name="ID_SEKSI" class="java.lang.String"/>
+	<parameter name="ID_WILAYAH" class="java.lang.String"/>
+	<parameter name="ID_AREA" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
+" AND T_STOP.\"MONTH\" = " + $P{MONTH} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_DIVPROSBU\" = " + $P{ID_DIV} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DEP_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DINAS_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_DINAS\" = " + $P{ID_DINAS} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AREA_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
+" AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_AREA} :
+""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT \n" +
+"     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS TOTAL_SAFE, \n" +
+"     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS TOTAL_UNSAFE \n" +
+"FROM \n" +
+"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
+"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
+"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
+"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
+"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
+"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"WHERE \n" +
+"     T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" +
+" AND T_STOP.\"STATUS_AKTIF\" = 1 \n" + $P{MONTH_CLAUSE} + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_WIL_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT \n" +
+"     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS TOTAL_SAFE, \n" +
+"     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS TOTAL_UNSAFE \n" +
+"FROM \n" +
+"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
+"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
+"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
+"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
+"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
+"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"WHERE \n" +
+"     T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" +
+" AND T_STOP.\"STATUS_AKTIF\" = 1 \n" + $P{MONTH_CLAUSE} + $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MAIN_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
+! $P{IS_IN_ORG}.isEmpty() &&
+$P{IS_IN_ORG}.equalsIgnoreCase( "0" ) ?
+$P{DYNAMIC_WIL_QUERY} :
+$P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{MAIN_QUERY}]]>
+	</queryString>
+	<field name="TOTAL_SAFE" class="java.lang.Integer"/>
+	<field name="TOTAL_UNSAFE" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Observasi Performansi per Kategori]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="215" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kategori]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Safe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unsafe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% Safe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% Unsafe]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<subreportParameter name="TOTAL_UNSAFE">
+					<subreportParameterExpression><![CDATA[$F{TOTAL_UNSAFE} == null ? 0 : $F{TOTAL_UNSAFE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIV">
+					<subreportParameterExpression><![CDATA[$P{ID_DIV}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TOTAL_SAFE">
+					<subreportParameterExpression><![CDATA[$F{TOTAL_SAFE} == null ? 0 : $F{TOTAL_SAFE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IS_IN_ORG">
+					<subreportParameterExpression><![CDATA[$P{IS_IN_ORG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIR">
+					<subreportParameterExpression><![CDATA[$P{ID_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_WILAYAH">
+					<subreportParameterExpression><![CDATA[$P{ID_WILAYAH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_SEKSI">
+					<subreportParameterExpression><![CDATA[$P{ID_SEKSI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DEP">
+					<subreportParameterExpression><![CDATA[$P{ID_DEP}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_AREA">
+					<subreportParameterExpression><![CDATA[$P{ID_AREA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DINAS">
+					<subreportParameterExpression><![CDATA[$P{ID_DINAS}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_kategori_srkategori.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="obs_lap_performansi_kategori_srkategori" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IS_IN_ORG" class="java.lang.String">
+		<parameterDescription><![CDATA[1=organisasi
+0=wilayah]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String"/>
+	<parameter name="ID_DEP" class="java.lang.String"/>
+	<parameter name="ID_DINAS" class="java.lang.String"/>
+	<parameter name="ID_SEKSI" class="java.lang.String"/>
+	<parameter name="ID_WILAYAH" class="java.lang.String"/>
+	<parameter name="ID_AREA" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="TOTAL_SAFE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TOTAL_UNSAFE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     R_TIPE_OBSERVASI."ID_TIPE_OBSERVASI" AS R_TIPE_OBSERVASI_ID_TIPE_OBSERVASI,
+     R_TIPE_OBSERVASI."NAMA_TIPE_OBSERVASI" AS R_TIPE_OBSERVASI_NAMA_TIPE_OBSERVASI
+FROM
+     "dbo"."R_TIPE_OBSERVASI" R_TIPE_OBSERVASI]]>
+	</queryString>
+	<field name="R_TIPE_OBSERVASI_ID_TIPE_OBSERVASI" class="java.lang.Integer"/>
+	<field name="R_TIPE_OBSERVASI_NAMA_TIPE_OBSERVASI" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_TIPE_OBSERVASI_NAMA_TIPE_OBSERVASI}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="215" y="0" width="340" height="20"/>
+				<subreportParameter name="TOTAL_UNSAFE">
+					<subreportParameterExpression><![CDATA[$P{TOTAL_UNSAFE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="YEAR">
+					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIV">
+					<subreportParameterExpression><![CDATA[$P{ID_DIV}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_TIPE_OBSERVASI">
+					<subreportParameterExpression><![CDATA[$F{R_TIPE_OBSERVASI_ID_TIPE_OBSERVASI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TOTAL_SAFE">
+					<subreportParameterExpression><![CDATA[$P{TOTAL_SAFE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IS_IN_ORG">
+					<subreportParameterExpression><![CDATA[$P{IS_IN_ORG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DIR">
+					<subreportParameterExpression><![CDATA[$P{ID_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_WILAYAH">
+					<subreportParameterExpression><![CDATA[$P{ID_WILAYAH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_SEKSI">
+					<subreportParameterExpression><![CDATA[$P{ID_SEKSI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DEP">
+					<subreportParameterExpression><![CDATA[$P{ID_DEP}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_AREA">
+					<subreportParameterExpression><![CDATA[$P{ID_AREA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MONTH">
+					<subreportParameterExpression><![CDATA[$P{MONTH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_DINAS">
+					<subreportParameterExpression><![CDATA[$P{ID_DINAS}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_kategori_detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="215" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="215" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL_SAFE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL_UNSAFE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL_SAFE} != null && $P{TOTAL_SAFE} != 0 ? 1 : 0]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="470" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL_UNSAFE} != null && $P{TOTAL_UNSAFE} != 0 ? 1 : 0]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
