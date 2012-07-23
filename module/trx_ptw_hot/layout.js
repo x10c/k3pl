@@ -629,18 +629,33 @@ function M_TrxPTWHotMaster(title)
 		}
 
 		var form;
+		var id_report	= '33';
+		var tipe_report	= 'doc';
 		form = document.createElement('form');
 
 		form.setAttribute('method', 'post');
-		form.setAttribute('target', '_blank');
-		form.setAttribute('action', _g_root +'/module/lap_ptw/export_hwp.jsp');
+		form.setAttribute('target', '_blank');		
+		form.setAttribute('action', _g_root +'/report');
+		
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
+		
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
 
-		var id_ptw = document.createElement('input');
-		id_ptw.setAttribute('type', 'hidden');
-		id_ptw.setAttribute('name', 'id_ptw');
-		id_ptw.setAttribute('value', data.get('id_ptw'));
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'id_ptw');
+        hiddenField3.setAttribute('value', m_trx_ptw_hot_id_ptw);
 
-		form.appendChild(id_ptw);
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		document.body.appendChild(form);
 		form.submit();
 	}
 
