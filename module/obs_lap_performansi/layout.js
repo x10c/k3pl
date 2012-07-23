@@ -207,6 +207,15 @@ function M_ObsLapPerfByCategoryGrid()
 		}
 	});
 
+	this.btn_print = new Ext.Button({
+			text		: 'Print'
+		,	iconCls		: 'print16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_print();
+			}
+	});
+
 	this.panel = new Ext.grid.GridPanel({
 		store		: this.store
 	,	cm			: this.cm
@@ -215,14 +224,90 @@ function M_ObsLapPerfByCategoryGrid()
 	,	autoHeight	: true
 	,	autoScroll	: true
 	,	plugins		: new Ext.ux.grid.GridSummary()
-	,	tbar		: [
-			{
-				xtype	: 'exportbutton'
-			,	store	: this.store
-			}
-		]
+	,	tbar		: [ this.btn_print ]
 	});
 
+	this.do_print = function()
+	{
+		var form;
+		var id_report	= '29';
+		var tipe_report	= 'xls';
+		form = document.createElement('form');
+
+		form.setAttribute('method', 'post');
+		form.setAttribute('target', '_blank');		
+		form.setAttribute('action', _g_root +'/report');
+		
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
+		
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'id_dir');
+        hiddenField3.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_org.formDirektorat.getValue ());
+		
+		var hiddenField4 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField4.setAttribute('name', 'id_div');
+        hiddenField4.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_org.formDivProSBU.getValue ());
+		
+		var hiddenField5 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField5.setAttribute('name', 'id_dep');
+        hiddenField5.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_org.formDepartemen.getValue());
+		
+		var hiddenField6 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField6.setAttribute('name', 'id_dinas');
+        hiddenField6.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_org.formDinas.getValue());
+		
+		var hiddenField7 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField7.setAttribute('name', 'id_seksi');
+        hiddenField7.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_org.formSeksi.getValue());
+		
+		var hiddenField8 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField8.setAttribute('name', 'id_wilayah');
+        hiddenField8.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_wil.formWilayah.getValue());
+		
+		var hiddenField9 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField9.setAttribute('name', 'id_area');
+        hiddenField9.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_wil.formArea.getValue());
+		
+		var hiddenField10 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField10.setAttribute('name', 'year');
+        hiddenField10.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_waktu.formTahun.getValue());
+		
+		var hiddenField11 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField11.setAttribute('name', 'month');
+        hiddenField11.setAttribute('value', m_obs_lap_performansi.perf_by_cat.form.set_waktu.formBulan.getValue());
+		
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		form.appendChild(hiddenField4);
+		form.appendChild(hiddenField5);
+		form.appendChild(hiddenField6);
+		form.appendChild(hiddenField7);
+		form.appendChild(hiddenField8);
+		form.appendChild(hiddenField9);
+		form.appendChild(hiddenField10);
+		form.appendChild(hiddenField11);
+		document.body.appendChild(form);
+		form.submit();
+	}
+	
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
@@ -340,6 +425,15 @@ function M_ObsLapPerfByIndexGrid()
 		}
 	});
 
+	this.btn_print = new Ext.Button({
+			text		: 'Print'
+		,	iconCls		: 'print16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_print();
+			}
+	});
+
 	this.panel = new Ext.grid.GridPanel({
 		store		: this.store
 	,	cm		: this.cm
@@ -348,14 +442,84 @@ function M_ObsLapPerfByIndexGrid()
 	,	autoHeight	: true
 	,	autoScroll	: true
 	,	plugins		: new Ext.ux.grid.GridSummary()
-	,	tbar		: [
-			{
-				xtype	: 'exportbutton'
-			,	store	: this.store
-			}
-		]
+	,	tbar		: [ this.btn_print ]
 	});
 
+	this.do_print = function()
+	{
+		var form;
+		var id_report	= '30';
+		var tipe_report	= 'xls';
+		form = document.createElement('form');
+
+		form.setAttribute('method', 'post');
+		form.setAttribute('target', '_blank');		
+		form.setAttribute('action', _g_root +'/report');
+		
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
+		
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'id_dir');
+        hiddenField3.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_org.formDirektorat.getValue ());
+		
+		var hiddenField4 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField4.setAttribute('name', 'id_div');
+        hiddenField4.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_org.formDivProSBU.getValue ());
+		
+		var hiddenField5 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField5.setAttribute('name', 'id_dep');
+        hiddenField5.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_org.formDepartemen.getValue());
+		
+		var hiddenField6 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField6.setAttribute('name', 'id_dinas');
+        hiddenField6.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_org.formDinas.getValue());
+		
+		var hiddenField7 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField7.setAttribute('name', 'id_seksi');
+        hiddenField7.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_org.formSeksi.getValue());
+		
+		var hiddenField8 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField8.setAttribute('name', 'id_wilayah');
+        hiddenField8.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_wil.formWilayah.getValue());
+		
+		var hiddenField9 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField9.setAttribute('name', 'id_area');
+        hiddenField9.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_wil.formArea.getValue());
+		
+		var hiddenField10 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField10.setAttribute('name', 'year');
+        hiddenField10.setAttribute('value', m_obs_lap_performansi.perf_by_index.form.set_waktu.formTahun.getValue());
+		
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		form.appendChild(hiddenField4);
+		form.appendChild(hiddenField5);
+		form.appendChild(hiddenField6);
+		form.appendChild(hiddenField7);
+		form.appendChild(hiddenField8);
+		form.appendChild(hiddenField9);
+		form.appendChild(hiddenField10);
+		document.body.appendChild(form);
+		form.submit();
+	}
+	
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
@@ -474,6 +638,15 @@ function M_ObsLapPerfByHourGrid()
 		}
 	});
 
+	this.btn_print = new Ext.Button({
+			text		: 'Print'
+		,	iconCls		: 'print16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_print();
+			}
+	});
+
 	this.panel = new Ext.grid.GridPanel({
 		store		: this.store
 	,	cm		: this.cm
@@ -482,14 +655,84 @@ function M_ObsLapPerfByHourGrid()
 	,	autoHeight	: true
 	,	autoScroll	: true
 	,	plugins		: new Ext.ux.grid.GridSummary()
-	,	tbar		: [
-			{
-				xtype	: 'exportbutton'
-			,	store	: this.store
-			}
-		]
+	,	tbar		: [ this.btn_print ]
 	});
 
+	this.do_print = function()
+	{
+		var form;
+		var id_report	= '31';
+		var tipe_report	= 'xls';
+		form = document.createElement('form');
+
+		form.setAttribute('method', 'post');
+		form.setAttribute('target', '_blank');		
+		form.setAttribute('action', _g_root +'/report');
+		
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
+		
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'id_dir');
+        hiddenField3.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_org.formDirektorat.getValue ());
+		
+		var hiddenField4 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField4.setAttribute('name', 'id_div');
+        hiddenField4.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_org.formDivProSBU.getValue ());
+		
+		var hiddenField5 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField5.setAttribute('name', 'id_dep');
+        hiddenField5.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_org.formDepartemen.getValue());
+		
+		var hiddenField6 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField6.setAttribute('name', 'id_dinas');
+        hiddenField6.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_org.formDinas.getValue());
+		
+		var hiddenField7 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField7.setAttribute('name', 'id_seksi');
+        hiddenField7.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_org.formSeksi.getValue());
+		
+		var hiddenField8 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField8.setAttribute('name', 'id_wilayah');
+        hiddenField8.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_wil.formWilayah.getValue());
+		
+		var hiddenField9 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField9.setAttribute('name', 'id_area');
+        hiddenField9.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_wil.formArea.getValue());
+		
+		var hiddenField10 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField10.setAttribute('name', 'year');
+        hiddenField10.setAttribute('value', m_obs_lap_performansi.perf_by_hour.form.set_waktu.formTahun.getValue());
+		
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		form.appendChild(hiddenField4);
+		form.appendChild(hiddenField5);
+		form.appendChild(hiddenField6);
+		form.appendChild(hiddenField7);
+		form.appendChild(hiddenField8);
+		form.appendChild(hiddenField9);
+		form.appendChild(hiddenField10);
+		document.body.appendChild(form);
+		form.submit();
+	}
+	
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
@@ -595,6 +838,15 @@ function M_ObsLapSTOPGrid()
 		singleSelect	: true
 	});
 
+	this.btn_print = new Ext.Button({
+			text		: 'Print'
+		,	iconCls		: 'print16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_print();
+			}
+	});
+
 	this.panel = new Ext.grid.GridPanel({
 		title				: 'STOP Tabel'
 	,	store				: this.store
@@ -603,14 +855,90 @@ function M_ObsLapSTOPGrid()
 	,	autoScroll			: true
 	,	autoExpandColumn	: 'item'
 	,	viewConfig			: {forceFit: true}
-	,	tbar		: [
-			{
-				xtype	: 'exportbutton'
-			,	store	: this.store
-			}
-		]
+	,	tbar				: [ this.btn_print ]
 	});
 
+	this.do_print = function()
+	{
+		var form;
+		var id_report	= '32';
+		var tipe_report	= 'xls';
+		form = document.createElement('form');
+
+		form.setAttribute('method', 'post');
+		form.setAttribute('target', '_blank');		
+		form.setAttribute('action', _g_root +'/report');
+		
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
+		
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'id_dir');
+        hiddenField3.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_org.formDirektorat.getValue ());
+		
+		var hiddenField4 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField4.setAttribute('name', 'id_div');
+        hiddenField4.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_org.formDivProSBU.getValue ());
+		
+		var hiddenField5 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField5.setAttribute('name', 'id_dep');
+        hiddenField5.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_org.formDepartemen.getValue());
+		
+		var hiddenField6 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField6.setAttribute('name', 'id_dinas');
+        hiddenField6.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_org.formDinas.getValue());
+		
+		var hiddenField7 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField7.setAttribute('name', 'id_seksi');
+        hiddenField7.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_org.formSeksi.getValue());
+		
+		var hiddenField8 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField8.setAttribute('name', 'id_wilayah');
+        hiddenField8.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_wil.formWilayah.getValue());
+		
+		var hiddenField9 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField9.setAttribute('name', 'id_area');
+        hiddenField9.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_wil.formArea.getValue());
+		
+		var hiddenField10 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField10.setAttribute('name', 'year');
+        hiddenField10.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_waktu.formTahun.getValue());
+		
+		var hiddenField11 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField11.setAttribute('name', 'month');
+        hiddenField11.setAttribute('value', m_obs_lap_performansi.perf_stop.form.set_waktu.formBulan.getValue());
+		
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		form.appendChild(hiddenField4);
+		form.appendChild(hiddenField5);
+		form.appendChild(hiddenField6);
+		form.appendChild(hiddenField7);
+		form.appendChild(hiddenField8);
+		form.appendChild(hiddenField9);
+		form.appendChild(hiddenField10);
+		form.appendChild(hiddenField11);
+		document.body.appendChild(form);
+		form.submit();
+	}
+	
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area
 							, year, month, is_in_org)
 	{
