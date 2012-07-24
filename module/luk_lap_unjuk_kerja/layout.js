@@ -542,6 +542,197 @@ function M_LUK_JBA ()
 	}
 }
 
+function M_LUK_Insiden ()
+{
+	this.grid_store = new Ext.data.JsonStore ({
+				url			: m_luk_d +'data_insiden.jsp'
+			,	autoLoad	: false
+			,	fields		: [
+						'dir_id'
+					,	'dir_name'
+					,	'jml_korban_mati'
+					,	'jml_korban_berat'
+					,	'jml_korban_sedang'
+					,	'jml_korban_medis'
+					,	'jml_korban_p3k'
+					,	'jml_hampir_celaka'
+					,	'jml_kecelakaan_kendaraan'
+				]
+			,	idProperty	:'dir_id'
+		});
+
+	this.grid_cm = new Ext.grid.ColumnModel ({
+			columns	: [{
+					header		:'Direktorat'
+				,	dataIndex	:'dir_name'
+				,	width		:260
+				},{
+					header		:'Fatality'
+				,	dataIndex	:'jml_korban_mati'
+				},{
+					header		:'Kecelakaan Berat'
+				,	dataIndex	:'jml_korban_berat'
+				},{
+					header		:'Kecelakaan Sedang'
+				,	dataIndex	:'jml_korban_sedang'
+				},{
+					header		:'Kecelakaan Ringan'
+				,	dataIndex	:'jml_korban_medis'
+				},{
+					header		:'First Aid'
+				,	dataIndex	:'jml_korban_p3k'
+				},{
+					header		:'Near Miss'
+				,	dataIndex	:'jml_hampir_celaka'
+				},{
+					header		:'Kecelakaan Kendaraan'
+				,	dataIndex	:'jml_kecelakaan_kendaraan'
+				}]
+		});
+
+	this.grid = new Ext.grid.GridPanel ({
+		title		: 'Data'
+	,	autoHeight	: true
+	,	autoScroll	: true
+	,	store		: this.grid_store
+	,	colModel	: this.grid_cm
+	});
+
+	this.chart = new Ext.Panel ({
+			title		: 'Grafik'
+		,	html		: '<div id="luk_insiden_chart"></div>'
+		,	view		: {}
+		,	chartConfig	: {
+				chart		: {
+					renderTo			: 'luk_insiden_chart'
+				,	defaultSeriesType	: 'column'
+				}
+			,	title	: {
+					text		: 'Grafik Insiden'
+				}
+			,	subtitle: {
+					text		: 'Tahun'
+				}
+			,	xAxis	: {
+					categories	: []
+				}
+			,	yAxis	: {
+					title		: {
+						text		: ''
+					}
+				}
+			,	legend	: {
+					layout		: 'horizontal'
+				}
+			,	series	: [{
+					name		: 'Fatality'
+				,	dataIndex	: 'jml_korban_mati'
+				},{
+					name		: 'Kecelakaan Berat'
+				,	dataIndex	: 'jml_korban_berat'
+				},{
+					name		: 'Kecelakaan Sedang'
+				,	dataIndex	: 'jml_korban_sedang'
+				},{
+					name		: 'Kecelakaan Ringan'
+				,	dataIndex	: 'jml_korban_medis'
+				},{
+					name		: 'First Aid'
+				,	dataIndex	: 'jml_korban_p3k'
+				},{
+					name		: 'Near Miss'
+				,	dataIndex	: 'jml_hampir_celaka'
+				},{
+					name		: 'Kecelakaan Kendaraan'
+				,	dataIndex	: 'jml_kecelakaan_kendaraan'
+				}]
+			}
+		});
+
+	this.form_year = new Ext.form.ComboBox ({
+			fieldLabel		: 'Tahun'
+		,	store			: new Ext.data.ArrayStore({
+				fields			: ['year']
+			,	data			: k3pl_create_form_year_data(10)
+			})
+		,	valueField		: 'year'
+		,	displayField	: 'year'
+		,	allowBlank		: false
+		,	mode			: 'local'
+		,	triggerAction	: 'all'
+		});
+
+	this.btn_ref = new Ext.Button({
+		text	: 'Refresh'
+	,	iconCls	: 'refresh16'
+	,	scope	: this
+	,	handler	: function() {
+			this.do_load();
+		}
+	});
+
+	this.panel = new Ext.Panel ({
+		title		: 'Grafik Insiden'
+	,	autoScroll	: true
+	,	frame		: false
+	,	padding		: '6'
+	,	tbar		: [
+				'Tahun : '
+			,	this.form_year
+			,	'-'
+			,	this.btn_ref
+		]
+	,	items		: [
+				this.grid
+			,	this.chart
+		]
+	});
+
+	this.do_load = function ()
+	{
+		var year = this.form_year.getValue ();
+
+		this.grid_store.load ({
+			scope	: this
+		,	params	: {
+				year	: year
+			}
+		,	callback: function (records, options, success) {
+				if (! success || records.length <= 0) {
+					return;
+				}
+
+				this.chart.chartConfig.subtitle.text	= 'Tahun '+ year;
+				this.set_chart_categories (records);
+				this.set_chart_series_data (records);
+				this.chart.view = new Highcharts.Chart (this.chart.chartConfig);
+			}
+		});
+	}
+
+	this.set_chart_categories = function (records)
+	{
+		var cat = this.chart.chartConfig.xAxis.categories = [];
+
+		for (var i = 0; i < records.length; i++) {
+			cat.push (records[i].get ('dir_name'));
+		}
+	}
+
+	this.set_chart_series_data = function (records)
+	{
+		var s = this.chart.chartConfig.series;
+
+		for (var i = 0; i < s.length; i++) {
+			s[i].data = [];
+
+			for (var j = 0; j < records.length; j++) {
+				s[i].data.push (parseInt (records[j].get (s[i].dataIndex)));
+			}
+		}
+	}
+}
+
 function M_LUKAll()
 {
 	this.uk				= new M_LUK();
@@ -564,6 +755,7 @@ function M_LUKAll()
 				, 'column', true);
 
 	this.luk_jba = new M_LUK_JBA ();
+	this.luk_insiden = new M_LUK_Insiden ();
 
 	this.panel = new Ext.TabPanel({
 		id			: 'luk_lap_unjuk_kerja_panel'
@@ -574,6 +766,7 @@ function M_LUKAll()
 		,	this.uk_chart_ltif.panel
 		,	this.uk_chart_tsaf.panel
 		,	this.luk_jba.panel
+		,	this.luk_insiden.panel
 		]
 	});
 
