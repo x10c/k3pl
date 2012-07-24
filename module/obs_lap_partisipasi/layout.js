@@ -339,7 +339,6 @@ function M_ObsLapPartPegGrid()
 		,	autoScroll	: true
 		,	height		: 500
 		,	tbar		: [ this.btn_print ]
-
 	});
 
 	this.do_print = function()

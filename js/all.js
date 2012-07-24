@@ -37,6 +37,25 @@ var k3pl_months = [
 ,	[12, 'Desember']
 ];
 
+/**
+ *  fix for missing horizontal scroll when autoHeight is set
+ */
+Ext.override (Ext.grid.GridView,{
+refresh: Ext.grid.GridView.prototype.refresh.createSequence(function(){
+		if (this.grid.autoHeight){
+			var body = this.grid.el.select('.x-grid3-body').first();
+			var height = this.grid.getGridEl().getHeight()-this.scroller.getHeight()+body.getHeight();
+			this.grid.getGridEl().setHeight(height);
+			this.scroller.setStyle({
+				overflow: 'auto'
+			});
+			this.grid.autoHeight = false;
+			this.layout();
+			this.grid.autoHeight = true;
+		}
+	})
+});
+
 /* fix for hidden button in RowEditor when grid height is set to auto */
 Ext.override(Ext.grid.GridView, {
 	getEditorParent: function() {
