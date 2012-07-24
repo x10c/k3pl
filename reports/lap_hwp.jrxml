@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_hwp" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="822" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_PTW" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     T_PTW."NOMOR" AS T_PTW_NOMOR,
+     T_PTW."TGL_PENGESAHAN" AS T_PTW_TGL_PENGESAHAN,
+     T_PTW."MASA_BERLAKU_AWAL" AS T_PTW_MASA_BERLAKU_AWAL,
+     T_PTW."MASA_BERLAKU_AKHIR" AS T_PTW_MASA_BERLAKU_AKHIR,
+     T_PTW."LOKASI_PEKERJAAN" AS T_PTW_LOKASI_PEKERJAAN,
+     T_PTW."PELAKSANA_PEKERJAAN" AS T_PTW_PELAKSANA_PEKERJAAN,
+     T_PTW."URAIAN_PEKERJAAN" AS T_PTW_URAIAN_PEKERJAAN,
+     T_PTW."NAMA_PETUGAS_ISOLASI_LISTRIK" AS T_PTW_NAMA_PETUGAS_ISOLASI_LISTRIK,
+     T_PTW."JABATAN_PETUGAS_ISOLASI_LISTRIK" AS T_PTW_JABATAN_PETUGAS_ISOLASI_LISTRIK,
+     T_PTW."NAMA_PETUGAS_UJI_KANDUNGAN_GAS" AS T_PTW_NAMA_PETUGAS_UJI_KANDUNGAN_GAS,
+     T_PTW."JABATAN_PETUGAS_UJI_KANDUNGAN_GAS" AS T_PTW_JABATAN_PETUGAS_UJI_KANDUNGAN_GAS,
+     T_PTW."NAMA_PELAKSANA_PEKERJAAN" AS T_PTW_NAMA_PELAKSANA_PEKERJAAN,
+     T_PTW."JABATAN_PELAKSANA_PEKERJAAN" AS T_PTW_JABATAN_PELAKSANA_PEKERJAAN,
+     T_PTW."NAMA_PEJABAT_BERWENANG" AS T_PTW_NAMA_PEJABAT_BERWENANG,
+     T_PTW."JABATAN_PEJABAT_BERWENANG" AS T_PTW_JABATAN_PEJABAT_BERWENANG,
+     T_PTW."CATATAN" AS T_PTW_CATATAN
+FROM
+     "dbo"."T_PTW" T_PTW
+WHERE
+     T_PTW."JENIS_PTW" = 1
+ AND T_PTW."ID_PTW" = $P{ID_PTW}]]>
+	</queryString>
+	<field name="T_PTW_NOMOR" class="java.lang.String"/>
+	<field name="T_PTW_TGL_PENGESAHAN" class="java.sql.Timestamp"/>
+	<field name="T_PTW_MASA_BERLAKU_AWAL" class="java.sql.Timestamp"/>
+	<field name="T_PTW_MASA_BERLAKU_AKHIR" class="java.sql.Timestamp"/>
+	<field name="T_PTW_LOKASI_PEKERJAAN" class="java.lang.String"/>
+	<field name="T_PTW_PELAKSANA_PEKERJAAN" class="java.lang.String"/>
+	<field name="T_PTW_URAIAN_PEKERJAAN" class="java.lang.String"/>
+	<field name="T_PTW_NAMA_PETUGAS_ISOLASI_LISTRIK" class="java.lang.String"/>
+	<field name="T_PTW_JABATAN_PETUGAS_ISOLASI_LISTRIK" class="java.lang.String"/>
+	<field name="T_PTW_NAMA_PETUGAS_UJI_KANDUNGAN_GAS" class="java.lang.String"/>
+	<field name="T_PTW_JABATAN_PETUGAS_UJI_KANDUNGAN_GAS" class="java.lang.String"/>
+	<field name="T_PTW_NAMA_PELAKSANA_PEKERJAAN" class="java.lang.String"/>
+	<field name="T_PTW_JABATAN_PELAKSANA_PEKERJAAN" class="java.lang.String"/>
+	<field name="T_PTW_NAMA_PEJABAT_BERWENANG" class="java.lang.String"/>
+	<field name="T_PTW_JABATAN_PEJABAT_BERWENANG" class="java.lang.String"/>
+	<field name="T_PTW_CATATAN" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="100" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<image scaleImage="RealHeight" hAlign="Center" vAlign="Middle">
+					<reportElement x="23" y="0" width="54" height="60"/>
+					<imageExpression><![CDATA["./logo.jpg"]]></imageExpression>
+				</image>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="100" y="0" width="602" height="60" backcolor="#FF0000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<staticText>
+					<reportElement x="0" y="0" width="602" height="60" forecolor="#FFFFFF"/>
+					<box>
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+						<font fontName="SansSerif" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[INSTRUKSI KERJA
+IJIN KERJA PANAS PADA SAAT BEROPERASI (<i>HOT WORK PERMIT</i>)
+PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="702" y="0" width="100" height="60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="200" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="802" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NO. " + $F{T_PTW_NOMOR}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="25" width="802" height="175" backcolor="#FF0000"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<frame>
+					<reportElement mode="Opaque" x="5" y="7" width="320" height="115"/>
+					<staticText>
+						<reportElement x="0" y="0" width="320" height="20"/>
+						<textElement verticalAlignment="Middle">
+							<font size="9" isBold="true"/>
+							<paragraph leftIndent="2"/>
+						</textElement>
+						<text><![CDATA[A. UMUM]]></text>
+					</staticText>
+					<frame>
+						<reportElement x="8" y="20" width="305" height="15"/>
+						<box>
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<staticText>
+							<reportElement x="0" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Nomor]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="90" y="0" width="7" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[:]]></text>
+						</staticText>
+						<textField isStretchWithOverflow="true">
+							<reportElement x="97" y="0" width="208" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{T_PTW_NOMOR}]]></textFieldExpression>
+						</textField>
+					</frame>
+					<frame>
+						<reportElement x="8" y="35" width="305" height="15"/>
+						<box>
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<staticText>
+							<reportElement x="0" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Tanggal Pengesahan]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="90" y="0" width="7" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[:]]></text>
+						</staticText>
+						<textField isStretchWithOverflow="true" pattern="dd MMMMM yyyy">
+							<reportElement x="97" y="0" width="208" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{T_PTW_TGL_PENGESAHAN}]]></textFieldExpression>
+						</textField>
+					</frame>
+					<frame>
+						<reportElement x="8" y="50" width="305" height="15"/>
+						<box>
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<staticText>
+							<reportElement x="0" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Masa Berlaku]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="90" y="0" width="7" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[:]]></text>
+						</staticText>
+						<textField isStretchWithOverflow="true" pattern="">
+							<reportElement x="97" y="0" width="208" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA["Tanggal : " + (new SimpleDateFormat("dd MMMMM yyyy").format((java.util.Date) $F{T_PTW_MASA_BERLAKU_AWAL})).toString() +
+" s/d " + (new SimpleDateFormat("dd MMMMM yyyy").format((java.util.Date) $F{T_PTW_MASA_BERLAKU_AKHIR})).toString()]]></textFieldExpression>
+						</textField>
+					</frame>
+					<frame>
+						<reportElement x="8" y="65" width="305" height="15"/>
+						<box>
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<staticText>
+							<reportElement x="0" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Lokasi Pekerjaan]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="90" y="0" width="7" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[:]]></text>
+						</staticText>
+						<textField isStretchWithOverflow="true" pattern="">
+							<reportElement x="97" y="0" width="208" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{T_PTW_LOKASI_PEKERJAAN}]]></textFieldExpression>
+						</textField>
+					</frame>
+					<frame>
+						<reportElement x="8" y="80" width="305" height="15"/>
+						<box>
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<staticText>
+							<reportElement x="0" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Pelaksanaan Pekerjaan]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="90" y="0" width="7" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[:]]></text>
+						</staticText>
+						<textField isStretchWithOverflow="true" pattern="">
+							<reportElement x="97" y="0" width="208" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{T_PTW_PELAKSANA_PEKERJAAN}]]></textFieldExpression>
+						</textField>
+					</frame>
+					<frame>
+						<reportElement x="8" y="95" width="305" height="15"/>
+						<box>
+							<pen lineWidth="1.0"/>
+							<topPen lineWidth="1.0"/>
+							<leftPen lineWidth="1.0"/>
+							<bottomPen lineWidth="1.0"/>
+							<rightPen lineWidth="1.0"/>
+						</box>
+						<staticText>
+							<reportElement x="0" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Uraian Pekerjaan]]></text>
+						</staticText>
+						<staticText>
+							<reportElement x="90" y="0" width="7" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[:]]></text>
+						</staticText>
+						<textField isStretchWithOverflow="true" pattern="">
+							<reportElement x="97" y="0" width="208" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{T_PTW_URAIAN_PEKERJAAN}]]></textFieldExpression>
+						</textField>
+					</frame>
+				</frame>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>
