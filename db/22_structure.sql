@@ -1,6 +1,11 @@
 alter table R_DIVPROSBU add STATUS_DIVPROSBU tinyint not null default 3
 go
 
+update	R_DIVPROSBU
+set		STATUS_DIVPROSBU	= 1
+where	ID_DIVPROSBU		= 2
+go
+
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description', 
