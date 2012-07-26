@@ -155,7 +155,7 @@ go
 /* Table: R_KEL_JABATAN_KOMITE_SUB_KOMITE                       */
 /*==============================================================*/
 create table R_KEL_JABATAN_KOMITE_SUB_KOMITE (
-   ID_KEL_JABATAN_KOMITE_SUB_KOMITE smallint             not null,
+   ID_KEL_JABATAN_KOMITE_SUB_KOMITE smallint identity,
    ID_KEL_JABATAN_CSC   smallint             not null,
    ID_DIVPROSBU         int                  null,
    ID_DIREKTORAT        int                  null,
@@ -193,9 +193,8 @@ alter table R_KEL_JABATAN_KOMITE_SUB_KOMITE
       references R_KEL_JABATAN_CSC (ID_KEL_JABATAN_CSC)
 go
 
-insert into R_KEL_JABATAN_KOMITE_SUB_KOMITE (ID_KEL_JABATAN_KOMITE_SUB_KOMITE, ID_KEL_JABATAN_CSC, ID_DIVPROSBU, ID_DIREKTORAT, NAMA_KEL_JABATAN_KOMITE_SUB_KOMITE, ID_USER)
-select	ID_KEL_JABATAN_KOMITE_SUB_KOMITE
-	,	5
+insert into R_KEL_JABATAN_KOMITE_SUB_KOMITE (ID_KEL_JABATAN_CSC, ID_DIVPROSBU, ID_DIREKTORAT, NAMA_KEL_JABATAN_KOMITE_SUB_KOMITE, ID_USER)
+select	5
 	,	1
 	,	3
 	,	NAMA_KEL_JABATAN_KOMITE_SUB_KOMITE
