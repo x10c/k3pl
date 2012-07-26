@@ -241,21 +241,3 @@ values (
 ,	'IS_IN_ORG;ID_DIR;ID_DIV;ID_DEP;ID_DINAS;ID_SEKSI;ID_WILAYAH;ID_AREA;YEAR;MONTH'
 )
 go
-
-insert into R_REPORT (
-	NAMA_REPORT
-,	KLASIFIKASI_REPORT
-,	TIPE_REPORT
-,	FILE_LOCATION
-,	WEB_PARAMS
-,	REPORT_PARAMS
-)
-values (
-	'Hot Work Permit'
-,	5
-,	'doc'
-,	'reports/lap_hwp.jasper'
-,	'id_ptw'
-,	'ID_PTW'
-)
-go
