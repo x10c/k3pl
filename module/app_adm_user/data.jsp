@@ -7,6 +7,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection db_con = (Connection) session.getAttribute("db.con");
@@ -15,6 +16,10 @@ try {
 		return;
 	}
 
+	Cookie[]	cookies			= request.getCookies ();
+	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
 	Statement db_stmt = db_con.createStatement();
 
 	String q=" select	A.nipg"
@@ -22,7 +27,9 @@ try {
 		+" ,		A.status_user"
 		+" from		__user		A"
 		+" ,		r_pegawai	B"
-		+" where	A.nipg = B.nipg"
+		+" where	A.nipg 			= B.nipg"
+		+" and		B.id_direktorat = " + id_direktorat
+		+" and		B.id_divprosbu	= " + id_divprosbu
 		+" order by	B.nama_pegawai";
 
 	ResultSet	rs	= db_stmt.executeQuery(q);
