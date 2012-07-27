@@ -446,7 +446,7 @@ function M_RefKelJabatanKomite()
 			, dataIndex	: 'id'
 			, width		: 50
 			, sortable	: true
-			, editor	: this.form_id_kel_jabatan_komite
+			, hidden	: true
 			}
 		,	{ id		: 'nama'
 			, header	: 'Nama'
@@ -547,6 +547,7 @@ function M_RefKelJabatanKomite()
 		,	tbar		: this.toolbar
 		,	autoWidth	: true
 		,	width		: '50%'
+		,	height		: 250
 		,	autoExpandColumn: 'nama'
 		,	listeners		: {
 				scope		: this
@@ -597,8 +598,7 @@ function M_RefKelJabatanKomite()
 	{
 		Ext.Ajax.request({
 			params :{
-				id		: record.data['id']
-			,	nama	: record.data['nama']
+				nama	: record.data['nama']
 			,	id_kel_jabatan_csc	: m_ref_jab_kel_csc_id
 			,	id_direktorat	: m_ref_direktorat_id
 			,	id_divprosbu	: m_ref_divprosbu_id
@@ -752,7 +752,7 @@ function M_RefKelJabatanCSC()
 			this.form_divprosbu.clearFilter(true);
 			this.form_divprosbu.filterBy(this.form_divprosbu_filter, this);
 
-			var id = this.store_divprosbu.getAt(0).get('id');
+			var id = this.store_divprosbu..get('id');
 
 			this.form_divprosbu.setValue(id);
 		} else {
@@ -952,8 +952,9 @@ function M_RefKelJabatanCSC()
 
 	this.do_load = function()
 	{
-		this.store.load();
 		this.store_direktorat.load();
+		this.store_divprosbu.load();
+		this.store.load();
 		
 	}
 

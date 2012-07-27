@@ -706,7 +706,6 @@ function M_RefPegawaiKomite()
 					if (msg.success == false) {
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
-					this.do_load();
 				}
 		,	scope	: this
 		});
