@@ -241,3 +241,21 @@ values (
 ,	'IS_IN_ORG;ID_DIR;ID_DIV;ID_DEP;ID_DINAS;ID_SEKSI;ID_WILAYAH;ID_AREA;YEAR;MONTH'
 )
 go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Laporan Insiden'
+,	5
+,	'doc'
+,	'reports/lap_invest_insiden.jasper'
+,	'id_insiden'
+,	'ID_INSIDEN'
+)
+go

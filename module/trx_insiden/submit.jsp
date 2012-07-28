@@ -64,11 +64,23 @@ try {
 	String		jml_pencemaran_lingkungan	= request.getParameter("jml_pencemaran_lingkungan");
 	String		jml_kecelakaan_kendaraan	= request.getParameter("jml_kecelakaan_kendaraan");
 	String		jml_kejadian_keamanan		= request.getParameter("jml_kejadian_keamanan");
+	
+	String		no_insiden				= request.getParameter("no_insiden");
+	String		waktu					= request.getParameter("waktu");
+	String		bagian_fungsi			= request.getParameter("bagian_fungsi");
+	String		pekerjaan_dilakukan		= request.getParameter("pekerjaan_dilakukan");
+	String		tindakan_dilakukan		= request.getParameter("tindakan_dilakukan");
+	String		dikeluarkan				= request.getParameter("dikeluarkan");
+	String		ringkasan_insiden		= request.getParameter("ringkasan_insiden");
+	String		temuan_investigasi		= request.getParameter("temuan_investigasi");
+	String		akar_masalah			= request.getParameter("akar_masalah");
+	String		sistem_perlu_diperkuat	= request.getParameter("sistem_perlu_diperkuat");
+	
 	String		q;
 
-	DateFormat	df	= new SimpleDateFormat("yyyy-MM-dd");
+	DateFormat	df		= new SimpleDateFormat("yyyy-MM-dd");
 	Date		dt_in	= df.parse(tanggal);
-	Calendar	cal	= Calendar.getInstance();
+	Calendar	cal		= Calendar.getInstance();
 	Date		date	= new Date();
 	int		year;
 	int		month;
@@ -117,6 +129,16 @@ try {
 			+" , id_user"
 			+" , id_divprosbu"
 			+" , id_direktorat"
+			+" , no_insiden"
+			+" , waktu"
+			+" , bagian_fungsi"
+			+" , pekerjaan_dilakukan"
+			+" , tindakan_dilakukan"
+			+" , dikeluarkan"
+			+" , ringkasan_insiden"
+			+" , temuan_investigasi"
+			+" , akar_masalah"
+			+" , sistem_perlu_diperkuat"
 			+" ) select "
 			+     id_insiden
 			+" , id_direktorat"
@@ -152,6 +174,16 @@ try {
 			+" ,'"+ user_nipg +"'"
 			+" ,"+ user_div
 			+" ,"+ user_dir
+			+" ,'"+ no_insiden +"'"
+			+" ,'"+ waktu +"'"
+			+" ,'"+ bagian_fungsi +"'"
+			+" ,'"+ pekerjaan_dilakukan +"'"
+			+" ,'"+ tindakan_dilakukan +"'"
+			+" ,'"+ dikeluarkan +"'"
+			+" ,'"+ ringkasan_insiden +"'"
+			+" ,'"+ temuan_investigasi +"'"
+			+" ,'"+ akar_masalah +"'"
+			+" ,'"+ sistem_perlu_diperkuat +"'"
 			+" from r_seksi where id_seksi = "+ id_area_seksi;
 		break;
 	case 3:
@@ -187,6 +219,17 @@ try {
 			+" , jml_pencemaran_lingkungan	= "+ jml_pencemaran_lingkungan
 			+" , jml_kecelakaan_kendaraan	= "+ jml_kecelakaan_kendaraan
 			+" , jml_kejadian_keamanan		= "+ jml_kejadian_keamanan
+			
+			+" , no_insiden					= '"+ no_insiden +"'"
+			+" , waktu						= '"+ waktu +"'"
+			+" , bagian_fungsi				= '"+ bagian_fungsi +"'"
+			+" , pekerjaan_dilakukan		= '"+ pekerjaan_dilakukan +"'"
+			+" , tindakan_dilakukan			= '"+ tindakan_dilakukan +"'"
+			+" , dikeluarkan				= '"+ dikeluarkan +"'"
+			+" , ringkasan_insiden			= '"+ ringkasan_insiden +"'"
+			+" , temuan_investigasi			= '"+ temuan_investigasi +"'"
+			+" , akar_masalah				= '"+ akar_masalah +"'"
+			+" , sistem_perlu_diperkuat		= '"+ sistem_perlu_diperkuat +"'"
 
 			+" , id_user				= '"+ user_nipg +"' "
 			+" , tanggal_akses			= getdate() "

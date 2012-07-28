@@ -10,21 +10,11 @@
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.ResultSet" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
 		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Cookie[]	cookies		= request.getCookies ();
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	if (user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User Divisi/Proyek/SBU tidak diketahui.'}");
 		return;
 	}
 
@@ -59,9 +49,18 @@ try {
 	+" ,		jml_pencemaran_lingkungan"
 	+" ,		jml_kecelakaan_kendaraan"
 	+" ,		jml_kejadian_keamanan"
+	+" ,		no_insiden"
+	+" ,		waktu"
+	+" ,		bagian_fungsi"
+	+" ,		pekerjaan_dilakukan"
+	+" ,		tindakan_dilakukan"
+	+" ,		dikeluarkan"
+	+" ,		ringkasan_insiden"
+	+" ,		temuan_investigasi"
+	+" ,		akar_masalah"
+	+" ,		sistem_perlu_diperkuat"
 	+" from		t_insiden"
-	+" where	id_insiden		= "+ id
-	+" and		id_divprosbu	= "+ user_div;
+	+" where	id_insiden		= "+ id;
 
 	rs = db_stmt.executeQuery(q);
 
@@ -95,6 +94,16 @@ try {
 		+"', jml_pencemaran_lingkungan	: '"+ rs.getString("jml_pencemaran_lingkungan")
 		+"', jml_kecelakaan_kendaraan	: '"+ rs.getString("jml_kecelakaan_kendaraan")
 		+"', jml_kejadian_keamanan		: '"+ rs.getString("jml_kejadian_keamanan")
+		+"', no_insiden					: '"+ rs.getString("no_insiden")
+		+"', waktu						: '"+ rs.getString("waktu")
+		+"', bagian_fungsi				: '"+ rs.getString("bagian_fungsi")
+		+"', pekerjaan_dilakukan		: '"+ rs.getString("pekerjaan_dilakukan")
+		+"', tindakan_dilakukan			: '"+ rs.getString("tindakan_dilakukan")
+		+"', dikeluarkan				: '"+ rs.getString("dikeluarkan")
+		+"', ringkasan_insiden			: '"+ rs.getString("ringkasan_insiden")
+		+"', temuan_investigasi			: '"+ rs.getString("temuan_investigasi")
+		+"', akar_masalah				: '"+ rs.getString("akar_masalah")
+		+"', sistem_perlu_diperkuat		: '"+ rs.getString("sistem_perlu_diperkuat")
 		+"'}";
 
 	rs.close();

@@ -2030,8 +2030,6 @@ insert into R_PEGAWAI values ('0097701698',1,1,203,95,77,'Afdal','-','1','1',get
 go
 insert into R_PEGAWAI values ('0004791937',1,1,203,95,77,'Andri Oscarianto Ginting ','-','1','1',getdate(),28,7)
 go
-insert into R_PEGAWAI values ('3086651074',1,1,203,95,77,'Bahman Efendy','-','1','1',getdate(),28,7)
-go
 insert into R_PEGAWAI values ('3086641068',1,1,203,95,77,'Usman ','-','1','1',getdate(),28,7)
 go
 insert into R_PEGAWAI values ('3082610912',1,1,203,95,77,'Sukarman','-','1','1',getdate(),28,7)
