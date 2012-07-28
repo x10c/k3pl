@@ -30,7 +30,6 @@ function M_TrxInsidenMasterAdd(title)
 {
 	this.title 			= title;
 	this.dml_type		= 0;
-	this.id_insiden		= '';
 
 	this.store_area = new Ext.data.ArrayStore({
 			fields		: ['id', 'name']
@@ -456,7 +455,7 @@ function M_TrxInsidenMasterAdd(title)
 			,	waitMsg		: 'Mohon Tunggu ...'
 			,	params		: {
 						dml_type					: this.dml_type
-					,	id_insiden					: this.id_insiden
+					,	id_insiden					: m_trx_insiden_id_insiden
 					,	id_area_seksi				: this.form_area.getValue()
 					,	id_klas						: this.form_klas.getValue()
 					,	tanggal						: this.form_tanggal.getValue()
