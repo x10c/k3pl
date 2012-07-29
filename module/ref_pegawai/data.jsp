@@ -17,6 +17,7 @@ try {
 	}
 
 	Cookie[]	cookies			= request.getCookies ();
+	String		nipg			= (String) request.getParameter ("nipg");
 	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
 	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
@@ -37,8 +38,13 @@ try {
 		+" ,		status_pegawai "
 		+" from		r_pegawai "
 		+" where	id_direktorat	= " + id_direktorat
-		+" and		id_divprosbu	= " + id_divprosbu
-		+" order by	nama_pegawai";
+		+" and		id_divprosbu	= " + id_divprosbu;
+
+	if (null != nipg) {
+		q +=" and nipg = '"+ nipg +"'";
+	}
+
+	q += " order by	nama_pegawai";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;

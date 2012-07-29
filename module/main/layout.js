@@ -124,6 +124,19 @@ function menu_item_on_click(node)
 	});
 }
 
+function check_direktorat ()
+{
+	var id_dir = Ext.util.Cookies.get ("user.direktorat");
+
+	if (id_dir != "7") {
+		return;
+	}
+
+	m_ref_pegawai = new M_RefPegawai (true);
+
+	m_ref_pegawai.do_refresh (3);
+}
+
 Ext.onReady(
 function(){
 	main_msg	= document.getElementById('msg');
@@ -226,6 +239,8 @@ function(){
 	};
 
 	menu_item_on_click(node);
+
+	check_direktorat ();
 });
 
 //@ sourceURL=main.layout.js

@@ -104,6 +104,7 @@ if (null == user_nipg || null == db_url) {
 <script type='text/javascript' src='<%=cpath%>/js/all.js'></script>
 
 <%-- all module --%>
+<script type='text/javascript' src='<%=cpath%>/module/ref_pegawai/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/app_home/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/pssr_entry/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/sfm_data_rapat_sub/layout.js'></script>

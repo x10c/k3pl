@@ -9,8 +9,9 @@
 var m_ref_pegawai;
 var m_ref_pegawai_d = _g_root +'/module/ref_pegawai/';
 
-function M_RefPegawai()
+function M_RefPegawai(load_once)
 {
+	this.do_load_once	= load_once;
 	this.dml_type		= 0;
 	this.ha_level		= 0;
 	this.id_direktorat	= '0';
@@ -160,18 +161,21 @@ function M_RefPegawai()
  */
 	this.form_nipg = new Ext.form.TextField({
 			fieldLabel	: 'NIPG'
+		,	name		: 'nipg'
 		,	allowBlank	: false
 		,	width		: 200
 	});
 
 	this.form_name = new Ext.form.TextField({
 			fieldLabel	: 'Nama Pegawai'
+		,	name		: 'nama_pegawai'
 		,	allowBlank	: false
 		,	width		: 200
 	});
 
 	this.form_email = new Ext.form.TextField({
 			fieldLabel	: 'E-mail'
+		,	name		: 'email'
 		,	vtype		: 'email'
 		,	vtypeText	: 'Format email: nama@domain.tld'
 		,	width		: 200
@@ -179,6 +183,7 @@ function M_RefPegawai()
 
 	this.form_klas = new Ext.form.ComboBox({
 			fieldLabel		: 'Klasifikasi'
+		,	name			: 'id_klasifikasi_pegawai'
 		,	store			: this.store_klas
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -191,6 +196,7 @@ function M_RefPegawai()
 
 	this.form_jabatan = new Ext.form.ComboBox({
 			fieldLabel		: 'Jabatan'
+		,	name			: 'id_jabatan'
 		,	store			: this.store_jabatan
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -203,6 +209,7 @@ function M_RefPegawai()
 
 	this.form_seksi = new Ext.form.ComboBox({
 			fieldLabel		: 'Seksi'
+		,	name			: 'id_seksi'
 		,	store			: this.store_seksi
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -216,6 +223,7 @@ function M_RefPegawai()
 
 	this.form_dinas = new Ext.form.ComboBox({
 			fieldLabel		: 'Dinas'
+		,	name			: 'id_dinas'
 		,	store			: this.store_dinas
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -235,6 +243,7 @@ function M_RefPegawai()
 
 	this.form_departemen = new Ext.form.ComboBox({
 			fieldLabel		: 'Departemen'
+		,	name			: 'id_departemen'
 		,	store			: this.store_departemen
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -253,6 +262,7 @@ function M_RefPegawai()
 
 	this.form_divprosbu = new Ext.form.ComboBox({
 			fieldLabel		: 'Divisi/Proyek/SBU'
+		,	name			: 'id_divprosbu'
 		,	store			: this.store_divprosbu
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -271,6 +281,7 @@ function M_RefPegawai()
 
 	this.form_direktorat = new Ext.form.ComboBox({
 			fieldLabel		: 'Direktorat'
+		,	name			: 'id_direktorat'
 		,	store			: this.store_direktorat
 		,	valueField		: 'id'
 		,	displayField	: 'name'
@@ -288,7 +299,8 @@ function M_RefPegawai()
 	});
 
 	this.form_status = new Ext.form.Checkbox({
-			fieldLabel	: 'Status Aktif'
+		fieldLabel	: 'Status Aktif'
+	,	name		: 'status_pegawai'
 	});
 /*
  * Buttons
@@ -547,6 +559,7 @@ function M_RefPegawai()
  */
 	this.form = new Ext.form.FormPanel({
 		title		: 'Data Pegawai'
+	,	itemId		: 'ref_pegawai_form'
 	,	padding		: 6
 	,	labelAlign	: 'right'
 	,	labelWidth	: 120
@@ -570,15 +583,30 @@ function M_RefPegawai()
 		]
 	});
 
-	this.panel = new Ext.Container({
-		id			: 'ref_pegawai_panel'
-	,	layout		: 'card'
-	,	activeItem	: 0
-	,	items		: [
-			this.grid
-		,	this.form
-		]
-	});
+	if (load_once) {
+		this.win = new Ext.Window ({
+			title		: 'Ubah Data Pegawai'
+		,	id			: 'ref_pegawai_win'
+		,	width		: 560
+		,	closable	: false
+		,	modal		: true
+		,	closeAction	: 'hide'
+		,	items		: [
+				this.form
+			]
+		});
+	} else {
+		this.panel = new Ext.Container({
+			id			: 'ref_pegawai_panel'
+		,	layout		: 'card'
+		,	activeItem	: 0
+		,	items		: [
+				this.grid
+			,	this.form
+			]
+		});
+	}
+
 /*
  * functions
  */
@@ -784,6 +812,11 @@ function M_RefPegawai()
 
 					Ext.MessageBox.alert('Pesan', msg.info);
 
+					if (this.do_load_once) {
+						do_logout ();
+						return;
+					}
+
 					if (msg.success == false) {
 						return;
 					}
@@ -841,13 +874,33 @@ function M_RefPegawai()
 		this.dml_type = 3;
 		this.form_nipg.setDisabled(true);
 		this.do_fill_form(data[0]);
-		this.panel.layout.setActiveItem(this.form);
+		this.panel.getLayout ().setActiveItem(this.form);
 
 		return true;
 	}
 
 	this.do_load = function()
 	{
+		if (this.do_load_once == true) {
+			this.store.load ({
+				scope	: this
+			,	params	: {
+					nipg	: Ext.util.Cookies.get ("user.nipg")
+				}
+			,	callback: function (r, options, success) {
+					if (!success) {
+						Ext.Msg.alert('Error', 'Data Pegawai tidak dapat diambil!');
+						return;
+					}
+					this.form.getForm ().loadRecord (r[0]);
+					m_ref_pegawai.dml_type = 3;
+					m_ref_pegawai.btn_cancel.setDisabled (true);
+					m_ref_pegawai.win.show ();
+				}
+			});
+			return;
+		}
+
 		delete this.store.lastParams;
 
 		this.store.load({
@@ -871,6 +924,6 @@ function M_RefPegawai()
 	}
 }
 
-m_ref_pegawai = new M_RefPegawai();
+m_ref_pegawai = new M_RefPegawai(false);
 
 //@ sourceURL=ref_pegawai.layout.js
