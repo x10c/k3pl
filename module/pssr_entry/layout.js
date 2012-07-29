@@ -212,6 +212,11 @@ function M_PssrEntryMaster(title)
 	}
 
 	this.entry_pssr_checklist = function (){
+		if (m_pssr_entry_id_pssr == '') {
+			Ext.Msg.alert("Kesalahan Operasi"
+		, "Silahkan pilih salah satu PSSR terlebih dahulu!");
+			return;
+		}
 		m_pssr_entry_checklist.form_edit();
 		m_pssr_entry.panel.layout.setActiveItem(m_pssr_entry_checklist.panel);
 	}
@@ -383,7 +388,7 @@ function M_PssrEntryMasterAdd(title)
 		
 		this.form_id_pssr.setValue(data[0].data['id_pssr']);
 		this.form_project.setValue(data[0].data['id_project']);
-		this.form_project.setValue(data[0].data['tanggal_mulai']);
+		this.form_tanggal_project.setValue(data[0].data['tanggal_mulai']);
 		this.form_lokasi.setValue(data[0].data['lokasi']);
 		this.form_tanggal.setValue(data[0].data['tanggal']);
 		

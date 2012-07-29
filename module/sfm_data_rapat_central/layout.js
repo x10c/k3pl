@@ -2149,7 +2149,7 @@ function M_SfmInputRapatCentral(){
 	{
 		this.store.load({
 			params		: {
-				type : '1'
+				type : this.ha_level
 			}
 		});
 	}

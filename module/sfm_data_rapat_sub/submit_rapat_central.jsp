@@ -43,7 +43,7 @@ try {
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
 		+" left join R_KEL_JABATAN_KOMITE_SUB_KOMITE C on (C.ID_KEL_JABATAN_KOMITE_SUB_KOMITE = A.ID_KEL_JABATAN_KOMITE_SUB_KOMITE) "
-		+" where B.nipg = "+ id_user +" and A.notulen in ('1','3') and A.id_kel_jabatan_komite_sub_komite is not null"
+		+" where B.nipg = "+ id_user +" and A.notulen in ('1','2','3') and A.id_kel_jabatan_komite_sub_komite is not null"
 		+" order by	A.id_kel_jabatan_komite_sub_komite ";
 
 	ResultSet	rs_kel = db_stmt.executeQuery(q);
@@ -53,7 +53,8 @@ try {
 		id_kel_jabatan_csc = rs_kel.getString("id_kel_jabatan_csc");
 		id_kel_jabatan_komite_sub_komite = rs_kel.getString("id_kel_jabatan_komite_sub_komite");
 	}else {
-		out.print("{ success:false,info: tidak dapat menemukan anda dalam daftar anggota Sub Komite");
+		out.print("{ success:false,info: \"tidak dapat menemukan anda dalam daftar notulen atau penanggung jawab Sub Komite\"}");
+		return;
 	}
 	
 	if (id_rapat.equals("")){

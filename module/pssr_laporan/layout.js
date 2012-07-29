@@ -130,10 +130,10 @@
 	{
 		var load_type = 'user';
 
+		this.store_project.load();
 		if (m_pssr_laporan_ha_level == 4) {
 			load_type = 'all';
 		}
-		this.store_project.load();
 		this.store.load({
 			params	: {
 				load_type : load_type
