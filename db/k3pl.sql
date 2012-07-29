@@ -13374,6 +13374,24 @@ values (
 )
 go
 
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Laporan Insiden'
+,	5
+,	'doc'
+,	'reports/lap_invest_insiden.jasper'
+,	'id_insiden'
+,	'ID_INSIDEN'
+)
+go
+
 insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (1, 2, 9, 'Auditor Bidang Teknik', '1')
 go
 insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (1, 2, 9, 24, 1, 'Audit Perencanaan dan Pembangunan', '1')
@@ -15405,8 +15423,6 @@ go
 insert into R_PEGAWAI values ('0097701698',1,1,203,95,77,'Afdal','-','1','1',getdate(),28,7)
 go
 insert into R_PEGAWAI values ('0004791937',1,1,203,95,77,'Andri Oscarianto Ginting ','-','1','1',getdate(),28,7)
-go
-insert into R_PEGAWAI values ('3086651074',1,1,203,95,77,'Bahman Efendy','-','1','1',getdate(),28,7)
 go
 insert into R_PEGAWAI values ('3086641068',1,1,203,95,77,'Usman ','-','1','1',getdate(),28,7)
 go

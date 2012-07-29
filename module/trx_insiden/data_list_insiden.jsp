@@ -30,7 +30,8 @@ try {
 		return;
 	}
 
-	Statement	db_stmt = db_con.createStatement();
+	Statement	db_stmt 	= db_con.createStatement();
+	String		load_type	= (String) request.getParameter("load_type");
 
 	String q
 	=" select	A.id_insiden"
@@ -43,8 +44,13 @@ try {
 	+" where	A.id_area_seksi				= B.id_seksi"
 	+" and		A.id_klasifikasi_pegawai	= D.id_klasifikasi_pegawai"
 	+" and		A.id_divprosbu				= "+ user_div
-	+" and		A.id_direktorat				= "+ user_dir
-	+" order by	A.id_insiden";
+	+" and		A.id_direktorat				= "+ user_dir;
+	
+	if (!load_type.equals("all")) {
+		q+=" and	A.id_user		= '"+ user_nipg +"'";
+	}
+
+	q+=" order by	A.id_insiden";
 
 	ResultSet	rs		= db_stmt.executeQuery(q);
 	int			i		= 0;
