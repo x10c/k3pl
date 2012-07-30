@@ -49,8 +49,9 @@ try {
 	
 	if (rs_kel.next()){
 		id_kel_jabatan_csc = rs_kel.getString("id_kel_jabatan_csc");
-	}else {
-		out.print("{ success:false,info: tidak dapat menemukan anda dalam daftar anggota CSC");
+	} else {
+		out.print("{success:false,info:'Untuk menambahkan data, anda harus terdaftar sebagai anggota CSC.'}");
+		return;
 	}
 	
 	if (id_rapat.equals("")){
