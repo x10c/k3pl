@@ -39,9 +39,9 @@ order by	a.NAMA_PEGAWAI
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="30">
+		<band height="35">
 			<staticText>
-				<reportElement x="0" y="0" width="802" height="25"/>
+				<reportElement x="0" y="0" width="802" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="14" isBold="true"/>
 				</textElement>
