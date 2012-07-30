@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_hwp" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="822" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="629"/>
-	<property name="ireport.y" value="126"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="349"/>
 	<subDataset name="JenisPekerjaanDS">
 		<parameter name="ID_PTW" class="java.lang.String">
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -47,7 +47,7 @@ ORDER BY
 			<![CDATA[SELECT
      R_ALAT_PELINDUNG_DIRI_PTW."ID_ALAT_PELINDUNG_DIRI_PTW" AS R_ALAT_PELINDUNG_DIRI_PTW_ID_ALAT_PELINDUNG_DIRI_PTW,
      R_ALAT_PELINDUNG_DIRI_PTW."NAMA_ALAT_PELINDUNG_DIRI_PTW" AS R_ALAT_PELINDUNG_DIRI_PTW_NAMA_ALAT_PELINDUNG_DIRI_PTW,
-     ( SELECT count(T_PTW_ALAT_PELINDUNG_DIRI."ID_ALAT_PELINDUNG_DIRI_PTW") AS TOTAL_ALAT_PELINDUNG_DIRI_PTW FROM "dbo"."T_PTW_ALAT_PELINDUNG_DIRI" T_PTW_ALAT_PELINDUNG_DIRI WHERE T_PTW_ALAT_PELINDUNG_DIRI."ID_PTW" = $P{ID_PTW} AND T_PTW_ALAT_PELINDUNG_DIRI."ID_ALAT_PELINDUNG_DIRI_PTW" = R_ALAT_PELINDUNG_DIRI_PTW."ID_ALAT_PELINDUNG_DIRI_PTW" ) AS TOTAL_ALAT_PELINDUNG_DIRI
+     ( SELECT T_PTW_ALAT_PELINDUNG_DIRI."KETERANGAN" AS KETERANGAN FROM "dbo"."T_PTW_ALAT_PELINDUNG_DIRI" T_PTW_ALAT_PELINDUNG_DIRI WHERE T_PTW_ALAT_PELINDUNG_DIRI."ID_PTW" = $P{ID_PTW} AND T_PTW_ALAT_PELINDUNG_DIRI."ID_ALAT_PELINDUNG_DIRI_PTW" = R_ALAT_PELINDUNG_DIRI_PTW."ID_ALAT_PELINDUNG_DIRI_PTW" ) AS KETERANGAN
 FROM
      "dbo"."R_ALAT_PELINDUNG_DIRI_PTW" R_ALAT_PELINDUNG_DIRI_PTW
 ORDER BY
@@ -55,7 +55,7 @@ ORDER BY
 		</queryString>
 		<field name="R_ALAT_PELINDUNG_DIRI_PTW_ID_ALAT_PELINDUNG_DIRI_PTW" class="java.lang.Short"/>
 		<field name="R_ALAT_PELINDUNG_DIRI_PTW_NAMA_ALAT_PELINDUNG_DIRI_PTW" class="java.lang.String"/>
-		<field name="TOTAL_ALAT_PELINDUNG_DIRI" class="java.lang.Integer"/>
+		<field name="KETERANGAN" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="DokumenPendukungDS">
 		<parameter name="ID_PTW" class="java.lang.String">
@@ -445,7 +445,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 						<reportElement mode="Opaque" x="0" y="123" width="300" height="40"/>
 						<componentElement>
 							<reportElement x="8" y="20" width="285" height="15"/>
-							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 								<datasetRun subDataset="JenisPekerjaanDS">
 									<datasetParameter name="ID_PTW">
 										<datasetParameterExpression><![CDATA[$P{ID_PTW}]]></datasetParameterExpression>
@@ -493,7 +493,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 						</staticText>
 						<componentElement>
 							<reportElement x="8" y="20" width="285" height="15"/>
-							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 								<datasetRun subDataset="SumberBahayaAlatKegiatanDS">
 									<datasetParameter name="ID_PTW">
 										<datasetParameterExpression><![CDATA[$P{ID_PTW}]]></datasetParameterExpression>
@@ -533,7 +533,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 						</staticText>
 						<componentElement>
 							<reportElement x="8" y="20" width="285" height="15"/>
-							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 								<datasetRun subDataset="AlatPelindungDiriDS">
 									<datasetParameter name="ID_PTW">
 										<datasetParameterExpression><![CDATA[$P{ID_PTW}]]></datasetParameterExpression>
@@ -551,7 +551,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 											<rightPen lineWidth="1.0"/>
 										</box>
 										<textField isStretchWithOverflow="true">
-											<reportElement x="0" y="0" width="201" height="15"/>
+											<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="80" height="15"/>
 											<textElement verticalAlignment="Middle">
 												<font size="8"/>
 												<paragraph leftIndent="2"/>
@@ -559,7 +559,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 											<textFieldExpression><![CDATA[$F{R_ALAT_PELINDUNG_DIRI_PTW_NAMA_ALAT_PELINDUNG_DIRI_PTW}]]></textFieldExpression>
 										</textField>
 										<staticText>
-											<reportElement x="201" y="0" width="7" height="15"/>
+											<reportElement stretchType="RelativeToBandHeight" x="80" y="0" width="7" height="15"/>
 											<textElement verticalAlignment="Middle">
 												<font size="8"/>
 												<paragraph leftIndent="2"/>
@@ -567,12 +567,11 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 											<text><![CDATA[:]]></text>
 										</staticText>
 										<textField isStretchWithOverflow="true">
-											<reportElement x="208" y="0" width="77" height="15"/>
+											<reportElement stretchType="RelativeToBandHeight" x="87" y="0" width="198" height="15"/>
 											<textElement verticalAlignment="Middle">
 												<font size="8"/>
 											</textElement>
-											<textFieldExpression><![CDATA[$F{TOTAL_ALAT_PELINDUNG_DIRI} != null && $F{TOTAL_ALAT_PELINDUNG_DIRI} > 0 ?
-"v" : "o"]]></textFieldExpression>
+											<textFieldExpression><![CDATA[$F{KETERANGAN}]]></textFieldExpression>
 										</textField>
 									</frame>
 								</jr:listContents>
@@ -591,7 +590,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 						</staticText>
 						<componentElement>
 							<reportElement x="8" y="20" width="285" height="15"/>
-							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 								<datasetRun subDataset="DokumenPendukungDS">
 									<datasetParameter name="ID_PTW">
 										<datasetParameterExpression><![CDATA[$P{ID_PTW}]]></datasetParameterExpression>
@@ -671,7 +670,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 						</staticText>
 						<componentElement>
 							<reportElement x="8" y="35" width="285" height="15"/>
-							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 								<datasetRun subDataset="SafetyChecklistDS">
 									<datasetParameter name="ID_PTW">
 										<datasetParameterExpression><![CDATA[$P{ID_PTW}]]></datasetParameterExpression>
@@ -808,7 +807,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 						</staticText>
 						<componentElement>
 							<reportElement x="8" y="50" width="285" height="15"/>
-							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+							<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 								<datasetRun subDataset="UjiKandunganDS">
 									<datasetParameter name="ID_PTW">
 										<datasetParameterExpression><![CDATA[$P{ID_PTW}]]></datasetParameterExpression>
