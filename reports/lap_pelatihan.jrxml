@@ -122,7 +122,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="60" y="0" width="495" height="20"/>
+					<reportElement x="80" y="0" width="475" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -132,7 +132,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<textFieldExpression><![CDATA[$F{DIREKTORAT}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="0" y="0" width="60" height="20"/>
+					<reportElement x="0" y="0" width="80" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -149,7 +149,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="105" y="0" width="450" height="20"/>
+					<reportElement x="125" y="0" width="430" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -159,7 +159,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<textFieldExpression><![CDATA[$F{DIVPROSBU}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="5" y="0" width="100" height="20"/>
+					<reportElement x="5" y="0" width="120" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -176,7 +176,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="90" y="0" width="465" height="20"/>
+					<reportElement x="110" y="0" width="445" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -186,7 +186,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<textFieldExpression><![CDATA[$F{DEPARTEMEN}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="10" y="0" width="80" height="20"/>
+					<reportElement x="10" y="0" width="100" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -203,7 +203,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="57" y="0" width="498" height="20"/>
+					<reportElement x="77" y="0" width="478" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -213,7 +213,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<textFieldExpression><![CDATA[$F{DINAS}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="15" y="0" width="42" height="20"/>
+					<reportElement x="15" y="0" width="62" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -230,7 +230,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="50">
 				<textField>
-					<reportElement x="62" y="0" width="493" height="20"/>
+					<reportElement x="82" y="0" width="473" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -240,7 +240,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<textFieldExpression><![CDATA[$F{SEKSI}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="20" y="0" width="42" height="20"/>
+					<reportElement x="20" y="0" width="62" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -250,7 +250,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<text><![CDATA[Seksi :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="520" y="20" width="35" height="30"/>
+					<reportElement x="510" y="20" width="45" height="30"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -304,7 +304,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<text><![CDATA[Tanggal]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="410" y="20" width="110" height="30"/>
+					<reportElement x="410" y="20" width="100" height="30"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
@@ -377,7 +377,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$F{TANGGAL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="410" y="0" width="110" height="20"/>
+				<reportElement x="410" y="0" width="100" height="20"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -387,7 +387,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$F{TEMPAT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="520" y="0" width="35" height="20"/>
+				<reportElement x="510" y="0" width="45" height="20"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
