@@ -122,22 +122,22 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="50" y="0" width="505" height="20"/>
+					<reportElement x="60" y="0" width="495" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri"/>
+						<font fontName="SansSerif"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DIREKTORAT}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="0" y="0" width="50" height="20"/>
+					<reportElement x="0" y="0" width="60" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Direktorat :]]></text>
 				</staticText>
@@ -149,22 +149,22 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="90" y="0" width="465" height="20"/>
+					<reportElement x="105" y="0" width="450" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri"/>
+						<font fontName="SansSerif"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DIVPROSBU}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="5" y="0" width="85" height="20"/>
+					<reportElement x="5" y="0" width="100" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Divisi/Proyek/SBU :]]></text>
 				</staticText>
@@ -176,22 +176,22 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="70" y="0" width="485" height="20"/>
+					<reportElement x="90" y="0" width="465" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri"/>
+						<font fontName="SansSerif"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DEPARTEMEN}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="10" y="0" width="60" height="20"/>
+					<reportElement x="10" y="0" width="80" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Departemen :]]></text>
 				</staticText>
@@ -203,22 +203,22 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="20">
 				<textField>
-					<reportElement x="47" y="0" width="508" height="20"/>
+					<reportElement x="57" y="0" width="498" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri"/>
+						<font fontName="SansSerif"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DINAS}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="15" y="0" width="32" height="20"/>
+					<reportElement x="15" y="0" width="42" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Dinas :]]></text>
 				</staticText>
@@ -230,22 +230,22 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 		<groupHeader>
 			<band height="50">
 				<textField>
-					<reportElement x="52" y="0" width="503" height="20"/>
+					<reportElement x="62" y="0" width="493" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri"/>
+						<font fontName="SansSerif"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{SEKSI}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="20" y="0" width="32" height="20"/>
+					<reportElement x="20" y="0" width="42" height="20"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Seksi :]]></text>
 				</staticText>
@@ -255,7 +255,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Durasi
 (Hari)]]></text>
@@ -267,7 +267,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 						<rightPen lineWidth="0.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[NIPG]]></text>
 				</staticText>
@@ -278,7 +278,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 						<rightPen lineWidth="0.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Nama Pegawai]]></text>
 				</staticText>
@@ -289,7 +289,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 						<rightPen lineWidth="0.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Nama Pelatihan]]></text>
 				</staticText>
@@ -299,7 +299,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Tanggal]]></text>
 				</staticText>
@@ -309,7 +309,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font fontName="Calibri" isBold="true"/>
+						<font fontName="SansSerif" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Tempat]]></text>
 				</staticText>
@@ -327,7 +327,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="14" isBold="true"/>
+					<font fontName="SansSerif" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LAPORAN PELATIHAN]]></text>
 			</staticText>
@@ -342,7 +342,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement>
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NIPG}]]></textFieldExpression>
 			</textField>
@@ -352,7 +352,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NAMA_PEGAWAI}]]></textFieldExpression>
 			</textField>
@@ -362,7 +362,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NAMA_PELATIHAN}]]></textFieldExpression>
 			</textField>
@@ -372,7 +372,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TANGGAL}]]></textFieldExpression>
 			</textField>
@@ -382,7 +382,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEMPAT}]]></textFieldExpression>
 			</textField>
@@ -392,7 +392,7 @@ $P{CLAUSE_END_DATE}]]></defaultValueExpression>
 					<bottomPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{DURASI}]]></textFieldExpression>
 			</textField>

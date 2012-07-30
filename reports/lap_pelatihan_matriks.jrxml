@@ -43,7 +43,7 @@ order by	a.NAMA_PEGAWAI
 			<staticText>
 				<reportElement x="0" y="0" width="802" height="25"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="14" isBold="true"/>
+					<font fontName="SansSerif" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MATRIKS PELATIHAN]]></text>
 			</staticText>
@@ -65,7 +65,7 @@ order by	a.NAMA_PEGAWAI
 								<rightPen lineWidth="0.5"/>
 							</box>
 							<textElement verticalAlignment="Middle">
-								<font fontName="Calibri" isBold="true"/>
+								<font fontName="SansSerif" isBold="true"/>
 							</textElement>
 							<text><![CDATA[Nama Pegawai]]></text>
 						</staticText>
@@ -79,7 +79,7 @@ order by	a.NAMA_PEGAWAI
 								<rightPen lineWidth="0.5"/>
 							</box>
 							<textElement verticalAlignment="Middle">
-								<font fontName="Calibri" isBold="true"/>
+								<font fontName="SansSerif" isBold="true"/>
 							</textElement>
 							<text><![CDATA[Jabatan]]></text>
 						</staticText>
@@ -104,7 +104,7 @@ order by	a.NAMA_PEGAWAI
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement>
-									<font fontName="Calibri"/>
+									<font fontName="SansSerif"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{NAMA_PEGAWAI}]]></textFieldExpression>
 							</textField>
@@ -133,7 +133,7 @@ order by	a.NAMA_PEGAWAI
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement>
-									<font fontName="Calibri"/>
+									<font fontName="SansSerif"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{NAMA_JABATAN}]]></textFieldExpression>
 							</textField>
@@ -162,7 +162,7 @@ order by	a.NAMA_PEGAWAI
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Calibri" isBold="true"/>
+									<font fontName="SansSerif" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{NAMA_PELATIHAN}]]></textFieldExpression>
 							</textField>
@@ -190,7 +190,7 @@ order by	a.NAMA_PEGAWAI
 								<rightPen lineWidth="1.0"/>
 							</box>
 							<textElement verticalAlignment="Middle">
-								<font fontName="Calibri"/>
+								<font fontName="SansSerif"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$V{TANGGALMeasure}]]></textFieldExpression>
 						</textField>
