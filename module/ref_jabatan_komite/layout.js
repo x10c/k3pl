@@ -7,6 +7,7 @@
  *   - Prasetya Yanuar (mieh100freak@gmail.com)
  */
 
+var m_ref_jabatan_komite;
 var m_ref_jab_komite;
 var m_ref_jab_komite_d = _g_root +'/module/ref_jabatan_komite/';
 var m_ref_kel_jab_komite;
@@ -752,7 +753,7 @@ function M_RefKelJabatanCSC()
 			this.form_divprosbu.clearFilter(true);
 			this.form_divprosbu.filterBy(this.form_divprosbu_filter, this);
 
-			var id = this.store_divprosbu..get('id');
+			var id = this.store_divprosbu.get('id');
 
 			this.form_divprosbu.setValue(id);
 		} else {
@@ -1021,6 +1022,6 @@ function M_ReferensiJabatanKomite_manager()
 	}
 }
 
-var m_ref_jabatan_komite = new M_ReferensiJabatanKomite_manager();
+m_ref_jabatan_komite = new M_ReferensiJabatanKomite_manager();
 
 //@ sourceURL=ref_jabatan_komite.layout.js
