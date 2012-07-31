@@ -152,6 +152,7 @@ function M_TrnMatriks()
 						type	:'date'
 					,	format	:'Y-m-d'
 					}
+				,	width		:150
 				});
 			}, this);
 		}, this);
@@ -367,28 +368,34 @@ function M_TrnLapPegawai()
 		,{
 			header		:'NIPG'
 		,	dataIndex	:'nipg'
+		,	width		:120
 		},{
 			header		:'Nama Pegawai'
 		,	dataIndex	:'name'
+		,	width		:200
 		},{
 			header		:'Departemen'
 		,	dataIndex	:'id_dep'
 		,	groupable	:true
 		,	renderer	:store_renderer('id', 'name', k3pl.store.Departemen)
+		,	width		:200
 		},{
 			header		:'Dinas'
 		,	dataIndex	:'id_dinas'
 		,	groupable	:true
 		,	renderer	:store_renderer('id', 'name', k3pl.store.Dinas)
+		,	width		:200
 		},{
 			header		:'Seksi'
 		,	dataIndex	:'id_seksi'
 		,	groupable	:true
 		,	renderer	:store_renderer('id', 'name', k3pl.store.Seksi)
+		,	width		:200
 		},{
 			header		:'Nama Pelatihan'
 		,	dataIndex	:'nama_pelatihan'
 		,	groupable	:true
+		,	width		:200
 		},{
 			header		:'Tanggal'
 		,	dataIndex	:'tanggal'
@@ -399,10 +406,11 @@ function M_TrnLapPegawai()
 		,	summaryRenderer	: function() {
 					return '<center><b>Total :</b></center>';
 				}
+		,	width		:150
 		},{
 			header		:'Durasi (hari)'
 		,	dataIndex	:'lama'
-		,	summaryType	: 'sum'
+		,	summaryType	:'sum'
 		,	align		:'center'
 		}]
 	,	defaults	:{
@@ -426,13 +434,11 @@ function M_TrnLapPegawai()
 		store		:this.store
 	,	cm			:this.cm
 	,	autoHeight	:true
-	,	autoWidth	:true
 	,	autoScroll	:true
 	,	plugins		:[this.summary, this.group_summary]
 	,	view		: new Ext.grid.GroupingView({
 			hideGroupedColumn	:true
-		,	startCollapsed		:true
-		,	forceFit			:true
+		,	startCollapsed		:false
 		})
 	,	tbar		: [ this.btn_print ]
 	});
@@ -443,14 +449,13 @@ function M_TrnLapPegawai()
 		title		:'Data Pelatihan'
 	,	padding		:'6'
 	,	autoScroll	:true
-	,	defaults	:{
-			style		:{
-					marginLeft		: 'auto'
-				,	marginRight		: 'auto'
-				,	marginBottom	: '8px'
+	,	defaults	: {
+			style		: {
+				marginLeft	: 'auto'
+			,	marginRight	: 'auto'
 			}
 		}
-	,	items	:[
+	,	items		:[
 			this.panel_form
 		,	this.panel_grid
 		]

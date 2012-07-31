@@ -483,7 +483,13 @@ function M_RefPegawai(load_once)
 		,	sortable	: true
 		,	width		: 80
 		,	editor		: this.form_status
-		,	renderer	: checkbox_renderer(this.form_status, 'Aktif', 'Non-Aktif')
+		,	renderer	: function (value) {
+				if (value == '1' || value == 'true' || value == true) {
+					return 'Aktif';
+				} else {
+					return 'Non-Aktif';
+				}
+			}
 		,	filter		: {
 				type	:'boolean'
 			}

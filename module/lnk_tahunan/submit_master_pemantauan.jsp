@@ -54,8 +54,7 @@ try {
 		id_lingkungan_tahunan	= Long.toString(date.getTime());
 
 		q	=" insert into t_lingkungan ("
-			+"		id_lingkungan_tahunan"
-			+" ,	id_seksi"
+			+" 		id_seksi"
 			+" ,	id_dinas"
 			+" ,	id_departemen"
 			+" ,	tipe_kegiatan_lingkungan"
@@ -69,8 +68,7 @@ try {
 			+" ,	id_direktorat"
 			+" )"
 			+" values ("
-			+ id_lingkungan_tahunan
-			+", "+ id_seksi
+			+"  "+ id_seksi
 			+", "+ id_dinas
 			+", "+ id_departemen
 			+", "+ tipe_kegiatan_lingkungan

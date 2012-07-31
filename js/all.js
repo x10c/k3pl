@@ -44,7 +44,7 @@ Ext.override (Ext.grid.GridView,{
 refresh: Ext.grid.GridView.prototype.refresh.createSequence(function(){
 		if (this.grid.autoHeight){
 			var body = this.grid.el.select('.x-grid3-body').first();
-			var height = this.grid.getGridEl().getHeight()-this.scroller.getHeight()+body.getHeight();
+			var height = this.grid.getGridEl().getHeight()-this.scroller.getHeight()+body.getHeight() + 30;
 			this.grid.getGridEl().setHeight(height);
 			this.scroller.setStyle({
 				overflow: 'auto'

@@ -43,21 +43,21 @@ try {
 	int	i = 0;
 	int	j = 0;
 
-	q	=" select	A.id"
-		+" ,		A.id_pelatihan"
-		+" ,		A.penyelenggara"
-		+" ,		A.tempat"
-		+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal"
-		+" ,		A.lama"
-		+" from		t_pelatihan	A"
+	q	=" select	id"
+		+" ,		id_pelatihan"
+		+" ,		penyelenggara"
+		+" ,		tempat"
+		+" ,		replace(convert(varchar, tanggal, 111), '/', '-') as tanggal"
+		+" ,		lama"
+		+" from		t_pelatihan"
 		+" where	id_divprosbu = "+ user_div;
 
 	if (gid != null && !gid.equals("")) {
-		q += " A.id = "+ gid;
+		q += "and id = "+ gid;
 	}
 
-	q	+=" order by	A.tanggal		DESC"
-		 +" ,			A.id_pelatihan	ASC";
+	q	+=" order by	tanggal			DESC"
+		 +" ,			id_pelatihan	ASC";
 
 	rs = db_stmt.executeQuery(q);
 
@@ -95,9 +95,9 @@ try {
 
 		o	+="{id				:"+ id
 			+ ",id_pelatihan	:"+ rs.getString("id_pelatihan")
-			+ ",penyelenggara	:\""+ rs.getString("penyelenggara") +"\""
-			+ ",tempat			:\""+ rs.getString("tempat") +"\""
-			+ ",tanggal			:\""+ rs.getString("tanggal") +"\""
+			+ ",penyelenggara	:'"+ rs.getString("penyelenggara") +"'"
+			+ ",tempat			:'"+ rs.getString("tempat") +"'"
+			+ ",tanggal			:'"+ rs.getString("tanggal") +"'"
 			+ ",lama			:"+ rs.getString("lama")
 			+ ",peserta			:"+ peserta
 			+ "}";
