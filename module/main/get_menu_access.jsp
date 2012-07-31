@@ -1,27 +1,28 @@
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String q = "";
 try {
 	Connection con = (Connection) session.getAttribute("db.con");
-	if (con == null || con.isClosed()) {
-		String db_url = (String) session.getAttribute("db.url");
-
-		if (db_url == null) {
-			out.print("{success:false, info:'0'}");
-			return;
-		}
-
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		con = DriverManager.getConnection(db_url);
-
-		session.setAttribute("db.con", (Object) con);
+	if (con == null || (con != null && con.isClosed())) {
+		response.sendRedirect(request.getContextPath());
+		return;
 	}
 
-	Statement	stmt		= con.createStatement();
-	String		user_nipg	= (String) session.getAttribute("user.nipg");
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
 	String		menu_id		= request.getParameter("menu_id");
-	ResultSet	rs		= null;
 
 	if (menu_id == null || (menu_id != null && menu_id.equals(""))) {
 		out.print("{success:true,info:'0'}");
@@ -29,6 +30,9 @@ try {
 	}
 
 	session.setAttribute("menu.id", menu_id);
+
+	Statement	stmt	= con.createStatement();
+	ResultSet	rs		= null;
 
 	q
 	=" select	isnull(max(ha_level),1) ha_level"
