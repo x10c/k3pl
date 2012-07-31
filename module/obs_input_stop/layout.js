@@ -606,7 +606,6 @@ function M_ObsInputStop()
 			grid_id = 'obs_input_detail_'+ d[i].kel_id +'_'+ d[i].tipe_id;
 			grid = Ext.getCmp(grid_id);
 			if (grid == undefined) {
-				console.log('Cannot get grid with id '+ grid_id +'!');
 				continue;
 			}
 

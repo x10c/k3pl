@@ -39,7 +39,7 @@ if (null == user_nipg || null == db_url) {
 %>
 <html>
 <head>
-<title>PT. Perusahaan Gas Negara Tbk. | K3PL</title>
+<title>PT. Perusahaan Gas Negara (Persero) Tbk. | K3PL</title>
 <link rel='shortcut icon' href='<%=cpath%>/images/favicon_new.ico'/>
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/css/main.css'/>
 <%--

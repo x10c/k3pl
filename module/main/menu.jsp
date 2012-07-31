@@ -1,4 +1,8 @@
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 try {
 	Connection con = (Connection) session.getAttribute("db.con");
@@ -18,11 +22,21 @@ try {
 		session.setAttribute("db.con", (Object) con);
 	}
 
+	Cookie[]	cookies		= request.getCookies ();
+	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
+	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+
+	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
+		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
+		response.sendRedirect(request.getContextPath());
+		return;
+	}
+
 	Statement	stmt1	= con.createStatement();
 	Statement	stmt2	= con.createStatement();
 	ResultSet	rs1	= null;
 
-	String	user = (String) session.getAttribute("user.nipg");
 	String	q;
 	String	data;
 	int	i = 0;
@@ -52,7 +66,7 @@ try {
 			+" and		B.id_grup   	in ("
 			+"	select	id_grup"
 			+"	from	__user_grup"
-			+"	where	nipg = '"+ user +"'"
+			+"	where	nipg = '"+ user_nipg +"'"
 			+" )"
 			+" order by	A.menu_id";
 

@@ -18,7 +18,6 @@ var m_ref_org_ha_level	= 0;
 
 function disable_add_button ()
 {
-	console.log (m_ref_org_id_dir +","+ m_ref_org_id_div +","+ m_ref_org_id_dep +","+ m_ref_org_id_dinas);
 	m_ref_org_dir.btn_add.setDisabled (0);
 	m_ref_org_div.btn_add.setDisabled (m_ref_org_id_dir == 0);
 	m_ref_org_dep.btn_add.setDisabled (m_ref_org_id_div == 0);

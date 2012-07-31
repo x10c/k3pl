@@ -1385,7 +1385,6 @@ function M_PssrEntryChecklist(title)
 				grid_id = 'pssr_input_detail_'+ kat[i].id +'_'+ item[j].id;
 				grid = Ext.getCmp(grid_id);
 				if (grid == undefined) {
-					console.log('Cannot get grid with id '+ grid_id +'!');
 					continue;
 				}
 				detail = item[j].details;
@@ -1421,7 +1420,6 @@ function M_PssrEntryChecklist(title)
 			grid_id = 'pssr_input_detail_'+ d[i].kat_id +'_'+ d[i].item_id;
 			grid = Ext.getCmp(grid_id);
 			if (grid == undefined) {
-				console.log('Cannot get grid with id '+ grid_id +'!');
 				continue;
 			}
 
@@ -1431,7 +1429,6 @@ function M_PssrEntryChecklist(title)
 			}
 			//	grid.store.reload();
 			r = grid.store.getAt(x);
-			console.log('grid_id : '+ i +'. '+grid_id +'| detail_id'+ d[i].detail_id);
 			if (r == 'undefined'){
 				continue;
 			}

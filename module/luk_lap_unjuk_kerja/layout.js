@@ -536,8 +536,6 @@ function M_LUK_JBA ()
 			s[i].data.push (parseInt (r.get('dec')));
 		}
 
-		console.log (s);
-
 		return s;
 	}
 }
