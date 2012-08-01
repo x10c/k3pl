@@ -1,58 +1,39 @@
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%--
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
+ %
+ % Author(s):
+ % + PT. Awakami
+ %   - m.shulhan (ms@kilabit.org)
+--%>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection con = (Connection) session.getAttribute("db.con");
+	db_stmt = db_con.createStatement();
 
-	if (con == null || con.isClosed()) {
-		String db_url = (String) session.getAttribute("db.url");
+	Statement	db_stmt2	= db_con.createStatement();
+	ResultSet	db_rs2		= null;
+	int			i			= 0;
+	int			j			= 0;
+	JSONArray	children	= null;
+	JSONObject	parent		= null;
+	JSONObject	leaf		= null;
 
-		if (db_url == null) {
-			out.print("{success:false, info:'Session anda telah habis!'}");
-			return;
-		}
-
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		con = DriverManager.getConnection(db_url);
-
-		session.setAttribute("db.con", (Object) con);
-	}
-
-	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	stmt1	= con.createStatement();
-	Statement	stmt2	= con.createStatement();
-	ResultSet	rs1	= null;
-
-	String	q;
-	String	data;
-	int	i = 0;
-	int	j = 0;
-
-	q	=" select	menu_name, menu_folder, menu_id, icon "
+	db_q=" select	menu_name, menu_folder, menu_id, icon "
 		+" from		__menu "
 		+" where	menu_leaf = 0 "
 		+" order by	menu_id ";
 
-	rs1 = stmt1.executeQuery(q);
+	db_rs = db_stmt.executeQuery(db_q);
 
-	data = "[";
+	json_a = new JSONArray ();
 
-	while (rs1.next()) {
-		q	=" select distinct"
+	while (db_rs.next()) {
+		parent = new JSONObject ();
+		parent.put ("text", db_rs.getString ("menu_name"));
+		parent.put ("id", db_rs.getString ("menu_folder"));
+		parent.put ("iconCls", db_rs.getString ("icon"));
+
+		db_q=" select distinct"
 			+"	A.menu_id"
 			+" ,	A.menu_name"
 			+" ,	A.menu_folder"
@@ -62,7 +43,7 @@ try {
 			+" ,		__hak_akses	B"
 			+" where	A.menu_id   	= B.menu_id"
 			+" and		B.ha_level	>= 1"
-			+" and		A.menu_parent	= "+ rs1.getString("menu_id")
+			+" and		A.menu_parent	= "+ db_rs.getString("menu_id")
 			+" and		B.id_grup   	in ("
 			+"	select	id_grup"
 			+"	from	__user_grup"
@@ -70,50 +51,33 @@ try {
 			+" )"
 			+" order by	A.menu_id";
 
-		ResultSet rs2 = stmt2.executeQuery(q);
+		db_rs2 = db_stmt2.executeQuery (db_q);
 
-		if (!rs2.next()) {
+		if (!db_rs2.next()) {
 			continue;
 		}
 
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-
-		data+="{ text     :'"+ rs1.getString("menu_name") +"'"
-			+ ", id       :'"+ rs1.getString("menu_folder") +"'"
-			+ ", iconCls  :'"+ rs1.getString("icon") +"' "
-			+ ", children :[";
-
-		j = 0;
+		children = new JSONArray ();
 		do {
-			if (j > 0) {
-				data += ",";
-			} else {
-				j++;
-			}
+			leaf = new JSONObject ();
+			leaf.put ("text", db_rs2.getString ("menu_name"));
+			leaf.put ("id", db_rs2.getString ("menu_folder"));
+			leaf.put ("menu_id", db_rs2.getString ("menu_id"));
+			leaf.put ("iconCls", db_rs2.getString ("icon"));
+			leaf.put ("leaf", true);
 
-			data+="{"
-				+ "  text    : '"+ rs2.getString("menu_name") +"' "
-				+ ", id      : '"+ rs2.getString("menu_folder") +"' "
-				+ ", menu_id : '"+ rs2.getString("menu_id") +"' "
-				+" , iconCls : '"+ rs2.getString("icon") +"' "
-				+ ", leaf    : true "
-				+ "}";
-		} while (rs2.next());
+			children.put (leaf);
+		} while (db_rs2.next());
 
-		data +="]}";
+		parent.put ("children", children);
+		json_a.put (parent);
 
-		rs2.close();
+		db_rs2.close();
 	}
 
-	data +="]";
+	db_rs.close ();
 
-	rs1.close();
-
-	out.print(data);
+	out.print (json_a);
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }

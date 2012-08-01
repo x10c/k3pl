@@ -1,41 +1,14 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
+<%@ include file="../modinit.jsp" %>
 <%@ page contentType="text/html" %>
 <%
-Cookie[]	cookies	= request.getCookies ();
-String		c_name	= "";
-String		user_nipg	= null;
-String		user_name	= null;
-String		user_email	= null;
-
-if (cookies != null) {
-	for (int i = 0; i < cookies.length; i++) {
-		c_name = cookies[i].getName ();
-		if (c_name.equalsIgnoreCase ("user.nipg")) {
-			user_nipg = cookies[i].getValue ();
-		} else if (c_name.equalsIgnoreCase ("user.name")) {
-			user_name = cookies[i].getValue ();
-		} else if (c_name.equalsIgnoreCase ("user.email")) {
-			user_email = cookies[i].getValue ();
-		}
-	}
-}
-
-// check user session, if not exist redirect user to module login
-String cpath	= (String) request.getContextPath();
-String db_url	= (String) session.getAttribute("db.url");
-
-if (null == user_nipg || null == db_url) {
-	String url = cpath +"/index.jsp";
-	response.sendRedirect(url);
-	return;
-}
+String cpath = (String) request.getContextPath();
 %>
 <html>
 <head>

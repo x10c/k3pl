@@ -1,56 +1,50 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.Properties" %>
 <%@ page import="java.io.FileInputStream" %>
 <%@ page import="java.io.File" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 Properties	props	= new Properties();
-props.load(new FileInputStream(application.getRealPath("WEB-INF"+File.separator+"web.properties")));
+props.load (new FileInputStream(application.getRealPath("WEB-INF"+File.separator+"web.properties")));
 String		db_url	= props.getProperty("db")+";user="+props.getProperty("user")+";password="+props.getProperty("pass");
 
 try {
 	DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 } catch (SQLException e) {
-	System.out.println(e.getMessage());
-}
-
-Connection	db_con	= DriverManager.getConnection(db_url);
-Statement	db_stmt	= db_con.createStatement();
-ResultSet	rs		= null;
-Cookie[]	cookies	= request.getCookies ();
-String		c_name	= "";
-String		user	= null;
-String		cpath	= request.getContextPath();
-
-session.setAttribute("db.url", (Object) db_url);
-session.setAttribute("db.con", (Object) db_con);
-
-// get user session, redirect to main page if user already logged in
-
-if (cookies != null) {
-	for (int i = 0; i < cookies.length; i++) {
-		c_name = cookies[i].getName ();
-		if (c_name.equalsIgnoreCase ("user.nipg")) {
-			user = cookies[i].getValue ();
-		}
-	}
-}
-
-if (user != null) {
-	response.sendRedirect(cpath +"/module/main/index.jsp");
+	out.print (e.getMessage());
 	return;
 }
 
-String		q		= "";
-String		chart_delay		= "10";
-String		gallery_delay	= "7";
+Connection	db_con			= DriverManager.getConnection(db_url);
+Statement	db_stmt			= db_con.createStatement();
+ResultSet	rs				= null;
+Cookie[]	cookies			= request.getCookies ();
+String		user			= ServletUtilities.getCookieValue (cookies, "user.nipg", null);
+String		cpath			= request.getContextPath();
+String		q				= "";
+int			chart_delay		= 0;
+int			gallery_delay	= 0;
+
+session.setAttribute ("db.con", (Object) db_con);
+session.setAttribute ("db.url", (Object) db_url);
+
+// get user session, redirect to main page if user already logged in
+if (user != null && ! "".equals (user)) {
+	response.sendRedirect(cpath +"/module/main/index.jsp");
+	return;
+}
 
 q	=" select	isnull(chart_delay, 10) as chart_delay"
 	+" ,		isnull(gallery_delay, 7) as gallery_delay"
@@ -59,8 +53,8 @@ q	=" select	isnull(chart_delay, 10) as chart_delay"
 rs = db_stmt.executeQuery(q);
 
 if (rs.next()) {
-	chart_delay		= rs.getString("chart_delay");
-	gallery_delay	= rs.getString("gallery_delay");
+	chart_delay		= rs.getInt ("chart_delay");
+	gallery_delay	= rs.getInt ("gallery_delay");
 }
 
 rs.close();
@@ -68,7 +62,7 @@ rs.close();
 
 <html>
 <head>
-<title> PT. PGN Tbk. | K3PL</title>
+<title> PT. Perusahaan Gas Negara (Persero) Tbk. | K3PL</title>
 <link rel='shortcut icon' href='<%=cpath%>/images/favicon_new.ico'/>
 <script>
 	var _g_root = '<%= cpath %>';

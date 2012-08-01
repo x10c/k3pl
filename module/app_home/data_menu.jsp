@@ -5,45 +5,34 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	db_stmt = db_con.createStatement();
+
+	db_q
+	=" select"
+	+" 			menu_id"
+	+" ,		menu_name"
+	+" from		__menu"
+	+" order by	menu_id";
+
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
+
+	JSONArray menu = null;
+
+	while (db_rs.next()) {
+		menu = new JSONArray ();
+		menu.put (db_rs.getString ("menu_id"));
+		menu.put (db_rs.getString ("menu_name"));
+
+		json_a.put (menu);
 	}
 
-	Statement db_stmt = db_con.createStatement();
+	out.print (json_a);
 
-	q	=" select"
-		+" 			menu_id"
-		+" ,		menu_name"
-		+" from		__menu"
-		+" order by	menu_id";
-
-	ResultSet	rs		= db_stmt.executeQuery(q);
-	String		data	= "[";
-	int			i		= 0;
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i = 1;
-		}
-		data+= "['"+ rs.getString("menu_id") +"'"
-			+  ",\""+ rs.getString("menu_name") +"\""
-			+  "]";
-	}
-
-	data += "]";
-
-	out.print(data);
-
-	rs.close();
+	db_rs.close ();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }
