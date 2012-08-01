@@ -109,7 +109,7 @@ th {
 .theader {
 	text-align	: center;
 	background	: yellow;	
-	color		: white;
+	color		: black;
 }
 
 .thdr {
@@ -147,7 +147,7 @@ INSTRUKSI KERJA<br/>
 IJIN KERJA MEMASUKI RUANGAN TERBATAS (<i>CONFINED SPACE ENTRY PERMIT</i>) <br/>
 PT PERUSAHAAN GAS NEGARA (Persero) Tbk <br/>
 	</th>
-	<th class="tcenter" width="100"><img src="/k3pl/images/SBU_I.png" width="97" height="51"/></th>
+	<th class="tcenter" width="100"></th>
 </tr>
 </table>
 

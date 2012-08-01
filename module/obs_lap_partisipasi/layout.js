@@ -774,7 +774,7 @@ function M_ObsLapPartOrg()
 	this.form	= new M_ObsLapPartForm(this, true);
 	this.chart	= new M_ObsLapPartOrgChart(
 				  this.grid.store
-				, 'Persentase Partisipasi STOP'
+				, 'Persentase Partisipasi Observasi'
 				, 'name'
 				, ''
 				, 'total_part_percent'

@@ -147,7 +147,7 @@ INSTRUKSI KERJA<br/>
 IJIN KERJA PENGGALIAN (<i>DIGGING WORK PERMIT</i>) <br/>
 PT PERUSAHAAN GAS NEGARA (Persero) Tbk <br/>
 	</th>
-	<th class="tcenter" width="100"><img src="/k3pl/images/SBU_I.png" width="97" height="51"/></th>
+	<th class="tcenter" width="100"></th>
 </tr>
 </table>
 

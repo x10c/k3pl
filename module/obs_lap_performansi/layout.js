@@ -848,7 +848,7 @@ function M_ObsLapSTOPGrid()
 	});
 
 	this.panel = new Ext.grid.GridPanel({
-		title				: 'STOP Tabel'
+		title				: 'Tabel Observasi'
 	,	store				: this.store
 	,	cm					: this.cm
 	,	autoHeight			: true
@@ -966,14 +966,14 @@ function M_ObsLapSTOP()
 	this.form		= new M_ObsLapPerfForm(this.grid, true);
 	this.chart		= new M_ObsLapPerfChart(
 									this.grid.store
-								,	'Grafik Performansi STOP'
+								,	'Grafik Performansi Observasi'
 								,	'item'				,	''
 								,	'total_part_percent',	'% Partisipasi'
 								,	'unsafe_act_index'	,	'Unsafe Act per Hour'
 								,	'column');
 
 	this.panel = new Ext.Panel({
-		title		: 'Laporan Performansi STOP'
+		title		: 'Laporan Performansi Observasi'
 	,	padding		: '6'
 	,	autoScroll	: true
 	,	defaults	: {
@@ -1024,7 +1024,7 @@ function M_ObsLapPerformansi()
 	{
 		if (m_obs_lap_performansi_ha < 1) {
 			Ext.MessageBox.alert('Hak Akses'
-			, 'Maaf, Anda tidak memiliki hak akses untuk Data Performance STOP!');
+			, 'Maaf, Anda tidak memiliki hak akses untuk Laporan Performansi Observasi!');
 			this.panel.setDisabled(true);
 			return;
 		}

@@ -186,7 +186,7 @@ function M_AppNotif()
 		]
 	});
 
-	this.stop	= new M_AppNotifSet('Konfigurasi Notifikasi STOP', this);
+	this.stop	= new M_AppNotifSet('Konfigurasi Notifikasi Observasi', this);
 	this.rca	= new M_AppNotifSet('Konfigurasi Notifikasi RCA', this);
 /*
  * main panel
