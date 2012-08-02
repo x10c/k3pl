@@ -22,6 +22,7 @@ try {
 	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
 	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
 	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+	String		menu_id		= ServletUtilities.getCookieValue (cookies, "menu.id", "");
 
 	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
 		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
@@ -92,8 +93,8 @@ try {
 	db_stmt.executeUpdate(q);
 
 	q	=" insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ session.getAttribute("user.nipg") +"','"
-		+ session.getAttribute("menu.id") +"','"+ dml +"')";
+		+ user_nipg +"','"
+		+ menu_id +"','"+ dml +"')";
 
 	db_stmt.executeUpdate(q);
 

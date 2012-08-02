@@ -44,6 +44,7 @@ try {
 		+" ,		a.penanggung_jawab_nipg as pic "
 		+" ,		( select g.nama_pegawai from r_pegawai as g where a.penanggung_jawab_nipg = g.nipg) as nama_pic "
 		+" ,		'" + nipg + "' as user_login "
+		+" ,		a.id_user	as id_user "
 		+" from		t_rca	as a "
 		+" where	a.penanggung_jawab_nipg = '"+ nipg +"'"
 		+" or		'"+ nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca)";
@@ -75,6 +76,7 @@ try {
 			+ "','"+ rs.getString("pic")
 			+ "','"+ rs.getString("nama_pic")
 			+ "','"+ rs.getString("user_login")
+			+ "','"+ rs.getString("id_user")
 			+ "']";
 	}
 

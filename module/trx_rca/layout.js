@@ -486,9 +486,13 @@ function M_TrxRCADetail()
 			return;
 		}
 
-		this.store.remove(data[0]);
-		
-		this.do_calculate();
+		Ext.Msg.confirm ("Konfirmasi", "Apakah anda yakin akan menghapus data ?", function (btn_id, text, opt) {
+			if (btn_id == 'yes') {
+				this.store.remove(data[0]);
+				this.do_calculate();
+			}
+		}
+		,this);
 	}
 
 	this.do_cancel = function()
@@ -646,6 +650,7 @@ function M_TrxEditRCADetail()
 	this.v_x_s 		= 0;
 	this.sev		= 0;
 	this.nov		= 0;
+	this.status		= 0;
 	
 	this.store_status = new Ext.data.ArrayStore({
 			fields	: ['id','name']
@@ -1001,7 +1006,26 @@ function M_TrxEditRCADetail()
 	this.summary = new Ext.ux.grid.GridSummary();
 	
 	this.sm = new Ext.grid.RowSelectionModel({
-		singleSelect	: true
+			singleSelect	: true
+		,	listeners	: {
+				scope		: this
+			,	selectionchange	: function(sm) {
+					var data = sm.getSelections();
+					
+					if (data.length) {
+						this.status = data[0].data['status'];						
+					} else {
+						this.status = 0;
+					}
+					
+					if (this.status == 3){
+						this.btn_del.setDisabled(true);
+					} else {
+						this.btn_del.setDisabled(false);
+					}
+					
+				}
+			}
 	});
 
 	this.editor = new MyRowEditor(this);
@@ -1046,12 +1070,18 @@ function M_TrxEditRCADetail()
 	this.do_del = function()
 	{
 		var data = this.sm.getSelections();
+		
 		if (!data.length) {
 			return;
 		}
 
-		this.dml_type = 4;
-		this.do_save(data[0]);
+		Ext.Msg.confirm ("Konfirmasi", "Apakah anda yakin akan menghapus data ?", function (btn_id, text, opt) {
+			if (btn_id == 'yes') {
+				this.dml_type = 4;
+				this.do_save(data[0]);
+			}
+		}
+		,this);
 	}
 
 	this.do_cancel = function()
@@ -3113,7 +3143,7 @@ function M_TrxRCAList()
 	this.dml_type		= 0;
 	this.periode_status = 0;
 	
-	this.record = new Ext.data.Record.create([
+	this.reader = new Ext.data.ArrayReader({}, [
 		{
 			name	: 'id_rca'
 		},{
@@ -3132,42 +3162,55 @@ function M_TrxRCAList()
 			name	: 'nama_pic'
 		},{
 			name	: 'user_login'
+		},{
+			name	: 'id_user'
 		}
 	]);
-	
-	this.store = new Ext.data.ArrayStore({
-			fields	: this.record
-		,	url	: _g_root +'/module/trx_rca/data_rca_list.jsp'
+
+	this.store = new Ext.data.GroupingStore({
+			url	: _g_root +'/module/trx_rca/data_rca_list.jsp'
+		,	reader		: this.reader
+		,	groupField	: 'id_user'
 		,	autoLoad: false
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
 		columns	: [
-			new Ext.grid.RowNumberer()
-		,{
-			id			: 'tanggal_rca'
-		,	header		: 'Tanggal'
-		,	dataIndex	: 'tanggal_rca'
-		,	align		: 'center'
-		,	width		: 90
-		},{
-			id			: 'auditor_seksi'
-		,	header		: 'Satuan Kerja Auditor'
-		,	dataIndex	: 'auditor_seksi'
-		,	width		: 250
-		},{
-			id			: 'nama_auditor'
-		,	header		: 'Nama Auditor'
-		,	dataIndex	: 'nama_auditor'
-		,	width		: 250
-		},{
-			id			: 'penanggung_jawab_seksi'
-		,	header		: 'Satuan Kerja Penanggung Jawab'
-		,	dataIndex	: 'penanggung_jawab_seksi'
-		,	width		: 250
-		}]
+				new Ext.grid.RowNumberer()
+			,	{
+					id			: 'tanggal_rca'
+				,	header		: 'Tanggal'
+				,	dataIndex	: 'tanggal_rca'
+				,	align		: 'center'
+				,	width		: 90
+				}
+			,	{
+					id			: 'auditor_seksi'
+				,	header		: 'Satuan Kerja Auditor'
+				,	dataIndex	: 'auditor_seksi'
+				,	width		: 250
+				}
+			,	{
+					id			: 'nama_auditor'
+				,	header		: 'Nama Auditor'
+				,	dataIndex	: 'nama_auditor'
+				,	width		: 250
+				}
+			,	{
+					id			: 'penanggung_jawab_seksi'
+				,	header		: 'Satuan Kerja Penanggung Jawab'
+				,	dataIndex	: 'penanggung_jawab_seksi'
+				,	width		: 250
+				}
+			,	{
+					header		: 'NIPG'
+				,	dataIndex	: 'id_user'
+				,	hidden		: true
+				}
+		]
 	,	defaults : {
-			hideable	: false
+			sortable	: true
+		,	hideable	: false
 		}
 	});
 
@@ -3241,6 +3284,28 @@ function M_TrxRCAList()
 			]
 		});
 
+	this.grid_view = new Ext.grid.GroupingView({
+		forceFit		: true
+	,	remoteGroup		: true
+	,	groupOnSort		: true
+	,	enableGroupingMenu	: false
+	,	showGroupName		: false
+	,	onLoad			: Ext.emptyFn
+	,	listeners		: {
+			beforerefresh	: function(v)
+			{
+				v.scrollTop	= v.scroller.dom.scrollTop;
+				v.scrollHeight	= v.scroller.dom.scrollHeight;
+			}
+		,	refresh		: function(v)
+			{
+				v.scroller.dom.scrollTop = v.scrollTop
+					+ (v.scrollTop == 0 ? 0
+					: v.scroller.dom.scrollHeight - v.scrollHeight);
+			}
+		}
+	});
+
 	this.panel = new Ext.grid.GridPanel({
 			title				: 'Risk Containment Audit (RCA)'
 		,	store				: this.store
@@ -3249,6 +3314,7 @@ function M_TrxRCAList()
 		,	autoScroll			: true
 		,	autoExpandColumn	: 'penanggung_jawab_seksi'
 		,	tbar				: this.toolbar
+		,	view				: this.grid_view
 	});
 
 	this.do_del = function()
@@ -3259,51 +3325,56 @@ function M_TrxRCAList()
 			return;
 		}
 
-		Ext.Ajax.request({
-			url		: m_trx_rca_dir +'submit_rca_data.jsp'
-		,	params	: {
-				dml_type					: 4
-			,	id_rca						: data.get('id_rca')
-			,	tanggal_rca					: ''
-			,	auditor_direktorat			: ''
-			,	auditor_divprosbu			: ''
-			,	auditor_departemen			: ''
-			,	auditor_dinas				: ''
-			,	auditor_seksi				: ''
-			,	nama_tempat_rca				: ''
-			,	penanggung_jawab_direktorat	: ''
-			,	penanggung_jawab_divprosbu	: ''
-			,	penanggung_jawab_departemen	: ''
-			,	penanggung_jawab_dinas		: ''
-			,	penanggung_jawab_seksi		: ''
-			,	penanggung_jawab_nipg		: ''
-			,	waktu_audit					: ''
-			,	lama_audit					: ''
-			,	cuaca						: ''
-			,	periode						: 0
-			,	bulan						: 0
-			,	tahun						: 0
-			,	auditor						: '[]'
-			,	rca_detail					: '[]'
-			}
-		,	waitMsg	: 'Mohon Tunggu ...'
-		,	failure	: function(response) {
-				Ext.MessageBox.alert('Gagal', response.responseText);
-			}
-		,	success : function (response) {
-				var msg = Ext.util.JSON.decode(response.responseText);
+		Ext.Msg.confirm ("Konfirmasi", "Apakah anda yakin akan menghapus data ?", function (btn_id, text, opt) {
+			if (btn_id == 'yes') {
+				Ext.Ajax.request({
+					url		: m_trx_rca_dir +'submit_rca_data.jsp'
+				,	params	: {
+						dml_type					: 4
+					,	id_rca						: data.get('id_rca')
+					,	tanggal_rca					: ''
+					,	auditor_direktorat			: ''
+					,	auditor_divprosbu			: ''
+					,	auditor_departemen			: ''
+					,	auditor_dinas				: ''
+					,	auditor_seksi				: ''
+					,	nama_tempat_rca				: ''
+					,	penanggung_jawab_direktorat	: ''
+					,	penanggung_jawab_divprosbu	: ''
+					,	penanggung_jawab_departemen	: ''
+					,	penanggung_jawab_dinas		: ''
+					,	penanggung_jawab_seksi		: ''
+					,	penanggung_jawab_nipg		: ''
+					,	waktu_audit					: ''
+					,	lama_audit					: ''
+					,	cuaca						: ''
+					,	periode						: 0
+					,	bulan						: 0
+					,	tahun						: 0
+					,	auditor						: '[]'
+					,	rca_detail					: '[]'
+					}
+				,	waitMsg	: 'Mohon Tunggu ...'
+				,	failure	: function(response) {
+						Ext.MessageBox.alert('Gagal', response.responseText);
+					}
+				,	success : function (response) {
+						var msg = Ext.util.JSON.decode(response.responseText);
 
-				if (msg.success == false) {
-					Ext.MessageBox.alert('Kesalahan', msg.info);
-					return;
-				}
+						if (msg.success == false) {
+							Ext.MessageBox.alert('Kesalahan', msg.info);
+							return;
+						}
 
-				Ext.MessageBox.alert('Informasi', msg.info);
+						Ext.MessageBox.alert('Informasi', msg.info);
 
-				this.do_load();
+						this.do_load();
+					}
+				,	scope	: this
+				});
 			}
-		,	scope	: this
-		});
+		}
+		,this);
 	}
 	
 	this.do_edit = function()
