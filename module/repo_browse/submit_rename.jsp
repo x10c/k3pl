@@ -1,23 +1,14 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.io.*" %>
+<%@ include file="../modinit.jsp" %>
+<%@ page import="java.io.File" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
-	ResultSet	rs		= null;
 	String		id		= request.getParameter("id");
 	String		path	= request.getParameter("path");
 	String		from	= request.getParameter("from");
@@ -31,19 +22,21 @@ try {
 	name_from	= rpath +"/"+ path +"/"+ from;
 	name_to		= rpath +"/"+ path +"/"+ to;
 
-	log("rename: '"+ name_from +"' to '"+ name_to +"'");
+	log ("rename: '"+ name_from +"' to '"+ name_to +"'");
 
 	f_from	= new File(name_from);
 	f_to	= new File(name_to);
 
-	f_from.renameTo(f_to);
+	f_from.renameTo (f_to);
 
-	q	=" update	t_repo"
+	db_stmt = db_con.createStatement();
+
+	db_q=" update	t_repo"
 		+" set		name		='"+ to +"'"
 		+" ,		upload_date	= getdate()"
 		+" where	id			= "+ id;
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");

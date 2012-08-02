@@ -1,49 +1,37 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	JSONArray repo = new JSONArray ();
 
-	Statement	db_stmt = db_con.createStatement();
-	ResultSet	rs		= null;
-	String		data	="[";
+	db_stmt = db_con.createStatement();
 
-	q	=" select	id, name, dbo.fn_repo_get_path(pid, name) as path"
+	db_q=" select	id, name, dbo.fn_repo_get_path(pid, name) as path"
 		+" from		t_repo"
 		+" where	pid		= 3"
 		+" and		type	= 1";
 
-	rs = db_stmt.executeQuery(q);
+	db_rs = db_stmt.executeQuery (db_q);
 
-	int i = 0;
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i = 1;
-		}
+	json_a = new JSONArray ();
+	while (db_rs.next()) {
+		repo = new JSONArray ();
+		repo.put (db_rs.getInt ("id"));
+		repo.put (db_rs.getString ("name").replace("'","\\'"));
+		repo.put (db_rs.getString ("path"));
 
-		data+="[ "+ rs.getString("id")
-			+ ",'"+ rs.getString("name").replace("'","\\'") +"'"
-			+" ,'"+ rs.getString("path") +"'"
-			+ "]";
+		json_a.put (repo);
 	}
 
-	data +="]";
+	out.print (json_a);
 
-	rs.close();
-	out.print(data);
+	db_rs.close();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }

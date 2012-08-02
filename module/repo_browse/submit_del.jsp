@@ -1,40 +1,46 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.io.*" %>
+<%@ include file="../modinit.jsp" %>
+<%@ page import="java.io.File" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
-	ResultSet	rs		= null;
 	String		id		= request.getParameter("id");
 	String		name	= request.getParameter("name");
 	String		path	= config.getServletContext().getRealPath("/");
 	int			type	= Integer.parseInt(request.getParameter("type"));
 	File		f;
 
+	db_stmt = db_con.createStatement();
+
 	/* REJECT "Kontraktor/Dokumen Klaim" deletion */
 	if (id.equals("3")) {
 			out.print("{success:false"
-				+",info:'Direktori ini tidak dapat dihapus karena digunakan"
-				+" oleh referensi Kontraktor!'}");
+				+",info:'Direktori ini tidak dapat dihapus karena digunakan oleh referensi Kontraktor!'}");
+			return;
+	}
+
+	/* check if document is used in ref. kontraktor */
+	db_q	=" select	1"
+			+" from		r_kontraktor_klm"
+			+" where	id_repo = "+ id;
+
+	db_rs	= db_stmt.executeQuery (db_q);
+
+	if (db_rs.next ()) {
+			out.print("{success:false"
+				+",info:'Berkas ini dipakai pada Referensi Kontraktor!'}");
+			db_rs.close ();
 			return;
 	}
 
 	path += request.getParameter("path") +"/"+ name;
 
-	log("delete:"+ path);
+	log ("delete:"+ path);
 
 	/* delete file from system */
 	f = new File(path);
@@ -54,10 +60,10 @@ try {
 	}
 
 	/* delete file from database */
-	q	=" delete from t_repo"
+	db_q=" delete from t_repo"
 		+" where id = "+ id;
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
 	out.print("{success:true,info:'\""+ name +"\" telah dihapus!'}");
 } catch (Exception e) {

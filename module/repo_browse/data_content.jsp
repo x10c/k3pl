@@ -1,27 +1,19 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	int	id	= ServletUtilities.getIntParameter (request, "id", 0);
+	int pid	= ServletUtilities.getIntParameter (request, "pid", 0);
 
-	Statement	db_stmt = db_con.createStatement();
-	ResultSet	rs		= null;
-	String		q;
-	String		id		= request.getParameter("id");
-	String		pid		= request.getParameter("pid");
-	String		data;
+	db_stmt = db_con.createStatement();
 
- 	q	=" select	id"
+	db_q=" select	id"
 		+" ,		type"
 		+" ,		name"
 		+" ,		owner"
@@ -34,32 +26,36 @@ try {
 		+" where	pid		= "+ id
 		+" order by type asc";
 
-	rs = db_stmt.executeQuery(q);
+	db_rs = db_stmt.executeQuery (db_q);
 
-	data	="{data:[{"
-			+" 	id		: "+ pid
-			+", type	: 0"
-			+", name	:'..'"
-			+"}";
+	json_a = new JSONArray ();
 
-	while (rs.next()) {
-		data	+=",{"
-				+ "	id			: "+ rs.getString("id")
-				+ ",type		: "+ rs.getString("type")
-				+ ",pid			: "+ id
-				+ ",name		:'"+ rs.getString("name") +"'"
-				+ ",owner		: "+ rs.getString("owner")
-				+ ",group_owner	: "+ rs.getString("group_owner")
-				+ ",size		: "+ rs.getString("size")
-				+ ",perm		: "+ rs.getString("perm")
-				+ ",uploader	: "+ rs.getString("uploader")
-				+ ",upload_date	:'"+ rs.getString("upload_date") +"'"
-				+ "}";
+	json_o = new JSONObject ();
+	json_o.put ("id"			, pid);
+	json_o.put ("type"			, 0);
+	json_o.put ("name"			, "..");
+
+	json_a.put (json_o);
+
+	while (db_rs.next()) {
+		json_o = new JSONObject ();
+		json_o.put ("id"			, db_rs.getInt ("id"));
+		json_o.put ("type"			, db_rs.getInt ("type"));
+		json_o.put ("pid"			, id);
+		json_o.put ("name"			, db_rs.getString ("name"));
+		json_o.put ("owner"			, db_rs.getInt ("owner"));
+		json_o.put ("group_owner"	, db_rs.getInt ("group_owner"));
+		json_o.put ("size"			, db_rs.getInt ("size"));
+		json_o.put ("perm"			, db_rs.getInt ("perm"));
+		json_o.put ("uploader"		, db_rs.getInt ("uploader"));
+		json_o.put ("update_date"	, db_rs.getString ("upload_date"));
+
+		json_a.put (json_o);
 	}
 
-	data += "]}";
+	out.print("{data:"+ json_a +"}");
 
-	out.print(data);
+	db_rs.close ();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }

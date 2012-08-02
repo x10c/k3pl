@@ -5,9 +5,7 @@
  % + PT. Awakami
  %   - mhd.sulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.PreparedStatement" %>
+<%@ include file="../modinit.jsp" %>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="java.io.InputStream"%>
@@ -15,23 +13,14 @@
 <%@ page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>
 <%@ page import="org.apache.commons.fileupload.*"%>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
 	boolean is_multipart = ServletFileUpload.isMultipartContent(request);
 	if (!is_multipart) {
 		out.print("{success:false,info:'Data kosong!'}");
 		return;
 	}
 
-	Statement			db_stmt	= db_con.createStatement();
 	String				rpath	= config.getServletContext().getRealPath("/");
-	String				user	= (String) session.getAttribute("user.nipg");
 
 	FileItemFactory		factory	= new DiskFileItemFactory();
 	ServletFileUpload	upload	= new ServletFileUpload(factory);
@@ -46,6 +35,8 @@ try {
 	String				path	="";
 	String				name	="";
 	long				filesize=0;
+
+	db_stmt	= db_con.createStatement();
 
 	/* parse request */
 	while (itr.hasNext()) {
@@ -84,10 +75,10 @@ try {
 		+		id
 		+" ,	1"
 		+" ,'"+	name +"'"
-		+" ,'"+ user +"'"
+		+" ,'"+ user_nipg +"'"
 		+" , group_owner"
 		+" , "+ filesize
-		+" ,'"+ user +"'"
+		+" ,'"+ user_nipg +"'"
 		+" , ?"
 		+" from		t_repo"
 		+" where	id = "+ id
@@ -99,10 +90,10 @@ try {
 
 	ins.close ();
 
-	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ user +"','"+ session.getAttribute("menu.id") +"','2')";
+	db_q+="; insert into __log (nipg, nama_menu, status_akses) values ('"
+		+ user_nipg +"','"+ session.getAttribute("menu.id") +"','2')";
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
 	out.print("{success:true,info:'File telah tersimpan.'}");
 } catch (Exception e) {

@@ -4,9 +4,7 @@
  % Author(s):
  %	- mhd.sulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
+<%@ include file="../modinit.jsp" %>
 <%@ page import="java.io.File" %>
 <%@ page import="java.io.FileInputStream" %>
 <%@ page import="java.io.DataInputStream" %>
@@ -14,34 +12,30 @@
 <%
 ServletOutputStream	ostream = response.getOutputStream();
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	String	berkas_id	= request.getParameter ("id");
+	String	name		= "";
+	int		size		= 0;
+	byte[]	content;
 
-	Statement			db_stmt		= db_con.createStatement();
-	ResultSet			rs			= null;
-	String				berkas_id	= request.getParameter ("id");
-	String				q			= "";
-	String				name		= "";
-	int					size		= 0;
-	byte[]				content;
+	db_stmt	= db_con.createStatement();
 
-	q	=" select	name, size, berkas"
+	db_q=" select	name, size, berkas"
 		+" from		t_repo"
 		+" where	id = "+ berkas_id;
 
-	rs = db_stmt.executeQuery (q);
+	db_rs = db_stmt.executeQuery (db_q);
 
-	if (! rs.next ()) {
+	if (! db_rs.next ()) {
 		out.print ("{success:false,info:'Data berkas tidak didapat!'}");
+		db_rs.close ();
 		return;
 	}
 
-	name	= rs.getString ("name");
-	size	= rs.getInt ("size");
-	content	= rs.getBytes ("berkas");
+	name	= db_rs.getString ("name");
+	size	= db_rs.getInt ("size");
+	content	= db_rs.getBytes ("berkas");
+
+	db_rs.close ();
 
 	response.setContentType ("application/octet-stream");
 	response.setContentLength (content.length);

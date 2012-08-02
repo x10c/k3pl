@@ -5,26 +5,24 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.io.*" %>
+<%@ include file="../modinit.jsp" %>
+<%@ page import="java.io.File" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
-	ResultSet	rs		= null;
 	String		pid		= request.getParameter("id");
 	String		path	= request.getParameter("path");
 	String		name	= request.getParameter("name");
-	String		owner	= (String) session.getAttribute("user.nipg");
 	String		dir		= config.getServletContext().getRealPath("/") + path +"/"+ name;
 
-	q	=" insert into t_repo ("
+	/* create directory in file system */
+	File f = new File(dir);
+
+	f.mkdir();
+
+	/* insert directory name to database */
+	db_stmt = db_con.createStatement();
+
+	db_q=" insert into t_repo ("
 		+"	 pid"
 		+" , type"
 		+" , name"
@@ -39,24 +37,20 @@ try {
 		+	pid
 		+" , 0"
 		+" ,'"+ name +"'"
-		+" ,'"+ owner +"'"
+		+" ,'"+ user_nipg +"'"
 		+" , group_owner"
 		+" , 0"
 		+" , perm"
-		+" ,'"+ owner +"'"
+		+" ,'"+ user_nipg +"'"
 		+" , getdate()"
 		+" from		t_repo"
 		+" where	id = "+ pid;
 
-	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ owner +"','"
+	db_q+="; insert into __log (nipg, nama_menu, status_akses) values ('"
+		+ user_nipg +"','"
 		+ session.getAttribute("menu.id") +"','2')";
 
-	db_stmt.executeUpdate(q);
-
-	File f = new File(dir);
-
-	f.mkdir();
+	db_stmt.executeUpdate (db_q);
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }

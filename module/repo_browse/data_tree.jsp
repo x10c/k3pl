@@ -1,5 +1,5 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
@@ -7,8 +7,7 @@
  %
  % TODO: replace with a single query.
 --%>
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ include file="../modinit.jsp" %>
 <%!
 public JSONArray get_list_dir(int id, Connection db_con)
 {
@@ -70,45 +69,37 @@ try {
 }}
 %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	int id = 1;
 
-	Statement	db_stmt = db_con.createStatement();
-	ResultSet	rs		= null;
-	String		data;
-	JSONArray	childs	= null;
-	JSONObject	node	= new JSONObject();
-	int			id		= 1;
+	db_stmt = db_con.createStatement();
 
-	q	=" select repo_path from r_k3pl";
-	rs	= db_stmt.executeQuery(q);
+	db_q	=" select repo_path from r_k3pl";
+	db_rs	= db_stmt.executeQuery (db_q);
 
-	if (!rs.next()) {
+	if (! db_rs.next()) {
 		out.print("{success:false,info:'Direktori repositori belum di set!'}");
+		db_rs.close();
 		return;
 	}
 
-	node.put("id", id);
-	node.put("pid", 0);
-	node.put("text", rs.getString("repo_path"));
-	node.put("iconCls", "dir16");
+	json_o = new JSONObject();
+	json_o.put("id", id);
+	json_o.put("pid", 0);
+	json_o.put("text", db_rs.getString ("repo_path"));
+	json_o.put("iconCls", "dir16");
 
-	rs.close();
+	json_a = get_list_dir (id, db_con);
 
-	childs = get_list_dir(id, db_con);
-
-	if (childs.length() <= 0) {
-		node.put("leaf", "true");
+	if (json_a.length() <= 0) {
+		json_o.put("leaf", "true");
 	} else {
-		node.put("children", childs);
+		json_o.put("children", json_a);
 	}
 
-	out.print("["+ node +"]");
+	out.print("["+ json_o +"]");
+
+	db_rs.close();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }
