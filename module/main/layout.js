@@ -86,13 +86,13 @@ function get_layout(n)
 	});
 }
 
-function menu_item_on_click(node)
+function menu_item_on_click(node, check)
 {
 	var n = node.attributes;
 	var selnode = main_menu.selModel.selNode || {};
 
 	/* check if user click the same menu in the tree */
-	if (typeof n.leaf == 'undefined' || n.id == selnode.id) {
+	if (check && (typeof n.leaf == 'undefined' || n.id == selnode.id)) {
 		return;
 	}
 
@@ -162,8 +162,10 @@ function(){
 	,	root		: new Ext.tree.AsyncTreeNode()
 	,	loader		: new Ext.tree.TreeLoader({
 			dataUrl		: _g_root +'/module/main/menu.jsp'
+		,	scope		: main_menu
 		,	listeners	: {
-				load	: function(This, node, response) {
+				scope	: main_menu
+			,	load	: function (treeloader, node, response) {
 					var res = Ext.util.JSON.decode(response.responseText);
 
 					if (res.success == false) {
@@ -175,10 +177,22 @@ function(){
 			}
 		})
 	,	listeners	: {
-			click	: function(node) {
-				menu_item_on_click(node);
+			scope		: this
+		,	click		: function(node, o) {
+				menu_item_on_click (node, true);
 			}
 		}
+	,	tools		: [{
+			id			: 'refresh'
+		,	qtip		: 'Refresh module viewer'
+		,	handler		: function (e, tool, panel) {
+				var node = panel.selModel.selNode;
+
+				if (node != undefined) {
+					menu_item_on_click (node, false);
+				}
+			}
+		}]
 	});
 
 	main_content = new Ext.Panel({
@@ -206,7 +220,7 @@ function(){
 		region		: 'south'
 	,	autoHeight	: true
 	,	xtype		: 'box'
-	,	el		: 'footer'
+	,	el			: 'footer'
 	};
 
 	main_viewport = new Ext.Viewport({
@@ -238,7 +252,7 @@ function(){
 		}
 	};
 
-	menu_item_on_click(node);
+	menu_item_on_click (node, false);
 
 	check_direktorat ();
 });
