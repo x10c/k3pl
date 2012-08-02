@@ -41,7 +41,8 @@ try {
 		+"	and	A.year		= "+ year
 		+" where	C.id_grup		= 2"
 		+" and		C.nipg			= B.nipg"
-		+" and		B.id_divprosbu	= "+ user_div;
+		+" and		B.id_divprosbu	= "+ user_div
+		+" order by B.nama_pegawai";
 
 	db_rs = db_stmt.executeQuery (db_q);
 

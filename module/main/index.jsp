@@ -9,6 +9,16 @@
 <%@ page contentType="text/html" %>
 <%
 String cpath = (String) request.getContextPath();
+
+/* save user to session */
+session.setAttribute("user.nipg", user_nipg);
+session.setAttribute("user.name", user_name);
+session.setAttribute("user.email", user_email);
+session.setAttribute("user.direktorat", user_dir);
+session.setAttribute("user.divprosbu", user_div);
+session.setAttribute("user.departemen", user_dep);
+session.setAttribute("user.dinas", user_dinas);
+session.setAttribute("user.seksi", user_seksi);
 %>
 <html>
 <head>
