@@ -1,36 +1,24 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
-<%@ page import="org.json.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
 	Statement	db_stmt2= db_con.createStatement();
-
+	ResultSet	rs2		= null;
 	String		id_stop = (String) request.getParameter("id_stop");
-	ResultSet	rs;
-	ResultSet	rs2;
-	String		q;
-	String		n_obs;
-	String		safe, unsafe;
-	JSONObject	data	= new JSONObject();
-	JSONArray	details	= new JSONArray();
+	String		safe;
+	String		unsafe;
 	JSONObject	detail;
-	int		i	= 0;
+	int			i	= 0;
 
-	q=" select	A.nipg "
+	db_stmt = db_con.createStatement();
+
+	db_q=" select	A.nipg "
 	+" ,		B.nama_pegawai "
 	+" ,		A.id_area_seksi "
 	+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal "
@@ -47,31 +35,15 @@ try {
 	+" where	A.nipg		= B.nipg "
 	+" and		A.id_stop	= "+ id_stop;
 
-	rs = db_stmt.executeQuery(q);
+	db_rs = db_stmt.executeQuery (db_q);
 
-	if (!rs.next()) {
+	if (! db_rs.next()) {
 		out.print("{ success: false"
 		+", info:'Data observasi tidak ditemukan!'}");
 		return;
 	}
 
-	n_obs	= rs.getString("jml_org_observasi");
-
-	data.put("id_stop", id_stop);
-	data.put("nipg", rs.getString("nipg"));
-	data.put("nama_pegawai", rs.getString("nama_pegawai"));
-	data.put("id_area_seksi", rs.getString("id_area_seksi"));
-	data.put("tanggal", rs.getString("tanggal"));
-	data.put("site", rs.getString("site"));
-	data.put("shift", rs.getString("shift"));
-	data.put("lama_observasi", rs.getString("lama_observasi"));
-	data.put("jml_org_observasi", n_obs);
-	data.put("jml_org_diskusi", rs.getString("jml_org_diskusi"));
-	data.put("safe", rs.getString("tindakan_aman_diamati"));
-	data.put("unsafe", rs.getString("tindakan_tidak_aman_diamati"));
-	data.put("status_aktif", rs.getString("status_aktif"));
-
-	q=" select	id_kel_tipe_observasi"
+	db_q=" select	id_kel_tipe_observasi"
 	+" ,		id_tipe_observasi"
 	+" ,		id_detail_tipe_observasi"
 	+" ,		jumlah_safe"
@@ -79,26 +51,41 @@ try {
 	+" from		t_stop_detail"
 	+" where	id_stop = "+ id_stop;
 
-	rs2 = db_stmt2.executeQuery(q);
+	rs2 = db_stmt2.executeQuery (db_q);
 
+	json_a = new JSONArray ();
 	while (rs2.next()) {
 		detail	= new JSONObject();
 
-		detail.put("kel_id", rs2.getString("id_kel_tipe_observasi"));
-		detail.put("tipe_id", rs2.getString("id_tipe_observasi"));
-		detail.put("detail_id", rs2.getString("id_detail_tipe_observasi"));
-		detail.put("safe", rs2.getString("jumlah_safe"));
-		detail.put("unsafe", rs2.getString("jumlah_unsafe"));
+		detail.put ("kel_id", rs2.getString ("id_kel_tipe_observasi"));
+		detail.put ("tipe_id", rs2.getString ("id_tipe_observasi"));
+		detail.put ("detail_id", rs2.getString ("id_detail_tipe_observasi"));
+		detail.put ("safe", rs2.getString ("jumlah_safe"));
+		detail.put ("unsafe", rs2.getString ("jumlah_unsafe"));
 
-		details.put(detail);
+		json_a.put(detail);
 	}
 
-	data.put("details", details);
+	json_o	= new JSONObject ();
+	json_o.put ("id_stop", id_stop);
+	json_o.put ("nipg", db_rs.getString ("nipg"));
+	json_o.put ("nama_pegawai", db_rs.getString ("nama_pegawai"));
+	json_o.put ("id_area_seksi", db_rs.getString ("id_area_seksi"));
+	json_o.put ("tanggal", db_rs.getString ("tanggal"));
+	json_o.put ("site", db_rs.getString ("site"));
+	json_o.put ("shift", db_rs.getString ("shift"));
+	json_o.put ("lama_observasi", db_rs.getString ("lama_observasi"));
+	json_o.put ("jml_org_observasi", db_rs.getString ("jml_org_observasi"));
+	json_o.put ("jml_org_diskusi", db_rs.getString ("jml_org_diskusi"));
+	json_o.put ("safe", db_rs.getString ("tindakan_aman_diamati"));
+	json_o.put ("unsafe", db_rs.getString ("tindakan_tidak_aman_diamati"));
+	json_o.put ("status_aktif", db_rs.getString ("status_aktif"));
+	json_o.put ("details", json_a);
 
-	rs.close();
+	out.print (json_o);
+
 	rs2.close();
-
-	out.print(data);
+	db_rs.close();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }

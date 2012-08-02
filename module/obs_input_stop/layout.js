@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ * Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  *
  * Author(s):
  * + PT. Awakami
@@ -55,12 +55,12 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 		});
 
 	this.form_safe = new Ext.ux.form.SpinnerField({
-			allowBlank	: false
+			allowBlank		: false
 		,	allowDecimals	: false
 		,	allowNegative	: false
-		,	value		: 0
-		,	minValue	: 0
-		,	maxValue	: m_stop_n_observed
+		,	value			: 0
+		,	minValue		: 0
+		,	maxValue		: m_stop_n_observed
 		});
 
 	this.cm = new Ext.grid.ColumnModel({
@@ -69,7 +69,7 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 			{
 				dataIndex	: 'unsafe'
 			,	header		: 'Tidak Aman'
-			,	css		: 'background-color: #FFB5C1;'
+			,	css			: 'background-color: #FFB5C1;'
 			,	width		: 50
 			},{
 				id		: 'detail_name'
@@ -103,23 +103,23 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 	});
 
 	this.panel = new Ext.grid.EditorGridPanel({
-			title		: this.title
-		,	id		: this.id
-		,	style		: 'margin-bottom: 5px;'
-		,	autoHeight	: true
-		,	autoScroll	: true
-		,	stripeRows	: true
+			title			: this.title
+		,	id				: this.id
+		,	style			: 'margin-bottom: 5px;'
+		,	autoHeight		: true
+		,	autoScroll		: true
+		,	stripeRows		: true
 		,	clicksToEdit	: 1
-		,	store		: this.store
-		,	colModel	: this.cm
-		,	listeners	: {
-				afteredit	: function(e) {
+		,	store			: this.store
+		,	colModel		: this.cm
+		,	listeners		: {
+				afteredit		: function(e) {
 					if (e.field == 'safe') {
 						e.record.set('unsafe', m_stop_n_observed - e.record.get('safe'));
 					}
 				}
 			}
-	});
+		});
 }
 
 function M_ObsInputStop()
@@ -128,7 +128,7 @@ function M_ObsInputStop()
 	this.data_obs	= '';
 	this.dml_type	= 0;
 	this.id_stop	= '';
-	this.nipg	= '';
+	this.nipg		= '';
 
 	/* user data */
 
@@ -367,8 +367,8 @@ function M_ObsInputStop()
 			,	autoScroll	: true
 			,	autoHeight	: true
 			,	headerCfg	: {
-					cls	: 'stop-header-form'
-				,	html	: kel[i].text
+					cls			: 'stop-header-form'
+				,	html		: ''+ kel[i].text
 				}
 			});
 
@@ -393,7 +393,7 @@ function M_ObsInputStop()
 	this.get_obs_form = function()
 	{
 		Ext.Ajax.request({
-			url	: m_obs_input_stop_d +'data_obs_form.jsp'
+			url		: m_obs_input_stop_d +'data_obs_form.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
 				Ext.MessageBox.alert('Gagal', response.responseText);
@@ -406,7 +406,7 @@ function M_ObsInputStop()
 					return;
 				}
 
-				this.data_obs = Ext.util.JSON.decode(response.responseText);
+				this.data_obs = msg;
 				this.create_obs_form();
 			}
 		,	scope	: this
@@ -571,13 +571,15 @@ function M_ObsInputStop()
 		this.form_n_observed.setValue(m_stop_n_observed);
 		this.form_safe.setValue('');
 		this.form_unsafe.setValue('');
+
+		this.set_detail_max_value (1);
 	}
 
 	this.do_add = function()
 	{
 		this.do_reset();
 		this.dml_type	= 2;
-		this.nipg	= _g_usernipg;
+		this.nipg		= _g_usernipg;
 	}
 
 	this.edit_fill_form = function(data)

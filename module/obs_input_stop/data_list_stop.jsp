@@ -1,39 +1,20 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - mhd.sulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con		= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	JSONArray	stop		= new JSONArray ();
+	String		load_type	= (String) request.getParameter("load_type");
+	int			i			= 0;
 
-	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+	db_stmt = db_con.createStatement();
 
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt			= db_con.createStatement();
-	String		load_type		= (String) request.getParameter("load_type");
-
-	String q
-		=" select	A.id_stop"
+	db_q=" select	A.id_stop"
 		+" ,		A.nipg"
 		+" ,		C.nama_pegawai"
 		+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal"
@@ -52,40 +33,35 @@ try {
 		+" and		C.id_divprosbu	= "+ user_div;
 
 	if (!load_type.equals("all")) {
-		q+=" and	A.nipg		= '"+ user_nipg +"'";
+		db_q +=" and	A.nipg		= '"+ user_nipg +"'";
 	}
 
-	q+=" order by	A.id_stop desc";
+	db_q +=" order by	A.id_stop desc";
 
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
-	String		data	= "[";
+	db_rs = db_stmt.executeQuery (db_q);
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data+="[ '"+ rs.getString("id_stop")
-			+ "','"+ rs.getString("nipg")
-			+ "',\""+ rs.getString("nama_pegawai") +"\""
-			+ " ,'"+ rs.getString("tanggal")
-			+ "','"+ rs.getString("nama_area")
-			+ "','"+ rs.getString("site")
-			+ "','"+ rs.getString("shift")
-			+ "','"+ rs.getString("lama_observasi")
-			+ "','"+ rs.getString("jml_org_observasi")
-			+ "','"+ rs.getString("jml_org_diskusi")
-			+ "','"+ rs.getString("status_aktif")
-			+ "']";
+	json_a = new JSONArray ();
+	while (db_rs.next()) {
+		stop = new JSONArray ();
+
+		stop.put (db_rs.getString ("id_stop"));
+		stop.put (db_rs.getString ("nipg"));
+		stop.put (db_rs.getString ("nama_pegawai"));
+		stop.put (db_rs.getString ("tanggal"));
+		stop.put (db_rs.getString ("nama_area"));
+		stop.put (db_rs.getString ("site"));
+		stop.put (db_rs.getString ("shift"));
+		stop.put (db_rs.getString ("lama_observasi"));
+		stop.put (db_rs.getString ("jml_org_observasi"));
+		stop.put (db_rs.getString ("jml_org_diskusi"));
+		stop.put (db_rs.getString ("status_aktif"));
+
+		json_a.put (stop);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	db_rs.close ();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }

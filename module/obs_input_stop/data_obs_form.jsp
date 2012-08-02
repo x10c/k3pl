@@ -1,111 +1,94 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	con	= (Connection) session.getAttribute("db.con");
-	if (con == null || (con != null && con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
 
-	Statement	stmt1	= con.createStatement();
-	Statement	stmt2	= con.createStatement();
-	Statement	stmt3	= con.createStatement();
+	Statement	stmt2		= db_con.createStatement();
+	Statement	stmt3		= db_con.createStatement();
+	ResultSet	rs2			= null;
+	ResultSet	rs3			= null;
+	String		id_kel		= "";
+	String		id_tipe		= "";
+	JSONObject	obs_group	= null;
+	JSONArray	obs_types	= null;
+	JSONArray	obs_details	= null;
+	JSONObject	obs_type	= null;
+	JSONObject	obs_detail	= null;
 
-	String q= " select   id_kel_tipe_observasi "
+	db_stmt = db_con.createStatement();
+
+	db_q= " select   id_kel_tipe_observasi "
 		+ " ,        nama_kel_tipe_observasi "
 		+ " from     r_kelompok_tipe_observasi "
 		+ " order by id_kel_tipe_observasi ";
 
-	ResultSet	rs	= stmt1.executeQuery(q);
-	ResultSet	rs2	= null;
-	ResultSet	rs3	= null;
-	int		i	= 0;
-	int		j	= 0;
-	int		k	= 0;
-	String		id_kel	= "";
-	String		id_tipe	= "";
-	String		data	= "[";
+	db_rs = db_stmt.executeQuery (db_q);
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
+	json_a = new JSONArray ();
+	while (db_rs.next()) {
+		id_kel = db_rs.getString("id_kel_tipe_observasi");
 
-		id_kel = rs.getString("id_kel_tipe_observasi");
-
-		data	+= "{ id : '"+ id_kel +"' "
-			+  ", text : '"+ rs.getString("nama_kel_tipe_observasi") +"' "
-			+  ", tipe : [";
-
-		q	=" select	id_tipe_observasi "
+		db_q=" select	id_tipe_observasi "
 			+" ,		nama_tipe_observasi "
 			+" from		r_tipe_observasi "
 			+" where	id_kel_tipe_observasi = "+ id_kel;
 
-		rs2 = stmt2.executeQuery(q);
+		rs2 = stmt2.executeQuery (db_q);
 
-		j = 0;
+		obs_types = new JSONArray ();
 		while (rs2.next()) {
-			if (j > 0) {
-				data += ",";
-			} else {
-				j++;
-			}
-
 			id_tipe = rs2.getString("id_tipe_observasi");
 
-			data	+="{"
-				+ "  id : '"+ id_tipe +"' "
-				+ ", text : '"+ rs2.getString("nama_tipe_observasi") +"' "
-				+ ", details : [";
-
-			q	=" select	id_detail_tipe_observasi "
+			db_q=" select	id_detail_tipe_observasi "
 				+" ,		nama_detail_tipe_observasi "
 				+" from		r_detail_tipe_observasi "
 				+" where	id_kel_tipe_observasi	= "+ id_kel
 				+" and		id_tipe_observasi	= "+ id_tipe;
 
-			rs3 = stmt3.executeQuery(q);
+			rs3 = stmt3.executeQuery (db_q);
 
-			k = 0;
+			obs_details = new JSONArray ();
 			while (rs3.next()) {
-				if (k > 0) {
-					data += ",";
-				} else {
-					k++;
-				}
+				obs_detail = new JSONObject ();
+				obs_detail.put ("kel_id", id_kel);
+				obs_detail.put ("tipe_id", id_tipe);
+				obs_detail.put ("detail_id", rs3.getString ("id_detail_tipe_observasi"));
+				obs_detail.put ("detail_name", rs3.getString ("nama_detail_tipe_observasi"));
+				obs_detail.put ("safe", 0);
+				obs_detail.put ("unsafe", 0);
 
-				data	+="{"
-					+ "  kel_id : '"+ id_kel +"' "
-					+ ", tipe_id : '"+ id_tipe +"' "
-					+ ", detail_id : '"+ rs3.getString("id_detail_tipe_observasi") +"' "
-					+ ", detail_name : '"+ rs3.getString("nama_detail_tipe_observasi") +"' "
-					+ ", safe : '0'"
-					+ ", unsafe : '0'"
-					+ "}";
+				obs_details.put (obs_detail);
 			}
 
-			data += "]}";
+			obs_type = new JSONObject ();
+			obs_type.put ("id", id_tipe);
+			obs_type.put ("text", rs2.getString ("nama_tipe_observasi"));
+			obs_type.put ("details", obs_details);
+
+			obs_types.put (obs_type);
+
 			rs3.close();
 		}
-		data += "]}";
+
+		obs_group	= new JSONObject ();
+		obs_group.put ("id", id_kel);
+		obs_group.put ("text", db_rs.getString("nama_kel_tipe_observasi"));
+		obs_group.put ("tipe", obs_types);
+
+		json_a.put (obs_group);
+
 		rs2.close();
 	}
-	data += "]";
 
-	out.print(data);
+	out.print (json_a);
 
-	rs.close();
+	db_rs.close();
 } catch (Exception e) {
 	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
 }
