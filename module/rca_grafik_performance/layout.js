@@ -147,6 +147,7 @@ function M_RCAGrafikPerformance()
 				[1, 'Grafik Partisipasi RCA']
 			,	[2, 'Grafik Severity 4/5']
 			,	[3, 'Grafik Tindak Lanjut Temuan 4/5']
+			,	[4, 'Grafik Tindak Lanjut Temuan Non 4/5']
 			]
 		});
 
@@ -195,7 +196,7 @@ function M_RCAGrafikPerformance()
 
 	this.panel = new Ext.Panel({
 		id			: 'rca_grafik_performance_panel'
-	,	title		: 'GRAFIK PERFORMANCE RCA'
+	,	title		: 'GRAFIK PERFORMANSI RCA'
 	,	autoScroll	: true
 	,	defaults	:{
 			style		:{
@@ -244,6 +245,9 @@ function M_RCAGrafikPerformance()
 				break;
 			case 3	:
 				id_report	= '22';
+				break;
+			case 4	:
+				id_report	= '33';
 				break;
 		}
 

@@ -100,7 +100,7 @@ function M_RCALapPerfForm(grid, displayBulan)
  * Chart Panel: display custom chart based on different store.
  */
 function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
-							, y2data, y2title, y3data, y3title, series_type)
+							, y2data, y2title, y3data, y3title, y4data, y4title, series_type)
 {
 	this.chart = new Ext.ux.HighChart({
 		store		: store
@@ -115,6 +115,9 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 		},{
 			name		: y3title
 		,	dataIndex	: y3data
+		},{
+			name		: y4title
+		,	dataIndex	: y4data
 		}]
 	,	chartConfig	: {
 			chart	: {
@@ -162,6 +165,8 @@ function M_RCALapRCAGrid()
 			,	'severity'
 			,	'jml_tl_temuan'
 			,	'tl_temuan'
+			,	'jml_tl_temuan_non'
+			,	'tl_temuan_non'
 			,	'avg'
 			]
 		,	url		: m_rca_lap_performance_d +'data.jsp'
@@ -203,6 +208,14 @@ function M_RCALapRCAGrid()
 		},{
 			header		: '% Tindak Lanjut Temuan 4/5'
 		,	dataIndex	: 'tl_temuan'
+		,	format		: '000.00%'
+		,	css			: 'background-color: #f0f0f0;'
+		},{
+			header		: 'Jml Tindak Lanjut Temuan Non 4/5'
+		,	dataIndex	: 'jml_tl_temuan_non'
+		},{
+			header		: '% Tindak Lanjut Temuan Non 4/5'
+		,	dataIndex	: 'tl_temuan_non'
 		,	format		: '000.00%'
 		,	css			: 'background-color: #f0f0f0;'
 		},{
@@ -346,6 +359,7 @@ function M_RCALapperformance()
 								,	'total_part_percent',	'% Partisipasi'
 								,	'severity'			,	'% Severity 4/5'
 								,	'tl_temuan'			,	'% Tindak Lanjut Temuan 4/5'
+								,	'tl_temuan_non'		,	'% Tindak Lanjut Temuan Non 4/5'
 								,	'column');
 
 	this.panel = new Ext.Panel({

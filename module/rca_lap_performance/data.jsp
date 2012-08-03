@@ -19,7 +19,9 @@ String	q_vio		= "";
 String	q_temuan	= "";
 String	q_sev		= "";
 String	q_get_temuan= "";
+String	q_get_temuan_non= "";
 String	q_tl_temuan	= "";
+String	q_tl_temuan_non	= "";
 String	q_avg		= "";
 String	q_sum		= "";
 String	q_where		= "";
@@ -105,6 +107,13 @@ try {
 					+" where	rca_detail.id_rca		= rca.id_rca"
 					+" and		rca_detail.id_severity	in (4,5)"
 					+" and		year(rca.tanggal_rca)	= "+ year;
+					
+	q_get_temuan_non	="select	count(rca_detail.id_rca)	as jml"
+						+" from		t_rca_detail				as rca_detail"
+						+" ,		t_rca						as rca"
+						+" where	rca_detail.id_rca		= rca.id_rca"
+						+" and		rca_detail.id_severity	in (1,2,3)"
+						+" and		year(rca.tanggal_rca)	= "+ year;
 			
 	q_tl_temuan	=" select	count(rca_detail.id_rca) as temuan"
 				+" from		t_rca_detail		as rca_detail"
@@ -113,6 +122,14 @@ try {
 				+" and		rca_detail.id_severity	in (4,5)"
 				+" and		rca_detail.status		in ('2','3')"
 				+" and		year(rca.tanggal_rca)	= "+ year;
+				
+	q_tl_temuan_non	=" select	count(rca_detail.id_rca) as temuan"
+					+" from		t_rca_detail		as rca_detail"
+					+" ,		t_rca				as rca"
+					+" where	rca_detail.id_rca		= rca.id_rca"
+					+" and		rca_detail.id_severity	in (1,2,3)"
+					+" and		rca_detail.status		in ('2','3')"
+					+" and		year(rca.tanggal_rca)	= "+ year;
 				
 	q_avg	="select cast(convert(decimal(18,2), case when sum(rca_detail.violation_x_severity) is null then 0 else (1.0 * sum(rca_detail.violation_x_severity) / isnull(sum(rca_detail.number_of_violations),1)) end) as varchar) as average"
 			+" from		t_rca_detail		as rca_detail"
@@ -141,7 +158,9 @@ try {
 		q_temuan	+=" and month(rca.tanggal_rca) = "+ month;
 		q_sev		+=" and month(rca.tanggal_rca) = "+ month;
 		q_get_temuan+=" and month(rca.tanggal_rca) = "+ month;
+		q_get_temuan_non+=" and month(rca.tanggal_rca) = "+ month;
 		q_tl_temuan	+=" and month(rca.tanggal_rca) = "+ month;
+		q_tl_temuan_non	+=" and month(rca.tanggal_rca) = "+ month;
 		q_avg		+=" and month(rca.tanggal_rca) = "+ month;
 	}
 
@@ -153,7 +172,9 @@ try {
 	q_temuan		+= q_nipg3;
 	q_sev			+= q_nipg3;
 	q_get_temuan	+= q_nipg3;
+	q_get_temuan_non	+= q_nipg3;
 	q_tl_temuan		+= q_nipg3;
+	q_tl_temuan_non		+= q_nipg3;
 	q_avg			+= q_nipg3;
 
 	/* query by organisasi */
@@ -252,6 +273,8 @@ try {
 			+" ,		SEV.severity"
 			+" ,		TL_TEMUAN.temuan as jml_tl_temuan"
 			+" ,		round((TL_TEMUAN.temuan / cast(isnull(nullif(GET_TEMUAN.jml,0),1) as float)) * 100, 2, 1) as tl_temuan"
+			+" ,		TL_TEMUAN_NON.temuan as jml_tl_temuan_non"
+			+" ,		round((TL_TEMUAN_NON.temuan / cast(isnull(nullif(GET_TEMUAN_NON.jml,0),1) as float)) * 100, 2, 1) as tl_temuan_non"
 			+" ,		AVERAGE.average"
 			+" from ("+ q_target	+ q_where + id +")) T"
 			+" ,	("+ q_part		+ q_where + id +")) P"
@@ -260,6 +283,8 @@ try {
 			+" ,	("+ q_sev		+ q_where + id +")) SEV"
 			+" ,	("+ q_get_temuan+ q_where + id +")) GET_TEMUAN"
 			+" ,	("+ q_tl_temuan	+ q_where + id +")) TL_TEMUAN"
+			+" ,	("+ q_get_temuan_non + q_where + id +")) GET_TEMUAN_NON"
+			+" ,	("+ q_tl_temuan_non	+ q_where + id +")) TL_TEMUAN_NON"
 			+" ,	("+ q_avg		+ q_where + id +")) AVERAGE";
 
 		rs = db_stmt.executeQuery(q);
@@ -278,6 +303,8 @@ try {
 					+ ","+ rs.getString("severity")
 					+ ","+ rs.getString("jml_tl_temuan")
 					+ ","+ rs.getString("tl_temuan")
+					+ ","+ rs.getString("jml_tl_temuan_non")
+					+ ","+ rs.getString("tl_temuan_non")
 					+ ","+ rs.getString("average")
 					+ "]";
 		}

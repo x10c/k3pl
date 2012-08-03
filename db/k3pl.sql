@@ -16162,3 +16162,21 @@ go
 
 insert into __MENU values ('01.08', 'Pengaturan Repository', 'app_repository', '1', 2, '01', '');
 insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'01.08',4);
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Grafik Tindak Lanjut Temuan Non 4-5 RCA'
+,	5
+,	'doc'
+,	'reports/grafik_performance_rca_tl_temuan_non.jasper'
+,	'year_1;year_2;year_3;month_1;month_2;month_3;id_dir;id_div'
+,	'YEAR_1;YEAR_2;YEAR_3;MONTH_1;MONTH_2;MONTH_3;ID_DIR;ID_DIV'
+)
+go
