@@ -21,7 +21,7 @@ try {
 		+" ,		A.id_kel_jabatan_komite_sub_komite"
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
-		+" where B.nipg = "+ id_user +" and A.notulen in ('0','1') "
+		+" where B.nipg = '"+ id_user +"' and A.notulen in ('0','1') "
 		+" order by	A.id_kel_jabatan_komite_sub_komite ";
 
 	ResultSet	rs_kel = db_stmt.executeQuery(q);

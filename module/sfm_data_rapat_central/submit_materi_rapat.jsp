@@ -15,6 +15,7 @@
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
+String q = "";
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
 	Statement	db_stmt = db_con.createStatement();
@@ -33,7 +34,7 @@ try {
 	String id_user			= (String) session.getAttribute("user.nipg");
 	int randomize		= Integer.parseInt(id_user);
 	Date		date	= new Date();
-	String q = "";
+	
 	String p = "";
 	String s = "";
 	int		i,j,l;
@@ -74,7 +75,7 @@ try {
 		if (dml.equals("insert")) {
 		
 			if (id_rapat_materi.equals("") || id_rapat_materi.equals("undefined")){
-				id_rapat_materi = Long.toString(date.getTime()) + ( i + randomize);
+				id_rapat_materi = Long.toString(date.getTime()+i) ;
 			}
 			q	=" insert into t_rapat_materi ("
 				+"		id_rapat "
@@ -89,8 +90,8 @@ try {
 				+ id_rapat_materi +", '"
 				+ isi_rapat_materi +"', "
 				+" cast("+  batas_waktu_materi +" as datetime) , '"
-				+ status_materi +"', "
-				+ keterangan_materi +", '"
+				+ status_materi +"', '"
+				+ keterangan_materi +"', '"
 				+ id_user +"' )";
 			if (seksi_pelaksana.equals("") || seksi_pelaksana.equals("undefined") || seksi_pelaksana.equals("-")){
 				seksi_pelaksana = null;
@@ -154,15 +155,15 @@ try {
 					+" , 	id_user "
 					+" ) values ("
 					+ id_rapat +", "
-					+ id_rapat_materi +", '"
-					+ nipg_pelaksana +"', "
-					+ seksi_pelaksana +", '"
-					+ nipg_supervisor +"', "
+					+ id_rapat_materi +", "
+					+ "'" + nipg_pelaksana +"', "
+					+ seksi_pelaksana +", "
+					+ "'" + nipg_supervisor +"', "
 					+ dinas_supervisor +", '"
 					+ id_user +"' )"
 					+"end;";
 			}
-			
+			out.print("test 1");
 		} else if (dml.equals("delete")) {
 			q	=" delete from  t_pic_rapat_materi "
 				+" where	id_rapat   =  "+ id_rapat +" and id_rapat_materi = "+ id_rapat_materi;
@@ -178,6 +179,6 @@ try {
 	}
 	out.print("{ success:true, info:'Data telah tersimpan.'}");
 } catch (Exception e) {
-	out.print("{ success:false, info:'"+ e +"'}");
+	out.print("{ success:false, info:'"+ q +"'}");
 }
 %>

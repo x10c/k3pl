@@ -614,7 +614,7 @@ function M_SfmSubMateriRapatSub (title){
 					data : data
 				,	dml_type		: this.dml_type
 			}
-		,	url	: m_sfm_central_d +'submit_sub_materi_rapat.jsp'
+		,	url	: m_sfm_sub_d +'submit_sub_materi_rapat.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	success :
 				function (response)

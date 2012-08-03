@@ -129,7 +129,7 @@ function M_SfmSubMateriRapatCentral(){
 			fieldLabel	: 'Batas Waktu'
 		,	emptyText	: 'Thn-Bln-Tgl'
 		,	format		: 'Y-m-d'
-		,	allowBlank	: false
+		,	allowBlank	: true
 		,	editable	: false
 		,	width		: 100
 	});
@@ -686,7 +686,7 @@ function M_SfmMateriRapatCentral(){
 		,	emptyText	: 'Thn-Bulan-Tanggal'
 		,	format		: 'Y-m-d'
 		,	altFormats	: 'Y-m-d'
-		,	allowBlank	: false
+		,	allowBlank	: true
 		,	editable	: false
 		,	width		: 100
 	});

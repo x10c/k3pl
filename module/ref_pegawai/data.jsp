@@ -24,6 +24,23 @@ try {
 	Statement	db_stmt = db_con.createStatement();
 	String		start	= request.getParameter("start");
 	String		end	= request.getParameter("end");
+	
+	String 		p="";
+	String where_clause ="";
+	p = " select nipg from r_pegawai where nipg in	( "
+			+"						select 	nipg "
+			+"						from	__user_grup "
+			+"						where	id_grup	= 9 "
+			+"					) ";
+	ResultSet	rs_val	= db_stmt.executeQuery(p);
+	
+
+	if (rs_val.next()){
+		where_clause = " ";
+	}else{
+		where_clause = " where 		id_direktorat	= " + id_direktorat
+						+ " and		id_divprosbu	= " + id_divprosbu;
+	}
 
 	String q=" select	nipg "
 		+" ,		id_klasifikasi_pegawai "
@@ -37,8 +54,7 @@ try {
 		+" ,		email "
 		+" ,		status_pegawai "
 		+" from		r_pegawai "
-		+" where	id_direktorat	= " + id_direktorat
-		+" and		id_divprosbu	= " + id_divprosbu;
+		+ where_clause;
 
 	if (null != nipg) {
 		q +=" and nipg = '"+ nipg +"'";

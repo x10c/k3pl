@@ -21,6 +21,22 @@ try {
 	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
 	Statement db_stmt = db_con.createStatement();
+	String		nipg		= request.getParameter("nipg");
+	String 		p="";
+	String where_c ="";
+	p = " select nipg from r_pegawai where nipg in	( "
+			+"						select 	nipg "
+			+"						from	__user_grup "
+			+"						where	id_grup	= 9 "
+			+"					) ";
+	ResultSet	rs_val	= db_stmt.executeQuery(p);
+	
+	if (rs_val.next()){
+		where_c = " ";
+	}else{
+		where_c = " and		B.id_direktorat	= " + id_direktorat
+						+ " and		B.id_divprosbu	= " + id_divprosbu;
+	}
 
 	String q=" select	A.nipg"
 		+" ,		B.nama_pegawai"
@@ -28,8 +44,7 @@ try {
 		+" from		__user		A"
 		+" ,		r_pegawai	B"
 		+" where	A.nipg 			= B.nipg"
-		+" and		B.id_direktorat = " + id_direktorat
-		+" and		B.id_divprosbu	= " + id_divprosbu
+		+ where_c
 		+" order by	B.nama_pegawai";
 
 	ResultSet	rs	= db_stmt.executeQuery(q);

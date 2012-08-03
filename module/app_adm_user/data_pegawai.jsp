@@ -22,16 +22,32 @@ try {
 	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
 	Statement db_stmt = db_con.createStatement();
+	
+	String		nipg		= request.getParameter("nipg");
+	String 		p="";
+	String where_clause ="";
+	p = " select nipg from r_pegawai where nipg in	( "
+			+"						select 	nipg "
+			+"						from	__user_grup "
+			+"						where	id_grup	= 9 "
+			+"					) ";
+	ResultSet	rs_val	= db_stmt.executeQuery(p);
+	
+
+	if (rs_val.next()){
+		where_clause = " ";
+	}else{
+		where_clause = " and		id_direktorat	= " + id_direktorat
+						+ " and		id_divprosbu	= " + id_divprosbu;
+	}
 
 	q=" select	nipg"
 	+ " ,		nama_pegawai"
 	+ " from	r_pegawai"
 	+ " where	status_pegawai	= '1'"
-	+ " and		id_direktorat	= " + id_direktorat
-	+ " and		id_divprosbu	= " + id_divprosbu
+	+ where_clause
 	+ " and		nipg not in (select nipg from __user)"
 	+ " order by	nama_pegawai";
-
 	ResultSet	rs	= db_stmt.executeQuery(q);
 	int		i	= 0;
 	String		data	= "[";
