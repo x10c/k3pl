@@ -16150,3 +16150,15 @@ alter table T_INSIDEN_REKOMENDASI
    add constraint FK_T_INSIDEN_T_INSIDEN_REKOMENDASI foreign key (ID_INSIDEN)
       references T_INSIDEN (ID_INSIDEN)
 go
+
+alter table R_K3PL drop constraint DF__R_K3PL__REPO_PAT__65F62111
+go
+
+alter table R_K3PL drop column REPO_PATH
+go
+
+alter table R_K3PL add REPO_MAX_FILE_SIZE int not null default 10
+go
+
+insert into __MENU values ('01.08', 'Pengaturan Repository', 'app_repository', '1', 2, '01', '');
+insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'01.08',4);
