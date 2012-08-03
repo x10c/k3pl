@@ -43,5 +43,5 @@
 	String		db_q	= "";
 	JSONArray	json_a	= null;
 	JSONObject	json_o	= null;
-	String		data	= "";
+	JSONObject	_return	= new JSONObject ();
 %>

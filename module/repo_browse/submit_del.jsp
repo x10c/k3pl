@@ -19,8 +19,9 @@ try {
 
 	/* REJECT "Kontraktor/Dokumen Klaim" deletion */
 	if (id.equals("3")) {
-			out.print("{success:false"
-				+",info:'Direktori ini tidak dapat dihapus karena digunakan oleh referensi Kontraktor!'}");
+			_return.put ("success", false);
+			_return.put ("info", "Direktori ini tidak dapat dihapus karena digunakan oleh referensi Kontraktor!");
+			out.print (_return);
 			return;
 	}
 
@@ -32,8 +33,9 @@ try {
 	db_rs	= db_stmt.executeQuery (db_q);
 
 	if (db_rs.next ()) {
-			out.print("{success:false"
-				+",info:'Berkas ini dipakai pada Referensi Kontraktor!'}");
+			_return.put ("success", false);
+			_return.put ("info", "Berkas ini dipakai pada Referensi Kontraktor!");
+			out.print (_return);
 			db_rs.close ();
 			return;
 	}
@@ -49,8 +51,9 @@ try {
 		String[] files = f.list();
 
 		if (files.length > 0) {
-			out.print("{success:false"
-				+",info:'Direktori memiliki isi, tidak dapat dihapus!'}");
+			_return.put ("success", false);
+			_return.put ("info", "Direktori memiliki isi, tidak dapat dihapus!");
+			out.print (_return);
 			return;
 		}
 	}
@@ -65,8 +68,11 @@ try {
 
 	db_stmt.executeUpdate (db_q);
 
-	out.print("{success:true,info:'\""+ name +"\" telah dihapus!'}");
+	_return.put ("success", true);
+	_return.put ("info", "'"+ name +"' telah dihapus!");
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

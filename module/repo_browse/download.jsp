@@ -26,7 +26,9 @@ try {
 	db_rs = db_stmt.executeQuery (db_q);
 
 	if (! db_rs.next ()) {
-		out.print ("{success:false,info:'Data berkas tidak didapat!'}");
+		_return.put ("success", false);
+		_return.put ("info", "Data berkas tidak didapat!");
+		out.print (_return);
 		db_rs.close ();
 		return;
 	}
@@ -46,9 +48,11 @@ try {
 	ostream.flush ();
 	ostream.close ();
 } catch (Exception e) {
-	out.print ("{success:false,info:'"
-			+ e.toString ().replace ("'","\\'").replace ("\"","\\\"") +"'}");
 	ostream.flush ();
 	ostream.close ();
+
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

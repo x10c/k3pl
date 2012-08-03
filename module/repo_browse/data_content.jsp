@@ -53,10 +53,12 @@ try {
 		json_a.put (json_o);
 	}
 
-	out.print("{data:"+ json_a +"}");
+	_return.put ("data", json_a);
 
 	db_rs.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

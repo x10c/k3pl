@@ -33,7 +33,6 @@ function MRepoBrowseContent()
 			this.do_upload();
 		}
 	});
-
 	this.form_upload = new Ext.form.FormPanel({
 		fileUpload	:true
 	,	labelAlign	:"right"
@@ -57,6 +56,7 @@ function MRepoBrowseContent()
 			this.form_upload
 		]
 	});
+
 /*
  * grid
  */
@@ -151,7 +151,7 @@ function MRepoBrowseContent()
 	,	iconCls	:"upload16"
 	,	scope	:this
 	,	handler	:function() {
-			this.win_upload.show();
+			this.win_upload.show ();
 		}
 	});
 
@@ -408,7 +408,6 @@ function MRepoBrowseContent()
 			return;
 		}
 
-		this.win_upload.hide();
 		main_load.show();
 
 		this.form_upload.getForm().doAction("submit", {
@@ -425,7 +424,13 @@ function MRepoBrowseContent()
 			}
 		,	success	:function (form, action) {
 				main_load.hide();
-				this.do_load();
+
+				if (action.result.success == false) {
+					this.win_upload.show ();
+					Ext.Msg.alert ("Kesalahan", action.result.info);
+				} else {
+					this.do_load();
+				}
 			}
 		});
 	}

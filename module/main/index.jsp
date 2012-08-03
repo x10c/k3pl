@@ -10,7 +10,7 @@
 <%
 String cpath = (String) request.getContextPath();
 
-/* save user to session */
+/* save user's data to session */
 session.setAttribute("user.nipg", user_nipg);
 session.setAttribute("user.name", user_name);
 session.setAttribute("user.email", user_email);
@@ -87,10 +87,7 @@ session.setAttribute("user.seksi", user_seksi);
 <script type='text/javascript' src='<%=cpath%>/js/all.js'></script>
 
 <%-- all module --%>
-<script type='text/javascript' src='<%=cpath%>/module/ref_pegawai/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/app_home/layout.js'></script>
-<script type='text/javascript' src='<%=cpath%>/module/pssr_entry/layout.js'></script>
-<script type='text/javascript' src='<%=cpath%>/module/sfm_data_rapat_sub/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/main/layout.js'></script>
 </head>
 

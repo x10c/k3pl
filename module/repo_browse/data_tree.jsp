@@ -72,21 +72,10 @@ try {
 try {
 	int id = 1;
 
-	db_stmt = db_con.createStatement();
-
-	db_q	=" select repo_path from r_k3pl";
-	db_rs	= db_stmt.executeQuery (db_q);
-
-	if (! db_rs.next()) {
-		out.print("{success:false,info:'Direktori repositori belum di set!'}");
-		db_rs.close();
-		return;
-	}
-
 	json_o = new JSONObject();
 	json_o.put("id", id);
 	json_o.put("pid", 0);
-	json_o.put("text", db_rs.getString ("repo_path"));
+	json_o.put("text", "Repository");
 	json_o.put("iconCls", "dir16");
 
 	json_a = get_list_dir (id, db_con);
@@ -98,9 +87,9 @@ try {
 	}
 
 	out.print("["+ json_o +"]");
-
-	db_rs.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

@@ -38,7 +38,11 @@ try {
 
 	db_stmt.executeUpdate (db_q);
 
+	_return.put ("success", true);
+	_return.put ("info", "Berkas '"+ name_from +"' telah diubah nama menjadi '"+ name_to +"'.");
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

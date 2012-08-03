@@ -51,7 +51,12 @@ try {
 		+ session.getAttribute("menu.id") +"','2')";
 
 	db_stmt.executeUpdate (db_q);
+
+	_return.put ("success", true);
+	_return.put ("info", "Direktori '"+ name +"' telah dibuat.");
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

@@ -16,11 +16,14 @@
 try {
 	boolean is_multipart = ServletFileUpload.isMultipartContent(request);
 	if (!is_multipart) {
-		out.print("{success:false,info:'Data kosong!'}");
+		_return.put ("success", false);
+		_return.put ("info", "Data kosong!");
+		out.print (_return);
 		return;
 	}
 
 	String				rpath	= config.getServletContext().getRealPath("/");
+	int					content_length	= Integer.parseInt (request.getHeader ("Content-Length"));
 
 	FileItemFactory		factory	= new DiskFileItemFactory();
 	ServletFileUpload	upload	= new ServletFileUpload(factory);
@@ -34,9 +37,29 @@ try {
 	String				id		="";
 	String				path	="";
 	String				name	="";
-	long				filesize=0;
+	long				file_sz	=0;
+	long				max_sz	=0;
 
+	/* check file size */
 	db_stmt	= db_con.createStatement();
+	db_q	=" select	repo_max_file_size"
+			+" from		r_k3pl";
+	db_rs	= db_stmt.executeQuery (db_q);
+
+	if (db_rs.next ()) {
+		max_sz	= db_rs.getInt ("repo_max_file_size") * 1024 * 1024;
+	} else {
+		max_sz	= 10 * 1024 * 1024;
+	}
+
+	db_rs.close ();
+
+	if (content_length > max_sz) {
+		_return.put ("success", false);
+		_return.put ("info", "Ukuran berkas melampaui batas. Maksimum "+ max_sz +" MB.");
+		out.print (_return);
+		return;
+	}
 
 	/* parse request */
 	while (itr.hasNext()) {
@@ -47,14 +70,12 @@ try {
 
 			if (k.equals("id")) {
 				id = v;
-			} else if (k.equals("path")) {
-				path = v;
 			} else if (k.equals("name")) {
 				name = v;
 			}
 		} else {
 			item_up		= item;
-			filesize	= item.getSize();
+			file_sz		= item.getSize();
 		}
 	}
 
@@ -77,7 +98,7 @@ try {
 		+" ,'"+	name +"'"
 		+" ,'"+ user_nipg +"'"
 		+" , group_owner"
-		+" , "+ filesize
+		+" , "+ file_sz
 		+" ,'"+ user_nipg +"'"
 		+" , ?"
 		+" from		t_repo"
@@ -90,13 +111,16 @@ try {
 
 	ins.close ();
 
-	db_q+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ user_nipg +"','"+ session.getAttribute("menu.id") +"','2')";
+	db_q	=" insert into __log (nipg, nama_menu, status_akses) values ('"
+			+ user_nipg +"','"+ session.getAttribute("menu.id") +"','2')";
 
 	db_stmt.executeUpdate (db_q);
 
-	out.print("{success:true,info:'File telah tersimpan.'}");
+	_return.put ("success", true);
+	_return.put ("info", "File '"+ name +"' telah tersimpan.");
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>
