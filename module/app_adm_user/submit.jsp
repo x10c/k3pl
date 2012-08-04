@@ -1,5 +1,5 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami

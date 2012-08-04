@@ -10,8 +10,9 @@
 try {
 	JSONArray	menu	= null;
 	String		id_grup	= request.getParameter ("id_grup");
+	String		menu_id	= "";
 
-	db_stmt = db_con.createStatement();
+	db_stmt = db_con.createStatement ();
 	db_q	=" select		B.menu_id"
 			+" ,			B.menu_name"
 			+" ,			C.menu_id +' - '+ C.menu_name 'menu_parent'"
@@ -28,14 +29,29 @@ try {
 
 	json_a	= new JSONArray ();
 	while (db_rs.next()) {
-		menu = new JSONArray ();
-		menu.put (db_rs.getString ("menu_parent"));
-		menu.put (db_rs.getString ("menu_id"));
-		menu.put (db_rs.getString ("menu_name"));
-		menu.put (db_rs.getString ("ha_level"));
-		menu.put (db_rs.getString ("ha_level"));
+		menu_id = db_rs.getString ("menu_id");
 
-		json_a.put (menu);
+		if ("01.04".equals (menu_id)
+		||  "01.05".equals (menu_id)
+		||  "01.08".equals (menu_id)) {
+			if ("1".equals (user_group)) {
+				menu = new JSONArray ();
+				menu.put (db_rs.getString ("menu_parent"));
+				menu.put (menu_id);
+				menu.put (db_rs.getString ("menu_name"));
+				menu.put (db_rs.getString ("ha_level"));
+				menu.put (db_rs.getString ("ha_level"));
+				json_a.put (menu);
+			}
+		} else {
+			menu = new JSONArray ();
+			menu.put (db_rs.getString ("menu_parent"));
+			menu.put (menu_id);
+			menu.put (db_rs.getString ("menu_name"));
+			menu.put (db_rs.getString ("ha_level"));
+			menu.put (db_rs.getString ("ha_level"));
+			json_a.put (menu);
+		}
 	}
 
 	out.print (json_a);

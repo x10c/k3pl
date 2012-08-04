@@ -1,95 +1,69 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Cookie[]	cookies			= request.getCookies ();
-	String		nipg			= (String) request.getParameter ("nipg");
-	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	Statement	db_stmt = db_con.createStatement();
+	JSONArray	peg		= null;
+	String		nipg	= request.getParameter ("nipg");
 	String		start	= request.getParameter("start");
-	String		end	= request.getParameter("end");
-	
-	String 		p="";
-	String where_clause ="";
-	p = " select nipg from r_pegawai where nipg in	( "
-			+"						select 	nipg "
-			+"						from	__user_grup "
-			+"						where	id_grup	= 9 "
-			+"					) ";
-	ResultSet	rs_val	= db_stmt.executeQuery(p);
-	
+	String		end		= request.getParameter("end");
 
-	if (rs_val.next()){
-		where_clause = " ";
-	}else{
-		where_clause = " where 		id_direktorat	= " + id_direktorat
-						+ " and		id_divprosbu	= " + id_divprosbu;
-	}
+	db_stmt = db_con.createStatement();
 
-	String q=" select	nipg "
-		+" ,		id_klasifikasi_pegawai "
-		+" ,		id_jabatan "
-		+" ,		id_direktorat "
-		+" ,		id_divprosbu "
-		+" ,		id_departemen "
-		+" ,		id_dinas "
-		+" ,		id_seksi "
-		+" ,		nama_pegawai "
-		+" ,		email "
-		+" ,		status_pegawai "
-		+" from		r_pegawai "
-		+ where_clause;
+	db_q=" select	nipg"
+		+" ,		id_klasifikasi_pegawai"
+		+" ,		id_jabatan"
+		+" ,		id_direktorat"
+		+" ,		id_divprosbu"
+		+" ,		id_departemen"
+		+" ,		id_dinas"
+		+" ,		id_seksi"
+		+" ,		nama_pegawai"
+		+" ,		email"
+		+" ,		status_pegawai"
+		+" from		r_pegawai";
 
 	if (null != nipg) {
-		q +=" and nipg = '"+ nipg +"'";
-	}
-
-	q += " order by	nama_pegawai";
-
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int		i = 0;
-	String		nama, data = "[";
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
+		db_q +=" where nipg = '"+ nipg +"'";
+	} else {
+		if (! "1".equals (user_group)) {
+			db_q+=" where	id_direktorat	= "+ user_dir
+				+ " and		id_divprosbu	= "+ user_div;
 		}
-		data	+="['"+ rs.getString("nipg") +"'"
-			+ ","+ rs.getString("id_klasifikasi_pegawai")
-			+ ","+ rs.getString("id_jabatan")
-			+ ","+ rs.getString("id_direktorat")
-			+ ","+ rs.getString("id_divprosbu")
-			+ ","+ rs.getString("id_departemen")
-			+ ","+ rs.getString("id_dinas")
-			+ ","+ rs.getString("id_seksi")
-			+ ",\""+ rs.getString("nama_pegawai") +"\""
-			+ ",'"+ rs.getString("email") +"'"
-			+ ",'"+ rs.getString("status_pegawai") +"'"
-			+  "]";
 	}
 
-	data += "]";
+	db_q	+= " order by	nama_pegawai";
 
-	out.print(data);
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
+	while (db_rs.next()) {
+		peg = new JSONArray ();
+		peg.put (db_rs.getString ("nipg"));
+		peg.put (db_rs.getString ("id_klasifikasi_pegawai"));
+		peg.put (db_rs.getString ("id_jabatan"));
+		peg.put (db_rs.getString ("id_direktorat"));
+		peg.put (db_rs.getString ("id_divprosbu"));
+		peg.put (db_rs.getString ("id_departemen"));
+		peg.put (db_rs.getString ("id_dinas"));
+		peg.put (db_rs.getString ("id_seksi"));
+		peg.put (db_rs.getString ("nama_pegawai"));
+		peg.put (db_rs.getString ("email"));
+		peg.put (db_rs.getString ("status_pegawai"));
+
+		json_a.put (peg);
+	}
+
+	out.print (json_a);
+
+	db_rs.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
