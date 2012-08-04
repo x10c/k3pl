@@ -9578,6 +9578,7 @@ insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'25.02',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'26',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'26.01',4);
 
+
 update __MENU set MENU_NAME = 'Pengelolaan Lingkungan Tahunan', MENU_FOLDER = 'lnk_tahunan' where MENU_ID = '09.01';
 update __MENU set MENU_NAME = 'Pengelolaan Lingkungan Bulanan', MENU_FOLDER = 'lnk_bulanan',ICON = '' where MENU_ID = '09.02';
 
@@ -16180,3 +16181,87 @@ values (
 ,	'YEAR_1;YEAR_2;YEAR_3;MONTH_1;MONTH_2;MONTH_3;ID_DIR;ID_DIV'
 )
 go
+
+/* grup administrator DivProSBU */
+insert into __GRUP_USER (nama_grup, keterangan_grup) values ('Grup Administrator Divisi/Proyek/SBU', 'Administrator Divisi/Proyek/SBU');
+
+/* hak akses untuk grup administrator DivProSBU */
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.04',0);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.05',0);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.07',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.08',0);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.05',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.07',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.08',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.09',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.10',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.11',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.12',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.13',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.14',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.15',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.16',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.17',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.05',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.05',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.05',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.07',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.03',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.04',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.05',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.06',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.07',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.01',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.02',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26',4);
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26.01',4);

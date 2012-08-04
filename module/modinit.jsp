@@ -5,7 +5,6 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.PreparedStatement" %>
@@ -23,6 +22,7 @@
 	Cookie[]	cookies		= request.getCookies ();
 	String		user_name	= ServletUtilities.getCookieValue (cookies, "user.name", null);
 	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", null);
+	String		user_group	= ServletUtilities.getCookieValue (cookies, "user.group", null);
 	String		user_email	= ServletUtilities.getCookieValue (cookies, "user.email", null);
 	String		user_seksi	= ServletUtilities.getCookieValue (cookies, "user.seksi", null);
 	String		user_dinas	= ServletUtilities.getCookieValue (cookies, "user.dinas", null);
@@ -32,7 +32,7 @@
 
 	if (null == user_name || null == user_nipg || null == user_email
 	|| null == user_seksi || null == user_dinas || null == user_dep
-	|| null == user_div || null == user_dir) {
+	|| null == user_div || null == user_dir || null == user_group) {
 		out.print ("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
 		response.sendRedirect (request.getContextPath());
 		return;

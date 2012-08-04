@@ -12,6 +12,7 @@ String cpath = (String) request.getContextPath();
 
 /* save user's data to session */
 session.setAttribute("user.nipg", user_nipg);
+session.setAttribute("user.group", user_group);
 session.setAttribute("user.name", user_name);
 session.setAttribute("user.email", user_email);
 session.setAttribute("user.direktorat", user_dir);
