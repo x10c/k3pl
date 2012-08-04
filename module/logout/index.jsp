@@ -18,6 +18,7 @@ if (db_con != null && !db_con.isClosed()) {
 }
 
 session.removeAttribute("user.nipg");
+session.removeAttribute("user.group");
 session.removeAttribute("user.name");
 session.removeAttribute("user.email");
 session.removeAttribute("user.direktorat");
@@ -32,6 +33,8 @@ if (cookies != null) {
 	for (int i = 0; i < cookies.length; i++) {
 		c_name = cookies[i].getName ();
 		if (c_name.equalsIgnoreCase ("user.nipg")
+		||  c_name.equalsIgnoreCase ("user.group")
+		||  c_name.equalsIgnoreCase ("user.name")
 		||  c_name.equalsIgnoreCase ("user.name")
 		||  c_name.equalsIgnoreCase ("user.email")
 		||  c_name.equalsIgnoreCase ("user.direktorat")

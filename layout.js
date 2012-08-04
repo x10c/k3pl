@@ -20,11 +20,11 @@ $(document).ready(function() {
 	$(".right p a").hover(
 		function() {
 			$(this).stop().animate({
-				paddingLeft	:'10'
+				paddingLeft		:'10'
 			,	paddingRight	:'10'
 			},{
-				duration	:'700'
-			,	easing		:'easeInSine'
+				duration		:'700'
+			,	easing			:'easeInSine'
 			});
 			return true;
 		}
@@ -85,19 +85,19 @@ function charts_init()
 	});
 
 	this.form_charts = new Ext.form.ComboBox({
-		store		: this.store_charts
-	,	value		: -1
-	,	valueField	: 'id'
+		store			: this.store_charts
+	,	value			: -1
+	,	valueField		: 'id'
 	,	displayField	: 'name'
-	,	width		: 200
-	,	listWidth	: 240
-	,	allowBlank	: false
-	,	editable	: false
+	,	width			: 200
+	,	listWidth		: 240
+	,	allowBlank		: false
+	,	editable		: false
 	,	triggerAction	: 'all'
-	,	mode		: 'local'
-	,	listeners	: {
-			scope	: this
-		,	select	: function (cb, record, id) {
+	,	mode			: 'local'
+	,	listeners		: {
+			scope			: this
+		,	select			: function (cb, record, id) {
 				form_charts_on_select(record, id);
 			}
 		}

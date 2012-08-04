@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ * Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  *
  * Author(s):
  * + PT. Awakami
@@ -8,13 +8,13 @@
 
 var m_charts;
 var m_charts_interval;
-var m_charts_n		= 8;
-var m_charts_active	= 0;
-var m_charts_d		= _g_root +'/charts/';
+var m_charts_n			= 8;
+var m_charts_active		= 0;
+var m_charts_d			= _g_root +'/charts/';
 var m_obs_lap_perf_d	= _g_root +'/module/obs_lap_performansi/';
 var m_obs_lap_part_d	= _g_root +'/module/obs_lap_partisipasi/';
 var m_rca_lap_part_d	= _g_root +'/module/rca_lap_partisipasi/';
-var m_luk_d		= _g_root +'/module/luk_lap_unjuk_kerja/';
+var m_luk_d				= _g_root +'/module/luk_lap_unjuk_kerja/';
 
 function M_ObsLapPerfChart(store, title, xField, xTitle, ySafe, yUnsafe)
 {
@@ -104,10 +104,13 @@ function M_ChartPerfByCategory()
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: 0
+				id_dir		: 0
+			,	id_div		: 0
+			,	id_dep		: 0
 			,	id_dinas	: 0
 			,	id_seksi	: 0
-			,	id_area_seksi	: 0
+			,	id_wilayah	: 0
+			,	id_area		: 0
 			,	year		: year
 			,	month		: month
 			}
@@ -259,7 +262,7 @@ function M_LUKChart(title, y_title, store_url, chart_type, show_target)
 				}
 			}
 		,	legend		: {
-                                layout	: 'horizontal'
+				layout		: 'horizontal'
 			}
 		}
 	});
@@ -312,7 +315,7 @@ function M_ObsPartChart(title, xField, y1)
 	]);
 
 	this.store = new Ext.data.ArrayStore ({
-		url	:m_obs_lap_part_d +'data_part_org.jsp'
+		url		:m_obs_lap_part_d +'data_part_org.jsp'
 	,	fields	:this.record
 	,	autoLoad:false
 	});
@@ -351,7 +354,7 @@ function M_ObsPartChart(title, xField, y1)
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah
+	this.do_load = function (id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah
 				, id_area, year, month, is_in_org)
 	{
 		var sub		= '';
@@ -370,6 +373,8 @@ function M_ObsPartChart(title, xField, y1)
 			scope		: this
 		,	params		: {
 				is_in_org	: is_in_org
+			,	id_dir		: id_dir
+			,	id_div		: id_div
 			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
@@ -385,7 +390,7 @@ function M_ObsPartChart(title, xField, y1)
 	{
 		var d = new Date();
 
-		this.do_load(0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
+		this.do_load(0,0,0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
 	}
 }
 
@@ -439,7 +444,7 @@ function M_RCAPartChart(title, xField, y1)
 		]
 	});
 
-	this.do_load = function(id_dep, id_dinas, id_seksi, id_wilayah
+	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah
 				, id_area, year, month, is_in_org)
 	{
 		var sub		= '';
@@ -458,6 +463,8 @@ function M_RCAPartChart(title, xField, y1)
 			scope		: this
 		,	params		: {
 				is_in_org	: is_in_org
+			,	id_dir		: id_dir
+			,	id_div		: id_div
 			,	id_dep		: id_dep
 			,	id_dinas	: id_dinas
 			,	id_seksi	: id_seksi
@@ -473,7 +480,7 @@ function M_RCAPartChart(title, xField, y1)
 	{
 		var d = new Date();
 
-		this.do_load(0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
+		this.do_load(0,0,0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
 	}
 }
 
@@ -512,14 +519,14 @@ function M_Charts()
 				, 'total_part_percent');
 
 	this.panel = new Ext.Panel({
-			region		: 'center'
-		,	layout		: 'card'
-		,	margins		: '0'
-		,	bodyBorder	: false
-		,	activeItem	: m_charts_active
+			region				: 'center'
+		,	layout				: 'card'
+		,	margins				: '0'
+		,	bodyBorder			: false
+		,	activeItem			: m_charts_active
 		,	cardSwitchAnimation	: 'slide'
-		,	tbar		: []
-		,	charts		: [
+		,	tbar				: []
+		,	charts				: [
 				this.stop_part
 			,	this.rca_part
 			,	this.perf_by_cat
@@ -529,7 +536,7 @@ function M_Charts()
 			,	this.uk_chart_ltif
 			,	this.uk_chart_tsaf
 			]
-		,	items		: [
+		,	items				: [
 				this.stop_part.panel
 			,	this.rca_part.panel
 			,	this.perf_by_cat.chart.panel
@@ -561,12 +568,12 @@ function charts_do_refresh()
 
 function charts_start()
 {
-	m_charts_interval = window.setInterval('charts_do_refresh()', _g_chart_delay);
+	m_charts_interval = setInterval('charts_do_refresh()', _g_chart_delay);
 }
 
 function charts_stop()
 {
-	window.clearInterval(m_charts_interval);
+	clearInterval(m_charts_interval);
 }
 
 //@ sourceURL=charts.layout.js

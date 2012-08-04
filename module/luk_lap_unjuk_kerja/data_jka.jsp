@@ -4,6 +4,8 @@
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
+ %
+ % WARNING: This script is used by charts module.
 --%>
 
 <%@ page import="java.sql.Connection" %>
@@ -60,15 +62,7 @@ try {
 	}
 
 	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.div", null);
 
 	Statement	db_stmt	= db_con.createStatement();
 
@@ -118,32 +112,52 @@ try {
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 1"
 +" 	and		tahun					= "+ year
-+" 	and		bulan					= "+ month
-+"	and		id_divprosbu			= "+ user_div
-+" ) TEK,"
++" 	and		bulan					= "+ month;
+
+if (user_div != null && "0".equals (user_div)) {
+	q	+="	and		id_divprosbu		= "+ user_div;
+}
+
+q
++=" ) TEK,"
 +" ("
 +" 	select	isnull(sum(jml_jam_kerja),0)	as jka"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 2"
 +" 	and		tahun					= "+ year
-+" 	and		bulan					= "+ month
-+"	and		id_divprosbu			= "+ user_div
-+" ) SER,"
++" 	and		bulan					= "+ month;
+
+if (user_div != null && "0".equals (user_div)) {
+	q	+="	and		id_divprosbu		= "+ user_div;
+}
+
+q
++=" ) SER,"
 +" ("
 +" 	select	isnull(sum(jml_jam_kerja),0)	as jka"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 3"
 +" 	and		tahun					= "+ year
-+" 	and		bulan					= "+ month
-+"	and		id_divprosbu			= "+ user_div
-+" ) KON,"
++" 	and		bulan					= "+ month;
+
+if (user_div != null && "0".equals (user_div)) {
+	q	+="	and		id_divprosbu		= "+ user_div;
+}
+
+q
++=" ) KON,"
 +" ("
 +" 	select	isnull(sum(jml_jam_kerja),0)	as jka"
 +" 	from	t_unjuk_kerja"
 +" 	where	tahun			= "+ year
-+" 	and		bulan			= "+ month
-+"	and		id_divprosbu	= "+ user_div
-+" ) KUM";
++" 	and		bulan			= "+ month;
+
+if (user_div != null && "0".equals (user_div)) {
+	q	+="	and		id_divprosbu		= "+ user_div;
+}
+
+q
++=" ) KUM";
 
 		rs = db_stmt.executeQuery(q);
 

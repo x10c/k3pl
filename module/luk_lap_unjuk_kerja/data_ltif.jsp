@@ -4,6 +4,8 @@
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
+ %
+ % WARNING: This script is used by charts module.
 --%>
 
 <%@ page import="java.sql.Connection" %>
@@ -60,15 +62,7 @@ try {
 	}
 
 	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", null);
 
 	Statement	db_stmt	= db_con.createStatement();
 
@@ -125,17 +119,25 @@ try {
 +" 		from	t_insiden"
 +" 		where	id_klasifikasi_pegawai	= 1"
 +" 		and		tahun					= "+ year
-+" 		and		bulan					= "+ month
-+"		and		id_divprosbu			= "+ user_div
-+" 	) TI,"
++" 		and		bulan					= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TI,"
 +" 	("
 +" 		select	isnull(nullif(sum(jml_jam_kerja),0),1) as jk"
 +" 		from	t_unjuk_kerja"
 +" 		where	id_klasifikasi_pegawai	= 1"
 +" 		and		tahun					= "+ year
-+" 		and		bulan					= "+ month
-+"		and		id_divprosbu			= "+ user_div
-+" 	) TUK"
++" 		and		bulan					= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TUK"
 +" ) TEK,"
 +" ("
 +" 	select	round(((TI.lti/cast(TUK.jk as float)) * 100000),2,1) as ltif"
@@ -147,17 +149,25 @@ try {
 +" 		from	t_insiden"
 +" 		where	id_klasifikasi_pegawai	= 2"
 +" 		and		tahun					= "+ year
-+" 		and		bulan					= "+ month
-+"		and		id_divprosbu			= "+ user_div
-+" 	) TI,"
++" 		and		bulan					= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TI,"
 +" 	("
 +" 		select	isnull(nullif(sum(jml_jam_kerja),0),1) as jk"
 +" 		from	t_unjuk_kerja"
 +" 		where	id_klasifikasi_pegawai	= 2"
 +" 		and		tahun					= "+ year
-+" 		and		bulan					= "+ month
-+"		and		id_divprosbu			= "+ user_div
-+" 	) TUK"
++" 		and		bulan					= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TUK"
 +" ) SER,"
 +" ("
 +" 	select	round(((TI.lti/cast(TUK.jk as float)) * 100000),2,1) ltif"
@@ -169,17 +179,25 @@ try {
 +" 		from	t_insiden"
 +" 		where	id_klasifikasi_pegawai	= 3"
 +" 		and		tahun					= "+ year
-+" 		and		bulan					= "+ month
-+"		and		id_divprosbu			= "+ user_div
-+" 	) TI,"
++" 		and		bulan					= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TI,"
 +" 	("
 +" 		select	isnull(nullif(sum(jml_jam_kerja),0),1) as jk"
 +" 		from	t_unjuk_kerja"
 +" 		where	id_klasifikasi_pegawai	= 3"
 +" 		and		tahun					= "+ year
-+" 		and		bulan					= "+ month
-+"		and		id_divprosbu			= "+ user_div
-+" 	) TUK"
++" 		and		bulan					= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TUK"
 +" ) KON,"
 +" ("
 +" 	select	round(((TI.lti/cast(TUK.jk as float)) * 100000),2,1) as ltif"
@@ -190,16 +208,24 @@ try {
 +" 		+	isnull(sum(jml_korban_sedang),0)) as lti"
 +" 		from	t_insiden"
 +" 		where	tahun			= "+ year
-+" 		and		bulan			= "+ month
-+"		and		id_divprosbu	= "+ user_div
-+" 	) TI,"
++" 		and		bulan			= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TI,"
 +" 	("
 +" 		select	isnull(nullif(sum(jml_jam_kerja),0),1) as jk"
 +" 		from	t_unjuk_kerja"
 +" 		where	tahun			= "+ year
-+" 		and		bulan			= "+ month
-+"		and		id_divprosbu	= "+ user_div
-+" 	) TUK"
++" 		and		bulan			= "+ month;
+
+if (user_div != null && !"0".equals (user_div)) {
+	q +=" and	id_divprosbu	= "+ user_div;
+}
+
+q+=" ) TUK"
 +" ) KUM";
 
 		rs = db_stmt.executeQuery(q);

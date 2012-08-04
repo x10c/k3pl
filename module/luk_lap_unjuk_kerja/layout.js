@@ -301,7 +301,9 @@ function M_LUKChart(title, y_title, store_url, chart_type, show_target)
 	this.do_load = function()
 	{
 		this.store.load({
-			params	: { year: this.form_year.getValue() }
+			params	: {
+				year: this.form_year.getValue()
+			}
 		});
 
 		this.chart.setSubTitle('Tahun '+ this.form_year.getValue());

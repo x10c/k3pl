@@ -4,6 +4,8 @@
 % Author(s):
 % + PT. Awakami
 %   - m.shulhan (ms@kilabit.org)
+%
+% WARNING: This script is used by charts module.
 --%>
 
 <%@ page import="java.sql.Connection" %>
@@ -59,15 +61,7 @@ try {
 		return;
 	}
 	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", null);
 
 	Statement	db_stmt		= db_con.createStatement();
 	String		year		= (String) request.getParameter ("year");
@@ -120,9 +114,13 @@ try {
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 1"
 +" 	and		tahun					= "+ year
-+" 	and		bulan					= "+ month
-+"	and		id_divprosbu			= "+ user_div
-+" ) TEK,"
++" 	and		bulan					= "+ month;
+
+if (user_div != null && ! (user_div.equals("0") || user_div.equals (""))) {
+	q+="	and		id_divprosbu			= "+ user_div;
+}
+
+q+=" ) TEK,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
 +" 	/	isnull(nullif(convert(float, sum(jml_hari_kerja), 2),0.00),1.00))"
@@ -130,9 +128,13 @@ try {
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 2"
 +" 	and		tahun					= "+ year
-+" 	and		bulan					= "+ month
-+"	and		id_divprosbu			= "+ user_div
-+" ) SER,"
++" 	and		bulan					= "+ month;
+
+if (user_div != null && ! (user_div.equals("0") || user_div.equals (""))) {
+	q+="	and		id_divprosbu			= "+ user_div;
+}
+
+q+=" ) SER,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
 +" 	/	isnull(nullif(convert(float, sum(jml_hari_kerja), 2),0.00),1.00))"
@@ -140,9 +142,13 @@ try {
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 3"
 +" 	and		tahun					= "+ year
-+" 	and		bulan					= "+ month
-+"	and		id_divprosbu			= "+ user_div
-+" ) KON,"
++" 	and		bulan					= "+ month;
+
+if (user_div != null && ! (user_div.equals("0") || user_div.equals (""))) {
+	q+="	and		id_divprosbu			= "+ user_div;
+}
+
+q+=" ) KON,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
 +" 	/	isnull(nullif(convert(float, sum(jml_hari_kerja), 2),0.00),1.00))"

@@ -4,6 +4,8 @@
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
+ %
+ % WARNING: This script is used by charts module.
 --%>
 
 <%@ page import="java.sql.*" %>
