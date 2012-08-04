@@ -1,75 +1,48 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	JSONArray peg = null;
+
+	db_stmt = db_con.createStatement ();
+	db_q	=" select	A.nipg"
+			+" ,		B.nama_pegawai"
+			+" ,		A.status_user"
+			+" from		__user		A"
+			+" ,		r_pegawai	B"
+			+" where	A.nipg 			= B.nipg";
+
+	if (! "1".equals (user_group)) {
+		db_q	+=" and id_direktorat	= "+ user_dir
+				+ " and id_divprosbu	= "+ user_div;
 	}
 
-	Cookie[]	cookies			= request.getCookies ();
-	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+	db_q	+=" order by	B.nama_pegawai";
+	db_rs	= db_stmt.executeQuery (db_q);
 
-	Statement db_stmt = db_con.createStatement();
-	String		nipg		= request.getParameter("nipg");
-	String 		p="";
-	String where_c ="";
-	p = " select nipg from r_pegawai where nipg in	( "
-			+"						select 	nipg "
-			+"						from	__user_grup "
-			+"						where	id_grup	= 9 "
-			+"					) ";
-	ResultSet	rs_val	= db_stmt.executeQuery(p);
-	
-	if (rs_val.next()){
-		where_c = " ";
-	}else{
-		where_c = " and		B.id_direktorat	= " + id_direktorat
-						+ " and		B.id_divprosbu	= " + id_divprosbu;
+	json_a	= new JSONArray ();
+	while (db_rs.next()) {
+		peg = new JSONArray ();
+		peg.put (db_rs.getString ("nipg"));
+		peg.put (db_rs.getString ("nama_pegawai"));
+		peg.put ("");
+		peg.put (db_rs.getString ("status_user"));
+
+		json_a.put (peg);
 	}
 
-	String q=" select	A.nipg"
-		+" ,		B.nama_pegawai"
-		+" ,		A.status_user"
-		+" from		__user		A"
-		+" ,		r_pegawai	B"
-		+" where	A.nipg 			= B.nipg"
-		+ where_c
-		+" order by	B.nama_pegawai";
+	out.print (json_a);
 
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
-	String		data	= "[";
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i = 1;
-		}
-		data	+="['"+ rs.getString("nipg") +"'"
-			+ ",\""+ rs.getString("nama_pegawai") +"\""
-			+" ,''"
-			+ ",'"+ rs.getString("status_user") +"'"
-			+ "]";
-	}
-
-	data +="]";
-
-	out.print(data);
-
-	rs.close();
+	db_rs.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
