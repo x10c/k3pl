@@ -1135,7 +1135,8 @@ k3pl.form.SetWilayah = Ext.extend (Ext.form.FieldSet, {
 
 k3pl.form.SetWaktu = Ext.extend (Ext.form.FieldSet, {
 	constructor: function (config) {
-		config.formTahun = new k3pl.form.Tahun(config);
+		config.formTahun 	= new k3pl.form.Tahun(config);
+		config.labelWidth	= 120;
 
 		if (config != undefined && config.displayBulan) {
 			config.formBulan = new k3pl.form.Bulan(config);

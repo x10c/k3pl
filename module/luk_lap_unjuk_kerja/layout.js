@@ -316,6 +316,61 @@ function M_LUKChart(title, y_title, store_url, chart_type, show_target)
 	}
 }
 
+function M_LUK_JBAForm (_parent, displayBulan)
+{
+	this.ref_parent = _parent;
+
+	this.set_org = new k3pl.form.SetOrganisasi({
+			itemAll			:true
+		,	scope			:this
+		,	checkboxToggle	:false
+		});
+
+	this.set_org.formDivProSBU.hide ();
+	this.set_org.formDepartemen.hide ();
+	this.set_org.formDinas.hide ();
+	this.set_org.formSeksi.hide ();
+
+	this.set_waktu = new k3pl.form.SetWaktu({
+			itemAll			:displayBulan
+		,	displayBulan	:displayBulan
+		});
+
+	this.btn_submit = new Ext.Button({
+		text		: 'Submit'
+	,	listeners	: {
+			scope	: this
+		,	click	: function(btn, e) {
+				this.ref_parent.do_load (
+						this.set_org.formDirektorat.getValue ()
+					,	this.set_waktu.formTahun.getValue()
+				);
+			}
+		}
+	});
+
+	this.panel = new Ext.form.FormPanel({
+		frame		: true
+	,	width		: 500
+	,	labelAlign	: 'right'
+	,	labelWidth	: 150
+	,	buttonAlign	: 'center'
+	,	buttons		: [
+			this.btn_submit
+		]
+	,	items		: [
+			this.set_org
+		,	this.set_waktu
+		]
+	});
+
+	this.do_refresh = function(ha_level)
+	{
+		this.set_org.do_load();
+		this.set_waktu.do_load();
+	}
+}
+
 function M_LUK_JBA ()
 {
 	this.grid_store = new Ext.data.JsonStore ({
@@ -323,8 +378,8 @@ function M_LUK_JBA ()
 			,	autoLoad	: false
 			,	storeId		: 'JBA'
 			,	fields		: [
-						'dir_id'
-					,	'dir_name'
+						'id'
+					,	'name'
 					,	'jan'
 					,	'feb'
 					,	'mar'
@@ -338,13 +393,13 @@ function M_LUK_JBA ()
 					,	'nov'
 					,	'dec'
 				]
-			,	idProperty	:'dir_id'
+			,	idProperty	:'id'
 		});
 
 	this.grid_cm = new Ext.grid.ColumnModel ({
 			columns	: [{
-					header		:'Direktorat'
-				,	dataIndex	:'dir_name'
+					header		:'Nama'
+				,	dataIndex	:'name'
 				,	width		:260
 				},{
 					header		:'Januari'
@@ -382,7 +437,7 @@ function M_LUK_JBA ()
 				},{
 					header		:'Desember'
 				,	dataIndex	:'dec'
-				}]
+			}]
 		});
 
 	this.grid = new Ext.grid.GridPanel ({
@@ -436,53 +491,34 @@ function M_LUK_JBA ()
 			}
 		});
 
-	this.form_year = new Ext.form.ComboBox ({
-			fieldLabel		: 'Tahun'
-		,	store			: new Ext.data.ArrayStore({
-				fields			: ['year']
-			,	data			: k3pl_create_form_year_data(10)
-			})
-		,	valueField		: 'year'
-		,	displayField	: 'year'
-		,	allowBlank		: false
-		,	mode			: 'local'
-		,	triggerAction	: 'all'
-		});
-
-	this.btn_ref = new Ext.Button({
-		text	: 'Refresh'
-	,	iconCls	: 'refresh16'
-	,	scope	: this
-	,	handler	: function() {
-			this.do_load();
-		}
-	});
+	this.form = new M_LUK_JBAForm (this, 0);
 
 	this.panel = new Ext.Panel ({
 		title		: 'Jarak Berkendaraan Aman'
 	,	autoScroll	: true
 	,	frame		: false
 	,	padding		: '6'
-	,	tbar		: [
-				'Tahun : '
-			,	this.form_year
-			,	'-'
-			,	this.btn_ref
-		]
+	,	defaults	:{
+			style		: {
+				marginLeft	:'auto'
+			,	marginRight	:'auto'
+			,	marginBottom:'8px'
+			}
+		}
 	,	items		: [
-				this.grid
+				this.form.panel
+			,	this.grid
 			,	this.chart
 		]
 	});
 
-	this.do_load = function ()
+	this.do_load = function (id_dir, year)
 	{
-		var year = this.form_year.getValue ();
-
 		this.grid_store.load ({
 			scope	: this
 		,	params	: {
-				year	: year
+				id_dir		: id_dir
+			,	year		: year
 			}
 		,	callback: function (records, options, success) {
 				if (! success || records.length <= 0) {
@@ -490,6 +526,7 @@ function M_LUK_JBA ()
 				}
 
 				/* hide all month columns except for the last four months */
+				/*
 				var d		= new Date();
 				var m_end	= d.getMonth() + 1;
 				var m_start	= 1;
@@ -505,10 +542,13 @@ function M_LUK_JBA ()
 						this.grid_cm.setHidden (i, false);
 					}
 				}
+				*/
 
 				this.chart.chartConfig.subtitle.text	= 'Tahun '+ year;
+/*
 				this.chart.chartConfig.xAxis.min		= m_start - 1;
 				this.chart.chartConfig.xAxis.max		= m_end - 1;
+*/
 				this.chart.chartConfig.series			= this.convert_records_to_series (records);
 				this.chart.view = new Highcharts.Chart (this.chart.chartConfig);
 			}
@@ -522,7 +562,7 @@ function M_LUK_JBA ()
 		for (var i = 0; i < records.length; i++) {
 			r			= records[i];
 			s[i]		= {};
-			s[i].name	= r.get('dir_name');
+			s[i].name	= r.get('name');
 			s[i].data	= [];
 			s[i].data.push (parseInt (r.get('jan')));
 			s[i].data.push (parseInt (r.get('feb')));
@@ -540,6 +580,11 @@ function M_LUK_JBA ()
 
 		return s;
 	}
+
+	this.do_refresh = function (ha_level)
+	{
+		this.form.do_refresh (ha_level);
+	}
 }
 
 function M_LUK_Insiden ()
@@ -548,8 +593,8 @@ function M_LUK_Insiden ()
 				url			: m_luk_d +'data_insiden.jsp'
 			,	autoLoad	: false
 			,	fields		: [
-						'dir_id'
-					,	'dir_name'
+						'unit_id'
+					,	'unit_name'
 					,	'jml_korban_mati'
 					,	'jml_korban_berat'
 					,	'jml_korban_sedang'
@@ -558,13 +603,13 @@ function M_LUK_Insiden ()
 					,	'jml_hampir_celaka'
 					,	'jml_kecelakaan_kendaraan'
 				]
-			,	idProperty	:'dir_id'
+			,	idProperty	:'unit_id'
 		});
 
 	this.grid_cm = new Ext.grid.ColumnModel ({
 			columns	: [{
-					header		:'Direktorat'
-				,	dataIndex	:'dir_name'
+					header		:'Nama Unit'
+				,	dataIndex	:'unit_name'
 				,	width		:260
 				},{
 					header		:'Fatality'
@@ -649,53 +694,34 @@ function M_LUK_Insiden ()
 			}
 		});
 
-	this.form_year = new Ext.form.ComboBox ({
-			fieldLabel		: 'Tahun'
-		,	store			: new Ext.data.ArrayStore({
-				fields			: ['year']
-			,	data			: k3pl_create_form_year_data(10)
-			})
-		,	valueField		: 'year'
-		,	displayField	: 'year'
-		,	allowBlank		: false
-		,	mode			: 'local'
-		,	triggerAction	: 'all'
-		});
-
-	this.btn_ref = new Ext.Button({
-		text	: 'Refresh'
-	,	iconCls	: 'refresh16'
-	,	scope	: this
-	,	handler	: function() {
-			this.do_load();
-		}
-	});
+	this.form = new M_LUK_JBAForm (this, 0);
 
 	this.panel = new Ext.Panel ({
-		title		: 'Grafik Insiden'
+		title		: 'Insiden'
 	,	autoScroll	: true
 	,	frame		: false
 	,	padding		: '6'
-	,	tbar		: [
-				'Tahun : '
-			,	this.form_year
-			,	'-'
-			,	this.btn_ref
-		]
+	,	defaults	:{
+			style		: {
+					marginLeft	:'auto'
+				,	marginRight	:'auto'
+				,	marginBottom:'8px'
+			}
+		}
 	,	items		: [
-				this.grid
+				this.form.panel
+			,	this.grid
 			,	this.chart
 		]
 	});
 
-	this.do_load = function ()
+	this.do_load = function (id_dir, year)
 	{
-		var year = this.form_year.getValue ();
-
 		this.grid_store.load ({
 			scope	: this
 		,	params	: {
-				year	: year
+				id_dir	: id_dir
+			,	year	: year
 			}
 		,	callback: function (records, options, success) {
 				if (! success || records.length <= 0) {
@@ -715,7 +741,7 @@ function M_LUK_Insiden ()
 		var cat = this.chart.chartConfig.xAxis.categories = [];
 
 		for (var i = 0; i < records.length; i++) {
-			cat.push (records[i].get ('dir_name'));
+			cat.push (records[i].get ('unit_name'));
 		}
 	}
 
@@ -731,31 +757,36 @@ function M_LUK_Insiden ()
 			}
 		}
 	}
+
+	this.do_refresh = function (ha_level)
+	{
+		this.form.do_refresh (ha_level);
+	}
 }
 
 function M_LUKAll()
 {
 	this.uk				= new M_LUK();
 	this.uk_chart_jka	= new M_LUKChart(
-				'Grafik Jam Kerja Aman Kumulatif'
+				'Jam Kerja Aman Kumulatif'
 				, 'Jam Kerja'
 				, m_luk_d +'data_jka.jsp'
 				, 'column', false);
 
 	this.uk_chart_ltif	= new M_LUKChart(
-				'Grafik LTIF'
+				'LTIF'
 				, ''
 				, m_luk_d +'data_ltif.jsp'
 				, 'column', true);
 
 	this.uk_chart_tsaf	= new M_LUKChart(
-				'Grafik TSAF'
+				'TSAF'
 				, ''
 				, m_luk_d +'data_tsaf.jsp'
 				, 'column', true);
 
-	this.luk_jba = new M_LUK_JBA ();
-	this.luk_insiden = new M_LUK_Insiden ();
+	this.luk_jba		= new M_LUK_JBA ();
+	this.luk_insiden	= new M_LUK_Insiden ();
 
 	this.panel = new Ext.TabPanel({
 		id			: 'luk_lap_unjuk_kerja_panel'
@@ -776,6 +807,8 @@ function M_LUKAll()
 		this.uk_chart_jka.do_refresh(ha_level);
 		this.uk_chart_ltif.do_refresh(ha_level);
 		this.uk_chart_tsaf.do_refresh(ha_level);
+		this.luk_jba.do_refresh (ha_level);
+		this.luk_insiden.do_refresh (ha_level);
 	}
 }
 

@@ -46,16 +46,11 @@ function get_layout(n)
 {
 	main_load.show();
 
-	var c = main_content.findById(n.id+"_panel");
+	var c = main_content.findById (n.id+"_panel");
 
 	if (c != undefined) {
 		var m = eval("m_"+ n.id);
-
-		m.do_refresh(_g_ha);
-
-		main_content.layout.setActiveItem(n.id+"_panel");
-		main_load.hide();
-		return;
+		main_content.remove (m.panel);
 	}
 
 	Ext.Ajax.request({
@@ -75,13 +70,12 @@ function get_layout(n)
 
 			var m =	eval("m_"+ n.id);
 
-			m.do_refresh(_g_ha);
+			m.do_refresh (_g_ha);
 
-			main_content.add(m.panel);
-			main_content.layout.setActiveItem(m.panel);
-			main_content.doLayout();
-
-			main_load.hide();
+			main_content.add (m.panel);
+			main_content.layout.setActiveItem (m.panel);
+			main_content.doLayout ();
+			main_load.hide ();
 		}
 	});
 }

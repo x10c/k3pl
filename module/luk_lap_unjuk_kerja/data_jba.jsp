@@ -13,7 +13,7 @@
 <%@ page import="org.json.JSONObject" %>
 <%@ page import="org.kilabit.ServletUtilities" %>
 <%
-String	q_dir	= "";
+String	q_unit	= "";
 String	q_jba	= "";
 String	jba_months
 ="[{"
@@ -60,61 +60,42 @@ try {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
-	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
 
 	Statement	db_stmt		= db_con.createStatement ();
 	Statement	stmt_jba	= db_con.createStatement ();
-	String		year		= (String) request.getParameter ("year");
-	String		month_start	= (String) request.getParameter ("month_start");
-	String		month_end	= (String) request.getParameter ("month_end");
-	int			start, end;
 
-	if (month_end == null) {
-		end = 12;
-	} else {
-		end = Integer.parseInt(month_end);
-		end--;
-	}
-	if (month_start == null) {
-		start = 0;
-	} else {
-		start = Integer.parseInt(month_start);
-		start--;
-	}
-	JSONArray	jba			= new JSONArray (jba_months);
+	String		id_dir		= request.getParameter ("id_dir");
+	String		year		= request.getParameter ("year");
+
 	JSONArray	data_jba	= new JSONArray ();
-	JSONObject	jba_month	= null;
 	JSONObject	o			= null;
-	ResultSet	rs_dir		= null;
+	ResultSet	rs_unit		= null;
 	ResultSet	rs_jba		= null;
-	String		month		= "";
-	int			dir_id		= 0;
-	String		dir_name	= "";
+	int			unit_id		= 0;
+	String		unit_name	= "";
 	int			i			= 0;
 
-	q_dir	=" select	id_direktorat"
-			+" ,		nama_direktorat"
-			+" from		r_direktorat";
+	if (id_dir != null && !id_dir.equals ("0")) {
+		q_unit	=" select	id_divprosbu	as id"
+				+" ,		nama_divprosbu	as name"
+				+" from		r_divprosbu"
+				+" where	id_direktorat = "+ id_dir;
+	} else {
+		q_unit	=" select	id_direktorat	as id"
+				+" ,		nama_direktorat	as name"
+				+" from		r_direktorat";
+	}
 
-	rs_dir	= db_stmt.executeQuery (q_dir);
+	rs_unit = db_stmt.executeQuery (q_unit);
 
 	/* loop for all direktorat */
-	while (rs_dir.next ()) {
+	while (rs_unit.next ()) {
 		o			= new JSONObject ();
-		dir_id		= rs_dir.getInt ("id_direktorat");
-		dir_name	= rs_dir.getString ("nama_direktorat");
+		unit_id		= rs_unit.getInt ("id");
+		unit_name	= rs_unit.getString ("name");
 
-		o.put ("dir_id", dir_id);
-		o.put ("dir_name", dir_name);
+		o.put ("id", unit_id);
+		o.put ("name", unit_name);
 
 		q_jba		=" select	M1.jba as jan"
 					+" ,		M2.jba as feb"
@@ -136,9 +117,15 @@ try {
 					"( select	isnull (sum (jml_jarak_tempuh_aman), 0)	as jba"
 					+" from		t_unjuk_kerja"
 					+" where	tahun			= "+ year
-					+" and		bulan			= "+ i
-					+" and		id_direktorat	= "+ dir_id
-					+") M"+ i;
+					+" and		bulan			= "+ i;
+
+			if (id_dir != null && !id_dir.equals ("0")) {
+				q_jba +=" and id_divprosbu = "+ unit_id;
+			} else {
+				q_jba +=" and id_direktorat	= "+ unit_id;
+			}
+
+			q_jba += ") M"+ i;
 
 			if (i < 12) {
 				q_jba += ",";
@@ -169,22 +156,22 @@ try {
 
 	/* get JBA for Kontrak, Kumulatif Bulan, and Kumulatif Tahun */
 	for (int x = 0; x < 3; x++) {
-		dir_id++;
+		unit_id++;
 		switch (x) {
 		case 0:
-			dir_name = "Kontrak";
+			unit_name = "Kontrak";
 			break;
 		case 1:
-			dir_name = "Kumulatif Bulan";
+			unit_name = "Kumulatif Bulan";
 			break;
 		case 2:
-			dir_name = "Kumulatif Tahun";
+			unit_name = "Kumulatif Tahun";
 			break;
 		}
 
 		o = new JSONObject ();
-		o.put ("dir_id", dir_id);
-		o.put ("dir_name", dir_name);
+		o.put ("id", unit_id);
+		o.put ("name", unit_name);
 
 		q_jba		=" select	M1.jba as jan"
 					+" ,		M2.jba as feb"
@@ -249,7 +236,7 @@ try {
 		rs_jba.close ();
 	}
 
-	rs_dir.close ();
+	rs_unit.close ();
 	stmt_jba.close ();
 	db_stmt.close ();
 

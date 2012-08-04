@@ -19,54 +19,58 @@ try {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
-	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	String		id_dir		= request.getParameter ("id_dir");
+	String		year		= request.getParameter ("year");
 
 	Statement	st			= db_con.createStatement ();
 	Statement	st_i		= db_con.createStatement ();
 	ResultSet	rs			= null;
 	ResultSet	rs_i		= null;
-	String		year		= (String) request.getParameter ("year");
 	JSONArray	data		= new JSONArray ();
 	JSONObject	o			= null;
-	int			dir_id		= 0;
-	String		dir_name	= "";
+	int			unit_id		= 0;
+	String		unit_name	= "";
 	String		q			= "";
 	String		q_insiden	= "";
 
-	q	=" select	id_direktorat"
-		+" ,		nama_direktorat"
-		+" from		r_direktorat";
+	if (id_dir != null && ! id_dir.equals ("0")) {
+		q	=" select	id_divprosbu	as id"
+			+" ,		nama_divprosbu	as name"
+			+" from		r_divprosbu"
+			+" where	id_direktorat = "+ id_dir;
+	} else {
+		q	=" select	id_direktorat	as id"
+			+" ,		nama_direktorat	as name"
+			+" from		r_direktorat";
+	}
 
 	rs = st.executeQuery (q);
 
-	/* loop for all direktorat */
+	/* loop for all unit */
 	while (rs.next ()) {
 		o			= new JSONObject ();
-		dir_id		= rs.getInt ("id_direktorat");
-		dir_name	= rs.getString ("nama_direktorat");
+		unit_id		= rs.getInt ("id");
+		unit_name	= rs.getString ("name");
 
-		o.put ("dir_id", dir_id);
-		o.put ("dir_name", dir_name);
+		o.put ("unit_id", unit_id);
+		o.put ("unit_name", unit_name);
 
-		q_insiden	=" select	isnull (jml_korban_mati, 0) 	as jml_korban_mati"
-					+" ,		isnull (jml_korban_berat, 0)	as jml_korban_berat"
-					+" ,		isnull (jml_korban_sedang, 0)	as jml_korban_sedang"
-					+" ,		isnull (jml_korban_medis, 0)	as jml_korban_medis"
-					+" ,		isnull (jml_korban_p3k, 0)		as jml_korban_p3k"
-					+" ,		isnull (jml_hampir_celaka, 0)	as jml_hampir_celaka"
+		q_insiden	=" select	isnull (jml_korban_mati, 0) 			as jml_korban_mati"
+					+" ,		isnull (jml_korban_berat, 0)			as jml_korban_berat"
+					+" ,		isnull (jml_korban_sedang, 0)			as jml_korban_sedang"
+					+" ,		isnull (jml_korban_medis, 0)			as jml_korban_medis"
+					+" ,		isnull (jml_korban_p3k, 0)				as jml_korban_p3k"
+					+" ,		isnull (jml_hampir_celaka, 0)			as jml_hampir_celaka"
 					+" ,		isnull (jml_kecelakaan_kendaraan, 0)	as jml_kecelakaan_kendaraan"
 					+" from		t_insiden"
-					+" where	tahun			= "+ year
-					+" and		id_direktorat	= "+ dir_id;
+					+" where	tahun			= "+ year;
+
+		if (id_dir != null && ! id_dir.equals ("0")) {
+			q_insiden +=" and	id_divprosbu = "+ unit_id;
+		} else {
+			q_insiden +=" and	id_direktorat = "+ unit_id;
+		}
 
 		rs_i = st_i.executeQuery (q_insiden);
 
@@ -94,18 +98,19 @@ try {
 	}
 	rs.close ();
 
-	dir_id++;
-	dir_name = "Kontrak";
+	unit_id++;
+	unit_name = "Kontrak";
 
-	o.put ("dir_id", dir_id);
-	o.put ("dir_name", dir_name);
+	o = new JSONObject ();
+	o.put ("unit_id", unit_id);
+	o.put ("unit_name", unit_name);
 
-	q	=" select	isnull (jml_korban_mati, 0) 	as jml_korban_mati"
-		+" ,		isnull (jml_korban_berat, 0)	as jml_korban_berat"
-		+" ,		isnull (jml_korban_sedang, 0)	as jml_korban_sedang"
-		+" ,		isnull (jml_korban_medis, 0)	as jml_korban_medis"
-		+" ,		isnull (jml_korban_p3k, 0)		as jml_korban_p3k"
-		+" ,		isnull (jml_hampir_celaka, 0)	as jml_hampir_celaka"
+	q	=" select	isnull (jml_korban_mati, 0) 			as jml_korban_mati"
+		+" ,		isnull (jml_korban_berat, 0)			as jml_korban_berat"
+		+" ,		isnull (jml_korban_sedang, 0)			as jml_korban_sedang"
+		+" ,		isnull (jml_korban_medis, 0)			as jml_korban_medis"
+		+" ,		isnull (jml_korban_p3k, 0)				as jml_korban_p3k"
+		+" ,		isnull (jml_hampir_celaka, 0)			as jml_hampir_celaka"
 		+" ,		isnull (jml_kecelakaan_kendaraan, 0)	as jml_kecelakaan_kendaraan"
 		+" from		t_insiden"
 		+" where	tahun					= "+ year
@@ -130,6 +135,8 @@ try {
 		o.put ("jml_hampir_celaka", 0);
 		o.put ("jml_kecelakaan_kendaraan", 0);
 	}
+
+	data.put (o);
 
 	rs.close ();
 	st.close ();
