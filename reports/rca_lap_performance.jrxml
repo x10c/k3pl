@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="935" pageHeight="595" orientation="Landscape" columnWidth="895" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1105" pageHeight="595" orientation="Landscape" columnWidth="1065" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="7"/>
+	<property name="ireport.x" value="357"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="FIELD_MONTH" class="java.util.List" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new java.util.ArrayList(
@@ -230,6 +230,17 @@ $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_T
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
 "     ) AS TL_TEMUAN_45, \n" +
+"     ( SELECT count(T_RCA_DETAIL.\"ID_RCA\") AS JUMLAH " +
+"       FROM \n" +
+"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
+"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
+"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{ORG_NIPG3_CLAUSE} +
+"       WHERE \n" +
+"           T_RCA_DETAIL.\"ID_SEVERITY\" IN (1, 2, 3) \n" +
+"       AND T_RCA_DETAIL.\"STATUS\" IN (2, 3) \n" +
+"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
+$P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
+"     ) AS TL_TEMUAN_NON_45, \n" +
 "     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") is null then 0 else (1.0 * sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") / isnull(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),1)) end) as varchar) AS SUM_OF_VXS \n" +
 "       FROM \n" +
 "           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
@@ -373,6 +384,17 @@ $P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
 "     ) AS TL_TEMUAN_45, \n" +
+"     ( SELECT count(T_RCA_DETAIL.\"ID_RCA\") AS JUMLAH " +
+"       FROM \n" +
+"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
+"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
+"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
+"       WHERE \n" +
+"           T_RCA_DETAIL.\"ID_SEVERITY\" IN (1, 2, 3) \n" +
+"       AND T_RCA_DETAIL.\"STATUS\" IN (2, 3) \n" +
+"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
+$P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
+"     ) AS TL_TEMUAN_NON_45, \n" +
 "     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") is null then 0 else (1.0 * sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") / isnull(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),1)) end) as varchar) AS SUM_OF_VXS \n" +
 "       FROM \n" +
 "           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
@@ -407,6 +429,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<field name="TEMUAN" class="java.lang.Integer"/>
 	<field name="SEVERITY" class="java.lang.String"/>
 	<field name="TL_TEMUAN_45" class="java.lang.Integer"/>
+	<field name="TL_TEMUAN_NON_45" class="java.lang.Integer"/>
 	<field name="VXS" class="java.lang.String"/>
 	<variable name="PARTISIPASI_PERCENTAGE" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{TARGET} != null && $F{TARGET}.intValue() != 0 ? new BigDecimal($F{PARTISIPASI}.doubleValue()/$F{TARGET}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
@@ -414,10 +437,13 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<variable name="TL_TEMUAN_PERCENTAGE" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{TEMUAN} != null && $F{TEMUAN}.intValue() != 0 ? new BigDecimal($F{TL_TEMUAN_45}.doubleValue()/$F{TEMUAN}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
 	</variable>
+	<variable name="TL_TEMUAN_NON_PERCENTAGE" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{TEMUAN} != null && $F{TEMUAN}.intValue() != 0 ? new BigDecimal($F{TL_TEMUAN_NON_45}.doubleValue()/$F{TEMUAN}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
+	</variable>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="895" height="45"/>
+				<reportElement x="0" y="0" width="1065" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -467,7 +493,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total Part Percent]]></text>
+				<text><![CDATA[% Partisipasi]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="385" y="0" width="85" height="40"/>
@@ -495,7 +521,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Temuan]]></text>
+				<text><![CDATA[Temuan Kumulatif 4/5]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="555" y="0" width="85" height="40"/>
@@ -509,7 +535,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Severity]]></text>
+				<text><![CDATA[% Severity 4/5]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="640" y="0" width="85" height="40"/>
@@ -523,7 +549,9 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Jumlah Tindak Lanjut Temuan]]></text>
+				<text><![CDATA[Jml
+Tindak Lanjut
+Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="725" y="0" width="85" height="40"/>
@@ -537,7 +565,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Tindak Lanjut Temuan]]></text>
+				<text><![CDATA[% Tindak Lanjut Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="810" y="0" width="85" height="40"/>
@@ -551,7 +579,37 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Average]]></text>
+				<text><![CDATA[Jml
+Tindak Lanjut
+Temuan Non 4/5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="895" y="0" width="85" height="40"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% Tindak Lanjut Temuan Non 4/5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="980" y="0" width="85" height="40"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Average of Severity]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -647,7 +705,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SEVERITY} == null ? 0 : $F{SEVERITY} + " %"]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="640" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
@@ -677,8 +735,38 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TL_TEMUAN_PERCENTAGE}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="810" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TL_TEMUAN_NON_45} == null ? 0 : $F{TL_TEMUAN_NON_45}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="895" y="0" width="85" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TL_TEMUAN_NON_PERCENTAGE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="980" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
