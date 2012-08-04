@@ -1,30 +1,22 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
-
 	int dml = 3;
 	String id_grup		= request.getParameter("id_grup");
 	String menu_id		= request.getParameter("menu_id");
 	String ha_level		= request.getParameter("ha_level");
 	String ha_level_org	= request.getParameter("ha_level_org");
-	String q;
 
-	q	=" if exists ("
+	db_stmt = db_con.createStatement();
+
+	db_q=" if exists ("
 		+"	select	1"
 		+"	from	__hak_akses"
 		+"	where	id_grup	= "+ id_grup
@@ -39,15 +31,18 @@ try {
 		+"	values ("+ id_grup +",'"+ menu_id +"',"+ ha_level +");"
 		+" end";
 
-	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ session.getAttribute("user.nipg") +"','"
+	db_q+="; insert into __log (nipg, nama_menu, status_akses) values ('"
+		+ user_nipg +"','"
 		+ session.getAttribute("menu.id") +"','"
 		+ dml +"')";
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
-	out.print("{success:true,info:'Data telah tersimpan.'}");
+	_return.put ("success", true);
+	_return.put ("info", "Data telah tersimpan.");
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

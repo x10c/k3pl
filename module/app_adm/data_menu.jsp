@@ -1,62 +1,49 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	JSONArray	menu	= null;
+	String		id_grup	= request.getParameter ("id_grup");
+
+	db_stmt = db_con.createStatement();
+	db_q	=" select		B.menu_id"
+			+" ,			B.menu_name"
+			+" ,			C.menu_id +' - '+ C.menu_name 'menu_parent'"
+			+" ,			isnull(A.ha_level, 0) 'ha_level'"
+			+" from			__hak_akses		A"
+			+" right join	__menu			B"
+			+" on			A.menu_id		= B.menu_id"
+			+" and			A.id_grup		= "+ id_grup
+			+" ,			__menu			C"
+			+" where 		B.menu_leaf		= '1'"
+			+" and			B.menu_parent	= C.menu_id"
+			+" order by     B.menu_id";
+	db_rs	= db_stmt.executeQuery (db_q);
+
+	json_a	= new JSONArray ();
+	while (db_rs.next()) {
+		menu = new JSONArray ();
+		menu.put (db_rs.getString ("menu_parent"));
+		menu.put (db_rs.getString ("menu_id"));
+		menu.put (db_rs.getString ("menu_name"));
+		menu.put (db_rs.getString ("ha_level"));
+		menu.put (db_rs.getString ("ha_level"));
+
+		json_a.put (menu);
 	}
 
-	Statement db_stmt = db_con.createStatement();
+	out.print (json_a);
 
-	String id_grup = request.getParameter("id_grup");
-
-	String q =
-		 " select	B.menu_id"
-		+" ,		B.menu_name"
-		+" ,		C.menu_id +' - '+ C.menu_name 'menu_parent'"
-		+" ,		isnull(A.ha_level, 0) 'ha_level'"
-		+" from		__hak_akses	A"
-		+" right join	__menu		B"
-		+" on	A.menu_id		= B.menu_id"
-		+" and	A.id_grup		= "+ id_grup
-		+" ,		__menu		C"
-		+" where 	B.menu_leaf	= '1'"
-		+" and		B.menu_parent	= C.menu_id"
-		+" order by     B.menu_id";
-
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int		i = 0;
-	String		data = "[";
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+="['"+ rs.getString("menu_parent") +"'"
-			+ ",'"+ rs.getString("menu_id") +"'"
-			+ ",'"+ rs.getString("menu_name") +"'"
-			+ ",'"+ rs.getString("ha_level") +"'"
-			+ ",'"+ rs.getString("ha_level") +"'"
-			+ "]";
-	}
-
-	data += "]";
-
-	out.print(data);
-
-	rs.close();
+	db_rs.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

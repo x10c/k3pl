@@ -1,50 +1,44 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	JSONArray group = null;
+
+	db_stmt	= db_con.createStatement();
+	db_q	=" select	id_grup"
+			+" ,		nama_grup"
+			+" ,		keterangan_grup"
+			+" from		__grup_user";
+
+	if (! "1".equals (user_group)) {
+		db_q	+=" where id_grup != 1";
 	}
 
-	Statement db_stmt = db_con.createStatement();
+	db_q	+=" order by nama_grup";
 
-	String q=" select	id_grup"
-		+" ,		nama_grup"
-		+" ,		keterangan_grup"
-		+" from		__grup_user"
-		+" order by	nama_grup";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
+	while (db_rs.next ()) {
+		group = new JSONArray ();
+		group.put (db_rs.getString ("id_grup"));
+		group.put (db_rs.getString ("nama_grup"));
+		group.put (db_rs.getString ("keterangan_grup"));
 
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	String		data	= "[";
-	int		i	= 0;
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i = 1;
-		}
-		data	+= "['"+ rs.getString("id_grup") +"'"
-			+  ",'"+ rs.getString("nama_grup") +"'"
-			+  ",'"+ rs.getString("keterangan_grup") +"'"
-			+  "]";
+		json_a.put (group);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	db_rs.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
