@@ -11864,40 +11864,41 @@ alter table R_PROJECT
       references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
-alter table T_UNJUK_KERJA add ID_DIVPROSBU int not null default 1
+alter table T_UNJUK_KERJA add ID_DEPARTEMEN int
 go
 
-alter table T_UNJUK_KERJA add ID_DIREKTORAT int not null default 3
+alter table T_UNJUK_KERJA add ID_DIVPROSBU int
+go
+
+alter table T_UNJUK_KERJA add ID_DIREKTORAT int
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('T_UNJUK_KERJA') and o.name = 'FK_R_DIVPROSBU_T_UNJUK_KERJA')
+   where r.fkeyid = object_id('T_UNJUK_KERJA') and o.name = 'FK_R_DEPARTEMEN_T_UNJUK_KERJA')
 alter table T_UNJUK_KERJA
-   drop constraint FK_R_DIVPROSBU_T_UNJUK_KERJA
+   drop constraint FK_R_DEPARTEMEN_T_UNJUK_KERJA
 go
 
 if exists (select 1
             from  sysindexes
            where  id    = object_id('T_UNJUK_KERJA')
-            and   name  = 'T_UNJUK_KERJA_FK_R_DIVPROSBU'
+            and   name  = 'T_UNJUK_KERJA_FK_R_DEPARTEMEN'
             and   indid > 0
             and   indid < 255)
-   drop index T_UNJUK_KERJA.T_UNJUK_KERJA_FK_R_DIVPROSBU
+   drop index T_UNJUK_KERJA.T_UNJUK_KERJA_FK_R_DEPARTEMEN
 go
 
-/*==============================================================*/
-/* Index: T_UNJUK_KERJA_FK_R_DIVPROSBU                          */
-/*==============================================================*/
-create index T_UNJUK_KERJA_FK_R_DIVPROSBU on T_UNJUK_KERJA (
+create index T_UNJUK_KERJA_FK_R_DEPARTEMEN on T_UNJUK_KERJA (
+ID_DEPARTEMEN ASC,
 ID_DIVPROSBU ASC,
 ID_DIREKTORAT ASC
 )
 go
 
 alter table T_UNJUK_KERJA
-   add constraint FK_R_DIVPROSBU_T_UNJUK_KERJA foreign key (ID_DIVPROSBU, ID_DIREKTORAT)
-      references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
+   add constraint FK_R_DEPARTEMEN_T_UNJUK_KERJA foreign key (ID_DEPARTEMEN, ID_DIVPROSBU, ID_DIREKTORAT)
+      references R_DEPARTEMEN (ID_DEPARTEMEN, ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
 alter table T_KEGIATAN add ID_DIVPROSBU int not null default 1
