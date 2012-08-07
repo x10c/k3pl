@@ -1,29 +1,15 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - prasetya (prasetya.yanuar@gmail.com)
  %   - agus sugianto (agus.delonge@gmail.com)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
-
-<%@ page import = "java.sql.*" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try{
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Cookie[]	cookies			= request.getCookies ();
-	String		id_user			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	Statement	db_stmt = db_con.createStatement();
-
 	int dml 				= Integer.parseInt(request.getParameter("dml_type"));
 	String id_project		= request.getParameter("id_project");
 	String no_project		= request.getParameter("no_project");
@@ -31,42 +17,50 @@ try{
 	String tanggal_mulai	= request.getParameter("tanggal_mulai");
 	String durasi			= request.getParameter("durasi");
 	String keterangan		= request.getParameter("keterangan");
-	String q;
+
+	db_stmt = db_con.createStatement();
 
 	switch (dml) {
 	case 2:
-		q	=" insert into r_project (no_project, nama_project, tanggal_mulai, durasi, keterangan, id_user, id_divprosbu, id_direktorat)"
-			+" values ('"+ no_project +"'" +" ,'"+ nama_project +"'" +" ,'"+tanggal_mulai+"'" +" ,'"+ durasi +"'" +" ,'"+keterangan +"'" +" ,'"+id_user +"'" +" ,"+ id_divprosbu +" ,"+ id_direktorat + ")";
+		db_q=" insert into r_project (no_project, nama_project, tanggal_mulai, durasi, keterangan, id_user, id_divprosbu, id_direktorat)"
+			+" values ('"+ no_project +"','"+ nama_project +"','"+ tanggal_mulai +"'"
+			+" ,'"+ durasi +"'"+" ,'"+keterangan +"'"
+			+" ,'"+ user_nipg +"'" +" ,"+ user_div +" ,"+ user_dir + ")";
 		break;
 	case 3:
-		q	=" update	r_project"
+		db_q=" update	r_project"
 			+" set		no_project		= '"+ no_project+"'"
 			+" ,		nama_project	= '"+ nama_project +"'"
 			+" ,		tanggal_mulai	= '"+ tanggal_mulai +"'"
 			+" ,		durasi			= '"+ durasi +"'"
 			+" ,		keterangan		= '"+ keterangan +"'"
-			+" ,		id_divprosbu	=  "+ id_divprosbu
-			+" ,		id_direktorat	=  "+ id_direktorat
-			+" ,		id_user			= '"+ id_user +"'"
+			+" ,		id_divprosbu	=  "+ user_div
+			+" ,		id_direktorat	=  "+ user_dir
+			+" ,		id_user			= '"+ user_nipg +"'"
 			+" ,		tanggal_akses	= getdate()"
 			+" where	id_project	= "+ id_project;
 		break;
 	case 4:
-		q = " delete from r_project where id_project = "+ id_project;
+		db_q= " delete from r_project where id_project = "+ id_project;
 		break;
 	default:
-		out.print("{success:false,info:'DML tipe tidak diketahui ("+dml+")!'}");
+		_return.put ("success", false);
+		_return.put ("info", "DML tipe tidak diketahui ("+dml+")!");
+		out.print (_return);
 		return;
 	}
 
-	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ session.getAttribute("user.nipg") +"','"
+	db_q+="; insert into __log (nipg, nama_menu, status_akses) values ('"
+		+ user_nipg +"','"
 		+ session.getAttribute("menu.id") +"','"+ dml +"')";
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
-	out.print("{success:true,info:'Data telah tersimpan.'}");
+	_return.put ("success", true);
+	_return.put ("info", "Data telah tersimpan.");
 } catch (Exception e){
-	out.print("{success:false,info:'"+ e.toString().replace("'", "\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

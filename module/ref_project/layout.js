@@ -36,68 +36,134 @@ function M_RefProject(title)
 	this.store_process = new Ext.data.ArrayStore ({
 			fields: ['id','name']
 		,	data:	[
-				['0','Belum ada']
-			,	['1','Sudah ada']
+				[0,'Belum ada']
+			,	[1,'Sudah ada']
 			]
 	});
+
+	this.form_id = new Ext.form.TextField ({
+			name		: 'id_project'
+		,	hidden		: true
+		});
 	
 	this.form_pha = new Ext.form.ComboBox({
-			store		: this.store_process
-		,	valueField	: 'id'
+			fieldLabel		: 'PHA'
+		,	name			: 'pha'
+		,	store			: this.store_process
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
+		,	mode			: 'local'
+		,	allowBlank		: false
 		,	forceSelection	: true
-		,	typeAhead	: true
+		,	typeAhead		: true
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
-	});
+		,	hidden			: true
+		});
 	
 	this.form_pssr = new Ext.form.ComboBox({
-			store		: this.store_process
-		,	valueField	: 'id'
+			fieldLabel		: 'PSSR'
+		,	name			: 'pssr'
+		,	store			: this.store_process
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
+		,	mode			: 'local'
+		,	allowBlank		: false
 		,	forceSelection	: true
-		,	typeAhead	: true
+		,	typeAhead		: true
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
-	});
-	
+		,	hidden			: true
+		});
+
 	this.form_csm = new Ext.form.ComboBox({
-			store		: this.store_process
-		,	valueField	: 'id'
+			fieldLabel		: 'CSM'
+		,	name			: 'csm'
+		,	store			: this.store_process
+		,	valueField		: 'id'
 		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
+		,	mode			: 'local'
+		,	allowBlank		: false
 		,	forceSelection	: true
-		,	typeAhead	: true
+		,	typeAhead		: true
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
-	});	
+		,	hidden			: true
+		});	
 	
 	this.form_no_project = new Ext.form.TextField({
-			allowBlank	: false
-	});
+			fieldLabel		: 'Nomor'
+		,	name			: 'no_project'
+		,	allowBlank		: false
+		});
 
 	this.form_nama_project = new Ext.form.TextField({
-			allowBlank	: false
-	});
+			fieldLabel		: 'Nama'
+		,	name			: 'nama_project'
+		,	allowBlank		: false
+		});
 
 	this.form_tanggal_mulai = new Ext.form.DateField({
-			emptyText	: 'Y-M-D'
-		,	format		: 'Y-m-d'
-		,	editable	: false
-		,	allowBlank	: false
-	});
+			fieldLabel		: 'Tanggal Mulai'
+		,	name			: 'tanggal_mulai'
+		,	emptyText		: 'Y-M-D'
+		,	format			: 'Y-m-d'
+		,	editable		: false
+		,	allowBlank		: false
+		});
 
 	this.form_durasi = new Ext.form.NumberField({
-			allowDecimals	: false
+			fieldLabel		: 'Durasi (Hari)'
+		,	name			: 'durasi'
+		,	allowDecimals	: false
 		,	allowNegative	: false
-	});
+		});
 
-	this.form_keterangan = new Ext.form.TextField({});
+	this.form_keterangan = new Ext.form.TextArea({
+			fieldLabel		: 'Keterangan'
+		,	name			: 'keterangan'
+		,	width			: 200
+		,	height			: 100
+		});
+
+	this.form_btn_save = new Ext.Button ({
+			text		: 'Simpan'
+		,	iconCls		: 'save16'
+		,	scope		: this
+		,	formBind	: true
+		,	handler		: function() {
+				this.do_save ();
+			}
+		});
+
+	this.form = new Ext.form.FormPanel ({
+			padding		: 6
+		,	labelAlign	: 'right'
+		,	items		: [
+				this.form_id
+			,	this.form_no_project
+			,	this.form_nama_project
+			,	this.form_tanggal_mulai
+			,	this.form_durasi
+			,	this.form_pha
+			,	this.form_pssr
+			,	this.form_csm
+			,	this.form_keterangan
+			]
+		,	buttons		: [
+				this.form_btn_save
+			]
+		});
+
+	this.win = new Ext.Window ({
+			title		: 'Data Project'
+		,	width		: 400
+		,	autoHeight	: true
+		,	closeAction	: 'hide'
+		,	items		: [
+				this.form
+			]
+		});
 
 	this.columns = [
 			new Ext.grid.RowNumberer()
@@ -105,52 +171,46 @@ function M_RefProject(title)
 			, dataIndex	: 'no_project'
 			, sortable	: true
 			, width		: 150
-			, editor	: this.form_no_project
 			}
 		,	{ header	: 'Nama Project'
 			, dataIndex	: 'nama_project'
 			, sortable	: true
 			, width		: 300
-			, editor	: this.form_nama_project
 			}
 		,	{ header	: 'Tanggal Mulai'
 			, dataIndex	: 'tanggal_mulai'
 			, sortable	: true
 			, width		: 100
 			, align		: 'center'
-			, editor	: this.form_tanggal_mulai
 			}
 		,	{ header	: 'Durasi (Hari)'
 			, dataIndex	: 'durasi'
 			, sortable	: true
 			, width		: 100
 			, align		: 'center'
-			, editor	: this.form_durasi
-			}
-		,	{ id		: 'keterangan'
-			, header	: 'Keterangan'
-			, dataIndex	: 'keterangan'
-			, sortable	: true
-			, editor	: this.form_keterangan
 			}
 		,	{ id		: 'pha'
 			, header	: 'PHA'
 			, dataIndex	: 'pha'
 			, sortable	: true
-			, editor	: this.form_pha
-			, renderer	: combo_renderer(this.form_pha)
+			, renderer	: store_renderer ('id', 'name', this.store_process)
 			}
 		,	{ id		: 'pssr'
 			, header	: 'PSSR'
 			, dataIndex	: 'pssr'
 			, sortable	: true
-			, renderer	: combo_renderer(this.form_pssr)
+			, renderer	: store_renderer ('id', 'name', this.store_process)
 			}
 		,	{ id		: 'csm'
 			, header	: 'CSM'
 			, dataIndex	: 'csm'
 			, sortable	: true
-			, renderer	: combo_renderer(this.form_csm)
+			, renderer	: store_renderer ('id', 'name', this.store_process)
+			}
+		,	{ id		: 'keterangan'
+			, header	: 'Keterangan'
+			, dataIndex	: 'keterangan'
+			, width		: 300
 			}
 		];
 
@@ -170,8 +230,6 @@ function M_RefProject(title)
 			}
 		});
 
-	this.editor = MyRowEditor(this);
-
 	this.btn_add = new Ext.Button({
 			text	: 'Tambah'
 		,	iconCls	: 'add16'
@@ -190,6 +248,15 @@ function M_RefProject(title)
 			}
 		});
 
+	this.btn_edit = new Ext.Button ({
+			text		: 'Edit'
+		,	iconCls		: 'edit16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_edit();
+			}
+		});
+
 	this.btn_del = new Ext.Button({
 			text		: 'Hapus'
 		,	iconCls		: 'del16'
@@ -204,6 +271,8 @@ function M_RefProject(title)
 			items	: [
 				this.btn_del
 			,	'-'
+			,	this.btn_edit
+			,	'-'
 			,	this.btn_ref
 			,	'-'
 			,	this.btn_add
@@ -211,38 +280,24 @@ function M_RefProject(title)
 		});
 
 	this.panel = new Ext.grid.GridPanel({
-			id			: 'ref_project_panel'
-		,	title		: title
-		,	store		: this.store
-		,	sm			: this.sm
-		,	columns		: this.columns
-		,	plugins		: this.editor
-		,	tbar		: this.toolbar
-		,	autoExpandColumn: 'keterangan'
-		,       listeners       : {
+			id				: 'ref_project_panel'
+		,	title			: title
+		,	store			: this.store
+		,	sm				: this.sm
+		,	columns			: this.columns
+		,	tbar			: this.toolbar
+		,	listeners       : {
 				scope		: this
-			,	rowclick	:
-					function (g, r, e) {
-						return this.do_edit(r);
-					}
-                        }
+			,	rowdblclick	: function (g, r, e) {
+					return this.do_edit ();
+				}
+			}
 		});
 
 	this.do_add = function()
 	{
-		this.record_new = new this.record({
-				id_project		: ''
-			,	no_project		: ''
-			,	nama_project	: ''
-			,	tanggal_mulai	: ''
-			,	durasi			: ''
-			,	keterangan		: ''
-			});
-
-		this.editor.stopEditing();
-		this.store.insert(0, this.record_new);
-		this.sm.selectRow(0);
-		this.editor.startEditing(0);
+		this.form.getForm ().reset ();
+		this.win.show ();
 
 		this.dml_type = 2;
 	}
@@ -250,43 +305,35 @@ function M_RefProject(title)
 	this.do_del = function()
 	{
 		var data = this.sm.getSelections();
-		if (!data.length) {
+		if (!data.length || this.ha_level < 4) {
 			return;
 		}
 
+		this.form.getForm ().loadRecord (data[0]);
 		this.dml_type = 4;
-		this.do_save(data[0]);
+		this.do_save ();
 	}
 
-	this.do_cancel = function()
+	this.do_save = function ()
 	{
-		if (this.dml_type == 2) {
-			this.store.remove(this.record_new);
-			this.sm.selectRow(0);
+		var form = this.form.getForm ();
+
+		if (! form.isValid ()) {
+			Ext.Msg.alert ('Kesalahan', 'Silahkan isi semua kolom yang berwarna merah');
+			return;
 		}
-	}
 
-	this.do_save = function(record)
-	{
-		Ext.Ajax.request({
-			params  : {
-				id_project		: record.data['id_project']
-			,	no_project		: record.data['no_project']
-			,	nama_project	: record.data['nama_project']
-			,	tanggal_mulai	: record.data['tanggal_mulai']
-			,	durasi			: record.data['durasi']
-			,	keterangan		: record.data['keterangan']
-			,	dml_type		: this.dml_type
+		form.submit ({
+			url		: m_ref_project_d +'submit.jsp'
+		,	params	: {
+				dml_type	: this.dml_type
 			}
-		,	url		: m_ref_project_d +'submit.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
-		,	success :
-				function (response)
+		,	success : function (form, resp)
 				{
-					var msg = Ext.util.JSON.decode(response.responseText);
-
-					if (msg.success == false) {
+					if (resp.result.success == false) {
 						Ext.MessageBox.alert('Pesan', msg.info);
+						return;
 					}
 
 					this.store.load();
@@ -295,25 +342,29 @@ function M_RefProject(title)
 		});
 	}
 
-	this.do_edit = function(row)
+	this.do_edit = function ()
 	{
-		if (this.ha_level >= 3) {
-			this.dml_type = 3;
-			return true;
+		var data = this.sm.getSelections();
+		if (data.length <= 0 || this.ha_level < 3) {
+			return false;
 		}
-		return false;
+
+		this.form.getForm ().loadRecord (data[0]);
+		this.dml_type = 3;
+		this.win.show ();
+
+		return true;
 	}
 
 	this.do_load = function()
 	{	
-		//this.store_process.load();
-		this.store.reload();
+		this.store.reload ();
 	}
 
-	this.do_refresh = function(ha_level)
+	this.do_refresh = function (ha_level)
 	{
 		this.ha_level = ha_level;
-		this.do_load();
+		this.do_load ();
 
 		if (ha_level >= 2) {
 			this.btn_add.setDisabled(false);

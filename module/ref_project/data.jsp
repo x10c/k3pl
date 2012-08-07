@@ -1,30 +1,20 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - prasetya (prasetya.yanuar@gmail.com)
  %   - agus sugianto (agus.delonge@gmail.com)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try{
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	JSONArray project = null;
 
-	Cookie[]	cookies			= request.getCookies ();
-	String		nipg			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+	db_stmt = db_con.createStatement();
 
-	Statement	db_stmt 		= db_con.createStatement();
-
-	String q=" select	id_project"
+	db_q=" select	id_project"
 		+" ,		no_project"
 		+" ,		nama_project"
 		+" ,		replace(convert(varchar, tanggal_mulai, 111), '/', '-') as tanggal_mulai "
@@ -34,54 +24,33 @@ try{
 		+" ,(select count(id_project) from t_pssr as c where  r_project.id_project = c.id_project) as pssr "
 		+" ,(select count(id_project) from t_csm_proyek as d where  r_project.id_project = d.id_project) as csm "
 		+" from		r_project"
-		+" where	id_divprosbu	= " + id_divprosbu
-		+" and		id_direktorat	= " + id_direktorat
+		+" where	id_divprosbu	= " + user_div
+		+" and		id_direktorat	= " + user_dir
 		+" order by	id_project";
 	
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
-	int		pha,csm,pssr;
-	pha = 0;
-	csm = 0;
-	pssr = 0;
-	String		data	= "[";
+	db_rs = db_stmt.executeQuery (db_q);
 
-	while (rs.next()){
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		
-		if (Integer.parseInt(rs.getString("pha")) > 0 ){
-			pha = 1;
-		}
-		if (Integer.parseInt(rs.getString("pssr")) > 0 ){
-			pssr = 1;
-		}
-		if (Integer.parseInt(rs.getString("csm")) > 0 ){
-			csm = 1;
-		}
-		
-		data 	+="[ "+ rs.getString("id_project")
-			+ ",'"+ rs.getString("no_project") 
-			+ "','"+ rs.getString("nama_project")
-			+ "','"+ rs.getString("tanggal_mulai")
-			+ "',"+ rs.getString("durasi")
-			+ ",'"+ rs.getString("keterangan")
-			+ "','"+ pha 
-			+ "','"+ pssr 
-			+ "','"+ csm
-			+"' ] ";
-		
-		pha = 0;
-		csm = 0;
-		pssr = 0;
+	json_a = new JSONArray ();
+	while (db_rs.next()) {
+		project = new JSONArray ();
+
+		project.put (db_rs.getString ("id_project"));
+		project.put (db_rs.getString ("no_project"));
+		project.put (db_rs.getString ("nama_project"));
+		project.put (db_rs.getString ("tanggal_mulai"));
+		project.put (db_rs.getString ("durasi"));
+		project.put (db_rs.getString ("keterangan"));
+		project.put (db_rs.getString ("pha"));
+		project.put (db_rs.getString ("pssr"));
+		project.put (db_rs.getString ("csm"));
+
+		json_a.put (project);
 	}	
-	data += "]";
 	
-	out.print(data);
+	out.print (json_a);
 }catch (Exception e){
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
