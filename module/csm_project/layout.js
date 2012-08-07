@@ -391,10 +391,12 @@ function CSMProjectContractor ()
 			header		:"Total Nilai"
 		,	dataIndex	:"total_nilai"
 		,	align		:"center"
+		,	sortable	:true
 		},{
 			header		:"Status Penilaian"
 		,	dataIndex	:"status_lulus"
 		,	align		:"center"
+		,	sortable	:true
 		,	renderer	:function (v) {
 				if (v == 1) {
 					return "Lulus";
@@ -674,26 +676,6 @@ function CSMFaktorPenilaian (id_faktor, title)
 	,	triggerAction	:"all"
 	,	mode			:"local"
 	,	listWidth		:500
-	,	listeners		:{
-			scope		:this
-		,	select		:function (combo, record, idx) {
-				var v = combo.getValue();
-				if (!v) {
-					return;
-				}
-				var r = this.sm.getSelected();
-				if (!r) {
-					return;
-				}
-				combo.collapse();
-
-				var total = (m_csm_project_penilaian.grid_utama.total
-						+ m_csm_project_penilaian.grid_tambahan.total);
-
-				total = total.toFixed(2);
-				m_csm_project_form.set_total(total);
-			}
-		}
 	});
 
 	this.form_keterangan = new Ext.form.TextField();
@@ -736,6 +718,13 @@ function CSMFaktorPenilaian (id_faktor, title)
 		,	editor			:this.form_keterangan
 		,	summaryRenderer	:function(v, p, o, scope) {
 				scope.total = (o.data.hasil_pantauan * scope.koefisien);
+
+				var total = (m_csm_project_penilaian.grid_utama.total
+						+ m_csm_project_penilaian.grid_tambahan.total);
+
+				total = total.toFixed(2);
+				m_csm_project_form.set_total(total);
+
 				return "<center>("+ scope.total.toFixed(2) +")</center>";
 			}
 		}]
