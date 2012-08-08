@@ -6,60 +6,49 @@
  %   - m.shulhan (ms@kilabit.org)
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	String		id_dir	= request.getParameter ("id_direktorat");
+	String		id_div	= request.getParameter ("id_divprosbu");
+	JSONArray	dep		= null;
+
+	if (id_dir == null || (id_dir != null && id_dir.equals ("0"))) {
+		id_dir = "0 or 1 = 1";
+	}
+	if (id_dir == null || id_div == null || (id_div != null && id_div.equals ("0"))) {
+		id_div = "0 or 1 = 1";
 	}
 
-	Statement	db_stmt			= db_con.createStatement();
-	String		id_direktorat	= request.getParameter("id_direktorat");
-	String		id_divprosbu	= request.getParameter("id_divprosbu");
+	db_stmt = db_con.createStatement();
+	db_q	=" select   id_direktorat"
+			+" ,        id_divprosbu"
+			+" ,        id_departemen"
+			+" ,        nama_departemen"
+			+" from		r_departemen"
+			+" where	(id_direktorat	= "+ id_dir +")"
+			+" and		(id_divprosbu	= "+ id_div +")"
+			+" order by id_departemen, id_divprosbu, id_direktorat";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	if (id_direktorat == null || id_direktorat.equals("0")) {
-		id_direktorat ="0 or 1 = 1";
-	}
-	if (id_direktorat == null || id_divprosbu == null || id_divprosbu.equals("0")) {
-		id_divprosbu = "0 or 1 = 1";
-	}
+	while (db_rs.next()) {
+		dep	= new JSONArray ();
+		dep.put (db_rs.getString ("id_direktorat"));
+		dep.put (db_rs.getString ("id_divprosbu"));
+		dep.put (db_rs.getString ("id_departemen"));
+		dep.put (db_rs.getString ("nama_departemen"));
 
-	String q=" select   id_direktorat"
-		+" ,        id_divprosbu"
-		+" ,        id_departemen"
-		+" ,        nama_departemen"
-		+" from		r_departemen"
-		+" where	id_direktorat	= "+ id_direktorat
-		+" and		id_divprosbu	= "+ id_divprosbu
-		+" order by id_departemen, id_divprosbu, id_direktorat";
-
-	ResultSet	rs 		= db_stmt.executeQuery(q);
-	int			i 		= 0;
-	String		data 	= "[";
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+="["+ rs.getString("id_direktorat")
-				+ ","+ rs.getString("id_divprosbu")
-				+ ","+ rs.getString("id_departemen")
-				+ ",'"+ rs.getString("nama_departemen") +"'"
-				+ "]";
+		json_a.put (dep);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	db_rs.close();
 	db_stmt.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

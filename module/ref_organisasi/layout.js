@@ -120,17 +120,11 @@ function M_RefOrgDirektorat ()
 			singleSelect	: true
 		,	listeners		: {
 				scope			: this
-			,	selectionchange	: function (sm) {
-					var data = sm.getSelections();
-					if (data.length) {
-						if (m_ref_org_ha_level == 4) {
-							this.btn_del.setDisabled(false);
-						}
-						m_ref_org_id_dir = data[0].data['id_direktorat'];
-					} else {
-						this.btn_del.setDisabled(true);
-						m_ref_org_id_dir = 0;
+			,	rowselect		: function (sm, row_id, r) {
+					if (m_ref_org_ha_level == 4) {
+						this.btn_del.setDisabled(false);
 					}
+					m_ref_org_id_dir = r.data['id_direktorat'];
 
 					dir_on_select_load_div();
 				}
@@ -246,7 +240,7 @@ function M_RefOrgDirektorat ()
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
 
-					this.store.load();
+					this.do_load();
 				}
 		,	scope	: this
 		});
@@ -361,17 +355,11 @@ function M_RefOrgDivProSBU ()
 			singleSelect	: true
 		,	listeners		: {
 				scope			: this
-			,	selectionchange	: function (sm) {
-					var data = sm.getSelections();
-					if (data.length) {
-						if (m_ref_org_ha_level == 4) {
-							this.btn_del.setDisabled(false);
-						}
-						m_ref_org_id_div = data[0].data['id_divprosbu'];
-					} else {
-						this.btn_del.setDisabled(true);
-						m_ref_org_id_div = 0;
+			,	rowselect		: function (sm, row_id, r) {
+					if (m_ref_org_ha_level == 4) {
+						this.btn_del.setDisabled(false);
 					}
+					m_ref_org_id_div = r.data['id_divprosbu'];
 
 					div_on_select_load_dep ();
 				}
@@ -492,7 +480,7 @@ function M_RefOrgDivProSBU ()
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
 
-					this.store.load();
+					this.do_load();
 				}
 		,	scope	: this
 		});
@@ -519,12 +507,12 @@ function M_RefOrgDivProSBU ()
 					return;
 				}
 
-				var dir_all = new Ext.data.Record({
+				var div_all = new Ext.data.Record({
 					id_divprosbu	: '0'
 				,	nama_divprosbu	: 'Semua Divisi/Proyek/SBU'
 				});
 
-				this.store.add (dir_all);
+				this.store.add (div_all);
 			}
 		});
 	}
@@ -536,8 +524,6 @@ function M_RefOrgDivProSBU ()
 		} else {
 			this.btn_add.setDisabled(false);
 		}
-
-		this.do_load();
 	}
 }
 
@@ -558,7 +544,7 @@ function M_RefOrgDepartement(title)
 
 	this.store = new Ext.data.ArrayStore({
 			fields	: this.record
-		,	url	: m_ref_org_d +'data_departemen.jsp'
+		,	url		: m_ref_org_d +'data_departemen.jsp'
 		,	autoLoad: false
 		});
 
@@ -580,17 +566,11 @@ function M_RefOrgDepartement(title)
 			singleSelect	: true
 		,	listeners	: {
 				scope		: this
-			,	selectionchange	: function(sm) {
-					var data = sm.getSelections();
-					if (data.length) {
-						if (m_ref_org_ha_level == 4) {
-							this.btn_del.setDisabled(false);
-						}
-						m_ref_org_id_dep = data[0].data['id_departemen'];
-					} else {
-						this.btn_del.setDisabled(true);
-						m_ref_org_id_dep = 0;
+			,	rowselect	: function (sm, row_id, r) {
+					if (m_ref_org_ha_level == 4) {
+						this.btn_del.setDisabled(false);
 					}
+					m_ref_org_id_dep = r.data['id_departemen'];
 
 					dep_on_select_load_dinas();
 				}
@@ -712,7 +692,7 @@ function M_RefOrgDepartement(title)
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
 
-					this.store.load();
+					this.do_load();
 				}
 		,	scope	: this
 		});
@@ -757,8 +737,6 @@ function M_RefOrgDepartement(title)
 		} else {
 			this.btn_add.setDisabled(false);
 		}
-
-		this.do_load();
 	}
 }
 
@@ -804,17 +782,11 @@ function M_RefOrgDinas(title)
 			singleSelect	: true
 		,	listeners	: {
 				scope		: this
-			,	selectionchange	: function(sm) {
-					var data = sm.getSelections();
-					if (data.length) {
-						if (m_ref_org_ha_level == 4) {
-							this.btn_del.setDisabled(false);
-						}
-						m_ref_org_id_dinas = data[0].data['id_dinas'];
-					} else {
-						this.btn_del.setDisabled(true);
-						m_ref_org_id_dinas = 0;
+			,	rowselect	: function (sm, row_idx, r) {
+					if (m_ref_org_ha_level == 4) {
+						this.btn_del.setDisabled(false);
 					}
+					m_ref_org_id_dinas = r.data['id_dinas'];
 
 					dinas_on_select_load_seksi();
 				}
@@ -992,8 +964,6 @@ function M_RefOrgDinas(title)
 		} else {
 			this.btn_add.setDisabled(true);
 		}
-
-		this.do_load();
 	}
 }
 
@@ -1041,9 +1011,8 @@ function M_RefOrgSeksi(title)
 			singleSelect	: true
 		,	listeners	: {
 				scope		: this
-			,	selectionchange	: function(sm) {
-					var data = sm.getSelections();
-					if (data.length && m_ref_org_ha_level == 4) {
+			,	rowselect	: function (sm, row_idx, r) {
+					if (m_ref_org_ha_level == 4) {
 						this.btn_del.setDisabled(false);
 					} else {
 						this.btn_del.setDisabled(true);
