@@ -59,6 +59,8 @@ try {
 	int		i	= 0;
 	String 	temp_hadir = "0";
 	String 	temp_absen = "0";
+	String	keterangan = "";
+	String	jabatan_komite = "";
 	
 	String		data	= "[";
 
@@ -72,12 +74,22 @@ try {
 			// temp_hadir = rs_attd.getString("jml_hadir");
 			// temp_absen = rs_attd.getString("jml_absen"); 
 		// }
+		
+		keterangan = rs.getString("keterangan_absensi");
+		jabatan_komite = rs.getString("id_jabatan_komite");
+		if (keterangan == null){
+			keterangan = "";
+		}
+		if (jabatan_komite.equals("0")){
+			jabatan_komite = "";
+		}
+		
 		data	+="[ '"+ rs.getString("id_rapat")
 			+ "','"+ rs.getString("nipg")
 			+ "','"+ rs.getString("nama_pegawai")
-			+ "','"+ rs.getString("id_jabatan_komite")
+			+ "','"+ jabatan_komite
 			+ "','"+ rs.getString("status_absensi")
-			+ "','"+ rs.getString("keterangan_absensi")
+			+ "','"+ keterangan
 			+ "','"+ rs.getString("jml_hadir")
 			+ "','"+ rs.getString("jml_absen")
 			+ "']";

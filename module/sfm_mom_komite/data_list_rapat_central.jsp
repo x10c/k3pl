@@ -18,7 +18,7 @@ String id_user		= (String) session.getAttribute("user.nipg");
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
 		+" left join R_KEL_JABATAN_CSC C on (C.ID_KEL_JABATAN_CSC = A.ID_KEL_JABATAN_CSC) "
-		+" where B.nipg = "+ id_user +" and A.notulen is not null and A.id_kel_jabatan_komite_sub_komite is null"
+		+" where B.nipg = '"+ id_user +"' and A.notulen is not null and A.id_kel_jabatan_komite_sub_komite is null"
 		+" order by	A.id_kel_jabatan_csc ";
 		
 	ResultSet	rs_kel = db_stmt.executeQuery(q);

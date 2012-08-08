@@ -37,8 +37,7 @@ var store_pic_dinas_sub = new Ext.data.ArrayStore({
 	,	autoLoad: false
 	});
 	
-function checkbox_renderer(checkbox)
-{
+function checkbox_renderer(checkbox){
 	return function(value) {
 		if (value == '1' || value == 'true' || value == true) {
 			return 'Hadir';
@@ -87,7 +86,6 @@ function do_validate_materi_load(){
 	}
 	return 1;
 }
-
 
 function do_validate_materi_load(){
 	if ( m_sfm_rapat_id == ''
@@ -682,7 +680,6 @@ function M_SfmSubMateriRapatSub (title){
 	}
 }
 
-
 function M_SfmMateriRapatSub (title){
 	this.title = title;
 	this.dml_type = '';
@@ -1256,8 +1253,6 @@ function M_SfmAbsenRapatSub (title){
 		,	autoLoad	: false
 		});
 	
-	
-	
 	this.form_id_rapat = new Ext.form.TextField({allowBlank : false});
 	
 	this.form_nipg = new Ext.form.TextField({allowBlank : true, disabled : true})
@@ -1294,7 +1289,6 @@ function M_SfmAbsenRapatSub (title){
 													}
 												}});
 	
-	
 	this.form_keterangan_absensi = new Ext.form.TextField({allowBlank : true});
 	
 	this.form_jml_hadir = new Ext.form.NumberField({allowBlank : true, value: 0});
@@ -1327,7 +1321,8 @@ function M_SfmAbsenRapatSub (title){
 		,	mode		: 'local'
 		,	triggerAction	: 'all'
 		,	allowBlank	: false
-		,	editable	: false
+		,	editable	: true
+		,  	typeAhead	: true
 		,	listeners	: {
 				scope	: this
 			,	select	: function(cb, record, index) {
@@ -1614,8 +1609,7 @@ function M_SfmAbsenRapatSub (title){
 
 }
  
- function M_SfmFormRapatSub()
-{
+function M_SfmFormRapatSub(){
 	this.data_rapat	= '';
 	this.dml_type	= '';
 	this.id_stop	= '';
@@ -1811,8 +1805,7 @@ function M_SfmAbsenRapatSub (title){
 	}
 }
 
-function M_SfmFormMasterRapatSub()
-{
+function M_SfmFormMasterRapatSub(){
 	this.data_rapat	= '';
 	this.dml_type	= '';
 
@@ -1939,7 +1932,7 @@ function M_SfmFormMasterRapatSub()
 
 }
  
- function M_SfmInputRapatSub (title){
+function M_SfmInputRapatSub (title){
 	this.title 	= title;
 	this.ha_level	= 0;
 	this.data_rapat	= '';
@@ -2254,9 +2247,8 @@ function M_SfmFormMasterRapatSub()
 		this.do_load();
 	}
  }
- 
- 
- function M_SfmDataRapatSub (){
+  
+function M_SfmDataRapatSub (){
 	m_sfm_data_rapat_sub_master = new M_SfmInputRapatSub('Rapat Komite');
 	m_sfm_data_absen_sub = new M_SfmAbsenRapatSub('Absensi Peserta')
 	m_sfm_data_materi_sub = new M_SfmMateriRapatSub('Materi Rapat');
@@ -2415,4 +2407,4 @@ function M_SfmFormMasterRapatSub()
 	}
  }
  
- m_sfm_data_rapat_sub = new M_SfmDataRapatSub ();
+m_sfm_data_rapat_sub = new M_SfmDataRapatSub ();

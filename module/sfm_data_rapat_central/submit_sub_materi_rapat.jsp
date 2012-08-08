@@ -77,7 +77,7 @@ try {
 		if (dml.equals("insert")) {
 		
 			if (id_rapat_sub_materi.equals("") || id_rapat_sub_materi.equals("undefined")){
-				id_rapat_sub_materi = Long.toString(date.getTime()) +  i );
+				id_rapat_sub_materi = Long.toString(date.getTime()) +  i ;
 			}
 			q	=" insert into t_rapat_sub_materi ("
 			+"		id_rapat "

@@ -1203,7 +1203,7 @@ function M_SfmAbsenRapatCentral(){
 	this.id_jabatan_komite	= '';
 	var chg_hadir		= 0;
 	var chg_absen		= 0;
-
+	var cb_aktif = '';
 	this.record = new Ext.data.Record.create([
 			{ name	: 'id_rapat' }
 		,	{ name	: 'nipg' }
@@ -1251,18 +1251,6 @@ function M_SfmAbsenRapatCentral(){
 
 	this.ck_stat_absen = new Ext.form.Checkbox({
 		boxLabel	: 'Hadir'
-	,	listeners	:{
-			scope	: this
-		,	change	: function (ck, checked, last_checked) {
-				if (checked) {
-					chg_hadir++;
-					chg_absen--;
-				} else {
-					chg_hadir--;
-					chg_absen++;
-				}
-			}
-		}
 	});
 
 	this.form_keterangan_absensi	= new Ext.form.TextField({allowBlank : true});
@@ -1273,12 +1261,10 @@ function M_SfmAbsenRapatCentral(){
 	{
 		this.nipg = record.get('nipg');
 		this.id_jabatan_komite = record.get('id_jabatan_komite');
-
-		if (this.nipg != 'undefined' && this.nipg != ''
-			&& this.id_jabatan_komite != 'undefined' && this.id_jabatan_komite != '') {
+		
 			this.form_nipg.setValue(this.nipg);
 			this.cb_jabatan_komite.setValue(this.id_jabatan_komite);
-		}
+	
 	}
 
 	this.store_peg = new Ext.data.ArrayStore({
@@ -1295,7 +1281,8 @@ function M_SfmAbsenRapatCentral(){
 		,	mode		: 'local'
 		,	triggerAction	: 'all'
 		,	allowBlank	: false
-		,	editable	: false
+		,	editable	: true
+		,  	typeAhead	:true
 		,	listeners	: {
 				scope	: this
 			,	select	: function(cb, record, index) {
@@ -1471,6 +1458,22 @@ function M_SfmAbsenRapatCentral(){
 		if (this.dml_type != 'update'){
 			this.nipg_old = '';
 			this.nama_peserta = '';
+			if (aktif != cb_aktif){
+				if (aktif == '1'){
+					chg_hadir += 1;
+					chg_absen -= 1;
+				}else {
+					chg_hadir -= 1;
+					chg_absen += 1;
+				}
+			}
+		}
+		if (this.dml_type != 'insert'){
+			if (aktif == '1'){
+				chg_hadir += 1;
+				chg_absen -= 1;
+			}
+			
 		}
 		Ext.Ajax.request({
 			params  : {
@@ -1508,8 +1511,9 @@ function M_SfmAbsenRapatCentral(){
 		var data = this.panel.getSelectionModel().getSelected();
 		this.nipg_old = data.data.nipg;
 		this.nama_peserta = data.data.nama_pegawai;
-		chg_hadir = data.data.jml_hadir;
-		chg_absen = data.data.jml_absen;
+		chg_hadir = parseInt(data.data.jml_hadir);
+		chg_absen = parseInt(data.data.jml_absen);
+		cb_aktif =  (data.data.status_absensi == true)? '1':'0';
 		if (this.ha_level >= 3) {
 			this.dml_type = 'update';
 			return true;
