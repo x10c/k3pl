@@ -9607,11 +9607,9 @@ insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('Human Factor', '1')
 insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('Other Recommendation', '1');
 insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('References', '1');
 
-insert into R_CSM_PERF_EVAL_SI values (1, 'Tidak Memenuhi Standar (TM) - < 50%');
-insert into R_CSM_PERF_EVAL_SI values (2, 'Memenuhi Beberapa Standar (MB) - 50% s/d < 75%');
-insert into R_CSM_PERF_EVAL_SI values (3, 'Memenuhi Hampir Semua Standar (MH) - 75% s/d < 100%');
-insert into R_CSM_PERF_EVAL_SI values (4, 'Memenuhi Semua Standar (MS) - 100%');
-insert into R_CSM_PERF_EVAL_SI values (5, 'Luar Biasa (LB)');
+insert into R_CSM_PERF_EVAL_SI values (1, 'Di bawah Standar - <= 55');
+insert into R_CSM_PERF_EVAL_SI values (2, 'Cukup Memenuhi Standar - 55 s/d <= 75');
+insert into R_CSM_PERF_EVAL_SI values (3, 'Memenuhi Standar - > 75');
 
 insert into R_CSM_PERF_EVAL values (0.15, 'Kerapihan Peralatan dan Fasilitas Umum Proyek');
 insert into R_CSM_PERF_EVAL values (0.15, 'Kelengkapan Alat Pelindung Diri (APD)');

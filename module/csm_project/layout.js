@@ -33,11 +33,13 @@ var	m_csm_store_kontraktor	= new Ext.data.ArrayStore ({
 	,	autoLoad			:false
 	});
 
+/* unneeded
 var m_csm_store_work_level	= new Ext.data.ArrayStore ({
 	url						:m_csm_project_d +"data_work_level.jsp"
 ,	fields					:["id", "keterangan"]
 ,	autoLoad				:false
 });
+*/
 
 function m_csm_store_kontraktor_load ()
 {
@@ -81,7 +83,7 @@ function CSMProject()
 	,	triggerAction	:"all"
 	,	mode			:"local"
 	});
-
+/*
 	this.form_work_level	= new Ext.form.ComboBox ({
 		store				:m_csm_store_work_level
 	,	allowBlank			:false
@@ -90,7 +92,7 @@ function CSMProject()
 	,	triggerAction		:"all"
 	,	mode				:"local"
 	});
-
+*/
 	this.form_koef_utama	= new Ext.form.NumberField ({
 		allowBlank			:false
 	,	allowNegative		:false
@@ -112,13 +114,13 @@ function CSMProject()
 		,	dataIndex	:"name"
 		,	editor		:this.form_name
 		},{
-			header		:"Tingkat Pekerjaan"
+/*			header		:"Tingkat Pekerjaan"
 		,	dataIndex	:"work_level"
 		,	align		:"center"
 		,	editor		:this.form_work_level
 		,	renderer	:combo_renderer(this.form_work_level)
 		},{
-			header		:"Koefisien Faktor Utama"
+*/			header		:"Koefisien Faktor Utama"
 		,	dataIndex	:"koefisien_utama"
 		,	align		:"center"
 		,	editor		:this.form_koef_utama
@@ -278,8 +280,8 @@ function CSMProject()
 
 		m_csm_store_kontraktor_load ();
 		m_csm_project_penilaian.set_proyek(row.data["name"]);
-		m_csm_project_penilaian.set_work_level(row.data["work_level"]);
-
+/*		m_csm_project_penilaian.set_work_level(row.data["work_level"]);
+*/
 		var id_kont = row.data["id_kontraktor"];
 
 		if (id_kont == '' || id_kont == '0' || _g_ha == 4) {
@@ -291,7 +293,7 @@ function CSMProject()
 
 	this.do_refresh = function ()
 	{
-		m_csm_store_work_level.load();
+/*		m_csm_store_work_level.load();*/
 		this.store.load();
 	}
 
@@ -582,7 +584,7 @@ function CSMFormPenilaian ()
 		fieldLabel		:"Total Nilai"
 	,	readOnly		:true
 	});
-
+/*
 	this.form_work_level	= new Ext.form.ComboBox ({
 		fieldLabel			:"Tingkat Pekerjaan"
 	,	store				:m_csm_store_work_level
@@ -592,7 +594,7 @@ function CSMFormPenilaian ()
 	,	mode				:"local"
 	,	readOnly			:true
 	});
-
+*/
 	this.form_status	= new Ext.form.TextField ({
 		fieldLabel		:"Status Penilaian"
 	,	readOnly		:true
@@ -606,7 +608,7 @@ function CSMFormPenilaian ()
 			this.form_proyek
 		,	this.form_kontraktor
 		,	this.form_total
-		,	this.form_work_level
+/*		,	this.form_work_level*/
 		,	this.form_status
 		]
 	});
@@ -819,12 +821,12 @@ function CSMPenilaian ()
 	{
 		m_csm_project_form.set_total (v);
 	}
-
+/*
 	this.set_work_level = function (v)
 	{
 		m_csm_project_form.form_work_level.setValue (v);
 	}
-
+*/
 	this.do_back = function ()
 	{
 		m_csm_project_kont.do_refresh();

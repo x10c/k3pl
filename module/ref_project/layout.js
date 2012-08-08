@@ -145,9 +145,6 @@ function M_RefProject(title)
 			,	this.form_nama_project
 			,	this.form_tanggal_mulai
 			,	this.form_durasi
-			,	this.form_pha
-			,	this.form_pssr
-			,	this.form_csm
 			,	this.form_keterangan
 			]
 		,	buttons		: [
