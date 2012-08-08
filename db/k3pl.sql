@@ -16181,6 +16181,42 @@ values (
 )
 go
 
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'MoM Komite'
+,	5
+,	'doc'
+,	'reports/mom_komite.jasper'
+,	'id_rapat'
+,	'ID_RAPAT'
+)
+go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	KLASIFIKASI_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'MoM Sub Komite'
+,	5
+,	'doc'
+,	'reports/mom_subkomite.jasper'
+,	'id_rapat'
+,	'ID_RAPAT'
+)
+go
+
 /* grup administrator DivProSBU */
 insert into __GRUP_USER (nama_grup, keterangan_grup) values ('Grup Administrator Divisi/Proyek/SBU', 'Administrator Divisi/Proyek/SBU');
 

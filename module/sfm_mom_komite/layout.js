@@ -777,63 +777,36 @@ function M_SfmAbsenRapatMom (title){
 		});
 
 	this.do_print = function(){
-		// Ext.Ajax.request({
-			// params  : {
-					// id_rapat 			: m_sfm_rapat_id
-			// }
-		// ,	url	: _g_root +'/module/sfm_mom_komite/data_rapat_export.jsp'
-		// ,	waitMsg	: 'Mohon Tunggu ...'
-		// ,	success :
-				// function (response)
-				// {
-					// var msg = Ext.util.JSON.decode(response.responseText);
-
-					// if (msg.success == false) {
-						// Ext.MessageBox.alert('Pesan', msg.info);
-					// }
-
-				// }
-		// ,	scope	: this
-		// });
 		var form;
+		var id_report	= '35';
+		var tipe_report	= 'doc';
+
 		form = document.createElement('form');
 		
 		form.setAttribute('method', 'post');
-		form.setAttribute('action', _g_root +'/module/sfm_mom_komite/data_rapat_export.jsp');
+		form.setAttribute('target', '_blank');		
+		form.setAttribute('action', _g_root +'/report');
 		
-		var hiddenField = document.createElement ('input');
-        hiddenField.setAttribute('type', 'hidden');
-        hiddenField.setAttribute('name', 'id_rapat');
-        hiddenField.setAttribute('value', m_sfm_rapat_id);
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
 		
-		form.appendChild(hiddenField);
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'id_rapat');
+        hiddenField3.setAttribute('value', m_sfm_rapat_id);
+		
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
 		document.body.appendChild(form);
 		form.submit();
-
-		// // create the form
-		// form = createElement('form', {
-			// method: 'post',
-			// action: _g_root +'/module/sfm_mom_komite/data_rapat_export.jsp'
-		// }, {
-			// display: NONE
-		// }, doc.body);
-		
-		// // add the values
-		// each(['id_rapat'], function(name) {
-			// createElement('input', {
-				// type: HIDDEN,
-				// name: name,
-				// value: { 
-					// id_rapat: m_sfm_rapat_id
-				// }[name]
-			// }, null, form);
-		// });
-		
-		// // submit
-		// form.submit();
-		
-		// // clean up
-		// discardElement(form);
 	}
 
 	this.do_load = function()
