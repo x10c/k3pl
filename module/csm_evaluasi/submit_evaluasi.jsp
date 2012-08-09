@@ -1,18 +1,18 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*"%>
-<%@ page import="org.json.*"%>
+<%@ include file="../modinit.jsp" %>
 <%!
-public String build_query(JSONArray data, String id_proyek)
+public String build_query (JSONArray data, String id_proyek)
 {
 	String		q		= "";
 	String		id		= "";
 	String		nilai	= "";
+	String		ket		= "";
 	JSONObject	item	= null;
 	int			i;
 try {
@@ -20,64 +20,63 @@ try {
 		item	= data.getJSONObject(i);
 		id		= item.getString("id");
 		nilai	= item.getString("nilai");
+		ket		= item.getString("ket");
 
 		q
 		+=" if exists ("
 		+"	select	1"
 		+"	from	t_csm_proyek_kont_eval_nilai"
-		+"	where	id_project	= "+ id_proyek
-		+"	and		id_evaluasi	= "+ id 
+		+"	where	id_project		= "+ id_proyek
+		+"	and		id_penilaian	= "+ id
 		+" ) begin"
 		+"	update	t_csm_proyek_kont_eval_nilai"
-		+"	set		nilai		= "+ nilai
-		+"	where	id_project	= "+ id_proyek
-		+"	and		id_evaluasi	= "+ id
+		+"	set		nilai			= "+ nilai
+		+"	,		keterangan		='"+ ket +"'"
+		+"	where	id_project		= "+ id_proyek
+		+"	and		id_penilaian	= "+ id
 		+" end else begin"
 		+"	insert into t_csm_proyek_kont_eval_nilai ("
 		+"		id_project"
-		+"	,	id_evaluasi"
+		+"	,	id_penilaian"
 		+"	,	nilai"
+		+"	,	keterangan"
 		+"	) values ("
 		+		id_proyek
 		+"		,"+ id
 		+"		,"+ nilai
+		+"		,'"+ ket +"'"
 		+"	);"
 		+"end;";
 	}
-
 	return q;
 } catch (Exception e) {
 	return q;
 }}
 %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	String		id_proyek		= request.getParameter ("id_proyek");
+	String		tanggal			= request.getParameter ("tanggal");
+	String		team			= request.getParameter ("team");
+	String		work_area		= request.getParameter ("work_area");
+	String		score			= request.getParameter ("score");
+	JSONArray	nilai_utama		= new JSONArray(request.getParameter ("nilai_utama"));
+	JSONArray	nilai_tambahan	= new JSONArray(request.getParameter ("nilai_tambahan"));
+	String		q_utama			= "";
+	String		q_tambahan		= "";
+
+	db_stmt		= db_con.createStatement ();
+	q_utama		= build_query (nilai_utama, id_proyek);
+	q_tambahan	= build_query (nilai_tambahan, id_proyek);
+
+	if (!q_utama.equals ("")) {
+		db_stmt.executeUpdate (q_utama);
+	}
+	if (!q_tambahan.equals ("")) {
+		db_stmt.executeUpdate (q_tambahan);
 	}
 
-	Statement	db_stmt			= db_con.createStatement();
-	ResultSet	rs				= null;
-	String		id_proyek		= request.getParameter("id_proyek");
-	String		tanggal			= request.getParameter("tanggal");
-	String		team			= request.getParameter("team");
-	String		work_area		= request.getParameter("work_area");
-	String		raw_score		= request.getParameter("raw_score");
-	String		weighted_score	= request.getParameter("weighted_score");
-	String		penghargaan		= request.getParameter("penghargaan");
-	JSONArray	evaluasi		= new JSONArray(request.getParameter("evaluasi"));
-	String		q_evaluasi		= "";
-
-	q_evaluasi = build_query(evaluasi, id_proyek);
-
-	if (!q_evaluasi.equals("")) {
-		db_stmt.executeUpdate(q_evaluasi);
-	}
-
-	q	=" if exists ("
+	db_q=" if exists ("
 		+"		select	1"
 		+"		from	t_csm_proyek_kont_eval"
 		+"		where	id_project = "+ id_proyek
@@ -101,20 +100,23 @@ try {
 		+"		);"
 		+" end";
 
-	q	+="; update	t_csm_proyek"
-		+" set		eval_raw_score		= "+ raw_score
-		+" ,		eval_weighted_score	= "+ weighted_score
-		+" ,		penghargaan_sanksi	= "+ penghargaan
-		+" where	id_project			= "+ id_proyek;
+	db_q+="; update	t_csm_proyek"
+		+" set		eval_score	= "+ score
+		+" where	id_project	= "+ id_proyek;
 
-	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ session.getAttribute("user.nipg") +"','"
+	db_q+="; insert into __log (nipg, nama_menu, status_akses) values ('"
+		+ user_nipg +"','"
 		+ session.getAttribute("menu.id") +"','3')";
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
-	out.print("{success:true,info:'Data telah tersimpan.'}");
+	_return.put ("success", true);
+	_return.put ("info", "Data telah tersimpan.");
+
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

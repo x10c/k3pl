@@ -7904,10 +7904,14 @@ go
 /* Table: T_CSM_PROYEK                                          */
 /*==============================================================*/
 create table T_CSM_PROYEK (
-   ID_PROJECT           bigint               not null,
-   ID_KONTRAKTOR        bigint               null default null,
-   EVAL_RAW_SCORE       int                  null default 0,
-   EVAL_WEIGHTED_SCORE  float                null default 0.0,
+   ID_PROJECT           bigint               not null references R_PROJECT (ID_PROJECT),
+   ID_KONTRAKTOR        bigint               null default null references R_KONTRATOR (ID),
+   EVAL_SCORE           float                null default 0,
+   PENGHARGAAN_SANKSI   int                  null default 1 references R_CSM_PERF_EVAL_PS (ID),
+   KOEFISIEN_UTAMA		float                not null default 0,
+   KOEFISIEN_TAMBAH     float                not null default 0,
+   ID_DIVPROSBU         int                  not null default 1 references R_DIVPROSBU (ID_DIVPROSBU ),
+   ID_DIREKTORAT        int                  not null default 3 references R_DIVPROSBU (ID_DIREKTORAT),
    constraint PK_T_CSM_PROYEK primary key (ID_PROJECT)
 )
 go
@@ -7940,9 +7944,10 @@ go
 /*==============================================================*/
 create table T_CSM_PROYEK_KONT_EVAL_NILAI (
    ID_PROJECT           bigint               not null,
-   ID_EVALUASI          int                  not null,
+   ID_PENILAIAN         int                  not null references R_CSM_PENILAIAN (ID),
    NILAI                smallint             not null,
-   constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_EVALUASI)
+   KETERANGAN           varchar(512)         not null,
+   constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_PENILAIAN)
 )
 go
 
@@ -8675,16 +8680,6 @@ go
 alter table T_CIM
    add constraint FK_R_MATERIAL_T_CIM foreign key (ID_MATERIAL)
       references R_MATERIAL (ID_MATERIAL)
-go
-
-alter table T_CSM_PROYEK
-   add constraint FK_R_KONTRAKTOR_T_CSM_PROYEK foreign key (ID_KONTRAKTOR)
-      references R_KONTRAKTOR (ID)
-go
-
-alter table T_CSM_PROYEK
-   add constraint FK_R_PROJECT_T_CSM_PROYEK foreign key (ID_PROJECT)
-      references R_PROJECT (ID_PROJECT)
 go
 
 alter table T_CSM_PROYEK_KONTRAKTOR
@@ -9888,13 +9883,6 @@ insert into R_CSM_PERF_EVAL_PS values (0.0, 55.0, 'Black list selama 2 tahun');
 insert into R_CSM_PERF_EVAL_PS values (55.1, 75.0, 'Sertifikat Keterangan Baik');
 insert into R_CSM_PERF_EVAL_PS values (75.1, 100.0, 'Penghargaan');
 
-/*
- * Update T_CSM_PROYEK tambah kolom PENGHARGAAN_SANKSI
- */
-alter table T_CSM_PROYEK add PENGHARGAAN_SANKSI int default 1
-	foreign key
-	references R_CSM_PERF_EVAL_PS (ID);
-
 if exists (select 1
           from sysobjects
           where id = object_id('R_MATERIAL_ADR')
@@ -10243,15 +10231,6 @@ insert into R_MATERIAL (NAMA_MATERIAL, ID_USER) values ('Carbon Steel', '1');
 insert into R_MATERIAL (NAMA_MATERIAL, ID_USER) values ('Tetra Hydro Tiophane (THT)', '1');
 
 insert into R_REPORT values ('Charter PSSR', 2, 'doc', 'reports/CharterPSSR.jasper', 'id_pssr', 'ID_PSSR');
-
-/*
- * Add columns koefisien_utama and koefisien_tambah to table T_CSM_PROYEK
- */
-alter table T_CSM_PROYEK add
-	KOEFISIEN_UTAMA		float not null default 0
-,	KOEFISIEN_TAMBAH	float not null default 0
-go
-
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
@@ -12037,12 +12016,6 @@ alter table T_LINGKUNGAN_BULANAN
       references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
-alter table T_CSM_PROYEK add ID_DIVPROSBU int not null default 1
-go
-
-alter table T_CSM_PROYEK add ID_DIREKTORAT int not null default 3
-go
-
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
    where r.fkeyid = object_id('T_CSM_PROYEK') and o.name = 'FK_R_DIVPROSBU_T_CSM_PROYEK')
@@ -12066,11 +12039,6 @@ create index T_CSM_PROYEK_FK_R_DIVPROSBU on T_CSM_PROYEK (
 ID_DIVPROSBU ASC,
 ID_DIREKTORAT ASC
 )
-go
-
-alter table T_CSM_PROYEK
-   add constraint FK_R_DIVPROSBU_T_CSM_PROYEK foreign key (ID_DIVPROSBU, ID_DIREKTORAT)
-      references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
 alter table T_PSSR add ID_DIVPROSBU int not null default 1

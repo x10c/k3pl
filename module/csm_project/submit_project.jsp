@@ -12,31 +12,26 @@ try {
 
 	int		dml 	= Integer.parseInt(request.getParameter("dml"));
 	String	id		= request.getParameter("id");
-	String	work_lvl= request.getParameter("work_level");
 	String	k_utama	= request.getParameter("koefisien_utama");
 	String	k_tambah= request.getParameter("koefisien_tambah");
 
 	db_stmt = db_con.createStatement();
-
-	/* set default work level to 0 */
-	if (work_lvl == null || (work_lvl != null && work_lvl.equals (""))) {
-		work_lvl = "1";
-	}
 
 	switch (dml) {
 	case 2:
 		db_q=" insert into t_csm_proyek ("
 			+"		id_project"
 			+" ,	id_kontraktor"
-			+" ,	eval_raw_score"
-			+" ,	eval_weighted_score"
-			+" ,	work_level"
+			+" ,	eval_score"
 			+" ,	penghargaan_sanksi"
 			+" ,	koefisien_utama"
 			+" ,	koefisien_tambah"
 			+" ,	id_divprosbu"
 			+" ,	id_direktorat"
-			+" ) values ("+ id +", null, 0, 0.0, "+ work_lvl
+			+" ) values ("
+			+ id
+			+", null"
+			+", 0.0"
 			+", 1"
 			+","+ k_utama
 			+","+ k_tambah
@@ -46,12 +41,11 @@ try {
 		break;
 	case 3:
 		db_q=" update	t_csm_proyek"
-			+" set		work_level	= "+ work_lvl
-			+" ,		koefisien_utama	= "+ k_utama
+			+" set		koefisien_utama	= "+ k_utama
 			+" ,		koefisien_tambah= "+ k_tambah
 			+" ,		id_divprosbu	= "+ user_div
 			+" ,		id_direktorat	= "+ user_dir
-			+" where	id_project	= "+ id;
+			+" where	id_project		= "+ id;
 		break;
 	case 4:
 		db_q="	delete from t_csm_proyek_kont_eval_nilai where id_project = "+ id

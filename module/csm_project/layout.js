@@ -747,7 +747,6 @@ function CSMFaktorPenilaian (id_faktor, title)
 		return data;
 	}
 
-
 	this.do_refresh = function (koefisien)
 	{
 		this.koefisien = koefisien;

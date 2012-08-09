@@ -1,74 +1,84 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="org.json.JSONArray"%>
-<%@ page import="org.json.JSONObject"%>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	JSONArray item = null;
 
-	Cookie[]	cookies		= request.getCookies ();
-	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
+	db_stmt	= db_con.createStatement();
+	db_q	=" select	X.id_project"
+			+" ,		X.nama_project"
+			+" ,		X.id_kontraktor"
+			+" ,		X.nama_kontraktor"
+			+" ,		X.score"
+			+" ,		X.penghargaan_sanksi"
+			+" ,		X.koefisien_utama"
+			+" ,		X.koefisien_tambah"
+			+" ,		isnull (Y.tanggal, '') as tanggal"
+			+" ,		isnull (Y.team, '') as team"
+			+" ,		isnull (Y.work_area, '') as work_area"
+			+" from "
+			+" ("
+			+"		select	A.id_project"
+			+" 		,		C.nama_project"
+			+"		,		A.id_kontraktor"
+			+"		,		B.nama as nama_kontraktor"
+			+"		,		isnull(A.eval_score, 0.0) as score"
+			+"		,		A.penghargaan_sanksi"
+			+"		,		A.koefisien_utama"
+			+"		,		A.koefisien_tambah"
+			+"		from	t_csm_proyek			A"
+			+"		,		r_kontraktor			B"
+			+"		,		r_project				C"
+			+"		,		r_csm_perf_eval_ps		D"
+			+"		where	A.id_kontraktor 		= B.id"
+			+"		and		A.id_project			= C.id_project"
+			+"		and		A.penghargaan_sanksi	= D.id"
+			+"		and		A.id_divprosbu			= "+ user_div
+			+"		and		A.id_direktorat			= "+ user_dir
+			+" ) X"
+			+" left join "
+			+" ("
+			+"		select	id_project"
+			+" 		,		replace(convert(varchar, tanggal, 111), '/', '-') as tanggal "
+			+"		,		team"
+			+"		,		work_area"
+			+"		from	t_csm_proyek_kont_eval"
+			+" ) Y"
+			+" on X.id_project = Y.id_project";
 
-	if (user_nipg.equals ("") || user_div.equals ("") || user_dir.equals ("")) {
-		out.print("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	Statement db_stmt = db_con.createStatement();
-
-	q	=" select   A.id_project"
-		+" ,		C.nama_project"
-		+" ,		A.id_kontraktor"
-		+" ,		B.nama as nama_kontraktor"
-		+" ,		isnull(A.eval_weighted_score, 0.0) as weighted_score"
-		+" ,		A.penghargaan_sanksi"
-		+" from     t_csm_proyek	A"
-		+" ,		r_kontraktor	B"
-		+" ,		r_project		C"
-		+" ,		r_csm_perf_eval_ps	D"
-		+" where	A.id_kontraktor 		= B.id"
-		+" and		A.id_project			= C.id_project"
-		+" and		A.penghargaan_sanksi	= D.id"
-		+" and		A.id_divprosbu			= " + user_div
-		+" and		A.id_direktorat			= " + user_dir;
-
-	ResultSet	rs		= db_stmt.executeQuery (q);
-	JSONArray	data	= new JSONArray ();
-	JSONArray	item	= null;
-
-	while (rs.next()) {
+	while (db_rs.next()) {
 		item = new JSONArray ();
-		item.put (rs.getString ("id_project"));
-		item.put (rs.getString ("nama_project"));
-		item.put (rs.getString ("id_kontraktor"));
-		item.put (rs.getString ("nama_kontraktor"));
-		item.put (rs.getString ("weighted_score"));
-		item.put (rs.getString ("penghargaan_sanksi"));
+		item.put (db_rs.getString ("id_project"));
+		item.put (db_rs.getString ("nama_project"));
+		item.put (db_rs.getString ("id_kontraktor"));
+		item.put (db_rs.getString ("nama_kontraktor"));
+		item.put (db_rs.getString ("score"));
+		item.put (db_rs.getString ("penghargaan_sanksi"));
+		item.put (db_rs.getString ("koefisien_utama"));
+		item.put (db_rs.getString ("koefisien_tambah"));
+		item.put (db_rs.getString ("tanggal"));
+		item.put (db_rs.getString ("team"));
+		item.put (db_rs.getString ("work_area"));
 
-		data.put (item);
+		json_a.put (item);
 	}
 
-	out.print (data.toString ());
+	out.print (json_a);
 
-	rs.close ();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
