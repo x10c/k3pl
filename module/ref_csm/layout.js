@@ -44,13 +44,13 @@ function RefCSMPerfEvalSI ()
 			header		:"Nilai Min."
 		,	dataIndex	:"min"
 		,	align		:"center"
-		,	width		:60
+		,	width		:100
 		,	editor		:this.form_min
 		},{
 			header		:"Nilai Maks."
 		,	dataIndex	:"max"
 		,	align		:"center"
-		,	width		:60
+		,	width		:100
 		,	editor		:this.form_max
 		},{
 			header		:"Keterangan"

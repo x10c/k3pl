@@ -1,62 +1,51 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*"%>
-<%@ page import="org.json.*"%>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt		= db_con.createStatement();
 	String		id_proyek	= request.getParameter("id_proyek");
+	JSONArray	item		= null;
 
-q
+	db_stmt	= db_con.createStatement();
+
+db_q
 =" select	A.id_project"
 +" ,		A.id_kontraktor"
 +" ,		A.total_nilai"
 +" ,		B.nama"
-+" ,		case"
-+" 				when A.total_nilai >= D.nilai then 1"
-+" 				else 0"
-+" 			end as status_lulus"
-+" from    t_csm_proyek_kontraktor		A"
++" from		t_csm_proyek_kontraktor		A"
 +" ,		r_kontraktor				B"
 +" ,		t_csm_proyek				C"
-+" ,		r_csm_project_work_level	D"
 +" where	A.id_project	= "+ id_proyek
 +" and		A.id_kontraktor	= B.id"
 +" and		A.id_project	= C.id_project"
-+" and		C.work_level	= D.id"
 +" order by B.nama";
 
-	ResultSet	rs		= db_stmt.executeQuery (q);
-	JSONArray	data	= new JSONArray ();
-	JSONArray	item	= null;
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	while (rs.next()) {
+	while (db_rs.next()) {
 		item = new JSONArray ();
-		item.put (rs.getString ("id_project"));
-		item.put (rs.getString ("id_kontraktor"));
-		item.put (rs.getString ("total_nilai"));
-		item.put (rs.getString ("nama"));
-		item.put (rs.getString ("status_lulus"));
+		item.put (db_rs.getString ("id_project"));
+		item.put (db_rs.getString ("id_kontraktor"));
+		item.put (db_rs.getString ("total_nilai"));
+		item.put (db_rs.getString ("nama"));
 
-		data.put (item);
+		json_a.put (item);
 	}
 
-	out.print (data.toString ());
+	out.print (json_a);
 
-	rs.close ();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

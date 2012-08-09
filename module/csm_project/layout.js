@@ -15,16 +15,15 @@ var m_csm_project_penilaian;
 var m_csm_project_d = _g_root +"/module/csm_project/";
 var m_csm_id_proyek;
 var m_csm_id_kontraktor;
-var m_csm_work_level_nilai	= 0;
 var m_csm_koef_utama		= 0;
 var m_csm_koef_tambah		= 0;
+var m_ref_csm_d				= _g_root +"/module/ref_csm/";
 
 var	m_csm_fields_kontraktor = new Ext.data.Record.create([
 		"id_proyek"
 	,	"id_kontraktor"
 	,	"total_nilai"
 	,	"nama_kontraktor"
-	,	"status_lulus"
 	]);
 
 var	m_csm_store_kontraktor	= new Ext.data.ArrayStore ({
@@ -33,13 +32,26 @@ var	m_csm_store_kontraktor	= new Ext.data.ArrayStore ({
 	,	autoLoad			:false
 	});
 
-/* unneeded
-var m_csm_store_work_level	= new Ext.data.ArrayStore ({
-	url						:m_csm_project_d +"data_work_level.jsp"
-,	fields					:["id", "keterangan"]
-,	autoLoad				:false
-});
-*/
+var m_csm_store_si	= new Ext.data.ArrayStore({
+		url				: m_ref_csm_d +"data_perf_eval_SI.jsp"
+	,	fields			:["id","min","max","keterangan"]
+	,	idIndex			:0
+	,	autoLoad		:false
+	,	get_keterangan	: function (v)
+		{
+			var min;
+			var max;
+			var r = this.getRange ();
+			for (var i = 0; i < r.length; i++) {
+				min = parseFloat (r[i].get ("min"));
+				max = parseFloat (r[i].get ("max"));
+
+				if (v > min && v <= max) {
+					return r[i].get ("keterangan");
+				}
+			}
+		}
+	});
 
 function m_csm_store_kontraktor_load ()
 {
@@ -57,8 +69,6 @@ function CSMProject()
 	,	"name"
 	,	"id_kontraktor"
 	,	"nama_kontraktor"
-	,	"work_level"
-	,	"work_level_nilai"
 	,	"koefisien_utama"
 	,	"koefisien_tambah"
 	]);
@@ -83,16 +93,7 @@ function CSMProject()
 	,	triggerAction	:"all"
 	,	mode			:"local"
 	});
-/*
-	this.form_work_level	= new Ext.form.ComboBox ({
-		store				:m_csm_store_work_level
-	,	allowBlank			:false
-	,	valueField			:"id"
-	,	displayField		:"keterangan"
-	,	triggerAction		:"all"
-	,	mode				:"local"
-	});
-*/
+
 	this.form_koef_utama	= new Ext.form.NumberField ({
 		allowBlank			:false
 	,	allowNegative		:false
@@ -114,13 +115,7 @@ function CSMProject()
 		,	dataIndex	:"name"
 		,	editor		:this.form_name
 		},{
-/*			header		:"Tingkat Pekerjaan"
-		,	dataIndex	:"work_level"
-		,	align		:"center"
-		,	editor		:this.form_work_level
-		,	renderer	:combo_renderer(this.form_work_level)
-		},{
-*/			header		:"Koefisien Faktor Utama"
+			header		:"Koefisien Faktor Utama"
 		,	dataIndex	:"koefisien_utama"
 		,	align		:"center"
 		,	editor		:this.form_koef_utama
@@ -273,15 +268,13 @@ function CSMProject()
 			return;
 		}
 
-		m_csm_work_level_nilai	= parseFloat(row.data["work_level_nilai"]);
 		m_csm_id_proyek			= row.data["id"];
 		m_csm_koef_utama		= row.data["koefisien_utama"];
 		m_csm_koef_tambah		= row.data["koefisien_tambah"];
 
 		m_csm_store_kontraktor_load ();
 		m_csm_project_penilaian.set_proyek(row.data["name"]);
-/*		m_csm_project_penilaian.set_work_level(row.data["work_level"]);
-*/
+
 		var id_kont = row.data["id_kontraktor"];
 
 		if (id_kont == '' || id_kont == '0' || _g_ha == 4) {
@@ -293,7 +286,7 @@ function CSMProject()
 
 	this.do_refresh = function ()
 	{
-/*		m_csm_store_work_level.load();*/
+		m_csm_store_si.load ();
 		this.store.load();
 	}
 
@@ -345,7 +338,6 @@ function CSMProject()
 		Ext.Ajax.request({
 			params  :{
 				id			:id
-			,	work_level	:r.data["work_level"]
 			,	dml			:this.dml
 			,	koefisien_utama		:r.data["koefisien_utama"]
 			,	koefisien_tambah	:r.data["koefisien_tambah"]
@@ -396,14 +388,12 @@ function CSMProjectContractor ()
 		,	sortable	:true
 		},{
 			header		:"Status Penilaian"
-		,	dataIndex	:"status_lulus"
+		,	dataIndex	:"total_nilai"
 		,	align		:"center"
 		,	sortable	:true
+		,	width		:200
 		,	renderer	:function (v) {
-				if (v == 1) {
-					return "Lulus";
-				}
-				return "Tidak Lulus";
+				return m_csm_store_si.get_keterangan (parseFloat (v));
 			}
 		}]
 	});
@@ -584,17 +574,7 @@ function CSMFormPenilaian ()
 		fieldLabel		:"Total Nilai"
 	,	readOnly		:true
 	});
-/*
-	this.form_work_level	= new Ext.form.ComboBox ({
-		fieldLabel			:"Tingkat Pekerjaan"
-	,	store				:m_csm_store_work_level
-	,	valueField			:"id"
-	,	displayField		:"keterangan"
-	,	triggerAction		:"all"
-	,	mode				:"local"
-	,	readOnly			:true
-	});
-*/
+
 	this.form_status	= new Ext.form.TextField ({
 		fieldLabel		:"Status Penilaian"
 	,	readOnly		:true
@@ -604,11 +584,13 @@ function CSMFormPenilaian ()
 		labelAlign	:"right"
 	,	labelWidth	:200
 	,	padding		:8
+	,	defaults	:{
+			width		: 200
+		}
 	,	items		:[
 			this.form_proyek
 		,	this.form_kontraktor
 		,	this.form_total
-/*		,	this.form_work_level*/
 		,	this.form_status
 		]
 	});
@@ -617,11 +599,7 @@ function CSMFormPenilaian ()
 	{
 		var nilai = parseFloat(v);
 
-		if (nilai >= m_csm_work_level_nilai) {
-			this.form_status.setValue("Lulus");
-		} else {
-			this.form_status.setValue("Tidak Lulus");
-		}
+		this.form_status.setValue (m_csm_store_si.get_keterangan (nilai));
 
 		this.form_total.setValue(v);
 	}
@@ -747,6 +725,29 @@ function CSMFaktorPenilaian (id_faktor, title)
 	,	autoExpandColumn	:"keterangan"
 	});
 
+	this.get_data_penilaian = function()
+	{
+		var data = [];
+
+		var mr = this.store.getModifiedRecords();
+		if (!mr || mr.length <= 0) {
+			return data;
+		}
+
+		var x;
+		for (var i = 0; i < mr.length; i++) {
+			x		= {};
+			x.id	= mr[i].data["id"];
+			x.nilai	= mr[i].data["hasil_pantauan"];
+			x.ket	= mr[i].data["keterangan"];
+
+			data.push(x);
+		}
+
+		return data;
+	}
+
+
 	this.do_refresh = function (koefisien)
 	{
 		this.koefisien = koefisien;
@@ -821,12 +822,7 @@ function CSMPenilaian ()
 	{
 		m_csm_project_form.set_total (v);
 	}
-/*
-	this.set_work_level = function (v)
-	{
-		m_csm_project_form.form_work_level.setValue (v);
-	}
-*/
+
 	this.do_back = function ()
 	{
 		m_csm_project_kont.do_refresh();
@@ -839,53 +835,13 @@ function CSMPenilaian ()
 		this.grid_tambahan.do_refresh(m_csm_koef_tambah);
 	}
 
-	this.get_data_utama = function()
-	{
-		this.data_utama = [];
-
-		var mr = this.grid_utama.store.getModifiedRecords();
-		if (!mr || mr.length <= 0) {
-			return;
-		}
-
-		var x;
-		for (var i = 0; i < mr.length; i++) {
-			x		= {};
-			x.id	= mr[i].data["id"];
-			x.nilai	= mr[i].data["hasil_pantauan"];
-			x.ket	= mr[i].data["keterangan"];
-
-			this.data_utama.push(x);
-		}
-	}
-
-	this.get_data_tambahan = function()
-	{
-		this.data_tambahan = [];
-
-		var mr = this.grid_tambahan.store.getModifiedRecords();
-		if (!mr || mr.length <= 0) {
-			return;
-		}
-
-		var x;
-		for (var i = 0; i < mr.length; i++) {
-			x		= {};
-			x.id	= mr[i].data["id"];
-			x.nilai	= mr[i].data["hasil_pantauan"];
-			x.ket	= mr[i].data["keterangan"];
-
-			this.data_tambahan.push(x);
-		}
-	}
-
 	this.do_save = function ()
 	{
 		var total = parseFloat(this.grid_utama.total)
 				+ parseFloat(this.grid_tambahan.total);
 
-		this.get_data_utama();
-		this.get_data_tambahan();
+		this.data_utama = this.grid_utama.get_data_penilaian ();
+		this.data_tambahan = this.grid_tambahan.get_data_penilaian ();
 
 		if (this.data_utama.length <= 0
 		&&  this.data_tambahan.length <= 0) {
