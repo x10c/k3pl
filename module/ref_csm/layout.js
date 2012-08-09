@@ -151,162 +151,6 @@ function RefCSMPerfEvalSI ()
 	}
 }
 
-function RefCSMPerfEval ()
-{
-	this.total		= 0.0;
-
-	this.fields = new Ext.data.Record.create ([
-		"id", "weight_factor", "element"
-	]);
-
-	this.store	= new Ext.data.ArrayStore ({
-		url		:m_ref_csm_d +"data_perf_eval.jsp"
-	,	fields	:this.fields
-	,	autoLoad:false
-	});
-
-	this.form_weight	= new Ext.form.NumberField({
-		allowBlank		:false
-	,	allowNegative	:false
-	,	allowDecimals	:true
-	});
-
-	this.form_element	= new Ext.form.TextArea({
-		allowBlank		:false
-	});
-
-	this.cm		= new Ext.grid.ColumnModel ({
-		columns	:[{
-			header		:"Weight Factor"
-		,	dataIndex	:"weight_factor"
-		,	align		:"center"
-		,	editor		:this.form_weight
-		,	summaryType	:"sum"
-		,	summaryRenderer	:function(v,p,o,scope) {
-				scope.total = v.toFixed(2);
-				return scope.total;
-			}
-		},{
-			header		:"Elemen Evaluasi"
-		,	id			:"element"
-		,	dataIndex	:"element"
-		,	editor		:this.form_element
-		}]
-	});
-
-	this.sm		= new Ext.grid.RowSelectionModel ({
-		singleSelect	:true
-	});
-
-	this.editor	= MyRowEditor (this);
-	this.btn_del = k3pl.button.Delete (this);
-	this.btn_ref = k3pl.button.Refresh (this);
-	this.btn_add = k3pl.button.Add (this);
-	this.summary	= new Ext.ux.grid.GridSummary({scope:this});
-
-	this.panel				= new Ext.grid.GridPanel ({
-		title				:"Evaluasi"
-	,	autoExpandColumn	:"element"
-	,	store				:this.store
-	,	cm					:this.cm
-	,	sm					:this.sm
-	,	plugins				:[this.editor,this.summary]
-	,	tbar				:[
-			this.btn_del	, "-"
-		,	this.btn_ref	, "-"
-		,	this.btn_add
-		]
-	,	listeners			:{
-			scope			:this
-		,	rowdblclick		:function (grid, rowidx, e) {
-				var r = this.store.getAt(rowidx);
-				this.do_edit (r);
-			}
-		}
-	});
-
-	this.do_refresh = function ()
-	{
-		this.store.load ();
-	}
-
-	this.do_del = function ()
-	{
-		var r = this.sm.getSelected();
-		if (!r) {
-			return;
-		}
-
-		this.dml = 4;
-		this.do_save (r);
-	}
-
-	this.do_edit = function (r)
-	{
-		this.dml = 3;
-	}
-
-	this.do_add = function ()
-	{
-		this.record_new = new this.fields({
-				id				:''
-			,	weight_factor	:0.0
-			,	element			:''
-			});
-
-		this.editor.stopEditing();
-		this.store.insert(0, this.record_new);
-		this.sm.selectRow(0);
-		this.editor.startEditing(0);
-
-		this.dml = 2;
-	}
-
-	this.do_cancel = function ()
-	{
-		if (this.dml == 2) {
-			this.store.remove(this.record_new);
-			this.sm.selectRow(0);
-		}
-	}
-
-	this.do_save = function (r)
-	{
-		if ((this.dml == 2 || this.dml == 3) && this.total > 1) {
-			Ext.Msg.alert("Evaluasi"
-			, "Nilai total dari Weight Factor tidak boleh lebih dari 1");
-
-			if (this.dml == 2) {
-				this.do_cancel();
-			}
-			return;
-		}
-
-		Ext.Ajax.request({
-			params  :{
-				id			:r.data['id']
-			,	weight		:r.data['weight_factor']
-			,	element		:r.data['element']
-			,	dml			:this.dml
-			}
-		,	url		:m_ref_csm_d +'submit_perf_eval.jsp'
-		,	waitMsg	:'Mohon Tunggu ...'
-		,	scope	:this
-		,	success :
-				function (response)
-				{
-					var msg = Ext.util.JSON.decode(response.responseText);
-
-					if (msg.success == false) {
-						Ext.MessageBox.alert('Pesan', msg.info);
-					}
-
-					this.store.load();
-				}
-		});
-	}
-}
-
 function RefCSMPerfEvalPS ()
 {
 	this.fields = new Ext.data.Record.create ([
@@ -819,7 +663,6 @@ function RefCSMPenilaianMD (id, title)
 function RefCSM ()
 {
 	m_ref_csm_perfevalsi	= new RefCSMPerfEvalSI ();
-	m_ref_csm_perfeval		= new RefCSMPerfEval ();
 	m_ref_csm_nilai_utama	= new RefCSMPenilaianMD (1, "Penilaian - Faktor Utama");
 	m_ref_csm_nilai_tambah	= new RefCSMPenilaianMD (2, "Penilaian - Faktor Tambahan");
 	m_ref_csm_perfeval_ps	= new RefCSMPerfEvalPS ();
@@ -834,7 +677,6 @@ function RefCSM ()
 			m_ref_csm_nilai_utama.panel
 		,	m_ref_csm_nilai_tambah.panel
 		,	m_ref_csm_perfevalsi.panel
-		,	m_ref_csm_perfeval.panel
 		,	m_ref_csm_perfeval_ps.panel
 		]
 	});
@@ -842,7 +684,6 @@ function RefCSM ()
 	this.do_refresh = function ()
 	{
 		m_ref_csm_perfevalsi.do_refresh ();
-		m_ref_csm_perfeval.do_refresh ();
 		m_ref_csm_nilai_utama.do_refresh ();
 		m_ref_csm_nilai_tambah.do_refresh ();
 		m_ref_csm_perfeval_ps.do_refresh ();

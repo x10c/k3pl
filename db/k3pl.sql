@@ -6241,13 +6241,6 @@ go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('T_CSM_PROYEK_KONT_EVAL_NILAI') and o.name = 'FK_R_CSM_PERF_EVAL_T_CSM_PROYEK_KONT_EVAL_NILAI')
-alter table T_CSM_PROYEK_KONT_EVAL_NILAI
-   drop constraint FK_R_CSM_PERF_EVAL_T_CSM_PROYEK_KONT_EVAL_NILAI
-go
-
-if exists (select 1
-   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
    where r.fkeyid = object_id('T_CSM_PROYEK_KONT_EVAL_NILAI') and o.name = 'FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI')
 alter table T_CSM_PROYEK_KONT_EVAL_NILAI
    drop constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI
@@ -6561,13 +6554,6 @@ if exists (select 1
            where  id = object_id('R_CSM_PENILAIAN')
             and   type = 'U')
    drop table R_CSM_PENILAIAN
-go
-
-if exists (select 1
-            from  sysobjects
-           where  id = object_id('R_CSM_PERF_EVAL')
-            and   type = 'U')
-   drop table R_CSM_PERF_EVAL
 go
 
 if exists (select 1
@@ -7312,17 +7298,6 @@ go
 /*==============================================================*/
 create index R_CSM_PENILAIAN_FK on R_CSM_PENILAIAN (
 ID_FAKTOR ASC
-)
-go
-
-/*==============================================================*/
-/* Table: R_CSM_PERF_EVAL                                       */
-/*==============================================================*/
-create table R_CSM_PERF_EVAL (
-   ID                   int                  identity,
-   WEIGHT_FACTOR        float                not null,
-   ELEMENT              varchar(1024)        not null,
-   constraint PK_R_CSM_PERF_EVAL primary key (ID)
 )
 go
 
@@ -8727,11 +8702,6 @@ alter table T_CSM_PROYEK_KONT_EVAL
 go
 
 alter table T_CSM_PROYEK_KONT_EVAL_NILAI
-   add constraint FK_R_CSM_PERF_EVAL_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_EVALUASI)
-      references R_CSM_PERF_EVAL (ID)
-go
-
-alter table T_CSM_PROYEK_KONT_EVAL_NILAI
    add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PROJECT)
       references T_CSM_PROYEK (ID_PROJECT)
 go
@@ -9610,25 +9580,6 @@ insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('References', '1');
 insert into R_CSM_PERF_EVAL_SI values (1, 'Di bawah Standar - <= 55');
 insert into R_CSM_PERF_EVAL_SI values (2, 'Cukup Memenuhi Standar - 55 s/d <= 75');
 insert into R_CSM_PERF_EVAL_SI values (3, 'Memenuhi Standar - > 75');
-
-insert into R_CSM_PERF_EVAL values (0.15, 'Kerapihan Peralatan dan Fasilitas Umum Proyek');
-insert into R_CSM_PERF_EVAL values (0.15, 'Kelengkapan Alat Pelindung Diri (APD)');
-insert into R_CSM_PERF_EVAL values (0.10, 'Safety Induction/Training/Safety talks/Tool Box meetings compliance');
-insert into R_CSM_PERF_EVAL values (0.15, 'Metode Kerja yang Memperhatikan Prinsip-Prinsip Keselamatan dan Efektifitas Penggunaan Peralatan Kerja');
-insert into R_CSM_PERF_EVAL values (0.05, 'Efektifitas team K3PL');
-insert into R_CSM_PERF_EVAL values (0.15, 'Komitmen dan Kemampuan Tim Proyek Atas Pelaksanaan K3PL di Lapangan');
-insert into R_CSM_PERF_EVAL values (0.05,
-	'Perencanaan / Tindakan Pencegahan terhadap temuan audit K3PL mingguan <br/><br/>'
-	+'1. Jumlah Insiden <br/>'
-	+'2. Recordable Insiden Frequency Rate <br/>'
-	+'3. LTI Frequency Rate');
-insert into R_CSM_PERF_EVAL values (0.10,
-	'Perencanaan / Tindakan Pencegahan terhadap temuan severity 4 & 5 <br/><br/>'
-	+'1. Severity 4 & 5 Violation <br/>'
-	+'2. Average Severity of Violation <br/>'
-	+'3. RCA Done');
-insert into R_CSM_PERF_EVAL values (0.05, 'Inisiatif Baru terhadap Sistem Internal & Proses Safety');
-insert into R_CSM_PERF_EVAL values (0.05, 'Kebutuhan kesehatan pekerja: Toilet, Air Minum dll');
 
 insert into R_CSM_FAKTOR_PENILAIAN values (1, 'Faktor Utama', 0.8);
 insert into R_CSM_FAKTOR_PENILAIAN values (2, 'Faktor Penambah/Pelengkap', 0.2);
