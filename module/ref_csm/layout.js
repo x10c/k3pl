@@ -16,7 +16,7 @@ var m_ref_csm_nilai_tambah;
 function RefCSMPerfEvalSI ()
 {
 	this.fields = new Ext.data.Record.create ([
-		"id", "score", "keterangan"
+		"id", "min", "max", "keterangan"
 	]);
 
 	this.store	= new Ext.data.ArrayStore ({
@@ -25,11 +25,15 @@ function RefCSMPerfEvalSI ()
 	,	autoLoad:false
 	});
 
-	this.form_score		= new Ext.form.NumberField({
-		allowBlank		:false
-	,	allowNegative	:false
-	,	allowDecimals	:false
-	});
+	this.form_min			= new Ext.form.NumberField({
+			allowBlank		:false
+		,	allowNegative	:false
+		});
+
+	this.form_max			= new Ext.form.NumberField({
+			allowBlank		:false
+		,	allowNegative	:false
+		});
 
 	this.form_ket		= new Ext.form.TextField({
 		allowBlank		:false
@@ -37,11 +41,17 @@ function RefCSMPerfEvalSI ()
 
 	this.cm		= new Ext.grid.ColumnModel ({
 		columns	:[{
-			header		:"Score"
-		,	dataIndex	:"score"
+			header		:"Nilai Min."
+		,	dataIndex	:"min"
 		,	align		:"center"
 		,	width		:60
-		,	editor		:this.form_score
+		,	editor		:this.form_min
+		},{
+			header		:"Nilai Maks."
+		,	dataIndex	:"max"
+		,	align		:"center"
+		,	width		:60
+		,	editor		:this.form_max
 		},{
 			header		:"Keterangan"
 		,	id			:"keterangan"
@@ -104,7 +114,8 @@ function RefCSMPerfEvalSI ()
 	{
 		this.record_new = new this.fields({
 				id			:''
-			,	score		:0
+			,	min			:0.0
+			,	max			:0.0
 			,	keterangan	:''
 			});
 
@@ -129,7 +140,8 @@ function RefCSMPerfEvalSI ()
 		Ext.Ajax.request({
 			params  :{
 				id			:r.data['id']
-			,	score		:r.data['score']
+			,	min			:r.data['min']
+			,	max			:r.data['max']
 			,	keterangan	:r.data['keterangan']
 			,	dml			:this.dml
 			}

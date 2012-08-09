@@ -5,45 +5,37 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
+	JSONArray data = null;
+
+	db_stmt = db_con.createStatement();
+	db_q	=" select   id"
+			+" ,		min"
+			+" ,		max"
+			+" ,        keterangan"
+			+" from     r_csm_perf_eval_si";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
+
+	while (db_rs.next()) {
+		data = new JSONArray ();
+		data.put (db_rs.getString ("id"));
+		data.put (db_rs.getString ("min"));
+		data.put (db_rs.getString ("max"));
+		data.put (db_rs.getString ("keterangan"));
+
+		json_a.put (data);
 	}
 
-	Statement db_stmt = db_con.createStatement();
+	out.print (json_a);
 
-	q	=" select   id"
-		+" ,		score"
-		+" ,        keterangan"
-		+" from     r_csm_perf_eval_si";
-
-	ResultSet	rs		= db_stmt.executeQuery(q);
-	int			i		= 0;
-	String		data	= "[";
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data+="[ "+ rs.getString("id")
-			+ ", "+ rs.getString("score")
-			+ ",'"+ rs.getString("keterangan") +"' ]";
-	}
-
-	data += "]";
-
-	out.print(data);
-
-	rs.close();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

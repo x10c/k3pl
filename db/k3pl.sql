@@ -7318,7 +7318,8 @@ go
 /*==============================================================*/
 create table R_CSM_PERF_EVAL_SI (
    ID                   int                  identity,
-   SCORE                int                  not null,
+   MIN                  float                not null default 0.0,
+   MAX                  float                not null default 0.0,
    KETERANGAN           varchar(512)         not null,
    constraint PK_R_CSM_PERF_EVAL_SI primary key (ID)
 )
@@ -9577,9 +9578,9 @@ insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('Human Factor', '1')
 insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('Other Recommendation', '1');
 insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('References', '1');
 
-insert into R_CSM_PERF_EVAL_SI values (1, 'Di bawah Standar - <= 55');
-insert into R_CSM_PERF_EVAL_SI values (2, 'Cukup Memenuhi Standar - 55 s/d <= 75');
-insert into R_CSM_PERF_EVAL_SI values (3, 'Memenuhi Standar - > 75');
+insert into R_CSM_PERF_EVAL_SI values (0.0, 55.0, 'Di Bawah Standar');
+insert into R_CSM_PERF_EVAL_SI values (55.1, 75.0, 'Cukup Memenuhi Standar');
+insert into R_CSM_PERF_EVAL_SI values (75.1, 100.0, 'Memenuhi Standar');
 
 insert into R_CSM_FAKTOR_PENILAIAN values (1, 'Faktor Utama', 0.8);
 insert into R_CSM_FAKTOR_PENILAIAN values (2, 'Faktor Penambah/Pelengkap', 0.2);

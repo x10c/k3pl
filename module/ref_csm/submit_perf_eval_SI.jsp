@@ -1,58 +1,58 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
-	String		id_user	= (String) session.getAttribute("user.nipg");
-
 	int		dml 		= Integer.parseInt(request.getParameter("dml"));
 	String	id			= request.getParameter("id");
-	String	score		= request.getParameter("score");
+	String	min			= request.getParameter("min");
+	String	max			= request.getParameter("max");
 	String	keterangan	= request.getParameter("keterangan");
-	String	q;
 
 	switch (dml) {
 	case 2:
-		q	=" insert into r_csm_perf_eval_si ("
-			+"		score"
+		db_q=" insert into r_csm_perf_eval_si ("
+			+"		min"
+			+" ,	max"
 			+" ,	keterangan"
-			+" ) values ("+ score +", '"+ keterangan +"') ";
+			+" ) values ("+ min +","+ max +",'"+ keterangan +"') ";
 		break;
 	case 3:
-		q	=" update	r_csm_perf_eval_si"
-			+" set		score = "+ score
-			+" ,		keterangan = '"+ keterangan +"' "
+		db_q=" update	r_csm_perf_eval_si"
+			+" set		min	= "+ min
+			+" ,		max = "+ max
+			+" ,		keterangan = '"+ keterangan +"'"
 			+" where	id = "+ id;
 		break;
 	case 4:
-		q	=" delete from r_csm_perf_eval_si"
+		db_q=" delete from r_csm_perf_eval_si"
 			+" where  id = "+ id;
 		break;
 	default:
-		out.print("{success:false,info:'DML tipe tidak diketahui ("+dml+")!'}");
+		_return.put ("success", false);
+		_return.put ("info", "DML tipe tidak diketahui ("+dml+")!");
+		out.print (_return);
 		return;
 	}
 
-	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
-		+ id_user +"','"+ session.getAttribute("menu.id") +"','"+ dml +"')";
+	db_stmt = db_con.createStatement ();
+	db_q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
+			+ user_nipg +"','"+ session.getAttribute("menu.id") +"','"+ dml +"')";
 
-	db_stmt.executeUpdate(q);
+	db_stmt.executeUpdate (db_q);
 
-	out.print("{success:true, info:'Data telah tersimpan.'}");
+	_return.put ("success", true);
+	_return.put ("info", "Data telah tersimpan.");
+
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>
