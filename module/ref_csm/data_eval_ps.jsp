@@ -1,48 +1,43 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*"%>
-<%@ page import="org.json.*"%>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt		= db_con.createStatement();
+	JSONArray	element		= null;
 	String		id_faktor	= request.getParameter("id_faktor");
 
-	q	=" select   id"
-		+" ,		nilai_min"
-		+" ,		nilai_max"
-		+" ,        keterangan"
-		+" from     r_csm_perf_eval_ps";
+	db_stmt	= db_con.createStatement();
+	db_q	=" select   id"
+			+" ,		nilai_min"
+			+" ,		nilai_max"
+			+" ,        keterangan"
+			+" from     r_csm_perf_eval_ps";
 
-	ResultSet	rs		= db_stmt.executeQuery(q);
-	JSONArray	data	= new JSONArray ();
-	JSONArray	element	= null;
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	while (rs.next()) {
+	while (db_rs.next()) {
 		element = new JSONArray ();
-		element.put(rs.getString("id"));
-		element.put(rs.getString("nilai_min"));
-		element.put(rs.getString("nilai_max"));
-		element.put(rs.getString("keterangan"));
+		element.put (db_rs.getString("id"));
+		element.put (db_rs.getString("nilai_min"));
+		element.put (db_rs.getString("nilai_max"));
+		element.put (db_rs.getString("keterangan"));
 
-		data.put(element);
+		json_a.put (element);
 	}
 
-	out.print(data.toString());
+	out.print (json_a);
 
-	rs.close();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

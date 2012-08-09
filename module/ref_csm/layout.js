@@ -12,160 +12,6 @@ var m_ref_csm_perfevalsi;
 var m_ref_csm_perfeval_ps;
 var m_ref_csm_nilai_utama;
 var m_ref_csm_nilai_tambah;
-var m_ref_csm_work_level;
-
-function RefCSMProjectWorkLevel ()
-{
-	this.dml = 0;
-
-	this.fields	= new Ext.data.Record.create ([
-		"id"
-	,	"nilai"
-	,	"keterangan"
-	]);
-
-	this.store	= new Ext.data.ArrayStore ({
-		url		:m_ref_csm_d +"data_work_level.jsp"
-	,	fields	:this.fields
-	,	autoLoad:false
-	});
-
-	this.form_nilai		= new Ext.form.NumberField ({
-		allowBlank		:false
-	,	allowNegative	:false
-	});
-
-	this.form_ket		= new Ext.form.TextField ({
-		allowBlank		:false
-	});
-
-	this.cm		= new Ext.grid.ColumnModel ({
-		columns	:[{
-			header		:"Nilai"
-		,	dataIndex	:"nilai"
-		,	align		:"center"
-		,	editor		:this.form_nilai
-		},{
-			header		:"Keterangan"
-		,	dataIndex	:"keterangan"
-		,	id			:"keterangan"
-		,	editor		:this.form_ket
-		}]
-	});
-
-	this.sm				= new Ext.grid.RowSelectionModel ({
-		singleSelect	:true
-	});
-
-	this.editor		= MyRowEditor(this);
-	this.btn_add	= k3pl.button.Add(this);
-	this.btn_ref	= k3pl.button.Refresh(this);
-	this.btn_edit	= k3pl.button.Edit(this);
-	this.btn_del	= k3pl.button.Delete(this);
-
-	this.panel				= new Ext.grid.GridPanel ({
-		title				:"Proyek - Tingkat Pekerjaan"
-	,	store				:this.store
-	,	cm					:this.cm
-	,	sm					:this.sm
-	,	autoExpandColumn	:"keterangan"
-	,	plugins				:[this.editor]
-	,	tbar				:[
-			this.btn_del	,"-"
-		,	this.btn_edit	,"-"
-		,	this.btn_ref	,"-"
-		,	this.btn_add
-		]
-	,	listeners		:{
-			scope		:this
-		,	rowdblclick	:function(grid, rowidx, e) {
-				this.do_edit (rowidx);
-			}
-		}
-	});
-
-	this.do_refresh = function ()
-	{
-		this.store.load ();
-	}
-
-	this.do_add = function ()
-	{
-		this.record_new = new this.fields ({
-			id			:0
-		,	nilai		:0
-		,	keterangan	:''
-		});
-
-		this.editor.stopEditing ();
-		this.store.insert (0, this.record_new);
-		this.sm.selectRow (0);
-		this.editor.startEditing (0);
-
-		this.dml = 2;
-	}
-
-	this.do_cancel = function ()
-	{
-		if (this.dml == 2) {
-			this.store.removeAt(0);
-			this.sm.selectRow (0);
-		}
-	}
-
-	this.do_edit = function ()
-	{
-		var r = this.sm.getSelected();
-		if (!r) {
-			return;
-		}
-
-		this.dml = 3;
-		this.editor.startEditing (r, true);
-	}
-
-	this.do_del = function ()
-	{
-		var r = this.sm.getSelected();
-		if (!r) {
-			return;
-		}
-
-		Ext.Msg.confirm ("Penghapusan Data"
-		,"Apakah anda yakin akan menghapus data ?"
-		,function (btn_id, text, opt) {
-			if (btn_id == 'yes') {
-				this.dml = 4;
-				this.do_save (r);
-			}
-		}
-		,this);
-	}
-
-	this.do_save = function (r)
-	{
-		Ext.Ajax.request({
-			params  :{
-				id			:r.data['id']
-			,	nilai		:r.data['nilai']
-			,	keterangan	:r.data['keterangan']
-			,	dml			:this.dml
-			}
-		,	url		:m_ref_csm_d +'submit_work_level.jsp'
-		,	waitMsg	:'Mohon Tunggu ...'
-		,	scope	:this
-		,	success : function (response) {
-				var msg = Ext.util.JSON.decode(response.responseText);
-
-				if (msg.success == false) {
-					Ext.MessageBox.alert('Pesan', msg.info);
-				}
-
-				this.do_refresh ();
-			}
-		});
-	}
-}
 
 function RefCSMPerfEvalSI ()
 {
@@ -972,7 +818,6 @@ function RefCSMPenilaianMD (id, title)
 
 function RefCSM ()
 {
-	m_ref_csm_work_level	= new RefCSMProjectWorkLevel ();
 	m_ref_csm_perfevalsi	= new RefCSMPerfEvalSI ();
 	m_ref_csm_perfeval		= new RefCSMPerfEval ();
 	m_ref_csm_nilai_utama	= new RefCSMPenilaianMD (1, "Penilaian - Faktor Utama");
@@ -986,8 +831,7 @@ function RefCSM ()
 	,	autoScroll		:true
 	,	enableTabScroll	:true
 	,	items			:[
-			m_ref_csm_work_level.panel
-		,	m_ref_csm_nilai_utama.panel
+			m_ref_csm_nilai_utama.panel
 		,	m_ref_csm_nilai_tambah.panel
 		,	m_ref_csm_perfevalsi.panel
 		,	m_ref_csm_perfeval.panel
@@ -997,7 +841,6 @@ function RefCSM ()
 
 	this.do_refresh = function ()
 	{
-		m_ref_csm_work_level.do_refresh ();
 		m_ref_csm_perfevalsi.do_refresh ();
 		m_ref_csm_perfeval.do_refresh ();
 		m_ref_csm_nilai_utama.do_refresh ();

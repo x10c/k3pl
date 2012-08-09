@@ -9932,35 +9932,9 @@ insert into R_REPORT values ('List References Used', 3, 'doc', 'reports/09_ListR
 insert into R_REPORT values ('Pengelolaan Lingkungan Tahunan', 4, 'xls', 'reports/PelaporanLingkungan.jasper', 'id_lt', 'ID_LINGKUNGAN_TAHUNAN');
 insert into R_REPORT values ('Pengelolaan Lingkungan Bulanan', 4, 'xls', 'reports/07_LapLingkunganBulanan.jasper', 'tahun;bulan', 'TAHUN;BULAN');
 
-insert into R_CSM_PERF_EVAL_PS values (0.0, 1.0, 'Black list selama 2 tahun');
-insert into R_CSM_PERF_EVAL_PS values (1.1, 3.0, 'Surat teguran dan Pembinaan Safety');
-insert into R_CSM_PERF_EVAL_PS values (3.1, 4.0, 'Certificate of Compliance');
-insert into R_CSM_PERF_EVAL_PS values (4.1, 5.0, 'Penghargaan');
-
-/*
- * R_CSM_PROJECT_LEVEL: Tingkat penilaian proyek.
- */
-if exists (
-	select	1
-	from	sysobjects
-	where	id = object_id('R_CSM_PROJECT_WORK_LEVEL')
-	and		type = 'U'
-)
-   drop table R_CSM_PROJECT_WORK_LEVEL
-go
-
-create table R_CSM_PROJECT_WORK_LEVEL (
-	ID			int 			identity primary key
-,	NILAI		float			not null default 0
-,	KETERANGAN	varchar(256)	not null default ''
-);
-
-/*
- * Update T_CSM_PROYEK tambah kolom WORK_LEVEL
- */
-alter table T_CSM_PROYEK add WORK_LEVEL int
-	foreign key
-	references R_CSM_PROJECT_WORK_LEVEL (ID);
+insert into R_CSM_PERF_EVAL_PS values (0.0, 55.0, 'Black list selama 2 tahun');
+insert into R_CSM_PERF_EVAL_PS values (55.1, 75.0, 'Sertifikat Keterangan Baik');
+insert into R_CSM_PERF_EVAL_PS values (75.1, 100.0, 'Penghargaan');
 
 /*
  * Update T_CSM_PROYEK tambah kolom PENGHARGAAN_SANKSI
@@ -10302,10 +10276,6 @@ alter table T_CHEMICAL_HAZARD
    add constraint FK_R_PROPERTIES_T_CHEMICAL_HAZARD foreign key (ID_PROPERTIES)
       references R_PROPERTIES (ID_PROPERTIES)
 go
-
-insert into R_CSM_PROJECT_WORK_LEVEL values (30, 'Low');
-insert into R_CSM_PROJECT_WORK_LEVEL values (50, 'Medium');
-insert into R_CSM_PROJECT_WORK_LEVEL values (80, 'High');
 
 insert into R_PROPERTIES (NAMA_PROPERTIES, ID_USER) values ('MSDS', '1');
 insert into R_PROPERTIES (NAMA_PROPERTIES, ID_USER) values ('Flammable', '1');
