@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr2_detail1" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr2_detail1" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d98e71f3-a5c1-49bf-a334-b10d3aa5e1b6">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="161"/>
+	<property name="ireport.x" value="132"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="MONTH" class="java.lang.String"/>
 	<parameter name="YEAR" class="java.lang.String"/>
@@ -41,15 +41,15 @@ GROUP BY
 	<detail>
 		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="802" height="20"/>
+				<reportElement uuid="4d62887a-7cda-4933-9235-aa637afc1101" x="0" y="0" width="802" height="20"/>
 				<textElement>
-					<font fontName="Times New Roman"/>
+					<font fontName="Serif"/>
 					<paragraph leftIndent="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{NO} + ". " + $F{R_TIPE_KEGIATAN_NAMA_TIPE_KEGIATAN}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement x="0" y="20" width="802" height="20"/>
+				<reportElement uuid="5ca2d288-7bde-409b-bda4-7d97e3b510aa" x="0" y="20" width="802" height="20"/>
 				<subreportParameter name="ID_WILAYAH">
 					<subreportParameterExpression><![CDATA[$P{ID_WILAYAH}]]></subreportParameterExpression>
 				</subreportParameter>

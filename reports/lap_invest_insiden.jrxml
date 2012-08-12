@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_invest_insiden" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_invest_insiden" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="6516e978-2d7a-42ca-ae24-779cbaea34ca">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="179"/>
 	<parameter name="ID_INSIDEN" class="java.lang.String">
 		<defaultValueExpression><![CDATA["1343487643027"]]></defaultValueExpression>
 	</parameter>
@@ -49,7 +49,7 @@ WHERE
 	<title>
 		<band height="84" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="60" height="56"/>
+				<reportElement uuid="474feee9-ac25-4e6b-a4b3-3a08ccfd28c7" x="0" y="0" width="60" height="56"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -58,12 +58,12 @@ WHERE
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<image scaleImage="RealSize" hAlign="Center" vAlign="Middle">
-					<reportElement x="5" y="0" width="50" height="56"/>
+					<reportElement uuid="d59c1599-5470-464a-9a46-897ca30c686f" x="5" y="0" width="50" height="56"/>
 					<imageExpression><![CDATA["./logo.jpg"]]></imageExpression>
 				</image>
 			</frame>
 			<staticText>
-				<reportElement x="60" y="0" width="495" height="56"/>
+				<reportElement uuid="00d8b539-28c2-44a6-95fa-489d117e2f27" x="60" y="0" width="495" height="56"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -72,13 +72,13 @@ WHERE
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14" isBold="true"/>
+					<font fontName="Serif" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LAPORAN INSIDEN
 PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 			</staticText>
 			<frame>
-				<reportElement x="0" y="60" width="555" height="20"/>
+				<reportElement uuid="2f0b2ac7-39c1-4ec6-9292-23785e95e61f" x="0" y="60" width="555" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -92,7 +92,7 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 	<detail>
 		<band height="370" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="370"/>
+				<reportElement uuid="8813c555-a0d0-4805-a859-81b27d3b6682" x="0" y="0" width="555" height="370"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -101,217 +101,214 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<staticText>
-					<reportElement x="0" y="0" width="555" height="30"/>
+					<reportElement uuid="5bb0639f-2be7-4303-96e7-aee30af95a2b" x="0" y="0" width="555" height="30"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Times New Roman" size="12" isBold="true"/>
+						<font fontName="Serif" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[LAPORAN INSIDEN]]></text>
 				</staticText>
 				<frame>
-					<reportElement x="0" y="30" width="555" height="20"/>
+					<reportElement uuid="7059ac6d-c1b9-4d02-9e4e-66b4e57b67f5" x="0" y="30" width="555" height="20"/>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
+						<reportElement uuid="df1e521f-5a48-47f3-bc51-4dd50f21c401" stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[Lokasi Insiden]]></text>
 					</staticText>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="100" y="0" width="10" height="20"/>
+						<reportElement uuid="45165bcd-fff2-4bb9-9e29-4bf6be9ab276" stretchType="RelativeToBandHeight" x="100" y="0" width="10" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-						<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="150" height="20"/>
+						<reportElement uuid="4981762f-8074-4764-b107-3817ba10bad7" stretchType="RelativeToBandHeight" x="110" y="0" width="150" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{R_WILAYAH_NAMA_WILAYAH}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="295" y="0" width="100" height="20"/>
+						<reportElement uuid="6fa10e64-6d26-4157-a56a-73f8198ead51" stretchType="RelativeToBandHeight" x="295" y="0" width="100" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[Nomor Insiden]]></text>
 					</staticText>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="395" y="0" width="10" height="20"/>
+						<reportElement uuid="6326dffd-d67f-4b99-b005-17f8d8a01cc3" stretchType="RelativeToBandHeight" x="395" y="0" width="10" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-						<reportElement stretchType="RelativeToBandHeight" x="405" y="0" width="150" height="20"/>
+						<reportElement uuid="d60e4790-1b64-41a0-b090-b6ab01540ddf" stretchType="RelativeToBandHeight" x="405" y="0" width="150" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{T_INSIDEN_NO_INSIDEN}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement positionType="Float" x="0" y="50" width="555" height="20"/>
+					<reportElement uuid="5b3bf037-da55-4969-8c65-a1865f345ed5" positionType="Float" x="0" y="50" width="555" height="20"/>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
+						<reportElement uuid="02572d8c-3a3b-4682-a06c-0992623d678b" stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[Tanggal Insiden]]></text>
 					</staticText>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="100" y="0" width="10" height="20"/>
+						<reportElement uuid="93d66f4c-6505-43e4-8e1b-b59410ec8cdb" stretchType="RelativeToBandHeight" x="100" y="0" width="10" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true" pattern="dd MMMMM yyyy" isBlankWhenNull="true">
-						<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="150" height="20"/>
+						<reportElement uuid="553b853b-9b54-4d1d-acd6-6b1e238f3319" stretchType="RelativeToBandHeight" x="110" y="0" width="150" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{T_INSIDEN_TANGGAL}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="295" y="0" width="100" height="20"/>
+						<reportElement uuid="7dfb259c-f37e-48f8-9f66-d7f689d125a9" stretchType="RelativeToBandHeight" x="295" y="0" width="100" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[Bagian / Fungsi]]></text>
 					</staticText>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="395" y="0" width="10" height="20"/>
+						<reportElement uuid="8608d961-fcf9-4abe-874a-3cd5a7edab36" stretchType="RelativeToBandHeight" x="395" y="0" width="10" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-						<reportElement stretchType="RelativeToBandHeight" x="405" y="0" width="150" height="20"/>
+						<reportElement uuid="2ed9238b-fce1-4265-bde3-6537543a05fd" stretchType="RelativeToBandHeight" x="405" y="0" width="150" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{T_INSIDEN_BAGIAN_FUNGSI}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement positionType="Float" x="0" y="70" width="555" height="20"/>
+					<reportElement uuid="61b3cfdf-04de-4ff4-80ca-c1330755fe2e" positionType="Float" x="0" y="70" width="555" height="20"/>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
+						<reportElement uuid="b0ee61c4-0ddb-4200-b9f3-77bc19b6e259" stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[Waktu Insiden]]></text>
 					</staticText>
 					<staticText>
-						<reportElement stretchType="RelativeToBandHeight" x="100" y="0" width="10" height="20"/>
+						<reportElement uuid="bd70e0de-6d34-4c3b-830a-cb05629cc53d" stretchType="RelativeToBandHeight" x="100" y="0" width="10" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 							<paragraph leftIndent="2"/>
 						</textElement>
 						<text><![CDATA[:]]></text>
 					</staticText>
 					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-						<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="150" height="20"/>
+						<reportElement uuid="9821dd4c-4e46-45e0-b5f6-e73dfac3a22b" stretchType="RelativeToBandHeight" x="110" y="0" width="150" height="20"/>
 						<textElement>
-							<font fontName="Times New Roman" size="11"/>
+							<font fontName="Serif" size="11"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{T_INSIDEN_WAKTU}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
-					<reportElement positionType="Float" x="0" y="95" width="555" height="275"/>
+					<reportElement uuid="dccbc175-5e1e-4080-a694-b0be90f98203" positionType="Float" x="0" y="95" width="555" height="275"/>
 					<frame>
-						<reportElement x="0" y="0" width="555" height="40"/>
+						<reportElement uuid="f5390357-ce5d-4fc1-93cb-0c11d2dc133d" x="0" y="0" width="555" height="40"/>
 						<staticText>
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20"/>
+							<reportElement uuid="67617cf0-afa2-40b5-8f7b-90abfe71580d" stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20"/>
 							<textElement>
-								<font fontName="Times New Roman" size="11" isBold="true"/>
+								<font fontName="Serif" size="11" isBold="true"/>
 								<paragraph leftIndent="2"/>
 							</textElement>
 							<text><![CDATA[Pekerjaan yang sedang dilakukan ketika insiden terjadi :]]></text>
 						</staticText>
 						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="555" height="20"/>
+							<reportElement uuid="cddae181-e169-4a10-b1b1-6986c279cdd7" stretchType="RelativeToBandHeight" x="0" y="20" width="555" height="20"/>
 							<textElement>
-								<font fontName="Times New Roman" size="11"/>
+								<font fontName="Serif" size="11"/>
 								<paragraph leftIndent="2"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{T_INSIDEN_PEKERJAAN_DILAKUKAN}]]></textFieldExpression>
 						</textField>
 					</frame>
 					<frame>
-						<reportElement positionType="Float" x="0" y="45" width="555" height="40"/>
+						<reportElement uuid="9b55924c-f4b2-4461-90f2-54733a51cbac" positionType="Float" x="0" y="45" width="555" height="40"/>
 						<staticText>
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20"/>
+							<reportElement uuid="48f09f34-bc76-4652-b74a-1a3f2a07ae87" stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20"/>
 							<textElement>
-								<font fontName="Times New Roman" size="11" isBold="true"/>
+								<font fontName="Serif" size="11" isBold="true"/>
 								<paragraph leftIndent="2"/>
 							</textElement>
 							<text><![CDATA[Uraian peristiwa insiden :]]></text>
 						</staticText>
 						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="555" height="20"/>
+							<reportElement uuid="1e31bdf7-9981-4fd8-b1a0-aa9188db805f" stretchType="RelativeToBandHeight" x="0" y="20" width="555" height="20"/>
 							<textElement>
-								<font fontName="Times New Roman" size="11"/>
+								<font fontName="Serif" size="11"/>
 								<paragraph leftIndent="2"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{T_INSIDEN_URAIAN}]]></textFieldExpression>
 						</textField>
 					</frame>
 					<frame>
-						<reportElement positionType="Float" x="0" y="90" width="555" height="40"/>
+						<reportElement uuid="2e152a9d-4383-4a7a-b658-0fbb6276ffc6" positionType="Float" x="0" y="90" width="555" height="40"/>
 						<staticText>
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20"/>
+							<reportElement uuid="7cb21758-fe6a-4fab-bd37-d1ad9d0121a6" stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20"/>
 							<textElement>
-								<font fontName="Times New Roman" size="11" isBold="true"/>
+								<font fontName="Serif" size="11" isBold="true"/>
 								<paragraph leftIndent="2"/>
 							</textElement>
 							<text><![CDATA[Tindakan segera yang sudah dilakukan :]]></text>
 						</staticText>
 						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="555" height="20"/>
+							<reportElement uuid="fdc8c8cd-54a4-4718-8fca-d011a726935a" stretchType="RelativeToBandHeight" x="0" y="20" width="555" height="20"/>
 							<textElement>
-								<font fontName="Times New Roman" size="11"/>
+								<font fontName="Serif" size="11"/>
 								<paragraph leftIndent="2"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{T_INSIDEN_TINDAKAN_DILAKUKAN}]]></textFieldExpression>
 						</textField>
 					</frame>
 					<frame>
-						<reportElement positionType="Float" x="0" y="155" width="555" height="120"/>
+						<reportElement uuid="5c06175b-4e48-40aa-9379-b85f863c0cf0" positionType="Float" x="0" y="155" width="555" height="120"/>
 						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="340" y="0" width="200" height="20"/>
+							<reportElement uuid="b3ad6530-2b4d-4907-8879-99fbe29ede33" stretchType="RelativeToBandHeight" x="340" y="0" width="200" height="20"/>
 							<textElement textAlignment="Center">
-								<font fontName="Times New Roman" size="11"/>
+								<font fontName="Serif" size="11"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{R_WILAYAH_NAMA_WILAYAH} + ", " + new SimpleDateFormat("dd MMMM yyyy").format(new Date())]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="340" y="80" width="200" height="20"/>
+							<reportElement uuid="6fe17473-d41a-4a38-965e-d91bad494e13" stretchType="RelativeToBandHeight" x="340" y="80" width="200" height="20"/>
 							<textElement textAlignment="Center">
-								<font fontName="Times New Roman" size="11" isUnderline="true"/>
+								<font fontName="Serif" size="11" isUnderline="true"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-							<reportElement stretchType="RelativeToBandHeight" x="340" y="100" width="200" height="20"/>
+							<reportElement uuid="83d0bb52-87e8-4a84-8c7d-288893bbcc80" stretchType="RelativeToBandHeight" x="340" y="100" width="200" height="20"/>
 							<textElement textAlignment="Center">
-								<font fontName="Times New Roman" size="11"/>
+								<font fontName="Serif" size="11"/>
 							</textElement>
-							<textFieldExpression><![CDATA["NIPG : " + $F{R_PEGAWAI_NIPG}]]></textFieldExpression>
 						</textField>
 					</frame>
 				</frame>

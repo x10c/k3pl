@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_safety_metrics" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_safety_metrics" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="04d3e531-0296-4c3d-9f2b-e22966a6d559">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -664,9 +664,9 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 	<title>
 		<band height="55" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="802" height="30"/>
+				<reportElement uuid="c475ae60-7ee2-4939-afb5-d1f6bf800d6c" x="0" y="0" width="802" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="20" isBold="true"/>
+					<font fontName="SansSerif" size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SAFETY METRICS]]></text>
 			</staticText>
@@ -675,7 +675,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 	<columnHeader>
 		<band height="70">
 			<staticText>
-				<reportElement mode="Opaque" x="22" y="0" width="265" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="404f97cd-735f-4250-b370-1ec68f20d7c4" mode="Opaque" x="22" y="0" width="265" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -684,12 +684,12 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="287" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="1d243bd8-6c8e-482c-b8bf-495e5b232001" mode="Opaque" x="287" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -698,12 +698,12 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Fatality]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="322" y="0" width="46" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="3dc5e4e4-d733-4f05-aaa4-6c3d338b900b" mode="Opaque" x="322" y="0" width="46" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -712,12 +712,12 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[LTIF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="368" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="567a5cb0-3e44-430d-8140-23be9cceac41" mode="Opaque" x="368" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -726,13 +726,13 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Kecelakaan
 Ringan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="22" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="daf4c627-1a31-4b77-a20a-883fbe09c541" mode="Opaque" x="0" y="0" width="22" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -741,12 +741,12 @@ Ringan]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="612" y="0" width="135" height="20" backcolor="#C0C0C0"/>
+				<reportElement uuid="e2136f6b-7e44-4719-8401-ce3763b9a980" mode="Opaque" x="612" y="0" width="135" height="20" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -755,12 +755,12 @@ Ringan]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Risk Containment Audit]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="612" y="20" width="45" height="50" backcolor="#C0C0C0"/>
+				<reportElement uuid="b9330bc3-8dad-456e-9341-3904838a4e39" mode="Opaque" x="612" y="20" width="45" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -769,13 +769,13 @@ Ringan]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[%
 Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="657" y="20" width="45" height="50" backcolor="#C0C0C0"/>
+				<reportElement uuid="e876d4b4-4908-4e24-983c-76c7d7a5d6fe" mode="Opaque" x="657" y="20" width="45" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -784,14 +784,14 @@ Partisipasi]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[%
 Severity
 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="702" y="20" width="45" height="50" backcolor="#C0C0C0"/>
+				<reportElement uuid="153c272c-69d8-4a2f-8075-e225640b2563" mode="Opaque" x="702" y="20" width="45" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -800,14 +800,14 @@ Severity
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[%
 Perbaikan
 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="747" y="0" width="55" height="20" backcolor="#C0C0C0"/>
+				<reportElement uuid="965d7b36-920c-4394-81b8-9294d00d5562" mode="Opaque" x="747" y="0" width="55" height="20" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -816,12 +816,12 @@ Perbaikan
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Observasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="747" y="20" width="55" height="50" backcolor="#C0C0C0"/>
+				<reportElement uuid="a799ff5a-7f16-45d0-8a3d-58cdc1c863c4" mode="Opaque" x="747" y="20" width="55" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -830,13 +830,13 @@ Perbaikan
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[%
 Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="473" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="44158cd9-e10a-40fd-a30c-11acfc66f970" mode="Opaque" x="473" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -845,13 +845,13 @@ Partisipasi]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Kecelakaan
 Kendaraan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="403" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="170f2cd0-66e4-4509-8218-fd2ee210e221" mode="Opaque" x="403" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -860,13 +860,13 @@ Kendaraan]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[First
 Aid]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="438" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="416446c8-3727-4aa9-9735-4b00f7c1399d" mode="Opaque" x="438" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -875,13 +875,13 @@ Aid]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Near
 Missed]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="508" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="6cfc5688-d92d-4c6f-bb81-5ee138fdcc19" mode="Opaque" x="508" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -890,12 +890,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[TSAF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="543" y="0" width="69" height="70" backcolor="#C0C0C0"/>
+				<reportElement uuid="5e34e0f8-fa0d-4531-a19f-f82a3a871bdf" mode="Opaque" x="543" y="0" width="69" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -904,7 +904,7 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Jam Kerja Aman (Jam)]]></text>
 			</staticText>
@@ -913,7 +913,7 @@ Missed]]></text>
 	<detail>
 		<band height="20">
 			<textField>
-				<reportElement x="22" y="0" width="265" height="20"/>
+				<reportElement uuid="d6b42322-3f97-4624-9d6d-89ea3e4f5f82" x="22" y="0" width="265" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -922,12 +922,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ITEM}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="22" height="20"/>
+				<reportElement uuid="edf3ab60-4941-49ac-acfd-e20191709cd1" x="0" y="0" width="22" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -936,12 +936,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{NO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
-				<reportElement x="612" y="0" width="45" height="20"/>
+				<reportElement uuid="14ae7298-1d43-422c-a2af-280f155d7721" x="612" y="0" width="45" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -950,12 +950,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PERCENT_PARTISIPASI_RCA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="657" y="0" width="45" height="20"/>
+				<reportElement uuid="1f9ba34b-396d-429d-bc4d-086cf33ce17e" x="657" y="0" width="45" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -964,12 +964,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PERCENT_45}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="702" y="0" width="45" height="20"/>
+				<reportElement uuid="0b339dcf-3e94-417d-a958-a5402fea21cd" x="702" y="0" width="45" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -978,12 +978,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PERCENT_PERBAIKAN_TEMUAN_45}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="747" y="0" width="55" height="20"/>
+				<reportElement uuid="7feae150-1cb8-4acf-829d-815f63243acd" x="747" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -992,12 +992,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PERCENT_PARTISIPASI_OBSERVASI}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="287" y="0" width="35" height="20"/>
+				<reportElement uuid="f9dced16-7fe6-4618-9889-7655e0b68def" x="287" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1006,12 +1006,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FATALITY}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="322" y="0" width="46" height="20"/>
+				<reportElement uuid="85f950e1-d139-480f-b1ae-4758ac6b9c41" x="322" y="0" width="46" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1020,12 +1020,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{LTIF}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="368" y="0" width="35" height="20"/>
+				<reportElement uuid="43558ff8-8a6d-42f4-8623-829ef212b50e" x="368" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1034,12 +1034,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{KECELAKAAN_RINGAN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="403" y="0" width="35" height="20"/>
+				<reportElement uuid="ee640edd-99f2-4062-a37c-d2a07d6cbad1" x="403" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1048,12 +1048,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FIRST_AID}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="438" y="0" width="35" height="20"/>
+				<reportElement uuid="7cb62613-4187-4b22-b0fa-f5573480857c" x="438" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1062,12 +1062,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NEAR_MISSED}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="473" y="0" width="35" height="20"/>
+				<reportElement uuid="db5af78a-e2d9-410d-a50c-070535807c5b" x="473" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1076,12 +1076,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{KECELAKAAN_KENDARAAN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="508" y="0" width="35" height="20"/>
+				<reportElement uuid="b9457c8f-a995-4e75-a52d-177d00f8f5c2" x="508" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1090,12 +1090,12 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TSAF}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="543" y="0" width="69" height="20"/>
+				<reportElement uuid="b919cfdf-a663-444a-a8da-9458e3a5d9f1" x="543" y="0" width="69" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1104,7 +1104,7 @@ Missed]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{JAM_KERJA_AMAN}]]></textFieldExpression>
 			</textField>

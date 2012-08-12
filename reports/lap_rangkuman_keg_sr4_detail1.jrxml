@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr4_detail1" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr4_detail1" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b87a837a-eb65-482a-9c67-aa7d852633ac">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -41,9 +41,9 @@ ORDER BY
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="802" height="20"/>
+				<reportElement uuid="87bb3feb-76ab-45e1-a555-c4b33f88c285" x="0" y="0" width="802" height="20"/>
 				<textElement>
-					<font fontName="Times New Roman"/>
+					<font fontName="Serif"/>
 					<paragraph leftIndent="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{NO} + ". " + $F{T_AREA_PERHATIAN_DETAIL_NAMA_AREA_PERHATIAN}]]></textFieldExpression>

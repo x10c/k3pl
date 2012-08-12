@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1105" pageHeight="595" orientation="Landscape" columnWidth="1065" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1105" pageHeight="595" orientation="Landscape" columnWidth="1065" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="a83a0976-f788-48ad-b384-544025ef7ec3">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="357"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="FIELD_MONTH" class="java.util.List" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new java.util.ArrayList(
@@ -443,9 +443,9 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="1065" height="45"/>
+				<reportElement uuid="8bb71290-9bf4-4f56-a855-6c7018d4c452" x="0" y="0" width="1065" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Laporan Performansi RCA]]></text>
 			</staticText>
@@ -454,7 +454,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="215" height="40"/>
+				<reportElement uuid="76a9fe6a-2cb1-4679-9ba0-6874880644e5" x="0" y="0" width="215" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -463,12 +463,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="215" y="0" width="85" height="40"/>
+				<reportElement uuid="47577618-b357-457f-8c63-74e62e316de8" x="215" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -477,12 +477,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Partisipan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="0" width="85" height="40"/>
+				<reportElement uuid="ff391ddb-553b-43cc-ba93-11c9459ad11c" x="300" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -491,12 +491,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="385" y="0" width="85" height="40"/>
+				<reportElement uuid="00892caa-d996-429b-a72f-bb8faf4bcb15" x="385" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -505,12 +505,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Violation]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="470" y="0" width="85" height="40"/>
+				<reportElement uuid="2744926f-3dcb-4fb4-aab0-3f25cdb221d3" x="470" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -519,12 +519,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Temuan Kumulatif 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="555" y="0" width="85" height="40"/>
+				<reportElement uuid="b696061e-18bb-412f-82c2-05989bd5950a" x="555" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -533,12 +533,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Severity 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="640" y="0" width="85" height="40"/>
+				<reportElement uuid="e0c76bf2-6ef3-4a79-b52b-6886ed43d265" x="640" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -547,14 +547,14 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jml
 Tindak Lanjut
 Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="725" y="0" width="85" height="40"/>
+				<reportElement uuid="09b0aeef-d9ec-4599-8f01-17d9dc2023e5" x="725" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -563,12 +563,12 @@ Temuan 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Tindak Lanjut Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="810" y="0" width="85" height="40"/>
+				<reportElement uuid="d84e438d-feea-4ede-9bcc-d63625b31f0a" x="810" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -577,14 +577,14 @@ Temuan 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jml
 Tindak Lanjut
 Temuan Non 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="895" y="0" width="85" height="40"/>
+				<reportElement uuid="0a59f54a-d66d-4585-a014-c8079cf85635" x="895" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -593,12 +593,12 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Tindak Lanjut Temuan Non 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="980" y="0" width="85" height="40"/>
+				<reportElement uuid="0a62951c-bdbc-45ea-be77-e79a9829d910" x="980" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -607,7 +607,7 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Average of Severity]]></text>
 			</staticText>
@@ -616,7 +616,7 @@ Temuan Non 4/5]]></text>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
+				<reportElement uuid="8cb2ac7f-a9e9-4115-ad5e-881b70fe3695" stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -625,13 +625,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
+				<reportElement uuid="30525f3e-a3df-482a-9119-da8a1e98cf77" stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -640,13 +640,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
+				<reportElement uuid="e44404c8-a469-4c49-8da8-d16066ac182c" stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -655,13 +655,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
+				<reportElement uuid="1a83b09b-b024-435c-873d-e117f8e1ad3c" stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -670,13 +670,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VIOLATION} == null ? 0 : $F{VIOLATION}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
+				<reportElement uuid="47c241e5-ef2f-4820-a94f-64acd28c599b" stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -685,13 +685,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TEMUAN} == null ? 0 : $F{TEMUAN}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="555" y="0" width="85" height="20"/>
+				<reportElement uuid="e60958c2-2f07-4d5e-9d5f-26f0b5939912" stretchType="RelativeToBandHeight" x="555" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -700,13 +700,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SEVERITY} == null ? 0 : $F{SEVERITY} + " %"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="640" y="0" width="85" height="20"/>
+				<reportElement uuid="6bbe87c8-48cc-4a26-b631-57640abc15fa" stretchType="RelativeToBandHeight" x="640" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -715,13 +715,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TL_TEMUAN_45} == null ? 0 : $F{TL_TEMUAN_45}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="725" y="0" width="85" height="20"/>
+				<reportElement uuid="e3149c29-61a3-41b1-9a74-ba068919ff50" stretchType="RelativeToBandHeight" x="725" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -730,13 +730,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TL_TEMUAN_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="810" y="0" width="85" height="20"/>
+				<reportElement uuid="015c9eba-bb10-4836-aa95-c04b449f7514" stretchType="RelativeToBandHeight" x="810" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -745,13 +745,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TL_TEMUAN_NON_45} == null ? 0 : $F{TL_TEMUAN_NON_45}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="895" y="0" width="85" height="20"/>
+				<reportElement uuid="f17bf0bb-4697-470e-b2ca-cc068aaff01b" stretchType="RelativeToBandHeight" x="895" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -760,13 +760,13 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TL_TEMUAN_NON_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="980" y="0" width="85" height="20"/>
+				<reportElement uuid="247b4749-9aa4-4bf6-a74f-9606067e5d37" stretchType="RelativeToBandHeight" x="980" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -775,7 +775,7 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VXS} + " %"]]></textFieldExpression>

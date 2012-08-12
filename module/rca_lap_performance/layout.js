@@ -141,7 +141,6 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 
 	this.panel = new Ext.Panel({
 		border		: true
-	,	layout		: 'fit'
 	,	items		: [
 			this.chart
 		]
@@ -174,7 +173,10 @@ function M_RCALapRCAGrid()
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
-		columns	: [
+		defaults	: {
+			align		: 'center'
+		}
+	,	columns	: [
 			new Ext.grid.RowNumberer()
 		,{
 			header		: 'ITEM'
@@ -222,10 +224,6 @@ function M_RCALapRCAGrid()
 			header		: 'Average Of Severity'
 		,	dataIndex	: 'avg'
 		}]
-	,	defaults : {
-			width		: 40
-		,	align		: 'center'
-		}
 	});
 
 	this.sm = new Ext.grid.RowSelectionModel({
@@ -246,9 +244,6 @@ function M_RCALapRCAGrid()
 		,	store				: this.store
 		,	cm					: this.cm
 		,	autoHeight			: true
-		,	autoScroll			: true
-		,	autoExpandColumn	: 'item'
-		,	viewConfig			: {forceFit: true}
 		,	tbar				: [ this.btn_print]
 	});
 

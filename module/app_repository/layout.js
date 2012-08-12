@@ -27,7 +27,7 @@ function AppRepository ()
 			itemId		: "app_repository_panel"
 		,	title		: "Pengaturan Repository"
 		,	labelAlign	: "right"
-		,	labelWidth	: 200
+		,	labelWidth	: 210
 		,	padding		: 6
 		,	url			: m_app_repository_d +'/submit.jsp'
 		,	tbar		: [
