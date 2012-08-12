@@ -7901,22 +7901,6 @@ create table T_CIM (
 go
 
 /*==============================================================*/
-/* Table: T_CSM_PROYEK                                          */
-/*==============================================================*/
-create table T_CSM_PROYEK (
-   ID_PROJECT           bigint               not null references R_PROJECT (ID_PROJECT),
-   ID_KONTRAKTOR        bigint               null default null references R_KONTRATOR (ID),
-   EVAL_SCORE           float                null default 0,
-   PENGHARGAAN_SANKSI   int                  null default 1 references R_CSM_PERF_EVAL_PS (ID),
-   KOEFISIEN_UTAMA		float                not null default 0,
-   KOEFISIEN_TAMBAH     float                not null default 0,
-   ID_DIVPROSBU         int                  not null default 1 references R_DIVPROSBU (ID_DIVPROSBU ),
-   ID_DIREKTORAT        int                  not null default 3 references R_DIVPROSBU (ID_DIREKTORAT),
-   constraint PK_T_CSM_PROYEK primary key (ID_PROJECT)
-)
-go
-
-/*==============================================================*/
 /* Table: T_CSM_PROYEK_KONTRAKTOR                               */
 /*==============================================================*/
 create table T_CSM_PROYEK_KONTRAKTOR (
@@ -8687,21 +8671,6 @@ alter table T_CSM_PROYEK_KONTRAKTOR
       references R_KONTRAKTOR (ID)
 go
 
-alter table T_CSM_PROYEK_KONTRAKTOR
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONTRAKTOR foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
-go
-
-alter table T_CSM_PROYEK_KONT_EVAL
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
-go
-
-alter table T_CSM_PROYEK_KONT_EVAL_NILAI
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
-go
-
 alter table T_CSM_PROYEK_KONT_NILAI
    add constraint FK_R_CSM_PENILAIAN_T_CSM_PROYEK_KONT_NILAI foreign key (ID_PENILAIAN)
       references R_CSM_PENILAIAN (ID)
@@ -8710,11 +8679,6 @@ go
 alter table T_CSM_PROYEK_KONT_NILAI
    add constraint FK_R_KONTRAKTOR_T_CSM_PROYEK_KONT_NILAI foreign key (ID_KONTRAKTOR)
       references R_KONTRAKTOR (ID)
-go
-
-alter table T_CSM_PROYEK_KONT_NILAI
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_NILAI foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
 go
 
 alter table T_LINGKUNGAN
@@ -10788,6 +10752,15 @@ go
 if exists (
 	select	1
 	from	sysobjects
+	where	id = object_id('T_CSM_PROYEK_KONT_EVAL_NILAI')
+	and		type = 'U'
+)
+	drop table T_CSM_PROYEK_KONT_EVAL_NILAI
+go
+
+if exists (
+	select	1
+	from	sysobjects
 	where	id = object_id('R_CSM_PENILAIAN')
 	and		type = 'U'
 )
@@ -10812,6 +10785,18 @@ create table T_CSM_PROYEK_KONT_NILAI (
    NILAI                int                  not null default 0,
    KETERANGAN           varchar(512)         not null default '',
    constraint PK_T_CSM_PROYEK_KONT_NILAI primary key (ID_PROJECT, ID_KONTRAKTOR, ID_PENILAIAN)
+)
+go
+
+/*==============================================================*/
+/* Table: T_CSM_PROYEK_KONT_EVAL_NILAI                          */
+/*==============================================================*/
+create table T_CSM_PROYEK_KONT_EVAL_NILAI (
+   ID_PROJECT           bigint               not null,
+   ID_PENILAIAN         int                  not null references R_CSM_PENILAIAN (ID),
+   NILAI                smallint             not null,
+   KETERANGAN           varchar(512)         not null,
+   constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_PENILAIAN)
 )
 go
 
@@ -12014,31 +11999,6 @@ go
 alter table T_LINGKUNGAN_BULANAN
    add constraint FK_R_DIVPROSBU_T_LINGKUNGAN_BULANAN foreign key (ID_DIVPROSBU, ID_DIREKTORAT)
       references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
-go
-
-if exists (select 1
-   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('T_CSM_PROYEK') and o.name = 'FK_R_DIVPROSBU_T_CSM_PROYEK')
-alter table T_CSM_PROYEK
-   drop constraint FK_R_DIVPROSBU_T_CSM_PROYEK
-go
-
-if exists (select 1
-            from  sysindexes
-           where  id    = object_id('T_CSM_PROYEK')
-            and   name  = 'T_CSM_PROYEK_FK_R_DIVPROSBU'
-            and   indid > 0
-            and   indid < 255)
-   drop index T_CSM_PROYEK.T_CSM_PROYEK_FK_R_DIVPROSBU
-go
-
-/*==============================================================*/
-/* Index: T_CSM_PROYEK_FK_R_DIVPROSBU                           */
-/*==============================================================*/
-create index T_CSM_PROYEK_FK_R_DIVPROSBU on T_CSM_PROYEK (
-ID_DIVPROSBU ASC,
-ID_DIREKTORAT ASC
-)
 go
 
 alter table T_PSSR add ID_DIVPROSBU int not null default 1
@@ -16190,3 +16150,68 @@ insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.01',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.02',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26.01',4);
+
+/*==============================================================*/
+/* Table: T_CSM_PROYEK                                          */
+/*==============================================================*/
+create table T_CSM_PROYEK (
+   ID_PROJECT           bigint               not null primary key references R_PROJECT (ID_PROJECT),
+   ID_KONTRAKTOR        bigint               null default null foreign key references R_KONTRAKTOR (ID),
+   EVAL_SCORE           float                null default 0,
+   PENGHARGAAN_SANKSI   int                  null default 1 references R_CSM_PERF_EVAL_PS (ID),
+   KOEFISIEN_UTAMA		float                not null default 0,
+   KOEFISIEN_TAMBAH     float                not null default 0,
+   ID_DIVPROSBU         int                  not null default 1,
+   ID_DIREKTORAT        int                  not null default 3,
+)
+go
+
+alter table T_CSM_PROYEK
+   add constraint FK_R_DIVPROSBU_T_CSM_PROYEK foreign key (ID_DIVPROSBU, ID_DIREKTORAT)
+      references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
+go
+
+alter table T_CSM_PROYEK_KONTRAKTOR
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONTRAKTOR foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+alter table T_CSM_PROYEK_KONT_EVAL
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+alter table T_CSM_PROYEK_KONT_EVAL_NILAI
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+alter table T_CSM_PROYEK_KONT_NILAI
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_NILAI foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('T_CSM_PROYEK') and o.name = 'FK_R_DIVPROSBU_T_CSM_PROYEK')
+alter table T_CSM_PROYEK
+   drop constraint FK_R_DIVPROSBU_T_CSM_PROYEK
+go
+
+if exists (select 1
+            from  sysindexes
+           where  id    = object_id('T_CSM_PROYEK')
+            and   name  = 'T_CSM_PROYEK_FK_R_DIVPROSBU'
+            and   indid > 0
+            and   indid < 255)
+   drop index T_CSM_PROYEK.T_CSM_PROYEK_FK_R_DIVPROSBU
+go
+
+/*==============================================================*/
+/* Index: T_CSM_PROYEK_FK_R_DIVPROSBU                           */
+/*==============================================================*/
+create index T_CSM_PROYEK_FK_R_DIVPROSBU on T_CSM_PROYEK (
+ID_DIVPROSBU ASC,
+ID_DIREKTORAT ASC
+)
+go
