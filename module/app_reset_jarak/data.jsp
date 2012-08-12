@@ -1,23 +1,17 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	JSONArray insiden = null;
+	db_stmt	= db_con.createStatement();
 
-	Statement	db_stmt		= db_con.createStatement();
-
-	String q=" select	A.id_insiden"
+	db_q	=" select	A.id_insiden"
 		+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal"
 		+" ,		B.nama_seksi as nama_area"
 		+" ,		D.nama_klasifikasi_pegawai"
@@ -28,35 +22,32 @@ try {
 		+" ,		r_klasifikasi_pegawai	D"
 		+" where	A.jml_kecelakaan_kendaraan	> 0"
 		+" and		A.nilai_rusak_kendaraan		>= 10000000"
-		+" and		A.id_area_seksi			= B.id_seksi"
+		+" and		A.id_area_seksi				= B.id_seksi"
 		+" and		A.id_klasifikasi_pegawai	= D.id_klasifikasi_pegawai"
+		+" and		A.id_divprosbu				= "+ user_div
 		+" order by	A.tanggal desc ";
 
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
-	String		data	= "[";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
+	while (db_rs.next()) {
+		insiden = new JSONArray ();
+		insiden.put (db_rs.getString ("id_insiden"));
+		insiden.put (db_rs.getString ("tanggal"));
+		insiden.put (db_rs.getString ("nama_area"));
+		insiden.put (db_rs.getString ("nama_klasifikasi_pegawai"));
+		insiden.put (db_rs.getString ("jml_kecelakaan_kendaraan"));
+		insiden.put (db_rs.getString ("status_reset_jarak"));
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+= "[ '"+ rs.getString("id_insiden")
-			+  "','"+ rs.getString("tanggal")
-			+  "','"+ rs.getString("nama_area")
-			+  "','"+ rs.getString("nama_klasifikasi_pegawai")
-			+  "','"+ rs.getString("jml_kecelakaan_kendaraan")
-			+  "',"+ rs.getString("status_reset_jarak")
-			+  "]";
+		json_a.put (insiden);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
