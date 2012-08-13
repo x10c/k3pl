@@ -19,36 +19,22 @@ try {
 	
 	String		id_rapat	= request.getParameter("id_rapat");
 	String id_user		= (String) session.getAttribute("user.nipg");
-	String q=" select	A.id_kel_jabatan_csc "
-		+" ,		A.id_kel_jabatan_komite_sub_komite "
-		+" from		r_jabatan_komite_sub_komite A"
-		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "
-		+" left join R_KEL_JABATAN_KOMITE_SUB_KOMITE C on (C.ID_KEL_JABATAN_KOMITE_SUB_KOMITE = A.ID_KEL_JABATAN_KOMITE_SUB_KOMITE) "
-		+" where B.nipg = "+ id_user +" and A.notulen is not null and A.id_kel_jabatan_komite_sub_komite is not null"
-		+" order by	A.id_kel_jabatan_komite_sub_komite ";
-		
-	ResultSet	rs_kel = db_stmt.executeQuery(q);
-	q=" ";
+	String q;
 	
-	if (rs_kel.next()){
-		 q=" select	A.id_rapat "
-		+" ,		A.id_kel_jabatan_komite_sub_komite"
-		+" , 		B.nama_kel_jabatan_komite_sub_komite "
-		+" ,		A.no_rapat "
-		+" ,		A.judul_rapat "
-		+" ,		replace(convert(varchar, A.tanggal_rapat, 111), '/', '-') tanggal"
-		+" ,		A.lokasi_rapat "
-		+" ,		A.tanggal_notulen "
-		+" , 		A.nama_notulis "
-		+" from		t_rapat	A "
-		+" left join	r_kel_jabatan_komite_sub_komite	B"
-		+" on		A.id_kel_jabatan_komite_sub_komite = B.id_kel_jabatan_komite_sub_komite "
-		+" where A.id_kel_jabatan_komite_sub_komite not in ('1') and A.id_rapat = '"+ id_rapat +"' "
-		+" order by	A.id_rapat ";
-	}else {
-		out.print("Error, tidak dapat me-retrieve data rapat");
-		return;
-	}
+	 q=" select	A.id_rapat "
+	+" ,		A.id_kel_jabatan_komite_sub_komite"
+	+" , 		B.nama_kel_jabatan_komite_sub_komite "
+	+" ,		A.no_rapat "
+	+" ,		A.judul_rapat "
+	+" ,		replace(convert(varchar, A.tanggal_rapat, 111), '/', '-') tanggal"
+	+" ,		A.lokasi_rapat "
+	+" ,		A.tanggal_notulen "
+	+" , 		A.nama_notulis "
+	+" from		t_rapat	A "
+	+" left join	r_kel_jabatan_komite_sub_komite	B"
+	+" on		A.id_kel_jabatan_komite_sub_komite = B.id_kel_jabatan_komite_sub_komite "
+	+" where  A.id_rapat = '"+ id_rapat +"' "
+	+" order by	A.id_rapat ";
 	
 	ResultSet	rs	= db_stmt.executeQuery(q);
 		

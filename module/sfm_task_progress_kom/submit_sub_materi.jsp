@@ -25,7 +25,7 @@ try {
 			+" set		status_sub_materi		= '"+ status_sub_materi +"' "
 			+" ,		id_user			= '"+ id_user +"' "
 			+" ,		tanggal_akses		= getdate() "
-			+" where	id_rapat_sub_materi			= "+ id_rapat_sub_materi ;
+			+" where	id_rapat_sub_materi			= '"+ id_rapat_sub_materi +"' ";
 
 	}  else {
 		out.print("{success:false"

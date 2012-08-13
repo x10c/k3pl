@@ -16,16 +16,15 @@ try {
 	String dml		= request.getParameter("dml_type");
 	String nipg		= request.getParameter("nipg");
 	String id_rapat_materi  = request.getParameter("id_rapat_materi");
-	String id_rapat_sub_materi  = request.getParameter("id_rapat_sub_materi");
-	String status_sub_materi	= request.getParameter("status_sub_materi");
+	String status_materi	= request.getParameter("status_materi");
 	String q		= "";
 
 	if (dml.equals("update")) {
-		q	=" update	t_rapat_sub_materi "
-			+" set		status_sub_materi		= '"+ status_sub_materi +"' "
+		q	=" update	t_rapat_materi "
+			+" set		status_materi		= '"+ status_materi +"' "
 			+" ,		id_user			= '"+ id_user +"' "
 			+" ,		tanggal_akses		= getdate() "
-			+" where	id_rapat_sub_materi			= "+ id_rapat_sub_materi ;
+			+" where	id_rapat_materi			= "+ id_rapat_materi ;
 
 	}  else {
 		out.print("{success:false"

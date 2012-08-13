@@ -6,9 +6,9 @@
  *   - m.shulhan (ms@kilabit.org)
  */
 
-var m_sfm_task_progress_sup;
-var m_sfm_task_progress_sup_d = _g_root +'/module/sfm_task_progress_sup/';
-var m_sfm_task_prog_sup_ha_level = '';
+var m_sfm_task_progress_kom;
+var m_sfm_task_progress_kom_d = _g_root +'/module/sfm_task_progress_kom/';
+var m_sfm_task_prog_ha_level = '';
 var m_sfm_materi_id = '';
 
 function checkbox_renderer(checkbox)
@@ -28,15 +28,16 @@ function do_on_select_task_materi_sub(){
 		return;
 	}
 
-	m_sfm_task_progress_sup_sub.do_load();
+	m_sfm_task_progress_kom_sub.do_load();
 
 }
 
-function M_SfmTaskProgressSupSub(title)
+function M_SfmTaskProgressKomSub(title)
 {
 	this.title = title;
 	this.dml_type = '';
-	this.ha_level = m_sfm_task_prog_sup_ha_level;
+	this.ha_level = m_sfm_task_prog_ha_level;
+	
 	
 	this.record = new Ext.data.Record.create([
 			{ name	: 'nipg_pelaksana' }
@@ -57,7 +58,7 @@ function M_SfmTaskProgressSupSub(title)
 		, this.record);
 	
 	this.store = new Ext.data.Store({
-			url	: _g_root +'/module/sfm_task_progress_sup/data_sub_materi.jsp'
+			url	: _g_root +'/module/sfm_task_progress_kom/data_sub_materi.jsp'
 		,	reader	: this.reader
 		,	autoLoad: false
 		});
@@ -79,6 +80,7 @@ function M_SfmTaskProgressSupSub(title)
 		,	editable	: false
 		,	disabled 	: true
 		});
+		
 	this.cb_supervisor = new Ext.form.ComboBox({
 			fieldLabel	: 'Supervisor'
 		,	store		: this.store_peg
@@ -102,25 +104,6 @@ function M_SfmTaskProgressSupSub(title)
 		,	disabled	: true
 	});
 
-	this.store_status_sub_materi = new Ext.data.ArrayStore({
-			fields	: ['id', 'name']
-		,	data	: [
-				['1', 'Open']
-			,	['3', 'Closed Supervisor']
-			]
-		});
-	
-	this.cb_status_sub_materi = new Ext.form.ComboBox({
-			store		: this.store_status_sub_materi
-		,	valueField	: 'id'
-		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	forceSelection	: true
-		,	typeAhead	: true
-		,	selectOnFocus	: true
-		,	triggerAction	: 'all'
-		});
 	
 	this.store_status_all = new Ext.data.ArrayStore({
 			fields	: ['id', 'name']
@@ -142,26 +125,24 @@ function M_SfmTaskProgressSupSub(title)
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
 		});
-		
+	
 	this.form_keterangan = new Ext.form.TextField({allowBlank : true, disabled : true});
 	
 	this.columns = [
 			new Ext.grid.RowNumberer()
 		,	{ id		: 'nipg_pelaksana'
-			, header	: 'NIPG Pelaksana'
+			, header	: 'Pelaksana'
 			, dataIndex	: 'nipg_pelaksana'
 			, sortable	: true
 			, editor	: this.cb_pelaksana
 			, renderer	: combo_renderer(this.cb_pelaksana)
-			, hidden	: true
 			}
 		,	{ id		: 'nipg_supervisor'
-			, header	: 'NIPG Supervisor'
+			, header	: 'Supervisor'
 			, dataIndex	: 'nipg_supervisor'
 			, sortable	: true
 			, editor	: this.cb_supervisor
 			, renderer	: combo_renderer(this.cb_supervisor)
-			, hidden	: true
 			}
 		,	{ id		: 'id_rapat'
 			, header	: 'Id Rapat'
@@ -200,7 +181,7 @@ function M_SfmTaskProgressSupSub(title)
 			, header	: 'Status'
 			, dataIndex	: 'status_sub_materi'
 			, sortable	: true
-			, editor	: this.cb_status_sub_materi
+			, editor	: this.cb_status_all
 			,renderer	: combo_renderer(this.cb_status_all)
 			}	
 		,	{ id		: 'keterangan_sub_materi'
@@ -299,7 +280,7 @@ function M_SfmTaskProgressSupSub(title)
 				,	keterangan_sub_materi 	: record.data['keterangan_sub_materi']
 			,       dml_type	: this.dml_type
 			}
-		,	url	: _g_root +'/module/sfm_task_progress_sup/submit_sub_materi.jsp'
+		,	url	: _g_root +'/module/sfm_task_progress_kom/submit_sub_materi.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	success :
 				function (response)
@@ -320,7 +301,7 @@ function M_SfmTaskProgressSupSub(title)
 	{
 		var data = this.sm.getSelections();
 		
-		if (m_sfm_task_prog_sup_ha_level >= 3) {
+		if (m_sfm_task_prog_ha_level >= 3) {
 			this.dml_type = 'update';
 			return true;
 		}
@@ -339,16 +320,16 @@ function M_SfmTaskProgressSupSub(title)
 
 	this.do_refresh = function(ha_level)
 	{	
-		m_sfm_task_prog_sup_ha_level = ha_level;
+		m_sfm_task_prog_ha_level = ha_level;
 	}
 }
 
-function M_SfmTaskProgressSup(title)
+function M_SfmTaskProgressKom(title)
 {
 	this.title = title;
 	this.dml_type = '';
-	this.ha_level = m_sfm_task_prog_sup_ha_level;
-	m_sfm_task_progress_sup_sub = new M_SfmTaskProgressSupSub('Sub Materi');
+	this.ha_level = m_sfm_task_prog_ha_level;
+	m_sfm_task_progress_kom_sub = new M_SfmTaskProgressKomSub('Sub Materi');
 	
 	this.record = new Ext.data.Record.create([
 			{ name	: 'nipg_pelaksana' }
@@ -370,7 +351,7 @@ function M_SfmTaskProgressSup(title)
 		, this.record);
 	
 	this.store = new Ext.data.Store({
-			url	: _g_root +'/module/sfm_task_progress_sup/data_materi.jsp'
+			url	: _g_root +'/module/sfm_task_progress_kom/data_materi.jsp'
 		,	reader	: this.reader
 		,	autoLoad: false
 		});
@@ -381,7 +362,7 @@ function M_SfmTaskProgressSup(title)
 		,	autoLoad: false
 		});
 		
-	this.cb_pegawai = new Ext.form.ComboBox({
+	this.cb_pelaksana = new Ext.form.ComboBox({
 			fieldLabel	: 'Pelaksana'
 		,	store		: this.store_peg
 		,	valueField	: 'nipg'
@@ -392,7 +373,18 @@ function M_SfmTaskProgressSup(title)
 		,	editable	: false
 		,	disabled 	: true
 		});
-
+		
+	this.cb_supervisor = new Ext.form.ComboBox({
+			fieldLabel	: 'Supervisor'
+		,	store		: this.store_peg
+		,	valueField	: 'nipg'
+		,	displayField	: 'nama_pegawai'
+		,	mode		: 'local'
+		,	triggerAction	: 'all'
+		,	allowBlank	: false
+		,	editable	: false
+		,	disabled 	: true
+		});
 	
 	this.form_id_rapat = new Ext.form.TextField({allowBlank : true});
 	this.form_no_rapat = new Ext.form.TextField({allowBlank : true, disabled : true});
@@ -407,26 +399,6 @@ function M_SfmTaskProgressSup(title)
 		,	disabled	: true
 	});
 
-	this.store_status_materi = new Ext.data.ArrayStore({
-			fields	: ['id', 'name']
-		,	data	: [
-				['1', 'Open']
-			,	['3', 'Closed Supervisor']
-			]
-		});
-	
-	this.cb_status_materi = new Ext.form.ComboBox({
-			store		: this.store_status_materi
-		,	valueField	: 'id'
-		,	displayField	: 'name'
-		,	mode		: 'local'
-		,	allowBlank	: false
-		,	forceSelection	: true
-		,	typeAhead	: true
-		,	selectOnFocus	: true
-		,	triggerAction	: 'all'
-		});
-	
 	this.store_status_all = new Ext.data.ArrayStore({
 			fields	: ['id', 'name']
 		,	data	: [
@@ -452,26 +424,25 @@ function M_SfmTaskProgressSup(title)
 	
 	this.columns = [
 			new Ext.grid.RowNumberer()
-		,	{ id		: 'nipg'
-			, header	: 'NIPG'
-			, dataIndex	: 'nipg'
+		,	{ id		: 'nipg_pelaksana'
+			, header	: 'Pelaksana'
+			, dataIndex	: 'nipg_pelaksana'
 			, sortable	: true
-			, editor	: this.cb_pegawai
-			, renderer	: combo_renderer(this.cb_pegawai)
-			, hidden	: true
+			, editor	: this.cb_pelaksana
+			, renderer	: combo_renderer(this.cb_pelaksana)
+			}
+		,	{ id		: 'nipg_supervisor'
+			, header	: 'Supervisor'
+			, dataIndex	: 'nipg_supervisor'
+			, sortable	: true
+			, editor	: this.cb_supervisor
+			, renderer	: combo_renderer(this.cb_supervisor)
 			}
 		,	{ id		: 'id_rapat'
 			, header	: 'Id Rapat'
 			, dataIndex	: 'id_rapat'
 			, sortable	: true
 			, editor	: this.form_id_rapat
-			, hidden	: true
-			}
-		,	{ id		: 'id_rapat_materi'
-			, header	: 'Id Materi Rapat'
-			, dataIndex	: 'id_rapat_materi'
-			, sortable	: true
-			, editor	: this.form_id_rapat_materi
 			, hidden	: true
 			}
 		,	{ id		: 'no_rapat'
@@ -485,6 +456,13 @@ function M_SfmTaskProgressSup(title)
 			, dataIndex	: 'judul_rapat'
 			, sortable	: true
 			, editor	: this.form_judul_rapat
+			}
+		,	{ id		: 'id_rapat_materi'
+			, header	: 'Id Materi Rapat'
+			, dataIndex	: 'id_rapat_materi'
+			, sortable	: true
+			, editor	: this.form_id_rapat_materi
+			, hidden	: true
 			}
 		,	{ id		: 'isi_rapat_materi'
 			, header	: 'Materi Rapat'
@@ -503,7 +481,7 @@ function M_SfmTaskProgressSup(title)
 			, header	: 'Status'
 			, dataIndex	: 'status_materi'
 			, sortable	: true
-			, editor	: this.cb_status_materi
+			, editor	: this.cb_status_all
 			,renderer	: combo_renderer(this.cb_status_all)
 			}	
 		,	{ id		: 'keterangan_materi'
@@ -587,7 +565,7 @@ function M_SfmTaskProgressSup(title)
 		});
 	
 	this.panel = new Ext.Container({
-			id			: 'sfm_task_progress_sup_panel'
+			id			: 'sfm_task_progress_panel'
 		,	layout		: 'border'
 		,	autoScroll	: true
 		,	defaults	: {
@@ -598,7 +576,7 @@ function M_SfmTaskProgressSup(title)
     			}
 		,	items		: [
 				this.grid
-			,	m_sfm_task_progress_sup_sub.panel
+			,	m_sfm_task_progress_kom_sub.panel
 			]
 		});
 	
@@ -624,7 +602,7 @@ function M_SfmTaskProgressSup(title)
 				,	keterangan_materi 	: record.data['keterangan_materi']
 			,       dml_type	: this.dml_type
 			}
-		,	url	: _g_root +'/module/sfm_task_progress_sup/submit_materi.jsp'
+		,	url	: _g_root +'/module/sfm_task_progress_kom/submit_materi.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	success :
 				function (response)
@@ -645,14 +623,7 @@ function M_SfmTaskProgressSup(title)
 	{
 		var data = this.sm.getSelections();
 		
-		if (data[0].data.status_materi != '1'
-			&& data[0].data.status_materi != '2'
-			&& data[0].data.status_materi != '3'){
-			Ext.MessageBox.alert('Pesan','Materi yang bersifat info, atau Pekerjaan yang telah selesai (FINISHED) tidak dapat di-edit');
-			return false;
-		}
-		
-		if (m_sfm_task_prog_sup_ha_level >= 3) {
+		if (m_sfm_task_prog_ha_level >= 3) {
 			this.dml_type = 'update';
 			return true;
 		}
@@ -661,15 +632,20 @@ function M_SfmTaskProgressSup(title)
 
 	this.do_load = function()
 	{
-		this.store.load();
+		this.store_peg.load({
+				callback : function(){
+					this.store.load();
+				}
+				, scope : this
+		});
 	}
 
 	this.do_refresh = function(ha_level)
 	{	
-		m_sfm_task_prog_sup_ha_level = ha_level;
+		m_sfm_task_prog_ha_level = ha_level;
 		this.do_load();
-		m_sfm_task_progress_sup_sub.do_refresh(ha_level);
+		m_sfm_task_progress_kom_sub.do_refresh(ha_level);
 	}
 }
 
-m_sfm_task_progress_sup = new M_SfmTaskProgressSup('Task Management');
+m_sfm_task_progress_kom = new M_SfmTaskProgressKom('Task Management');

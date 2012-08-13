@@ -1223,6 +1223,7 @@ function M_SfmAbsenRapatSub (title){
 	this.id_jabatan_komite = '';
 	var chg_hadir = 0;
 	var chg_absen = 0;
+	var cb_aktif = '';
 
 	this.record = new Ext.data.Record.create([
 			{ name	: 'id_rapat' }
@@ -1272,22 +1273,7 @@ function M_SfmAbsenRapatSub (title){
 		,   disabled	: true
 		});
 
-	this.ck_stat_absen = new Ext.form.Checkbox({boxLabel: 'Hadir', 
-												listeners:{
-													scope : this
-												,	change : function (ck, checked, last_checked){
-														if (checked){
-															Ext.MessageBox.alert('pesan','checked '+chg_hadir);
-															chg_hadir++;
-															chg_absen--;
-														}
-														else{
-														Ext.MessageBox.alert('pesan','unchecked '+chg_absen);
-															chg_hadir--;
-															chg_absen++;
-														}
-													}
-												}});
+	this.ck_stat_absen = new Ext.form.Checkbox({boxLabel: 'Hadir'});
 	
 	this.form_keterangan_absensi = new Ext.form.TextField({allowBlank : true});
 	
@@ -1437,7 +1423,6 @@ function M_SfmAbsenRapatSub (title){
 			}
 		});
 
-
 	this.btn_del = new Ext.Button({
 			text		: 'Hapus'
 		,	iconCls		: 'del16'
@@ -1479,8 +1464,7 @@ function M_SfmAbsenRapatSub (title){
                         }
 		});
 
-	this.do_add = function()
-	{
+	this.do_add = function(){
 		if (do_validate_load()){
 			this.record_new = new this.record({
 					id_rapat	: m_sfm_rapat_id
@@ -1503,8 +1487,7 @@ function M_SfmAbsenRapatSub (title){
 		}
 	}
 
-	this.do_del = function()
-	{
+	this.do_del = function(){
 		var data = this.sm.getSelections();
 		if (!data.length) {
 			return;
@@ -1515,22 +1498,41 @@ function M_SfmAbsenRapatSub (title){
 		this.do_save(data[0]);
 	}
 
-	this.do_cancel = function()
-	{	
+	this.do_cancel = function(){	
 		if (this.dml_type == 'insert') {
 			this.store.remove(this.record_new);
 			this.sm.selectRow(0);
 		}
 	}
 
-	this.do_save = function(record)
-	{	
+	this.do_save = function(record){	
 		var aktif =  record.data['status_absensi'] == true ? '1':'0';
+		//Ext.MessageBox.alert('pesan',aktif +"-"+cb_aktif);
 		
-		if (this.dml_type != 'update'){
+		if (this.dml_type == 'update'){
+
+					//Ext.MessageBox.alert('pesan',this.nipg_old);
+			if (aktif != cb_aktif){
+				if (aktif == '1'){
+					chg_hadir += 1;
+					chg_absen -= 1;
+				}else{
+					chg_hadir -= 1;
+					chg_absen += 1;
+				}
+				
+			}
+		}
+		if (this.dml_type == 'insert'){
 			this.nipg_old = '';
 			this.nama_peserta = '';
+			if (aktif == '1'){
+				chg_hadir += 1;
+				chg_absen -= 1;
+			}
+			
 		}
+		
 		Ext.Ajax.request({
 			params  : {
 				id_rapat	: record.data['id_rapat']
@@ -1562,13 +1564,22 @@ function M_SfmAbsenRapatSub (title){
 		});
 	}
 
-	this.do_edit = function(row)
-	{
+	this.do_edit = function(row){
 		var data = this.panel.getSelectionModel().getSelected();
 		this.nipg_old = data.data.nipg;
 		this.nama_peserta = data.data.nama_pegawai;
-		chg_hadir = data.data.jml_hadir;
-		chg_absen = data.data.jml_absen;
+		//Ext.MessageBox.alert('pesan',data.data.jml_hadir);
+		if (typeof data.data.jml_hadir == 'undefined'
+		||	data.data.jml_hadir == ''){
+			chg_hadir = 0;
+			chg_absen = 1;
+			cb_aktif = '0';
+		} else {
+			chg_hadir = parseInt(data.data.jml_hadir);
+			chg_absen = parseInt(data.data.jml_absen);
+			cb_aktif =  (data.data.status_absensi == true)? '1':'0';
+		}
+		//Ext.MessageBox.alert('pesan',chg_hadir);
 		if (this.ha_level >= 3) {
 			this.dml_type = 'update';
 			return true;
@@ -1576,8 +1587,8 @@ function M_SfmAbsenRapatSub (title){
 		return false;
 	}
 
-	this.do_load = function()
-	{	if (do_validate_load()){
+	this.do_load = function(){	
+		if (do_validate_load()){
 			// Ext.Messagebox.Alert('Pesan','id_rapat  : '+ m_sfm_rapat_id + ' tgl_rapat : ' + m_sfm_rapat_tgl);
 			this.store.load({
 				params		: {
@@ -1593,9 +1604,8 @@ function M_SfmAbsenRapatSub (title){
 			this.store_peg.load();
 		}
 	}
-
-	this.do_refresh = function(ha_level)
-	{
+	
+	this.do_refresh = function(ha_level){
 		this.ha_level = ha_level;
 
 		if (ha_level >= 2) {

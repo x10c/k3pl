@@ -1325,14 +1325,12 @@ function M_SfmAbsenRapatMomSub (title){
 				scope		: this
 			,	selectionchange	: function(sm) {
 					var data = sm.getSelections();
-					if (data.length && this.ha_level == 4) {
+					if (data.length && this.ha_level >= 1) {
 						this.btn_print.setDisabled(false);
-						this.btn_del.setDisabled(false);
 						m_sfm_rapat_id = data[0].data.id;
 						m_sfm_rapat_tgl = data[0].data.date;
 					} else {
 						this.btn_print.setDisabled(true);
-						this.btn_del.setDisabled(true);
 						m_sfm_rapat_id = '';
 						m_sfm_rapat_tgl = '';
 					}

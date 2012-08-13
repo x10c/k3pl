@@ -4436,8 +4436,9 @@ insert into __MENU values ('05.01'	,'Pencatatan Rapat Central'					,'sfm_data_ra
 insert into __MENU values ('05.02'	,'Pencatatan Rapat Sub Komite'				,'sfm_data_rapat_sub'			,'1',2,'05','');
 insert into __MENU values ('05.03'	,'Status Pekerjaan'							,'sfm_task_progress'			,'1',2,'05','');
 insert into __MENU values ('05.04'	,'Status Pekerjaan (Supervisor)'			,'sfm_task_progress_sup'		,'1',2,'05','');
-insert into __MENU values ('05.05'	,'MoM Komite'								,'sfm_mom_komite'				,'1',2,'05','report');
-insert into __MENU values ('05.06'	,'MoM Sub-Komite'							,'sfm_mom_sub_komite'			,'1',2,'05','report');
+insert into __MENU values ('05.05'	,'Status Pekerjaan (Komite)'				,'sfm_task_progress_kom'		,'1',2,'05','');
+insert into __MENU values ('05.06'	,'MoM Komite'								,'sfm_mom_komite'				,'1',2,'05','report');
+insert into __MENU values ('05.07'	,'MoM Sub-Komite'							,'sfm_mom_sub_komite'			,'1',2,'05','report');
 
 insert into __MENU values ('06'		,'JSA & PTW'								,'jsa_ptw'						,'0',1,'00','module');
 insert into __MENU values ('06.01'	,'Job Safety Analysis'						,'trx_jsa'						,'1',2,'06','');
@@ -12193,15 +12194,21 @@ alter table R_KEL_JABATAN_CSC
       references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('ECSC', '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('ECSC',1,null, '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC DIRTEKBANG', '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU ,ID_USER) values ('CSC DIRTEKBANG',2,null, '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC PROYEK', '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC PROYEK', 3,null,'1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC DIRUS', '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC DIRUS',5,null, '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC SBU-1', '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-1',3,1, '1')
+go
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-2',3,null, '1')
+go
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-3',3,null, '1')
+go
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU TSJ',3,null, '1')
 go
 
 if exists (select 1

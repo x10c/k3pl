@@ -1455,9 +1455,7 @@ function M_SfmAbsenRapatCentral(){
 	{
 		var aktif =  record.data['status_absensi'] == true ? '1':'0';
 
-		if (this.dml_type != 'update'){
-			this.nipg_old = '';
-			this.nama_peserta = '';
+		if (this.dml_type == 'update'){
 			if (aktif != cb_aktif){
 				if (aktif == '1'){
 					chg_hadir += 1;
@@ -1468,7 +1466,10 @@ function M_SfmAbsenRapatCentral(){
 				}
 			}
 		}
-		if (this.dml_type != 'insert'){
+		if (this.dml_type == 'insert'){
+		
+			this.nipg_old = '';
+			this.nama_peserta = '';
 			if (aktif == '1'){
 				chg_hadir += 1;
 				chg_absen -= 1;

@@ -38,7 +38,6 @@ function M_SfmTaskProgressSub(title)
 	this.dml_type = '';
 	this.ha_level = m_sfm_task_prog_ha_level;
 	
-	
 	this.record = new Ext.data.Record.create([
 			{ name	: 'nipg_pelaksana' }
 		,	{ name	: 'nipg_supervisor' }
@@ -56,13 +55,13 @@ function M_SfmTaskProgressSub(title)
 		,	root	: 'rows'
 		}
 		, this.record);
-	
+		
 	this.store = new Ext.data.Store({
 			url	: _g_root +'/module/sfm_task_progress/data_sub_materi.jsp'
 		,	reader	: this.reader
 		,	autoLoad: false
 		});
-	
+		
 	this.store_peg = new Ext.data.ArrayStore({
 			fields	: ['nipg','nama_pegawai']
 		,	url	: _g_root +'/module/sfm_data_rapat_central/data_pegawai.jsp'
@@ -83,18 +82,19 @@ function M_SfmTaskProgressSub(title)
 
 	
 	this.form_id_rapat = new Ext.form.TextField({allowBlank : true});
-	this.form_id_rapat_materi = new Ext.form.TextField({allowBlank : true});
+	this.form_no_rapat = new Ext.form.TextField({allowBlank : true, disabled : true});
+	this.form_judul_rapat = new Ext.form.TextField({allowBlank : true, disabled : true});
+	this.form_id_rapat_sub_materi = new Ext.form.TextField({allowBlank : true});
 	this.form_isi_rapat_sub_materi = new Ext.form.TextField({allowBlank : false, disabled : true});
 
-	this.form_batas_waktu_sub_materi	= new Ext.form.DateField({
+	this.form_batas_waktu	= new Ext.form.DateField({
 			emptyText	: 'Y-m-d'
 		,	format		: 'Y-m-d'
 		,	editable	: false
 		,	disabled	: true
 	});
-
 	
-	this.store_status_sub_materi = new Ext.data.ArrayStore({
+	this.store_status_materi = new Ext.data.ArrayStore({
 			fields	: ['id', 'name']
 		,	data	: [
 				['1', 'Open']
@@ -102,8 +102,8 @@ function M_SfmTaskProgressSub(title)
 			]
 		});
 	
-	this.cb_status_sub_materi = new Ext.form.ComboBox({
-			store		: this.store_status_sub_materi
+	this.cb_status_materi = new Ext.form.ComboBox({
+			store		: this.store_status_materi
 		,	valueField	: 'id'
 		,	displayField	: 'name'
 		,	mode		: 'local'
@@ -113,21 +113,35 @@ function M_SfmTaskProgressSub(title)
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
 		});
+	
+	this.store_status_all = new Ext.data.ArrayStore({
+			fields	: ['id', 'name']
+		,	data	: [
+				['0', 'Info']
+			,	['1', 'Open']
+			,	['2', 'Closed Pelaksana']
+			,	['3', 'Closed Supervisor']
+			,	['4', 'Finished']
+			]
+		});
+	this.cb_status_all = new Ext.form.ComboBox({
+			store		: this.store_status_all
+		,	valueField	: 'id'
+		,	displayField	: 'name'
+		,	mode		: 'local'
+		,	allowBlank	: false
+		,	forceSelection	: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		});
+		
 	this.form_keterangan = new Ext.form.TextField({allowBlank : true, disabled : true});
 	
 	this.columns = [
 			new Ext.grid.RowNumberer()
-		,	{ id		: 'nipg'
+		,	{ id		: 'nipg_pelaksana'
 			, header	: 'NIPG'
 			, dataIndex	: 'nipg_pelaksana'
-			, sortable	: true
-			, editor	: this.cb_pegawai
-			, renderer	: combo_renderer(this.cb_pegawai)
-			, hidden	: true
-			}
-		,	{ id		: 'nipg'
-			, header	: 'NIPG'
-			, dataIndex	: 'nipg_supervisor'
 			, sortable	: true
 			, editor	: this.cb_pegawai
 			, renderer	: combo_renderer(this.cb_pegawai)
@@ -140,21 +154,15 @@ function M_SfmTaskProgressSub(title)
 			, editor	: this.form_id_rapat
 			, hidden	: true
 			}
-		,	{ id		: 'id_rapat_materi'
-			, header	: 'Id Materi Rapat'
-			, dataIndex	: 'id_rapat_materi'
-			, sortable	: true
-			, editor	: this.form_id_rapat_materi
-			, hidden	: true
-			}
 		,	{ id		: 'id_rapat_sub_materi'
-			, header	: 'Id Materi Sub Rapat'
-			, dataIndex	: 'id_rapat_materi'
+			, header	: 'Id Sub Materi Rapat'
+			, dataIndex	: 'id_rapat_sub_materi'
 			, sortable	: true
+			, editor	: this.form_id_rapat_sub_materi
 			, hidden	: true
 			}
 		,	{ id		: 'isi_rapat_sub_materi'
-			, header	: 'Materi Rapat'
+			, header	: 'Sub Materi Rapat'
 			, dataIndex	: 'isi_rapat_sub_materi'
 			, sortable	: true
 			, editor	: this.form_isi_rapat_sub_materi
@@ -164,20 +172,20 @@ function M_SfmTaskProgressSub(title)
 			, header	: 'Batas Waktu'
 			, dataIndex	: 'batas_waktu_sub_materi'
 			, sortable	: true
-			, editor	: this.form_batas_waktu_sub_materi
+			, editor	: this.form_batas_waktu
 			}	
 		,	{ id		: 'status_sub_materi'
 			, header	: 'Status'
 			, dataIndex	: 'status_sub_materi'
 			, sortable	: true
-			, editor	: this.cb_status_sub_materi
-			,renderer	: combo_renderer(this.cb_status_sub_materi)
+			, editor	: this.cb_status_materi
+			,renderer	: combo_renderer(this.cb_status_all)
 			}	
 		,	{ id		: 'keterangan_sub_materi'
 			, header	: 'Keterangan'
 			, dataIndex	: 'keterangan_sub_materi'
 			, sortable	: true
-			, editor	: this.form_keterangan_sub_materi
+			, editor	: this.form_keterangan
 			
 			}	
 		];
@@ -280,7 +288,7 @@ function M_SfmTaskProgressSub(title)
 						Ext.MessageBox.alert('Pesan', msg.info);
 					}
 
-					this.store.load();
+					this.do_load();
 				}
 		,	scope	: this
 		});
@@ -289,6 +297,12 @@ function M_SfmTaskProgressSub(title)
 	this.do_edit = function(row)
 	{
 		var data = this.sm.getSelections();
+		
+		if (data[0].data.status_sub_materi != '1'
+			&& data[0].data.status_sub_materi != '2'){
+			Ext.MessageBox.alert('Pesan','Materi yang bersifat info, atau Pekerjaan yang telah di-close oleh supervisor tidak dapat diedit');
+			return false;
+		}
 		
 		if (m_sfm_task_prog_ha_level >= 3) {
 			this.dml_type = 'update';
@@ -324,6 +338,8 @@ function M_SfmTaskProgress(title)
 			{ name	: 'nipg_pelaksana' }
 		,	{ name	: 'nipg_supervisor' }
 		,	{ name	: 'id_rapat' }
+		,	{ name	: 'no_rapat' }
+		,	{ name	: 'judul_rapat' }
 		,	{ name	: 'id_rapat_materi' }
 		,	{ name	: 'isi_rapat_materi' }
 		,	{ name	: 'batas_waktu_materi'}
@@ -363,6 +379,8 @@ function M_SfmTaskProgress(title)
 
 	
 	this.form_id_rapat = new Ext.form.TextField({allowBlank : true});
+	this.form_no_rapat = new Ext.form.TextField({allowBlank : true, disabled : true});
+	this.form_judul_rapat = new Ext.form.TextField({allowBlank : true, disabled : true});
 	this.form_id_rapat_materi = new Ext.form.TextField({allowBlank : true});
 	this.form_isi_rapat_materi = new Ext.form.TextField({allowBlank : false, disabled : true});
 
@@ -373,7 +391,6 @@ function M_SfmTaskProgress(title)
 		,	disabled	: true
 	});
 
-	
 	this.store_status_materi = new Ext.data.ArrayStore({
 			fields	: ['id', 'name']
 		,	data	: [
@@ -393,6 +410,28 @@ function M_SfmTaskProgress(title)
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
 		});
+	
+	this.store_status_all = new Ext.data.ArrayStore({
+			fields	: ['id', 'name']
+		,	data	: [
+				['0', 'Info']
+			,	['1', 'Open']
+			,	['2', 'Closed Pelaksana']
+			,	['3', 'Closed Supervisor']
+			,	['4', 'Finished']
+			]
+		});
+	this.cb_status_all = new Ext.form.ComboBox({
+			store		: this.store_status_all
+		,	valueField	: 'id'
+		,	displayField	: 'name'
+		,	mode		: 'local'
+		,	allowBlank	: false
+		,	forceSelection	: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		});
+		
 	this.form_keterangan = new Ext.form.TextField({allowBlank : true, disabled : true});
 	
 	this.columns = [
@@ -411,6 +450,18 @@ function M_SfmTaskProgress(title)
 			, sortable	: true
 			, editor	: this.form_id_rapat
 			, hidden	: true
+			}
+		,	{ id		: 'no_rapat'
+			, header	: 'No Rapat'
+			, dataIndex	: 'no_rapat'
+			, sortable	: true
+			, editor	: this.form_no_rapat
+			}
+		,	{ id		: 'judul_rapat'
+			, header	: 'Judul Rapat'
+			, dataIndex	: 'judul_rapat'
+			, sortable	: true
+			, editor	: this.form_judul_rapat
 			}
 		,	{ id		: 'id_rapat_materi'
 			, header	: 'Id Materi Rapat'
@@ -437,7 +488,7 @@ function M_SfmTaskProgress(title)
 			, dataIndex	: 'status_materi'
 			, sortable	: true
 			, editor	: this.cb_status_materi
-			,renderer	: combo_renderer(this.cb_status_materi)
+			,renderer	: combo_renderer(this.cb_status_all)
 			}	
 		,	{ id		: 'keterangan_materi'
 			, header	: 'Keterangan'
@@ -577,7 +628,12 @@ function M_SfmTaskProgress(title)
 	this.do_edit = function(row)
 	{
 		var data = this.sm.getSelections();
-		
+		//Ext.MessageBox.alert('Pesan','a'+ data[0].data.status_materi);
+		if (data[0].data.status_materi != '1'
+			&& data[0].data.status_materi != '2'){
+			Ext.MessageBox.alert('Pesan','Materi yang bersifat info, atau Pekerjaan yang telah di-close oleh supervisor tidak dapat diedit');
+			return false;
+		}
 		if (m_sfm_task_prog_ha_level >= 3) {
 			this.dml_type = 'update';
 			return true;

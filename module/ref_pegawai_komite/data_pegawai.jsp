@@ -6,7 +6,7 @@
  %   - m.shulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -22,6 +22,16 @@ try {
 	String id_dinas	= request.getParameter("id_dinas");
 	String id_seksi	= request.getParameter("id_seksi");
 	String where_clause = "";
+	
+	if (! "1".equals (user_group)) {
+		if (!id_direktorat.equals(user_dir) || !id_divprosbu.equals(user_div)){
+			id_departemen = null;
+			id_dinas = null;
+			id_seksi = null;
+		}
+		id_direktorat 	= user_dir;
+		id_divprosbu 	= user_div;
+	}
 	
 	if (id_direktorat != null && (!id_direktorat.equals("0") && !id_direktorat.equals("null"))){
 		where_clause += " and A.id_direktorat = "+ id_direktorat;

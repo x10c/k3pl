@@ -7,22 +7,27 @@
  %   - Prasetya Yanuar (mieh100freak@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
+
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
-
-	Statement	db_stmt = db_con.createStatement();
+	String		where_c = "";
+	if (! "1".equals (user_group)) {
+		where_c =" where	id_direktorat	= "+ user_dir
+				+ " and		id_divprosbu	= "+ user_div;
+	}
+	db_stmt = db_con.createStatement();
 	
 	String q= " select   id_kel_jabatan_csc "
 		+ " ,        nama_kel_jabatan_csc "
 		+ " ,        id_direktorat "
 		+ " ,        id_divprosbu "
 		+ " from     r_kel_jabatan_csc "
+		+ where_c
 		+ " order by id_kel_jabatan_csc ";
 
 	ResultSet	rs = db_stmt.executeQuery(q);

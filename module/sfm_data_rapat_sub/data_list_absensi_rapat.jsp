@@ -61,6 +61,8 @@ try {
 	String 	temp_absen = "0";
 	String	keterangan = "";
 	String	jabatan_komite = "";
+	String	jml_hadir = "";
+	String	jml_absen = "";
 	
 	String		data	= "[";
 
@@ -77,11 +79,19 @@ try {
 		
 		keterangan = rs.getString("keterangan_absensi");
 		jabatan_komite = rs.getString("id_jabatan_komite");
+		jml_hadir = rs.getString("jml_hadir");
+		jml_absen = rs.getString("jml_absen");
 		if (keterangan == null){
 			keterangan = "";
 		}
 		if (jabatan_komite.equals("0")){
 			jabatan_komite = "";
+		}
+		if (jml_hadir == null){
+			jml_hadir = "";
+		}
+		if (jml_absen == null){
+			jml_absen = "";
 		}
 		
 		data	+="[ '"+ rs.getString("id_rapat")
@@ -90,8 +100,8 @@ try {
 			+ "','"+ jabatan_komite
 			+ "','"+ rs.getString("status_absensi")
 			+ "','"+ keterangan
-			+ "','"+ rs.getString("jml_hadir")
-			+ "','"+ rs.getString("jml_absen")
+			+ "','"+ jml_hadir
+			+ "','"+ jml_absen
 			+ "']";
 		
 	}
