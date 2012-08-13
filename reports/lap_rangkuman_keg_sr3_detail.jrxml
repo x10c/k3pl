@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr3_detail" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c8b90605-5946-4ac2-b9e7-8ab8c833edb7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_rangkuman_keg_sr3_detail" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -50,47 +50,47 @@ ORDER BY
 	<title>
 		<band height="70">
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="bfd23e36-3351-4570-9acb-954c17d6e297" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="267" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="267" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{AUDIT} != null && $P{AUDIT} > 0 ? "V" : "o") + "  Audit / Audit"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="7d79635d-7b4a-4238-aeb5-e4c9a6f346f4" positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="267" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="267" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{INSPEKSI} != null && $P{INSPEKSI} > 0 ? "V" : "o") + "  Inspeksi / Inspection"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="4bcd9fe0-5e8c-4962-9c93-88d493eec644" positionType="Float" stretchType="RelativeToBandHeight" x="534" y="0" width="268" height="20"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="534" y="0" width="268" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{INVESTIGASI} != null && $P{INVESTIGASI} > 0 ? "V" : "o") + "  Investigasi Kecelakaan / Incident Investigation"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="89a45cad-a2d7-4938-ad0a-b6f0989d6749" stretchType="RelativeToBandHeight" x="0" y="20" width="267" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="267" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{PELATIHAN} != null && $P{PELATIHAN} > 0 ? "V" : "o") + "  Pelatihan/Induksi / Safety Induction/Training"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="e5fd207a-131a-45d5-acc4-c6c62b7d04c8" stretchType="RelativeToBandHeight" x="267" y="20" width="267" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="20" width="267" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{JSA} != null && $P{JSA} > 0 ? "V" : "o") + "  JSA/HAZOP/Safety Review"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="f2b0a915-d593-45a2-8d2b-8ef95f097936" stretchType="RelativeToBandHeight" x="534" y="20" width="268" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="534" y="20" width="268" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{PEMANTAUAN} != null && $P{PEMANTAUAN} > 0 ? "V" : "o") + "  Pemantauan/Pengamatan / Monitoring/Surveillance"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="29ac05a8-5e5f-408f-b7d4-757936e75961" stretchType="RelativeToBandHeight" x="0" y="40" width="267" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="40" width="267" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{RAPAT} != null && $P{RAPAT} > 0 ? "V" : "o") + "  Rapat / Meettings"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="97ec7247-c0bf-4cf4-a50f-f00bbc5dce40" stretchType="RelativeToBandHeight" x="267" y="40" width="267" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="40" width="267" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{INSTITUSI} != null && $P{INSTITUSI} > 0 ? "V" : "o") + "  Institusi Pemerintah / Statutory Bodies"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="7c82431f-1ffc-4faa-aea1-a747b88a110b" stretchType="RelativeToBandHeight" x="534" y="40" width="268" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="534" y="40" width="268" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{LAINNYA} != null && $P{LAINNYA} > 0 ? "V" : "o") + "  Lainnya / Others"]]></textFieldExpression>
 			</textField>
@@ -99,7 +99,7 @@ ORDER BY
 	<detail>
 		<band height="40" splitType="Stretch">
 			<frame>
-				<reportElement uuid="c0381302-6385-432c-ba7c-31a6399c69e8" x="0" y="0" width="802" height="40"/>
+				<reportElement x="0" y="0" width="802" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -108,7 +108,7 @@ ORDER BY
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField>
-					<reportElement uuid="9b571662-e401-44ff-b084-c7d20c995054" x="0" y="0" width="802" height="20"/>
+					<reportElement x="0" y="0" width="802" height="20"/>
 					<textElement>
 						<font fontName="Serif" isBold="true"/>
 						<paragraph leftIndent="4" spacingBefore="2"/>
@@ -116,7 +116,7 @@ ORDER BY
 					<textFieldExpression><![CDATA[$F{R_WILAYAH_NAMA_WILAYAH}]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement uuid="0c3a0f1a-64b2-46cd-ac66-ddebe45abbf8" x="0" y="20" width="802" height="20"/>
+					<reportElement x="0" y="20" width="802" height="20"/>
 					<subreportParameter name="SUBREPORT_DIR">
 						<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
 					</subreportParameter>
