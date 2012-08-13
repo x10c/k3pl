@@ -381,7 +381,7 @@ function M_LUKTenagaHariJam()
 		this.ha_level = ha_level;
 
 		this.form_year.setValue(this.form_year.store.getAt(0).get('year'));
-		this.form_month.setValue (d.getMonth ());
+		this.form_month.setValue (d.getMonth () + 1);
 
 		this.do_load();
 	}
@@ -689,7 +689,7 @@ function M_LUKJarakBerkendaraan()
 		this.ha_level = ha_level;
 
 		this.form_year.setValue(this.form_year.store.getAt(0).get('year'));
-		this.form_month.setValue (d.getMonth ());
+		this.form_month.setValue (d.getMonth () + 1);
 
 		this.do_load();
 	}

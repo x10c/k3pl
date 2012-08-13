@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ * Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  *
  * Author(s):
  * + PT. Awakami
@@ -764,6 +764,309 @@ function M_LUK_Insiden ()
 	}
 }
 
+function M_LUK_TJK (displayBulan)
+{
+	this.ha_level = 0;
+
+	this.set_org = new k3pl.form.SetOrganisasi({
+			itemAll			:true
+		,	scope			:this
+		,	checkboxToggle	:false
+		});
+
+	this.set_org.formDepartemen.hide ();
+	this.set_org.formDinas.hide ();
+	this.set_org.formSeksi.hide ();
+
+	this.set_waktu = new k3pl.form.SetWaktu({
+			itemAll			:displayBulan
+		,	displayBulan	:displayBulan
+		});
+
+	this.btn_submit = new Ext.Button ({
+		text		: 'Submit'
+	,	listeners	: {
+			scope	: this
+		,	click	: function(btn, e) {
+				this.do_load (
+						this.set_org.formDirektorat.getValue ()
+					,	this.set_org.formDivProSBU.getValue ()
+					,	this.set_org.formDepartemen.getValue ()
+					,	this.set_org.formDinas.getValue ()
+					,	this.set_org.formSeksi.getValue ()
+					,	this.set_waktu.formTahun.getValue()
+					,	this.set_waktu.formBulan.getValue()
+				);
+			}
+		}
+	});
+
+	this.form = new Ext.form.FormPanel ({
+		frame		: true
+	,	width		: 500
+	,	labelAlign	: 'right'
+	,	labelWidth	: 150
+	,	buttonAlign	: 'center'
+	,	buttons		: [
+			this.btn_submit
+		]
+	,	items		: [
+			this.set_org
+		,	this.set_waktu
+		]
+	});
+
+	/*
+	** grid 
+	**/
+	this.fields = new Ext.data.Record.create([
+		{name: 'id'}
+	,	{name: 'name'}
+	,	{name: 'jml_tk_bulan_lalu'}
+	,	{name: 'jml_tenaga_kerja'}
+	,	{name: 'jml_jk_bulan_lalu'}
+	,	{name: 'jml_jam_kerja'}
+	,	{name: 'jml_kecelakaan'}
+	,	{name: 'jml_korban_ringan'}
+	,	{name: 'jml_korban_sedang'}
+	,	{name: 'jml_korban_berat'}
+	,	{name: 'jml_korban_mati'}
+	,	{name: 'jml_korban_total'}
+	,	{name: 'jml_hh_ringan'}
+	,	{name: 'jml_hh_sedang'}
+	,	{name: 'jml_hh_berat'}
+	,	{name: 'jml_hh_mati'}
+	,	{name: 'jml_hh_total'}
+	,	{name: 'ket'}
+	]);
+
+	this.reader = new Ext.data.JsonReader(
+		{root:'info'}
+		, this.fields
+	);
+
+	this.store = new Ext.data.Store({
+		url		: m_luk_d +'data_tjk.jsp'
+	,	reader	: this.reader
+	,	autoLoad: false
+	});
+
+	this.cm = new Ext.grid.ColumnModel({
+		columns	: [
+			new Ext.grid.RowNumberer ({
+				header	: 'NO.'
+			,	locked	: true
+			,	width	: 40
+			}),{
+				header		: 'Pekerja'
+			,	dataIndex	: 'name'
+			,	align		: 'left'
+			,	width		: 100
+			},{
+				header		: 'Lalu'
+			,	dataIndex	: 'jml_tk_bulan_lalu'
+			,	editable	: false
+			,	css			: 'background-color: #f0f0f0;'
+			,	width		: 60
+			},{
+				header		: 'Sekarang'
+			,	dataIndex	: 'jml_tenaga_kerja'
+			,	width		: 80
+			},{
+				header		: 'Lalu'
+			,	dataIndex	: 'jml_jk_bulan_lalu'
+			,	css			: 'background-color: #f0f0f0;'
+			},{
+				header		: 'Sekarang'
+			,	dataIndex	: 'jml_jam_kerja'
+			,	width		: 80
+			},{
+				header		: 'Jumlah Kecelakaan'
+			,	dataIndex	: 'jml_kecelakaan'
+			,	css			: 'background-color: #f0f0f0;'
+			,	width		: 100
+			},{
+				header		: 'Ringan'
+			,	dataIndex	: 'jml_korban_ringan'
+			},{
+				header		: 'Sedang'
+			,	dataIndex	: 'jml_korban_sedang'
+			},{
+				header		: 'Berat'
+			,	dataIndex	: 'jml_korban_berat'
+			},{
+				header		: 'Mati'
+			,	dataIndex	: 'jml_korban_mati'
+			},{
+				header		: 'Total'
+			,	dataIndex	: 'jml_korban_total'
+			},{
+				header		: 'Ringan'
+			,	dataIndex	: 'jml_hh_ringan'
+			},{
+				header		: 'Sedang'
+			,	dataIndex	: 'jml_hh_sedang'
+			},{
+				header		: 'Berat'
+			,	dataIndex	: 'jml_hh_berat'
+			},{
+				header		: 'Mati'
+			,	dataIndex	: 'jml_hh_mati'
+			},{
+				header		: 'Total'
+			,	dataIndex	: 'jml_hh_total'
+			},{
+				header		: 'Keterangan'
+			,	dataIndex	: 'ket'
+			}]
+	,	defaults : {
+			align		: 'center'
+		,	sortable	: false
+		,	hideable	: false
+		,	width		: 60
+		}
+	});
+
+	this.col_hdr = [{
+		colspan	: 2
+	},{
+		header	: 'Tenaga Kerja Bulan'
+	,	colspan	: 2
+	},{
+		header	: 'Jam Kerja Nyata + Lembur Bulan'
+	,	colspan	: 2
+	},{
+		colspan	: 1
+	},{
+		header	: 'Jumlah Korban'
+	,	colspan	: 5
+	},{
+		header	: 'Jumlah Hari Hilang'
+	,	colspan	: 5
+	}];
+
+	this.hdr = new Ext.ux.grid.ColumnHeaderGroup({
+		rows	: [this.col_hdr]
+	});
+
+	this.grid = new Ext.grid.GridPanel({
+		store		: this.store
+	,	cm			: this.cm
+	,	autoScroll	: true
+	,	autoHeight	: true
+	,	autoWidth	: true
+	,	plugins		: [this.hdr]
+	});
+
+	/*
+	** panel
+	**/
+	this.fields_kum = [
+		{name: 'kum_jk_bulan_lalu'}
+	,	{name: 'kum_jk_bulan_skrg'}
+	,	{name: 'kum_tanggal'}
+	];
+
+	this.reader_kum = new Ext.data.JsonReader(
+		{root	: 'info'}
+	,	this.fields_kum
+	);
+
+	this.store_kum = new Ext.data.Store ({
+		url			: m_luk_d +'data_tjk_kum.jsp'
+	,	reader		: this.reader_kum
+	,	autoLoad	: false
+	});
+
+	this.form_kum_jk_bulan_lalu = new Ext.form.NumberField({
+		fieldLabel	: 'Kumulatif Jam Kerja Bulan Lalu'
+	,	name		: 'kum_jk_bulan_lalu'
+	});
+
+	this.form_kum_jk_bulan_skrg = new Ext.form.NumberField({
+		fieldLabel	: 'Kumulatif Jam Kerja Bulan Sekarang'
+	,	name		: 'kum_jk_bulan_skrg'
+	});
+
+	this.form_kum_date = new Ext.form.TextField({
+		fieldLabel	: 'Terhitung Mulai Tanggal'
+	,	name		: 'kum_tanggal'
+	});
+
+	this.form_kumulatif = new Ext.form.FormPanel ({
+		labelWidth	: 260
+	,	labelAlign	: 'right'
+	,	padding		: 5
+	,	defaults	: {
+			readOnly	: true
+		,	width		: 120
+		}
+	,	items	: [
+			this.form_kum_jk_bulan_lalu
+		,	this.form_kum_jk_bulan_skrg
+		,	this.form_kum_date
+		]
+	});
+
+	this.panel = new Ext.Panel({
+		title		: 'Tenaga, Jam dan Kecelakaan'
+	,	autoWidth	: true
+	,	autoScroll	: true
+	,	defaults	:{
+			style		: {
+				marginLeft	:'auto'
+			,	marginRight	:'auto'
+			,	marginBottom:'8px'
+			}
+		}
+	,	items		: [
+			this.form
+		,	this.grid
+		,	this.form_kumulatif
+		]
+	});
+
+	this.do_load = function (dir, div, dep, dinas, seksi, tahun, bulan)
+	{
+		this.store.load ({
+			params	: {
+				dir		: dir
+			,	div		: div
+			,	dep		: dep
+			,	dinas	: dinas
+			,	seksi	: seksi	
+			,	tahun	: tahun
+			,	bulan	: bulan
+			}
+		});
+
+		this.store_kum.load ({
+			scope	: this
+		,	params	: {
+				dir		: dir
+			,	div		: div
+			,	tahun	: tahun
+			,	bulan	: bulan
+			}
+		,	callback: function (r,options,success) {
+				if (r && r.length > 0) {
+					this.form_kum_jk_bulan_lalu.setValue(r[0].get('kum_jk_bulan_lalu'));
+					this.form_kum_jk_bulan_skrg.setValue(r[0].get('kum_jk_bulan_skrg'));
+					this.form_kum_date.setValue(r[0].get('kum_tanggal'));
+				}
+			}
+
+		});
+	}
+
+	this.do_refresh = function (ha_level)
+	{
+		this.ha_level = ha_level;
+		this.set_org.do_load ();
+		this.set_waktu.do_load ();
+	}
+}
+
 function M_LUKAll()
 {
 	this.uk				= new M_LUK();
@@ -787,12 +1090,15 @@ function M_LUKAll()
 
 	this.luk_jba		= new M_LUK_JBA ();
 	this.luk_insiden	= new M_LUK_Insiden ();
+	this.luk_tjk		= new M_LUK_TJK (true);
 
 	this.panel = new Ext.TabPanel({
-		id			: 'luk_lap_unjuk_kerja_panel'
-	,	activeTab	: 0
-	,	items		: [
-			this.uk.panel
+		id				: 'luk_lap_unjuk_kerja_panel'
+	,	activeTab		: 0
+	,	enableTabScroll	: true
+	,	items			: [
+			this.luk_tjk.panel
+		,	this.uk.panel
 		,	this.uk_chart_jka.panel
 		,	this.uk_chart_ltif.panel
 		,	this.uk_chart_tsaf.panel
@@ -803,6 +1109,7 @@ function M_LUKAll()
 
 	this.do_refresh = function(ha_level)
 	{
+		this.luk_tjk.do_refresh (ha_level);
 		this.uk.do_refresh(ha_level);
 		this.uk_chart_jka.do_refresh(ha_level);
 		this.uk_chart_ltif.do_refresh(ha_level);
