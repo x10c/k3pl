@@ -4436,9 +4436,8 @@ insert into __MENU values ('05.01'	,'Pencatatan Rapat Central'					,'sfm_data_ra
 insert into __MENU values ('05.02'	,'Pencatatan Rapat Sub Komite'				,'sfm_data_rapat_sub'			,'1',2,'05','');
 insert into __MENU values ('05.03'	,'Status Pekerjaan'							,'sfm_task_progress'			,'1',2,'05','');
 insert into __MENU values ('05.04'	,'Status Pekerjaan (Supervisor)'			,'sfm_task_progress_sup'		,'1',2,'05','');
-insert into __MENU values ('05.05'	,'Status Pekerjaan (Komite)'				,'sfm_task_progress_kom'		,'1',2,'05','');
-insert into __MENU values ('05.06'	,'MoM Komite'								,'sfm_mom_komite'				,'1',2,'05','report');
-insert into __MENU values ('05.07'	,'MoM Sub-Komite'							,'sfm_mom_sub_komite'			,'1',2,'05','report');
+insert into __MENU values ('05.05'	,'MoM Komite'								,'sfm_mom_komite'				,'1',2,'05','report');
+insert into __MENU values ('05.06'	,'MoM Sub-Komite'							,'sfm_mom_sub_komite'			,'1',2,'05','report');
 
 insert into __MENU values ('06'		,'JSA & PTW'								,'jsa_ptw'						,'0',1,'00','module');
 insert into __MENU values ('06.01'	,'Job Safety Analysis'						,'trx_jsa'						,'1',2,'06','');
@@ -6242,6 +6241,13 @@ go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('T_CSM_PROYEK_KONT_EVAL_NILAI') and o.name = 'FK_R_CSM_PERF_EVAL_T_CSM_PROYEK_KONT_EVAL_NILAI')
+alter table T_CSM_PROYEK_KONT_EVAL_NILAI
+   drop constraint FK_R_CSM_PERF_EVAL_T_CSM_PROYEK_KONT_EVAL_NILAI
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
    where r.fkeyid = object_id('T_CSM_PROYEK_KONT_EVAL_NILAI') and o.name = 'FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI')
 alter table T_CSM_PROYEK_KONT_EVAL_NILAI
    drop constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI
@@ -6555,6 +6561,13 @@ if exists (select 1
            where  id = object_id('R_CSM_PENILAIAN')
             and   type = 'U')
    drop table R_CSM_PENILAIAN
+go
+
+if exists (select 1
+            from  sysobjects
+           where  id = object_id('R_CSM_PERF_EVAL')
+            and   type = 'U')
+   drop table R_CSM_PERF_EVAL
 go
 
 if exists (select 1
@@ -7303,6 +7316,17 @@ ID_FAKTOR ASC
 go
 
 /*==============================================================*/
+/* Table: R_CSM_PERF_EVAL                                       */
+/*==============================================================*/
+create table R_CSM_PERF_EVAL (
+   ID                   int                  identity,
+   WEIGHT_FACTOR        float                not null,
+   ELEMENT              varchar(1024)        not null,
+   constraint PK_R_CSM_PERF_EVAL primary key (ID)
+)
+go
+
+/*==============================================================*/
 /* Table: R_CSM_PERF_EVAL_PS                                    */
 /*==============================================================*/
 create table R_CSM_PERF_EVAL_PS (
@@ -7319,8 +7343,7 @@ go
 /*==============================================================*/
 create table R_CSM_PERF_EVAL_SI (
    ID                   int                  identity,
-   MIN                  float                not null default 0.0,
-   MAX                  float                not null default 0.0,
+   SCORE                int                  not null,
    KETERANGAN           varchar(512)         not null,
    constraint PK_R_CSM_PERF_EVAL_SI primary key (ID)
 )
@@ -7902,6 +7925,18 @@ create table T_CIM (
 go
 
 /*==============================================================*/
+/* Table: T_CSM_PROYEK                                          */
+/*==============================================================*/
+create table T_CSM_PROYEK (
+   ID_PROJECT           bigint               not null,
+   ID_KONTRAKTOR        bigint               null default null,
+   EVAL_RAW_SCORE       int                  null default 0,
+   EVAL_WEIGHTED_SCORE  float                null default 0.0,
+   constraint PK_T_CSM_PROYEK primary key (ID_PROJECT)
+)
+go
+
+/*==============================================================*/
 /* Table: T_CSM_PROYEK_KONTRAKTOR                               */
 /*==============================================================*/
 create table T_CSM_PROYEK_KONTRAKTOR (
@@ -7929,10 +7964,9 @@ go
 /*==============================================================*/
 create table T_CSM_PROYEK_KONT_EVAL_NILAI (
    ID_PROJECT           bigint               not null,
-   ID_PENILAIAN         int                  not null references R_CSM_PENILAIAN (ID),
+   ID_EVALUASI          int                  not null,
    NILAI                smallint             not null,
-   KETERANGAN           varchar(512)         not null,
-   constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_PENILAIAN)
+   constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_EVALUASI)
 )
 go
 
@@ -8667,9 +8701,39 @@ alter table T_CIM
       references R_MATERIAL (ID_MATERIAL)
 go
 
+alter table T_CSM_PROYEK
+   add constraint FK_R_KONTRAKTOR_T_CSM_PROYEK foreign key (ID_KONTRAKTOR)
+      references R_KONTRAKTOR (ID)
+go
+
+alter table T_CSM_PROYEK
+   add constraint FK_R_PROJECT_T_CSM_PROYEK foreign key (ID_PROJECT)
+      references R_PROJECT (ID_PROJECT)
+go
+
 alter table T_CSM_PROYEK_KONTRAKTOR
    add constraint FK_R_KONTRAKTOR_T_CSM_PROYEK_KONTRAKTOR foreign key (ID_KONTRAKTOR)
       references R_KONTRAKTOR (ID)
+go
+
+alter table T_CSM_PROYEK_KONTRAKTOR
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONTRAKTOR foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+alter table T_CSM_PROYEK_KONT_EVAL
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+alter table T_CSM_PROYEK_KONT_EVAL_NILAI
+   add constraint FK_R_CSM_PERF_EVAL_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_EVALUASI)
+      references R_CSM_PERF_EVAL (ID)
+go
+
+alter table T_CSM_PROYEK_KONT_EVAL_NILAI
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
 go
 
 alter table T_CSM_PROYEK_KONT_NILAI
@@ -8680,6 +8744,11 @@ go
 alter table T_CSM_PROYEK_KONT_NILAI
    add constraint FK_R_KONTRAKTOR_T_CSM_PROYEK_KONT_NILAI foreign key (ID_KONTRAKTOR)
       references R_KONTRAKTOR (ID)
+go
+
+alter table T_CSM_PROYEK_KONT_NILAI
+   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_NILAI foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
 go
 
 alter table T_LINGKUNGAN
@@ -9509,7 +9578,6 @@ insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'25.02',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'26',4);
 insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'26.01',4);
 
-
 update __MENU set MENU_NAME = 'Pengelolaan Lingkungan Tahunan', MENU_FOLDER = 'lnk_tahunan' where MENU_ID = '09.01';
 update __MENU set MENU_NAME = 'Pengelolaan Lingkungan Bulanan', MENU_FOLDER = 'lnk_bulanan',ICON = '' where MENU_ID = '09.02';
 
@@ -9538,9 +9606,28 @@ insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('Human Factor', '1')
 insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('Other Recommendation', '1');
 insert into R_WORK_STEPS (NAMA_WORK_STEPS, ID_USER) values ('References', '1');
 
-insert into R_CSM_PERF_EVAL_SI values (0.0, 55.0, 'Di Bawah Standar');
-insert into R_CSM_PERF_EVAL_SI values (55.1, 75.0, 'Cukup Memenuhi Standar');
-insert into R_CSM_PERF_EVAL_SI values (75.1, 100.0, 'Memenuhi Standar');
+insert into R_CSM_PERF_EVAL_SI values (1, 'Di bawah Standar - <= 55');
+insert into R_CSM_PERF_EVAL_SI values (2, 'Cukup Memenuhi Standar - 55 s/d <= 75');
+insert into R_CSM_PERF_EVAL_SI values (3, 'Memenuhi Standar - > 75');
+
+insert into R_CSM_PERF_EVAL values (0.15, 'Kerapihan Peralatan dan Fasilitas Umum Proyek');
+insert into R_CSM_PERF_EVAL values (0.15, 'Kelengkapan Alat Pelindung Diri (APD)');
+insert into R_CSM_PERF_EVAL values (0.10, 'Safety Induction/Training/Safety talks/Tool Box meetings compliance');
+insert into R_CSM_PERF_EVAL values (0.15, 'Metode Kerja yang Memperhatikan Prinsip-Prinsip Keselamatan dan Efektifitas Penggunaan Peralatan Kerja');
+insert into R_CSM_PERF_EVAL values (0.05, 'Efektifitas team K3PL');
+insert into R_CSM_PERF_EVAL values (0.15, 'Komitmen dan Kemampuan Tim Proyek Atas Pelaksanaan K3PL di Lapangan');
+insert into R_CSM_PERF_EVAL values (0.05,
+	'Perencanaan / Tindakan Pencegahan terhadap temuan audit K3PL mingguan <br/><br/>'
+	+'1. Jumlah Insiden <br/>'
+	+'2. Recordable Insiden Frequency Rate <br/>'
+	+'3. LTI Frequency Rate');
+insert into R_CSM_PERF_EVAL values (0.10,
+	'Perencanaan / Tindakan Pencegahan terhadap temuan severity 4 & 5 <br/><br/>'
+	+'1. Severity 4 & 5 Violation <br/>'
+	+'2. Average Severity of Violation <br/>'
+	+'3. RCA Done');
+insert into R_CSM_PERF_EVAL values (0.05, 'Inisiatif Baru terhadap Sistem Internal & Proses Safety');
+insert into R_CSM_PERF_EVAL values (0.05, 'Kebutuhan kesehatan pekerja: Toilet, Air Minum dll');
 
 insert into R_CSM_FAKTOR_PENILAIAN values (1, 'Faktor Utama', 0.8);
 insert into R_CSM_FAKTOR_PENILAIAN values (2, 'Faktor Penambah/Pelengkap', 0.2);
@@ -9844,9 +9931,42 @@ insert into R_REPORT values ('List References Used', 3, 'doc', 'reports/09_ListR
 insert into R_REPORT values ('Pengelolaan Lingkungan Tahunan', 4, 'xls', 'reports/PelaporanLingkungan.jasper', 'id_lt', 'ID_LINGKUNGAN_TAHUNAN');
 insert into R_REPORT values ('Pengelolaan Lingkungan Bulanan', 4, 'xls', 'reports/07_LapLingkunganBulanan.jasper', 'tahun;bulan', 'TAHUN;BULAN');
 
-insert into R_CSM_PERF_EVAL_PS values (0.0, 55.0, 'Black list selama 2 tahun');
-insert into R_CSM_PERF_EVAL_PS values (55.1, 75.0, 'Sertifikat Keterangan Baik');
-insert into R_CSM_PERF_EVAL_PS values (75.1, 100.0, 'Penghargaan');
+insert into R_CSM_PERF_EVAL_PS values (0.0, 1.0, 'Black list selama 2 tahun');
+insert into R_CSM_PERF_EVAL_PS values (1.1, 3.0, 'Surat teguran dan Pembinaan Safety');
+insert into R_CSM_PERF_EVAL_PS values (3.1, 4.0, 'Certificate of Compliance');
+insert into R_CSM_PERF_EVAL_PS values (4.1, 5.0, 'Penghargaan');
+
+/*
+ * R_CSM_PROJECT_LEVEL: Tingkat penilaian proyek.
+ */
+if exists (
+	select	1
+	from	sysobjects
+	where	id = object_id('R_CSM_PROJECT_WORK_LEVEL')
+	and		type = 'U'
+)
+   drop table R_CSM_PROJECT_WORK_LEVEL
+go
+
+create table R_CSM_PROJECT_WORK_LEVEL (
+	ID			int 			identity primary key
+,	NILAI		float			not null default 0
+,	KETERANGAN	varchar(256)	not null default ''
+);
+
+/*
+ * Update T_CSM_PROYEK tambah kolom WORK_LEVEL
+ */
+alter table T_CSM_PROYEK add WORK_LEVEL int
+	foreign key
+	references R_CSM_PROJECT_WORK_LEVEL (ID);
+
+/*
+ * Update T_CSM_PROYEK tambah kolom PENGHARGAAN_SANKSI
+ */
+alter table T_CSM_PROYEK add PENGHARGAAN_SANKSI int default 1
+	foreign key
+	references R_CSM_PERF_EVAL_PS (ID);
 
 if exists (select 1
           from sysobjects
@@ -10182,6 +10302,10 @@ alter table T_CHEMICAL_HAZARD
       references R_PROPERTIES (ID_PROPERTIES)
 go
 
+insert into R_CSM_PROJECT_WORK_LEVEL values (30, 'Low');
+insert into R_CSM_PROJECT_WORK_LEVEL values (50, 'Medium');
+insert into R_CSM_PROJECT_WORK_LEVEL values (80, 'High');
+
 insert into R_PROPERTIES (NAMA_PROPERTIES, ID_USER) values ('MSDS', '1');
 insert into R_PROPERTIES (NAMA_PROPERTIES, ID_USER) values ('Flammable', '1');
 insert into R_PROPERTIES (NAMA_PROPERTIES, ID_USER) values ('Toxicity', '1');
@@ -10196,6 +10320,15 @@ insert into R_MATERIAL (NAMA_MATERIAL, ID_USER) values ('Carbon Steel', '1');
 insert into R_MATERIAL (NAMA_MATERIAL, ID_USER) values ('Tetra Hydro Tiophane (THT)', '1');
 
 insert into R_REPORT values ('Charter PSSR', 2, 'doc', 'reports/CharterPSSR.jasper', 'id_pssr', 'ID_PSSR');
+
+/*
+ * Add columns koefisien_utama and koefisien_tambah to table T_CSM_PROYEK
+ */
+alter table T_CSM_PROYEK add
+	KOEFISIEN_UTAMA		float not null default 0
+,	KOEFISIEN_TAMBAH	float not null default 0
+go
+
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
@@ -10753,15 +10886,6 @@ go
 if exists (
 	select	1
 	from	sysobjects
-	where	id = object_id('T_CSM_PROYEK_KONT_EVAL_NILAI')
-	and		type = 'U'
-)
-	drop table T_CSM_PROYEK_KONT_EVAL_NILAI
-go
-
-if exists (
-	select	1
-	from	sysobjects
 	where	id = object_id('R_CSM_PENILAIAN')
 	and		type = 'U'
 )
@@ -10786,18 +10910,6 @@ create table T_CSM_PROYEK_KONT_NILAI (
    NILAI                int                  not null default 0,
    KETERANGAN           varchar(512)         not null default '',
    constraint PK_T_CSM_PROYEK_KONT_NILAI primary key (ID_PROJECT, ID_KONTRAKTOR, ID_PENILAIAN)
-)
-go
-
-/*==============================================================*/
-/* Table: T_CSM_PROYEK_KONT_EVAL_NILAI                          */
-/*==============================================================*/
-create table T_CSM_PROYEK_KONT_EVAL_NILAI (
-   ID_PROJECT           bigint               not null,
-   ID_PENILAIAN         int                  not null references R_CSM_PENILAIAN (ID),
-   NILAI                smallint             not null,
-   KETERANGAN           varchar(512)         not null,
-   constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_PENILAIAN)
 )
 go
 
@@ -12002,6 +12114,42 @@ alter table T_LINGKUNGAN_BULANAN
       references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
+alter table T_CSM_PROYEK add ID_DIVPROSBU int not null default 1
+go
+
+alter table T_CSM_PROYEK add ID_DIREKTORAT int not null default 3
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('T_CSM_PROYEK') and o.name = 'FK_R_DIVPROSBU_T_CSM_PROYEK')
+alter table T_CSM_PROYEK
+   drop constraint FK_R_DIVPROSBU_T_CSM_PROYEK
+go
+
+if exists (select 1
+            from  sysindexes
+           where  id    = object_id('T_CSM_PROYEK')
+            and   name  = 'T_CSM_PROYEK_FK_R_DIVPROSBU'
+            and   indid > 0
+            and   indid < 255)
+   drop index T_CSM_PROYEK.T_CSM_PROYEK_FK_R_DIVPROSBU
+go
+
+/*==============================================================*/
+/* Index: T_CSM_PROYEK_FK_R_DIVPROSBU                           */
+/*==============================================================*/
+create index T_CSM_PROYEK_FK_R_DIVPROSBU on T_CSM_PROYEK (
+ID_DIVPROSBU ASC,
+ID_DIREKTORAT ASC
+)
+go
+
+alter table T_CSM_PROYEK
+   add constraint FK_R_DIVPROSBU_T_CSM_PROYEK foreign key (ID_DIVPROSBU, ID_DIREKTORAT)
+      references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
+go
+
 alter table T_PSSR add ID_DIVPROSBU int not null default 1
 go
 
@@ -12194,21 +12342,15 @@ alter table R_KEL_JABATAN_CSC
       references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
 go
 
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('ECSC',1,null, '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('ECSC', '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU ,ID_USER) values ('CSC DIRTEKBANG',2,null, '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC DIRTEKBANG', '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC PROYEK', 3,null,'1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC PROYEK', '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC DIRUS',5,null, '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC DIRUS', '1')
 go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-1',3,1, '1')
-go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-2',3,null, '1')
-go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-3',3,null, '1')
-go
-insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU TSJ',3,null, '1')
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC, ID_USER) values ('CSC SBU-1', '1')
 go
 
 if exists (select 1
@@ -16008,6 +16150,7 @@ alter table T_INSIDEN_REKOMENDASI
       references T_INSIDEN (ID_INSIDEN)
 go
 
+
 alter table R_K3PL drop constraint DF__R_K3PL__REPO_PAT__65F62111
 go
 
@@ -16074,151 +16217,724 @@ values (
 )
 go
 
-/* grup administrator DivProSBU */
-insert into __GRUP_USER (nama_grup, keterangan_grup) values ('Grup Administrator Divisi/Proyek/SBU', 'Administrator Divisi/Proyek/SBU');
+update R_CSM_PERF_EVAL_SI set KETERANGAN = 'Di bawah Standar - <= 55' where ID = 1
+go
+update R_CSM_PERF_EVAL_SI set KETERANGAN = 'Cukup Memenuhi Standar - 55 s/d <= 75' where ID = 2
+go
+update R_CSM_PERF_EVAL_SI set KETERANGAN = 'Memenuhi Standar - > 75' where ID = 3
+go
+delete from R_CSM_PERF_EVAL_SI where ID = 4
+go
+delete from R_CSM_PERF_EVAL_SI where ID = 5
+go
 
-/* hak akses untuk grup administrator DivProSBU */
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.04',0);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.05',0);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.07',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.08',0);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.05',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.07',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.08',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.09',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.10',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.11',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.12',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.13',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.14',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.15',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.16',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.17',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.05',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.05',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.05',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.07',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.03',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.04',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.05',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.06',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.07',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.01',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.02',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26',4);
-insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26.01',4);
+update R_CSM_PERF_EVAL_PS set NILAI_MIN = 0.0, NILAI_MAX = 55.0 where ID = 1
+go
+update R_CSM_PERF_EVAL_PS set NILAI_MIN = 55.1, NILAI_MAX = 75.0, KETERANGAN = 'Sertifikat Keterangan Baik' where ID = 2
+go
+update R_CSM_PERF_EVAL_PS set NILAI_MIN = 75.1, NILAI_MAX = 100.0, KETERANGAN = 'Penghargaan' where ID = 3
+go
+delete from R_CSM_PERF_EVAL_PS where ID = 4
+go
 
-/*==============================================================*/
-/* Table: T_CSM_PROYEK                                          */
-/*==============================================================*/
-create table T_CSM_PROYEK (
-   ID_PROJECT           bigint               not null primary key references R_PROJECT (ID_PROJECT),
-   ID_KONTRAKTOR        bigint               null default null foreign key references R_KONTRAKTOR (ID),
-   EVAL_SCORE           float                null default 0,
-   PENGHARGAAN_SANKSI   int                  null default 1 references R_CSM_PERF_EVAL_PS (ID),
-   KOEFISIEN_UTAMA		float                not null default 0,
-   KOEFISIEN_TAMBAH     float                not null default 0,
-   ID_DIVPROSBU         int                  not null default 1,
-   ID_DIREKTORAT        int                  not null default 3,
+alter table T_CSM_PROYEK drop constraint FK__T_CSM_PRO__WORK___46D27B73
+go
+alter table T_CSM_PROYEK drop column WORK_LEVEL
+go
+
+drop table R_CSM_PROJECT_WORK_LEVEL
+go
+
+drop table T_CSM_PROYEK_KONT_EVAL_NILAI
+go
+
+drop table R_CSM_PERF_EVAL
+go
+
+drop table R_CSM_PERF_EVAL_SI
+go
+
+create table R_CSM_PERF_EVAL_SI(
+	ID                   int                  identity,
+	MIN                  float                not null default 0.0,
+	MAX                  float                not null default 0.0,
+	KETERANGAN           varchar(512)         not null,
+	constraint PK_R_CSM_PERF_EVAL_SI primary key (ID)
 )
 go
 
-alter table T_CSM_PROYEK
-   add constraint FK_R_DIVPROSBU_T_CSM_PROYEK foreign key (ID_DIVPROSBU, ID_DIREKTORAT)
-      references R_DIVPROSBU (ID_DIVPROSBU, ID_DIREKTORAT)
+alter table T_CSM_PROYEK drop constraint DF__T_CSM_PRO__EVAL___6991A7CB
+go
+alter table T_CSM_PROYEK drop column EVAL_WEIGHTED_SCORE
+go
+alter table T_CSM_PROYEK drop constraint DF__T_CSM_PRO__EVAL___689D8392
+go
+alter table T_CSM_PROYEK drop column EVAL_RAW_SCORE
+go
+alter table T_CSM_PROYEK add EVAL_SCORE float not null default 0.0
 go
 
-alter table T_CSM_PROYEK_KONTRAKTOR
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONTRAKTOR foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
-go
-
-alter table T_CSM_PROYEK_KONT_EVAL
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
+create table T_CSM_PROYEK_KONT_EVAL_NILAI(
+	ID_PROJECT           bigint               not null,
+	ID_PENILAIAN         int                  not null,
+	NILAI                smallint             not null,
+	KETERANGAN           varchar(512)         not null,
+	constraint PK_T_CSM_PROYEK_KONT_EVAL_NILA primary key (ID_PROJECT, ID_PENILAIAN)
+)
 go
 
 alter table T_CSM_PROYEK_KONT_EVAL_NILAI
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
+	add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PROJECT)
+		references T_CSM_PROYEK (ID_PROJECT)
 go
 
-alter table T_CSM_PROYEK_KONT_NILAI
-   add constraint FK_T_CSM_PROYEK_T_CSM_PROYEK_KONT_NILAI foreign key (ID_PROJECT)
-      references T_CSM_PROYEK (ID_PROJECT)
+alter table T_CSM_PROYEK_KONT_EVAL_NILAI
+	add constraint FK_R_CSM_PENILAIAN_T_CSM_PROYEK_KONT_EVAL_NILAI foreign key (ID_PENILAIAN)
+		references R_CSM_PENILAIAN (ID)
 go
 
-if exists (select 1
-   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('T_CSM_PROYEK') and o.name = 'FK_R_DIVPROSBU_T_CSM_PROYEK')
-alter table T_CSM_PROYEK
-   drop constraint FK_R_DIVPROSBU_T_CSM_PROYEK
+update __MENU set MENU_NAME = 'Status Pekerjaan (Komite)', MENU_FOLDER = 'sfm_task_progress_kom', ICON = '' where MENU_ID = '05.05'
+go
+update __MENU set MENU_NAME = 'MoM Komite', MENU_FOLDER = 'sfm_mom_komite' where MENU_ID = '05.06'
+go
+insert into __MENU values ('05.07', 'MoM Sub-Komite', 'sfm_mom_sub_komite', '1', 2, '05', 'report')
 go
 
-if exists (select 1
-            from  sysindexes
-           where  id    = object_id('T_CSM_PROYEK')
-            and   name  = 'T_CSM_PROYEK_FK_R_DIVPROSBU'
-            and   indid > 0
-            and   indid < 255)
-   drop index T_CSM_PROYEK.T_CSM_PROYEK_FK_R_DIVPROSBU
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-2',3,null, '1')
+go
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU-3',3,null, '1')
+go
+insert into R_KEL_JABATAN_CSC (NAMA_KEL_JABATAN_CSC,ID_DIREKTORAT,ID_DIVPROSBU, ID_USER) values ('CSC SBU TSJ',3,null, '1')
 go
 
-/*==============================================================*/
-/* Index: T_CSM_PROYEK_FK_R_DIVPROSBU                           */
-/*==============================================================*/
-create index T_CSM_PROYEK_FK_R_DIVPROSBU on T_CSM_PROYEK (
-ID_DIVPROSBU ASC,
-ID_DIREKTORAT ASC
-)
+insert into __GRUP_USER (nama_grup, keterangan_grup) values ('Grup Administrator Divisi/Proyek/SBU', 'Administrator Divisi/Proyek/SBU')
+go
+
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.04',0)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.05',0)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.07',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'01.08',0)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.05',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.07',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.08',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.09',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.10',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.11',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.12',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.13',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.14',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.15',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.16',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'02.17',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.05',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'03.06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'04.04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.05',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'05.07',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.05',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'06.07',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.03',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.04',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.05',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.06',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'07.07',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'08.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'09.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'23.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'24.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.01',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'25.02',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26',4)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (9,'26.01',4)
+go
+
+insert into __hak_akses (id_grup, menu_id, ha_level) values (1,'05.07',4)
+go
+
+insert into __hak_akses (id_grup, menu_id, ha_level) values (3,'05.07',3)
+go
+insert into __hak_akses (id_grup, menu_id, ha_level) values (4,'05.07',3)
+go
+
+insert into R_DIVPROSBU (ID_DIREKTORAT, NAMA_DIVPROSBU, STATUS_DIVPROSBU, ID_USER) values (3, 'Koordinator Pelaksana Proyek', 2, '1')
+go
+insert into R_DIVPROSBU (ID_DIREKTORAT, NAMA_DIVPROSBU, STATUS_DIVPROSBU, ID_USER) values (3, 'SBU II', 3, '1')
+go
+insert into R_DIVPROSBU (ID_DIREKTORAT, NAMA_DIVPROSBU, STATUS_DIVPROSBU, ID_USER) values (3, 'SBU III', 3, '1')
+go
+insert into R_DIVPROSBU (ID_DIREKTORAT, NAMA_DIVPROSBU, STATUS_DIVPROSBU, ID_USER) values (3, 'SBU Transmisi Sumatera-Jawa', 3, '1')
+go
+
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 29, 'Bagian Pengendalian Kerja', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 29, 'Kelompok Hukum', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 29, 'Proyek 1', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 29, 'Proyek 2', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 29, 'Proyek 3', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 29, 'Keuangan dan Administrasi', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Pengendalian Kinerja dan Hukum', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Penjualan dan Layanan', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Operasi dan Pemeliharaan', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Integritas Jaringan dan K3PL', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Enjiniring dan Pembangunan', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Keuangan dan SDM', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 30, 'Logistik dan Administrasi Umum', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Penjualan dan Layanan', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Operasi dan Pemeliharaan', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Integritas Jaringan dan K3PL', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Enjiniring dan Pembangunan', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Keuangan dan SDM', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Logistik dan Administrasi Umum', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 31, 'Pengendalian Kinerja dan Hukum', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 32, 'K3PL', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 32, 'Pengendalian Kinerja dan Hukum', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 32, 'Operasi', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 32, 'Enjiniring', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 32, 'Keuangan dan SDM', '1')
+go
+insert	into R_DEPARTEMEN (ID_DIREKTORAT, ID_DIVPROSBU, NAMA_DEPARTEMEN, ID_USER) values (3, 32, 'Logistik dan Administrasi Umum', '1')
+go
+
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 78, 'Dinas Bagian Pengendalian Kerja', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 79, 'Dinas Kelompok Hukum', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 80, 'Dinas Konstruksi', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 80, 'Dinas QA-QC dan K3PL', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 80, 'Dinas Administrasi Kontrak', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 80, 'Dinas Perizinan dan Pertahanan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 81, 'Dinas Konstruksi', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 81, 'Dinas QA-QC dan K3PL', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 81, 'Dinas Administrasi Kontrak', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 81, 'Dinas Perizinan dan Pertahanan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 82, 'Dinas Konstruksi', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 82, 'Dinas QA-QC dan K3PL', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 82, 'Dinas Administrasi Kontrak', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 82, 'Dinas Perizinan dan Pertahanan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 83, 'Dinas Keuangan dan Administrasi Proyek 1', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 83, 'Dinas Keuangan dan Administrasi Proyek 2', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 29, 83, 'Dinas Keuangan dan Administrasi Proyek 3', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 84, 'Pengendalian Kinerja', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 84, 'Hukum dan Humas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 85, 'Dispatching Center', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 85, 'Perencanaan Penjualan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 85, 'Penjualan dan Layanan Area Surabaya', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 85, 'Penjualan dan Layanan Area Sidoarjo-Mojokerto', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 85, 'Penjualan dan Layanan Area Pasuruan-Probolinggo', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 86, 'Sistem Manajemen Gas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 86, 'Operasi dan Pemeliharaan Wilayah I', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 86, 'Operasi dan Pemeliharaan Wilayah II', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 86, 'Workshop', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 87, 'Integritas Jaringan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 87, 'K3PL', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 88, 'Perencanaan dan Layanan Enjiniring', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 88, 'Pembangunan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 89, 'Keuangan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 89, 'SDM', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 90, 'Logistik', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 30, 90, 'Administrasi Umum', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 91, 'Dispatching Center', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 91, 'Perencanaan Penjualan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 91, 'Penjualan dan Layanan Area Medan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 91, 'Penjualan dan Layanan Area Batam', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 91, 'Penjualan dan Layanan Area Pekanbaru', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 92, 'Sistem Manajemen Gas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 92, 'Operasi dan Pemeliharaan Wilayah I', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 92, 'Operasi dan Pemeliharaan Wilayah II', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 92, 'Workshop', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 93, 'Integritas Jaringan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 93, 'K3PL', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 94, 'Perencanaan dan Layanan Enjiniring', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 94, 'Pembangunan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 95, 'Keuangan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 95, 'SDM', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 96, 'Logistik', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 96, 'Administrasi Umum', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 97, 'Pengendalian Kinerja', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 31, 97, 'Hukum dan Humas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 98, 'Keselamatan dan Kesehatan Kerja', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 98, 'Pengelolaan Lingkungan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 99, 'Pengendalian Kinerja', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 99, 'Hukum dan Humas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 100, 'Manajemen Transportasi Gas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 100, 'Operasi dan Pemeliharaan Wilayah I', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 100, 'Operasi dan Pemeliharaan Wilayah II', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 100, 'Operasi dan Pemeliharaan Wilayah III', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 101, 'Perencanaan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 101, 'Integritas Jaringan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 101, 'Integritas Fasilitas', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 102, 'Keuangan', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 102, 'SDM', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 103, 'Logistik', '1')
+go
+insert	into R_DINAS (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, NAMA_DINAS, ID_USER) values (3, 32, 103, 'Administrasi Umum', '1')
+go
+
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 78, 96, 1, 'Seksi Bagian Pengendalian Kinerja', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 79, 97, 1, 'Seksi Kelompok Hukum', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 80, 98, 1, 'Seksi Konstruksi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 80, 99, 1, 'Seksi QA-QC dan K3PL', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 80, 100, 1, 'Seksi Administrasi Kontrak', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 80, 101, 1, 'Seksi Perizinan dan Pertahanan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 81, 102, 1, 'Seksi Konstruksi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 81, 103, 1, 'Seksi QA-QC dan K3PL', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 81, 104, 1, 'Seksi Administrasi Kontrak', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 81, 105, 1, 'Seksi Perizinan dan Pertahanan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 82, 106, 1, 'Seksi Konstruksi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 82, 107, 1, 'Seksi QA-QC dan K3PL', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 82, 108, 1, 'Seksi Administrasi Kontrak', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 82, 109, 1, 'Seksi Perizinan dan Pertahanan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 83, 110, 1, 'Seksi Keuangan dan Administrasi Proyek 1', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 83, 111, 1, 'Seksi Keuangan dan Administrasi Proyek 2', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 29, 83, 112, 1, 'Seksi Keuangan dan Administrasi Proyek 3', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 84, 113, null, 'Seksi Pengendalian Kinerja', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 84, 114, null, 'Seksi Hukum dan Humas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 115, null, 'Seksi Dispatching Center', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 116, null, 'Seksi Perencanaan Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 117, null, 'Account Executive Rumah Tangga dan Komersial', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 117, null, 'Account Executive Industri', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 117, null, 'Layanan Teknis', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 117, null, 'Administrasi Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 118, null, 'Account Executive Rumah Tangga dan Komersial', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 118, null, 'Account Executive Industri', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 118, null, 'Layanan Teknis', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 118, null, 'Administrasi Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 119, null, 'Account Executive', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 119, null, 'Layanan Teknis', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 85, 119, null, 'Administrasi Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 86, 120, null, 'Seksi Sistem Manajemen Gas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 86, 121, null, 'Operasi dan Pemeliharaan Sub-Wil. Surabaya I', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 86, 121, null, 'Operasi dan Pemeliharaan Sub-Wil. Surabaya II', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 86, 122, null, 'Operasi dan Pemeliharaan Sub-Wil. Sidoarjo-Mojokerto', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 86, 122, null, 'Operasi dan Pemeliharaan Sub-Wil. Pasuruan-Probolinggo', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 86, 123, null, 'Seksi Workshop', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 87, 124, null, 'Manajemen Informasi Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 87, 124, null, 'Assesmen Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 87, 125, null, 'Keselamatan dan Kesehatan Kerja', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 87, 125, null, 'Pengelolaan Lingkungan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 88, 126, null, 'Perencanaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 88, 126, null, 'Layanan Enjiniring', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 88, 127, null, 'Kelompok Pelaksanaan Pembangunan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 88, 127, null, 'Pengendalian Pembangunan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 89, 128, null, 'Anggaran', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 89, 128, null, 'Perbendaharaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 89, 128, null, 'Akuntansi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 89, 129, null, 'Pembinaan dan Pengembangan SDM', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 89, 129, null, 'Renumerasi dan Hubungan Industrial', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 90, 130, null, 'Kelompok Pengadaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 90, 130, null, 'Administrasi Logistik', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 90, 130, null, 'Persediaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 90, 131, null, 'Layanan Umum dan Pengamanan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 30, 90, 131, null, 'Teknologi Informasi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 132, null, 'Seksi Dispatching Center', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 133, null, 'Seksi Perencanaan Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 134, null, 'Account Executive Rumah Tangga dan Komersial I', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 134, null, 'Account Executive Rumah Tangga dan Komersial II', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 134, null, 'Account Executive Industri I', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 134, null, 'Account Executive Industri II', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 134, null, 'Layanan Teknis', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 134, null, 'Administrasi Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 135, null, 'Account Executive I', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 135, null, 'Account Executive II', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 135, null, 'Layanan Teknis', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 135, null, 'Administrasi Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 136, null, 'Layanan Teknis', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 91, 136, null, 'Administrasi Penjualan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 92, 137, null, 'Seksi Sistem Manajemen Gas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 92, 138, null, 'Operasi dan Pemeliharaan Sub-Wil. Medan I', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 92, 138, null, 'Operasi dan Pemeliharaan Sub-Wil. Medan II', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 92, 139, null, 'Operasi dan Pemeliharaan Sub-Wil. Batam', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 92, 139, null, 'Operasi dan Pemeliharaan Sub-Wil. Pekanbaru', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 92, 140, null, 'Seksi Workshop', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 93, 141, null, 'Manajemen Informasi Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 93, 141, null, 'Asesmen Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 93, 142, null, 'Keselamatan dan Kesehatan Kerja', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 93, 142, null, 'Pengelolaan Lingkungan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 94, 143, null, 'Perencanaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 94, 144, null, 'Kelompok Pelaksanaan Pembangunan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 94, 144, null, 'Pengendalian Pembangunan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 95, 145, null, 'Anggaran', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 95, 145, null, 'Perbendaharaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 95, 145, null, 'Akuntansi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 95, 146, null, 'Pembinaan dan Pengembangan SDM', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 95, 146, null, 'Remunerisasi dan Hubungan Industrial', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 96, 147, null, 'Kelompok Pengadaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 96, 147, null, 'Administrasi Logistik', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 96, 147, null, 'Persediaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 96, 148, null, 'Layanan Umum dan Pengamanan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 96, 148, null, 'Teknologi Informasi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 97, 149, null, 'Seksi Pengendalian Kerja', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 31, 97, 150, null, 'Seksi Hukum dan Humas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 98, 151, null, 'Seksi K3PL', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 98, 152, null, 'Seksi Pengelolaan Lingkungan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 99, 153, null, 'Seksi Pengendalian Kinerja', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 99, 154, null, 'Seksi Hukum dan Humas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 155, null, 'Manajemen Data', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 155, null, 'Scada dan Telekomunikasi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 155, null, 'Gas Kontrol', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 156, null, 'Operasi dan Pemeliharaan Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 156, null, 'Operasi dan Pemeliharaan Fasilitas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 156, null, 'Kompresor', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 156, null, 'Layanan Umum', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 157, null, 'Operasi dan Pemeliharaan Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 157, null, 'Operasi dan Pemeliharaan Fasilitas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 157, null, 'Layanan Umum', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 158, null, 'Operasi dan Pemeliharaan Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 158, null, 'Operasi dan Pemeliharaan Fasilitas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 100, 158, null, 'Layanan Umum', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 101, 159, null, 'Perencanaa Umum', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 101, 159, null, 'Pengendalian Perencanaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 101, 160, null, 'Enjiniring Jaringan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 101, 160, null, 'Jasa Teknik', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 101, 161, null, 'Enjiniring Fasilitas', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 101, 161, null, 'Enjiniring Kompresor', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 102, 162, null, 'Anggaran', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 102, 162, null, 'Perbendaharaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 102, 162, null, 'Akuntansi', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 102, 163, null, 'Pembinaan dan Pengembangan SDM', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 102, 163, null, 'Remunerasi dan Hubungan Industrial', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 103, 164, null, 'Kelompok Pengadaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 103, 164, null, 'Administrasi Logistik', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 103, 164, null, 'Persediaan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 103, 165, null, 'Layanan Umum dan Pengamanan', '1')
+go
+insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 103, 165, null, 'Teknologi Informasi', '1')
 go
