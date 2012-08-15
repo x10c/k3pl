@@ -11,7 +11,7 @@ try {
 	JSONArray insiden = null;
 	db_stmt	= db_con.createStatement();
 
-	db_q	=" select	A.id_insiden"
+	db_q=" select	A.id_insiden"
 		+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal"
 		+" ,		B.nama_seksi as nama_area"
 		+" ,		D.nama_klasifikasi_pegawai"
@@ -21,7 +21,7 @@ try {
 		+" ,		r_seksi			B"
 		+" ,		r_klasifikasi_pegawai	D"
 		+" where	A.jml_kecelakaan_kendaraan	> 0"
-		+" and		A.nilai_rusak_kendaraan		>= 10000000"
+		+" and		A.nilai_rusak_kendaraan		>= 50000000"
 		+" and		A.id_area_seksi				= B.id_seksi"
 		+" and		A.id_klasifikasi_pegawai	= D.id_klasifikasi_pegawai"
 		+" and		A.id_divprosbu				= "+ user_div

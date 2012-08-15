@@ -24,7 +24,7 @@ function M_AppResetJamKerja()
 
 	this.store = new Ext.data.SimpleStore({
 		fields	: this.fields
-	,	url	: m_app_reset_jarak_d +'data.jsp'
+	,	url		: m_app_reset_jarak_d +'data.jsp'
 	,	autoLoad: false
 	});
 
@@ -73,17 +73,17 @@ function M_AppResetJamKerja()
 
 	this.panel = new Ext.grid.GridPanel({
 		title		: 'Reset Jarak Tempuh'
-	,	id		: 'app_reset_jarak_panel'
+	,	id			: 'app_reset_jarak_panel'
 	,	store		: this.store
-	,	cm		: this.cm
+	,	cm			: this.cm
 	,	plugins		: this.editor
 	,	viewConfig	: {forceFit: true}
 	,	tbar		: [
 			this.btn_refresh
 		]
-	,       listeners       : {
-			scope		: this
-		,	rowdblclick	:
+	,	listeners       : {
+			scope			: this
+		,	rowdblclick		:
 				function (g, r, e) {
 					return this.do_edit(r);
 				}
