@@ -477,7 +477,8 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 				}
 
 				if (this.store.getTotalCount() > 0) {
-					this.setValue(this.store.getAt(0).get('id'));
+					var id_seksi = Ext.util.Cookies.get ('user.seksi');
+					this.setValue (id_seksi == null ? this.store.getAt(0).get('id') : id_seksi);
 				}
 			}
 		});
@@ -569,7 +570,8 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 				}
 
 				if (this.store.getTotalCount() > 0) {
-					this.setValue(this.store.getAt(0).get('id'));
+					var id_dinas = Ext.util.Cookies.get ('user.dinas');
+					this.setValue (id_dinas == null ? this.store.getAt(0).get('id') : id_dinas);
 				}
 			}
 		});
@@ -663,7 +665,8 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 				}
 
 				if (this.store.getTotalCount() > 0) {
-					this.setValue(this.store.getAt(0).get('id'));
+					var id_dep = Ext.util.Cookies.get ('user.departemen');
+					this.setValue (id_dep == null ? this.store.getAt(0).get('id') : id_dep);
 				}
 			}
 		});
@@ -753,7 +756,8 @@ k3pl.form.DivProSBU = Ext.extend (Ext.form.ComboBox, {
 				}
 
 				if (this.store.getTotalCount() > 0) {
-					this.setValue(this.store.getAt(0).get('id'));
+					var id_div = Ext.util.Cookies.get ('user.divprosbu');
+					this.setValue (id_div == null ? this.store.getAt(0).get('id') : id_div);
 				}
 			}
 		});
@@ -845,7 +849,8 @@ k3pl.form.Direktorat = Ext.extend (Ext.form.ComboBox, {
 				}
 
 				if (this.store.getTotalCount() > 0) {
-					this.setValue(this.store.getAt(0).get('id'));
+					var id_dir = Ext.util.Cookies.get ('user.direktorat');
+					this.setValue (id_dir == null ? this.store.getAt(0).get('id') : id_dir);
 				}
 			}
 		});
@@ -1088,6 +1093,25 @@ k3pl.form.SetOrganisasi = Ext.extend (Ext.form.FieldSet, {
 			this.formDinas.setValue(0);
 			this.formSeksi.clearFilter();
 			this.formSeksi.setValue(0);
+		});
+
+		this.on ('expand', function (panel) {
+			var id_dir		= Ext.util.Cookies.get ('user.direktorat');
+			var id_div		= Ext.util.Cookies.get ('user.divprosbu');
+			var id_dep		= Ext.util.Cookies.get ('user.departemen');
+			var id_dinas	= Ext.util.Cookies.get ('user.dinas');
+			var id_seksi	= Ext.util.Cookies.get ('user.seksi');
+
+			this.formDirektorat.clearFilter ();
+			this.formDirektorat.setValue (id_dir == null ? 0 : id_dir);
+			this.formDivProSBU.clearFilter ();
+			this.formDivProSBU.setValue (id_div == null ? 0 : id_div);
+			this.formDepartemen.clearFilter ();
+			this.formDepartemen.setValue (id_dep == null ? 0 : id_dep);
+			this.formDinas.clearFilter ();
+			this.formDinas.setValue (id_dinas == null ? 0 : id_dinas);
+			this.formSeksi.clearFilter ();
+			this.formSeksi.setValue (id_seksi == null ? 0 : id_seksi);
 		});
 	}
 
