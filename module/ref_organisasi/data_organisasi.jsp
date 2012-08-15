@@ -11,20 +11,28 @@ try {
 	JSONArray org = null;
 
 	db_stmt	= db_con.createStatement();
-	db_q	=" select	A.nama_departemen"
-			+" ,		B.nama_dinas"
-			+" ,		C.nama_seksi"
-			+" from		r_departemen	A"
-			+" ,		r_dinas			B"
-			+" ,		r_seksi			C"
-			+" where	A.id_departemen	= B.id_departemen"
-			+" and		B.id_dinas		= C.id_dinas"
-			+" order by	C.id_departemen, C.id_dinas, C.id_seksi";
+	db_q	=" select	A.nama_direktorat"
+			+" ,		B.nama_divprosbu"
+			+" ,		C.nama_departemen"
+			+" ,		D.nama_dinas"
+			+" ,		E.nama_seksi"
+			+" from		r_direktorat	A"
+			+" ,		r_divprosbu		B"
+			+" ,		r_departemen	C"
+			+" ,		r_dinas			D"
+			+" ,		r_seksi			E"
+			+" where	A.id_direktorat	= B.id_direktorat"
+			+" and		B.id_divprosbu	= C.id_divprosbu"
+			+" and		C.id_departemen	= D.id_departemen"
+			+" and		D.id_dinas		= E.id_dinas"
+			+" order by	A.nama_direktorat";
 	db_rs	= db_stmt.executeQuery(db_q);
 	json_a	= new JSONArray ();
 
 	while (db_rs.next()) {
 		org = new JSONArray ();
+		org.put (db_rs.getString ("nama_direktorat"));
+		org.put (db_rs.getString ("nama_divprosbu"));
 		org.put (db_rs.getString ("nama_departemen"));
 		org.put (db_rs.getString ("nama_dinas"));
 		org.put (db_rs.getString ("nama_seksi"));

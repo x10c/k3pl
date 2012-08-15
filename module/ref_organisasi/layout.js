@@ -1,12 +1,13 @@
 /**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ * Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  *
  * Author(s):
  * + PT. Awakami
  *   - m.shulhan (ms@kilabit.org)
  */
 
-var m_ref_org_d = _g_root +'/module/ref_organisasi/';
+var m_ref_area_d	= _g_root +'/module/ref_area/';
+var m_ref_org_d		= _g_root +'/module/ref_organisasi/';
 var m_ref_org_dep;
 var m_ref_org_dinas;
 var m_ref_org_seksi;
@@ -969,7 +970,7 @@ function M_RefOrgDinas(title)
 
 function M_RefOrgSeksi(title)
 {
-	this.title	= title;
+	this.title		= title;
 	this.dml_type	= 0;
 
 	this.record = new Ext.data.Record.create([
@@ -985,11 +986,24 @@ function M_RefOrgSeksi(title)
 			name	: 'id_seksi'
 		},{
 			name	: 'nama_seksi'
+		},{
+			name	: 'id_wilayah'
 		}]);
 
 	this.store = new Ext.data.ArrayStore({
 			fields	: this.record
-		,	url	: m_ref_org_d +'data_seksi.jsp'
+		,	url		: m_ref_org_d +'data_seksi.jsp'
+		,	autoLoad: false
+		});
+
+	this.record_wilayah = new Ext.data.Record.create([
+			{name	: 'id'}
+		,	{name	: 'name'}
+		]);
+
+	this.store_wilayah = new Ext.data.ArrayStore({
+			fields	: this.record_wilayah
+		,	url		: m_ref_area_d +'data_wilayah.jsp'
 		,	autoLoad: false
 		});
 
@@ -997,15 +1011,36 @@ function M_RefOrgSeksi(title)
 			allowBlank	: false
 		});
 
+	this.form_wilayah = new Ext.form.ComboBox ({
+			store			: this.store_wilayah
+		,	valueField		: 'id'
+		,	displayField	: 'name'
+		,	mode			: 'local'
+		,	allowBlank		: false
+		,	forceSelection	: true
+		,	typeAhead		: true
+		,	selectOnFocus	: true
+		,	triggerAction	: 'all'
+		});
+
 	this.columns = [
 			new Ext.grid.RowNumberer()
-		,	{ id		: 'nama_seksi'
-			, header	: 'Nama'
-			, dataIndex	: 'nama_seksi'
-			, sortable	: true
-			, editor	: this.form_nama_seksi
-			}
-		];
+		,{
+			id			: 'nama_seksi'
+		,	header		: 'Nama'
+		,	dataIndex	: 'nama_seksi'
+		,	sortable	: true
+		,	editor		: this.form_nama_seksi
+		,	width		: 240
+		},{
+			id			: 'id_wilayah'
+		,	header		: 'Wilayah'
+		,	dataIndex	: 'id_wilayah'
+		,	sortable	: true
+		,	editor		: this.form_wilayah
+		,	renderer	: combo_renderer (this.form_wilayah)
+		,	width		: 120
+		}];
 
 	this.sm = new Ext.grid.RowSelectionModel({
 			singleSelect	: true
@@ -1095,6 +1130,7 @@ function M_RefOrgSeksi(title)
 			,	id_dinas		: m_ref_org_id_dinas
 			,	id_seksi		: ''
 			,	nama_seksi		: ''
+			,	id_wilayah		: ''
 			});
 
 		this.editor.stopEditing();
@@ -1134,9 +1170,10 @@ function M_RefOrgSeksi(title)
 			,	id_dinas		: record.data['id_dinas']
 			,	id_seksi		: record.data['id_seksi']
 			,	nama_seksi		: record.data['nama_seksi']
+			,	id_wilayah		: record.data['id_wilayah']
 			,	dml_type		: this.dml_type
 			}
-		,	url	: m_ref_org_d +'submit_seksi.jsp'
+		,	url		: m_ref_org_d +'submit_seksi.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	success :
 				function (response)
@@ -1181,21 +1218,32 @@ function M_RefOrgSeksi(title)
 		} else {
 			this.btn_add.setDisabled(true);
 		}
+		this.store_wilayah.load ();
 	}
 }
 
 function M_RefOrgList()
 {
 	this.store = new Ext.data.ArrayStore({
-		url	: m_ref_org_d +'data_organisasi.jsp'
-	,	fields	:['nama_departemen', 'nama_dinas', 'nama_seksi']
+		url		: m_ref_org_d +'data_organisasi.jsp'
+	,	fields	:['nama_direktorat', 'nama_divprosbu', 'nama_departemen', 'nama_dinas', 'nama_seksi']
 	,	autoLoad:false
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
-		columns	: [
-			new Ext.grid.RowNumberer()
-		,{
+		defaults	: {
+			sortable	: true
+		}
+	,	columns	: [
+			new Ext.grid.RowNumberer({
+				width	: 30
+		}),{
+			header		:'Direktorat'
+		,	dataIndex	:'nama_direktorat'
+		},{
+			header		:'Divisi/Proyek/SBU'
+		,	dataIndex	:'nama_divprosbu'
+		},{
 			header		:'Departemen'
 		,	dataIndex	:'nama_departemen'
 		},{
@@ -1210,7 +1258,7 @@ function M_RefOrgList()
 	this.panel = new Ext.grid.GridPanel({
 		title		:'Daftar Organisasi'
 	,	store		:this.store
-	,	cm		:this.cm
+	,	cm			:this.cm
 	,	viewConfig	:{forceFit:true}
 	});
 

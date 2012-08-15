@@ -1,44 +1,39 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
  %	 - agus sugianto (agus.delonge@gmail.com)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	Statement	db_stmt = db_con.createStatement();
+	JSONArray wilayah = null;
 
-	String q= " select   id_wilayah "
-		+ " ,        nama_wilayah "
-		+ " from     r_wilayah "
-		+ " order by nama_wilayah ";
+	db_stmt	= db_con.createStatement();
+	db_q	=" select   id_wilayah"
+			+" ,        nama_wilayah"
+			+" from     r_wilayah"
+			+" order by nama_wilayah";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int		i = 0;
-	String		data = "[";
+	while (db_rs.next()) {
+		wilayah = new JSONArray ();
+		wilayah.put (db_rs.getString ("id_wilayah"));
+		wilayah.put (db_rs.getString ("nama_wilayah"));
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+= "[ '"+ rs.getString("id_wilayah") +"' "
-			+  ", '"+ rs.getString("nama_wilayah") +"' "
-			+  "]";
+		json_a.put (wilayah);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+out.print (_return);
 }
 %>

@@ -15,6 +15,7 @@ try {
 	String id_dinas			= request.getParameter("id_dinas");
 	String id_seksi			= request.getParameter("id_seksi");
 	String nama_seksi		= request.getParameter("nama_seksi");
+	String id_wilayah		= request.getParameter("id_wilayah");
 
 	db_stmt	= db_con.createStatement();
 
@@ -26,18 +27,22 @@ try {
 			+" ,	id_departemen"
 			+" ,	id_dinas"
 			+" ,	nama_seksi"
+			+" ,	id_wilayah"
 			+" ,	id_user ) "
 			+" values ("
 			+ id_direktorat +","
 			+ id_divprosbu +","
 			+ id_departemen +","
 			+ id_dinas +",'"
-			+ nama_seksi +"','"
-			+ user_nipg +"')";
+			+ nama_seksi +"'"
+			+", "+ id_wilayah
+			+",'"+ user_nipg +"'"
+			+")";
 		break;
 	case 3:
 		db_q=" update	r_seksi "
 			+" set		nama_seksi	= '"+ nama_seksi +"' "
+			+" ,		id_wilayah	= "+ id_wilayah
 			+" ,		id_user		= '"+ user_nipg +"' "
 			+" ,		tanggal_akses	= getdate() "
 			+" where	id_departemen	= "+ id_departemen

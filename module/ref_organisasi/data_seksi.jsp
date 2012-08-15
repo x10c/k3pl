@@ -38,6 +38,7 @@ try {
 			+" ,        id_dinas"
 			+" ,        id_seksi"
 			+" ,        nama_seksi"
+			+" ,		id_wilayah"
 			+" from		r_seksi"
 			+" where	(id_direktorat	= "+ id_direktorat +")"
 			+" and		(id_divprosbu	= "+ id_divprosbu +")"
@@ -55,6 +56,7 @@ try {
 		seksi.put (db_rs.getString ("id_dinas"));
 		seksi.put (db_rs.getString ("id_seksi"));
 		seksi.put (db_rs.getString ("nama_seksi"));
+		seksi.put (db_rs.getString ("id_wilayah"));
 
 		json_a.put (seksi);
 	}
