@@ -247,7 +247,7 @@ function M_RCAGrafikPerformance()
 				id_report	= '22';
 				break;
 			case 4	:
-				id_report	= '33';
+				id_report	= '34';
 				break;
 		}
 

@@ -35,6 +35,11 @@ try {
 	+" ,		penanggung_jawab_departemen "
 	+" ,		penanggung_jawab_dinas "
 	+" ,		penanggung_jawab_seksi "
+	+" ,		( "
+	+" 			select	r_seksi.nama_seksi "
+	+" 			from	r_seksi "
+	+" 			where	t_rca.penanggung_jawab_seksi = r_seksi.id_seksi "
+	+" 			) penanggung_jawab_nama_seksi "
 	+" ,		penanggung_jawab_nipg "
 	+" ,		waktu_audit "
 	+" ,		lama_audit "
@@ -63,6 +68,7 @@ try {
 		+"', penanggung_jawab_departemen : '"+ rs.getString("penanggung_jawab_departemen")
 		+"', penanggung_jawab_dinas	: '"+ rs.getString("penanggung_jawab_dinas")
 		+"', penanggung_jawab_seksi	: '"+ rs.getString("penanggung_jawab_seksi")
+		+"', penanggung_jawab_nama_seksi	: '"+ rs.getString("penanggung_jawab_nama_seksi")
 		+"', penanggung_jawab_nipg	: '"+ rs.getString("penanggung_jawab_nipg")
 		+"', waktu_audit : '"+ rs.getString("waktu_audit")
 		+"', lama_audit : '"+ rs.getString("lama_audit")

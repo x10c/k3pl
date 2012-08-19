@@ -255,7 +255,7 @@ function M_HomeUserObs()
 		,	store		: this.store
 		,	cm			: this.cm
 		,	autoScroll	: true
-		,	height		: 400
+		,	height		: 200
 		,	style		: {
 				marginBottom	:12
 			}
@@ -265,6 +265,78 @@ function M_HomeUserObs()
 		this.store.load({
 			params	:{
 				load_type	:''
+			}
+		});
+	}
+}
+
+function M_HomeUserRCA()
+{
+	this.record = new Ext.data.Record.create([
+			{ name	: 'tanggal_rca'	}
+		,	{ name	: 'description' }
+		,	{ name	: 'id_severity' }
+		,	{ name	: 'status' }
+	]);
+	
+	this.store = new Ext.data.ArrayStore({
+			url			: m_app_home_d + 'data_rca.jsp'
+		,	fields		: this.record
+		,	autoLoad	: false
+	});
+
+	this.cm = new Ext.grid.ColumnModel({
+		columns	: [
+				new Ext.grid.RowNumberer()
+			,	{
+					header		: 'Tanggal RCA'
+				,	dataIndex	: 'tanggal_rca'
+				,	align		: 'center'
+				,	width		: 100
+				}
+			,	{
+					id			: 'description'
+				,	header		: 'Description'
+				,	dataIndex	: 'description'
+				}
+			,	{
+					header		: 'Severity'
+				,	dataIndex	: 'id_severity'
+				,	align		: 'center'
+				,	width		: 100
+				}
+			,	{
+					header		: 'Status'
+				,	dataIndex	: 'status'
+				,	align		: 'center'
+				,	width		: 100
+				}
+		]
+	,	defaults : {
+			sortable	: true
+		,	hideable	: false
+		}
+	});
+
+	this.sm = new Ext.grid.RowSelectionModel({
+			singleSelect	: true
+	});
+
+	this.panel = new Ext.grid.GridPanel({
+			title				: 'Data Risk Containment Audit (RCA)'
+		,	store				: this.store
+		,	cm					: this.cm
+		,	sm					: this.sm
+		,	autoScroll			: true
+		,	height				: 200
+		,	autoExpandColumn	: 'description'
+	});
+
+	this.do_refresh = function()
+	{
+		this.store.load({
+			params	: {
+				load_type : ''
 			}
 		});
 	}
@@ -419,6 +491,8 @@ function M_Home()
 	this.panel_log = new M_HomeLog();
 
 	this.data_obs = new M_HomeUserObs();
+	
+	this.data_rca = new M_HomeUserRCA();
 
 	this.menu = new Ext.menu.Menu({
 		items	:[{
@@ -449,7 +523,8 @@ function M_Home()
 		]
 	,	defaults		:{margins:'0 auto 12 auto'}
 	,	items			:[
-			this.data_obs.panel
+				this.data_obs.panel
+			,	this.data_rca.panel
 		]
 	});
 
@@ -479,6 +554,7 @@ function M_Home()
 	this.do_refresh = function(ha_level)
 	{
 		this.data_obs.do_refresh(ha_level);
+		this.data_rca.do_refresh();
 		this.panel_log.do_refresh(ha_level);
 		if (_g_ha < 4) {
 			this.panel.hideTabStripItem(1);

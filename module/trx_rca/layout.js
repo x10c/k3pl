@@ -1290,6 +1290,7 @@ function M_TrxRCAAdd()
 	this.dinas			= '0';
 	this.seksi			= '0';
 	this.pic			= '';
+	this.nama_seksi		= '';
 	this.nipg_1			= '';
 	this.nipg_2			= '';
 	this.nipg_3			= '';
@@ -1405,16 +1406,6 @@ function M_TrxRCAAdd()
 			this.form_nama_auditor_1.clearFilter(true);
 			this.form_nama_auditor_2.clearFilter(true);
 		}		
-	}
-
-	this.form_penanggung_jawab_on_select = function(record)
-	{
-		this.seksi		= record.get('id_seksi');
-		this.dinas 		= record.get('id_dinas');
-		this.departemen = record.get('id_departemen');
-		this.divprosbu	= record.get('id_divprosbu');
-		this.direktorat = record.get('id_direktorat');
-		this.pic		= record.get('kepala_seksi');
 	}
 
 	this.form_tanggal_rca = new Ext.form.DateField({
@@ -1583,25 +1574,11 @@ function M_TrxRCAAdd()
 		,	msgTarget	: 'side'
 	});
 
-	this.form_penanggung_jawab = new Ext.form.ComboBox({
+	this.form_penanggung_jawab = new Ext.form.TextField({
 			fieldLabel		: 'Penanggung Jawab'
-		,	store			: m_trx_rca_store_penanggung_jawab
-		,	valueField		: 'id_seksi'
-		,	displayField	: 'nama_seksi'
-		,	mode			: 'local'
 		,	allowBlank		: false
-		,	forceSelection	: true
-		,	typeAhead		: true
-		,	selectOnFocus	: true
-		,	triggerAction	: 'all'
-		,	width			: 200
-		,	listWidth		: 300
-		,	listeners		: {
-				scope	: this
-			,	select	: function(cb, record, index) {
-					this.form_penanggung_jawab_on_select(record);
-				}
-		}
+		,	readOnly		: true
+		,	width			: 175
 	});
 
 	this.form_waktu_audit = new Ext.form.TextField({
@@ -1691,6 +1668,184 @@ function M_TrxRCAAdd()
 		,	style				: 'text-align: right'
 	});
 
+	/* begin window penanggung jawab rca */
+	this.record_penanggung_jawab_rca = new Ext.data.Record.create([
+			{ name	: 'id_seksi' }
+		,	{ name	: 'id_dinas' }
+		,	{ name	: 'id_departemen' }
+		,	{ name	: 'id_divprosbu' }
+		,	{ name	: 'id_direktorat' }
+		,	{ name	: 'nama_seksi' }
+		,	{ name	: 'nama_dinas' }
+		,	{ name	: 'nama_departemen' }
+		,	{ name	: 'nama_divprosbu' }
+		,	{ name	: 'nama_direktorat' }
+		,	{ name	: 'pic' }
+	]);
+	
+	this.store_penanggung_jawab_rca = new Ext.data.ArrayStore({
+			url			: m_trx_rca_dir + 'data_penanggung_jawab_rca.jsp'
+		,	fields		: this.record_penanggung_jawab_rca
+		,	autoLoad	: false
+	});
+	
+	this.filters_penanggung_jawab_rca = new Ext.ux.grid.GridFilters({
+			encode	: true
+		,	local	: true
+	});
+
+	this.cm_penanggung_jawab_rca = new Ext.grid.ColumnModel({
+		columns	: [
+				new Ext.grid.RowNumberer()
+			,	{
+					header		: 'Direktorat'
+				,	dataIndex	: 'nama_direktorat'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Divisi/Proyek/SBU'
+				,	dataIndex	: 'nama_divprosbu'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Departemen'
+				, 	dataIndex	: 'nama_departemen'
+				, 	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Dinas'
+				,	dataIndex	: 'nama_dinas'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Seksi'
+				,	dataIndex	: 'nama_seksi'
+				,	width		: 150
+				,	filterable	: true
+				}
+		]
+	,	defaults : {
+			sortable	: true
+		,	hideable	: false
+		}
+	});
+	
+	this.btn_pilih_penanggung_jawab_rca = new Ext.Button({
+			text		: 'Pilih'
+		,	iconCls		: 'save16'
+		,	disabled	: true
+		,	scope		: this
+		,	handler		: function() {
+				this.do_pilih_penanggung_jawab_rca();
+			}
+	});
+
+	this.btn_batal_penanggung_jawab_rca = new Ext.Button({
+			text	: 'Batal'
+		,	iconCls	: 'del16'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_batal_penanggung_jawab_rca();
+			}
+	});
+	
+	this.bbar_penanggung_jawab_rca = new Ext.Toolbar({
+		items	: [
+				this.btn_batal_penanggung_jawab_rca
+			,	'->'
+			,	this.btn_pilih_penanggung_jawab_rca
+		]
+	});
+
+	this.sm_penanggung_jawab_rca = new Ext.grid.RowSelectionModel({
+			singleSelect	: true
+		,	listeners		: {
+				scope			: this
+			,	selectionchange	: function(sm) {
+					var data = sm.getSelections();
+					if (data.length) {
+						this.direktorat = data[0].data['id_direktorat'];
+						this.divprosbu	= data[0].data['id_divprosbu'];
+						this.departemen = data[0].data['id_departemen'];
+						this.dinas		= data[0].data['id_dinas'];
+						this.seksi		= data[0].data['id_seksi'];
+						this.pic		= data[0].data['pic'];
+						this.nama_seksi	= data[0].data['nama_seksi'];
+						this.btn_pilih_penanggung_jawab_rca.setDisabled(false);
+					} else {
+						this.direktorat = '';
+						this.divprosbu	= '';
+						this.departemen = '';
+						this.dinas		= '';
+						this.seksi		= '';
+						this.pic		= '';
+						this.nama_seksi	= '';
+						this.btn_pilih_penanggung_jawab_rca.setDisabled(true);
+					}
+				}
+			}
+	});
+
+	this.grid_penanggung_jawab_rca = new Ext.grid.GridPanel({
+			store		: this.store_penanggung_jawab_rca
+		,	cm			: this.cm_penanggung_jawab_rca
+		,	sm			: this.sm_penanggung_jawab_rca
+		,	autoScroll	: true
+		,	stripeRows	: true
+		,	bbar		: this.bbar_penanggung_jawab_rca
+		,	viewConfig	: { forceFit : true }
+		,	plugins		: [ this.filters_penanggung_jawab_rca ]
+	});
+
+	this.window_penanggung_jawab = new Ext.Window ({
+			title		: 'Penanggung Jawab RCA'
+		,	width		: 850
+		,	height		: 400
+		,	modal		: true
+		,	closable	: false
+		,	layout		: 'fit'
+		,	items		: [
+				this.grid_penanggung_jawab_rca
+			]
+	});
+	
+	this.do_pilih_penanggung_jawab_rca = function()
+	{
+		this.form_penanggung_jawab.setValue(this.nama_seksi);
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_batal_penanggung_jawab_rca = function()
+	{
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_load_penanggung_jawab_rca = function()
+	{
+		this.store_penanggung_jawab_rca.load();
+	}
+	
+	this.do_refresh_penanggung_jawab_rca = function()
+	{
+		this.do_load_penanggung_jawab_rca();
+		this.window_penanggung_jawab.show();
+	}
+	/* end window penanggung jawab rca */
+	
+	this.btn_pilih = new Ext.Button({
+			text	: '...'
+		,	width	: 20
+		,	tooltip	: 'Pilih Penanggung Jawab RCA'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_refresh_penanggung_jawab_rca();
+			}
+	});
+	
 	this.panel_form = new Ext.form.FormPanel({
 			layout		: 'column'
 		,	autoWidth	: true
@@ -1717,7 +1872,13 @@ function M_TrxRCAAdd()
 				,	labelWidth	: 120
 				,	items		: [
 						this.form_nama_tempat_rca
-					,	this.form_penanggung_jawab
+					,	{
+							xtype	: 'compositefield'
+						,	items	: [
+								this.form_penanggung_jawab
+							,	this.btn_pilih
+							]
+						}
 					,	this.form_waktu_audit
 					,	{
 							xtype	: 'compositefield'
@@ -2077,7 +2238,7 @@ function M_TrxRCAAdd()
 			,	penanggung_jawab_divprosbu	: this.divprosbu
 			,	penanggung_jawab_departemen	: this.departemen
 			,	penanggung_jawab_dinas		: this.dinas
-			,	penanggung_jawab_seksi		: this.form_penanggung_jawab.getValue()
+			,	penanggung_jawab_seksi		: this.seksi
 			,	penanggung_jawab_nipg		: this.pic
 			,	waktu_audit					: this.form_waktu_audit.getValue()
 			,	lama_audit					: this.form_lama_audit.getValue()
@@ -2174,6 +2335,7 @@ function M_TrxRCAEdit()
 	this.dinas			= '0';
 	this.seksi			= '0';
 	this.pic			= '';
+	this.nama_seksi		= '';
 	this.nipg_1			= '';
 	this.nipg_2			= '';
 	this.nipg_3			= '';
@@ -2296,16 +2458,6 @@ function M_TrxRCAEdit()
 		}		
 	}
 	
-	this.form_penanggung_jawab_on_select = function(record)
-	{
-		this.seksi		= record.get('id_seksi');
-		this.dinas 		= record.get('id_dinas');
-		this.departemen = record.get('id_departemen');
-		this.divprosbu 	= record.get('id_divprosbu');
-		this.direktorat = record.get('id_direktorat');
-		this.pic		= record.get('kepala_seksi');
-	}
-
 	this.form_tanggal_rca = new Ext.form.DateField({
 			fieldLabel	: 'Tanggal Audit'
 		,	emptyText	: 'Tahun-Bulan-Tanggal'
@@ -2468,25 +2620,11 @@ function M_TrxRCAEdit()
 		,	msgTarget	: 'side'
 	});
 
-	this.form_penanggung_jawab = new Ext.form.ComboBox({
+	this.form_penanggung_jawab = new Ext.form.TextField({
 			fieldLabel		: 'Penanggung Jawab'
-		,	store			: m_trx_rca_store_penanggung_jawab
-		,	valueField		: 'id_seksi'
-		,	displayField	: 'nama_seksi'
-		,	mode			: 'local'
 		,	allowBlank		: false
-		,	forceSelection	: true
-		,	typeAhead		: true
-		,	selectOnFocus	: true
-		,	triggerAction	: 'all'
-		,	width			: 200
-		,	listWidth		: 400
-		,	listeners		: {
-				scope	: this
-			,	select	: function(cb, record, index) {
-					this.form_penanggung_jawab_on_select(record);
-				}
-		}
+		,	readOnly		: true
+		,	width			: 175
 	});
 
 	this.form_waktu_audit = new Ext.form.TextField({
@@ -2576,6 +2714,184 @@ function M_TrxRCAEdit()
 		,	style				: 'text-align: right'
 	});
 	
+	/* begin window penanggung jawab rca */
+	this.record_penanggung_jawab_rca = new Ext.data.Record.create([
+			{ name	: 'id_seksi' }
+		,	{ name	: 'id_dinas' }
+		,	{ name	: 'id_departemen' }
+		,	{ name	: 'id_divprosbu' }
+		,	{ name	: 'id_direktorat' }
+		,	{ name	: 'nama_seksi' }
+		,	{ name	: 'nama_dinas' }
+		,	{ name	: 'nama_departemen' }
+		,	{ name	: 'nama_divprosbu' }
+		,	{ name	: 'nama_direktorat' }
+		,	{ name	: 'pic' }
+	]);
+	
+	this.store_penanggung_jawab_rca = new Ext.data.ArrayStore({
+			url			: m_trx_rca_dir + 'data_penanggung_jawab_rca.jsp'
+		,	fields		: this.record_penanggung_jawab_rca
+		,	autoLoad	: false
+	});
+	
+	this.filters_penanggung_jawab_rca = new Ext.ux.grid.GridFilters({
+			encode	: true
+		,	local	: true
+	});
+
+	this.cm_penanggung_jawab_rca = new Ext.grid.ColumnModel({
+		columns	: [
+				new Ext.grid.RowNumberer()
+			,	{
+					header		: 'Direktorat'
+				,	dataIndex	: 'nama_direktorat'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Divisi/Proyek/SBU'
+				,	dataIndex	: 'nama_divprosbu'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Departemen'
+				, 	dataIndex	: 'nama_departemen'
+				, 	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Dinas'
+				,	dataIndex	: 'nama_dinas'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Seksi'
+				,	dataIndex	: 'nama_seksi'
+				,	width		: 150
+				,	filterable	: true
+				}
+		]
+	,	defaults : {
+			sortable	: true
+		,	hideable	: false
+		}
+	});
+	
+	this.btn_pilih_penanggung_jawab_rca = new Ext.Button({
+			text		: 'Pilih'
+		,	iconCls		: 'save16'
+		,	disabled	: true
+		,	scope		: this
+		,	handler		: function() {
+				this.do_pilih_penanggung_jawab_rca();
+			}
+	});
+
+	this.btn_batal_penanggung_jawab_rca = new Ext.Button({
+			text	: 'Batal'
+		,	iconCls	: 'del16'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_batal_penanggung_jawab_rca();
+			}
+	});
+	
+	this.bbar_penanggung_jawab_rca = new Ext.Toolbar({
+		items	: [
+				this.btn_batal_penanggung_jawab_rca
+			,	'->'
+			,	this.btn_pilih_penanggung_jawab_rca
+		]
+	});
+
+	this.sm_penanggung_jawab_rca = new Ext.grid.RowSelectionModel({
+			singleSelect	: true
+		,	listeners		: {
+				scope			: this
+			,	selectionchange	: function(sm) {
+					var data = sm.getSelections();
+					if (data.length) {
+						this.direktorat = data[0].data['id_direktorat'];
+						this.divprosbu	= data[0].data['id_divprosbu'];
+						this.departemen = data[0].data['id_departemen'];
+						this.dinas		= data[0].data['id_dinas'];
+						this.seksi		= data[0].data['id_seksi'];
+						this.pic		= data[0].data['pic'];
+						this.nama_seksi	= data[0].data['nama_seksi'];
+						this.btn_pilih_penanggung_jawab_rca.setDisabled(false);
+					} else {
+						this.direktorat = '';
+						this.divprosbu	= '';
+						this.departemen = '';
+						this.dinas		= '';
+						this.seksi		= '';
+						this.pic		= '';
+						this.nama_seksi	= '';
+						this.btn_pilih_penanggung_jawab_rca.setDisabled(true);
+					}
+				}
+			}
+	});
+
+	this.grid_penanggung_jawab_rca = new Ext.grid.GridPanel({
+			store		: this.store_penanggung_jawab_rca
+		,	cm			: this.cm_penanggung_jawab_rca
+		,	sm			: this.sm_penanggung_jawab_rca
+		,	autoScroll	: true
+		,	stripeRows	: true
+		,	bbar		: this.bbar_penanggung_jawab_rca
+		,	viewConfig	: { forceFit : true }
+		,	plugins		: [ this.filters_penanggung_jawab_rca ]
+	});
+
+	this.window_penanggung_jawab = new Ext.Window ({
+			title		: 'Penanggung Jawab RCA'
+		,	width		: 850
+		,	height		: 400
+		,	modal		: true
+		,	closable	: false
+		,	layout		: 'fit'
+		,	items		: [
+				this.grid_penanggung_jawab_rca
+			]
+	});
+	
+	this.do_pilih_penanggung_jawab_rca = function()
+	{
+		this.form_penanggung_jawab.setValue(this.nama_seksi);
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_batal_penanggung_jawab_rca = function()
+	{
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_load_penanggung_jawab_rca = function()
+	{
+		this.store_penanggung_jawab_rca.load();
+	}
+	
+	this.do_refresh_penanggung_jawab_rca = function()
+	{
+		this.do_load_penanggung_jawab_rca();
+		this.window_penanggung_jawab.show();
+	}
+	/* end window penanggung jawab rca */
+	
+	this.btn_pilih = new Ext.Button({
+			text	: '...'
+		,	width	: 20
+		,	tooltip	: 'Pilih Penanggung Jawab RCA'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_refresh_penanggung_jawab_rca();
+			}
+	});
+	
 	this.panel_form = new Ext.form.FormPanel({
 			layout		: 'column'
 		,	autoWidth	: true
@@ -2602,7 +2918,13 @@ function M_TrxRCAEdit()
 				,	labelWidth	: 120
 				,	items		: [
 						this.form_nama_tempat_rca
-					,	this.form_penanggung_jawab
+					,	{
+							xtype	: 'compositefield'
+						,	items	: [
+								this.form_penanggung_jawab
+							,	this.btn_pilih
+							]
+						}
 					,	this.form_waktu_audit
 					,	{
 							xtype	: 'compositefield'
@@ -2885,7 +3207,7 @@ function M_TrxRCAEdit()
 			,	penanggung_jawab_divprosbu	: this.divprosbu
 			,	penanggung_jawab_departemen	: this.departemen
 			,	penanggung_jawab_dinas		: this.dinas
-			,	penanggung_jawab_seksi		: this.form_penanggung_jawab.getValue()
+			,	penanggung_jawab_seksi		: this.seksi
 			,	penanggung_jawab_nipg		: this.pic
 			,	waktu_audit					: this.form_waktu_audit.getValue()
 			,	lama_audit					: this.form_lama_audit.getValue()
@@ -2926,7 +3248,8 @@ function M_TrxRCAEdit()
 		this.form_divprosbu_auditor.setValue(data.auditor_divprosbu);
 		this.form_direktorat_auditor.setValue(data.auditor_direktorat);
 		this.form_nama_tempat_rca.setValue(data.nama_tempat_rca);
-		this.form_penanggung_jawab.setValue(data.penanggung_jawab_seksi);
+		this.form_penanggung_jawab.setValue(data.penanggung_jawab_nama_seksi);
+		this.seksi = data.penanggung_jawab_seksi;
 		this.dinas = data.penanggung_jawab_dinas;
 		this.departemen = data.penanggung_jawab_departemen;
 		this.divprosbu = data.penanggung_jawab_divprosbu;
@@ -2994,6 +3317,7 @@ function M_TrxRCAEdit()
 			this.form_direktorat_auditor.setDisabled(true);
 			this.form_nama_tempat_rca.setDisabled(true);
 			this.form_penanggung_jawab.setDisabled(true);
+			this.btn_pilih.setDisabled(true);
 			this.form_nama_auditor_1.setDisabled(true);
 			this.form_nama_auditor_2.setDisabled(true);
 			this.form_nama_auditor_3.setDisabled(true);
@@ -3035,6 +3359,7 @@ function M_TrxRCAEdit()
 			this.form_direktorat_auditor.setDisabled(false);
 			this.form_nama_tempat_rca.setDisabled(false);
 			this.form_penanggung_jawab.setDisabled(false);
+			this.btn_pilih.setDisabled(false);
 			this.form_nama_auditor_1.setDisabled(false);
 			this.form_nama_auditor_2.setDisabled(false);
 			this.form_nama_auditor_3.setDisabled(false);
