@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_unjuk_kerja_kumulatif" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="DetailDS">
+		<parameter name="TOTAL" class="java.lang.Integer" isForPrompting="false"/>
+		<parameter name="MONTH" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="YEAR" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="ID_DIR" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="ID_DIV" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="PREV_MONTH" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="PREV_YEAR" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() ?
+"   AND T_UNJUK_KERJA.\"ID_DIREKTORAT\" = " + $P{ID_DIR} + "\n" :
+""
+]]></defaultValueExpression>
+		</parameter>
+		<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() ?
+"   AND T_UNJUK_KERJA.\"ID_DIVPROSBU\" = " + $P{ID_DIV} + "\n" :
+""
+]]></defaultValueExpression>
+		</parameter>
+		<parameter name="RESET_QUERY" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["SELECT\n" +
+"     SKRG.\"KUM_JK_SKRG\" AS KUM_JK_SKRG,\n" +
+"     LALU.\"KUM_JK_LALU\" AS KUM_JK_LALU,\n" +
+"     replace(convert(varchar, TANGGAL.\"TANGGAL\", 111), '/', '-') AS TANGGAL\n" +
+"FROM\n" +
+"     (\n" +
+"     SELECT\n" +
+"       sum(T_UNJUK_KERJA.\"JML_JAM_KERJA\") AS KUM_JK_SKRG\n" +
+"     FROM\n" +
+"        \"dbo\".\"T_UNJUK_KERJA\" T_UNJUK_KERJA\n" +
+"       INNER JOIN \"dbo\".\"T_INSIDEN\" T_INSIDEN\n" +
+"       ON T_UNJUK_KERJA.\"TANGGAL\" >= T_INSIDEN.\"TANGGAL\"\n" +
+"     WHERE\n" +
+"        T_UNJUK_KERJA.\"TANGGAL\" <= cast('" + $P{YEAR} + "-" + $P{MONTH} + "-01' as datetime)\n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} +
+"     ) SKRG,\n" +
+"     (\n" +
+"     SELECT\n" +
+"       sum(T_UNJUK_KERJA.\"JML_JAM_KERJA\") AS KUM_JK_LALU\n" +
+"     FROM\n" +
+"        \"dbo\".\"T_UNJUK_KERJA\" T_UNJUK_KERJA\n" +
+"       INNER JOIN \"dbo\".\"T_INSIDEN\" T_INSIDEN\n" +
+"       ON T_UNJUK_KERJA.\"TANGGAL\" >= T_INSIDEN.\"TANGGAL\"\n" +
+"     WHERE\n" +
+"       T_UNJUK_KERJA.\"TANGGAL\" <= cast('" + $P{PREV_YEAR} + "-" + $P{PREV_MONTH} + "-01' as datetime)\n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} +
+"     ) LALU,\n" +
+"     (\n" +
+"     SELECT\n" +
+"       T_UNJUK_KERJA.\"TANGGAL\" AS TANGGAL\n" +
+"     FROM\n" +
+"        \"dbo\".\"T_INSIDEN\" T_UNJUK_KERJA\n" +
+"     WHERE\n" +
+"       T_UNJUK_KERJA.\"STATUS_RESET\" = 1\n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} +
+"     ) TANGGAL"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="NON_RESET_QUERY" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA["SELECT\n" +
+"     SKRG.\"KUM_JK_SKRG\" AS KUM_JK_SKRG,\n" +
+"     LALU.\"KUM_JK_LALU\" AS KUM_JK_LALU,\n" +
+"     '-' AS TANGGAL\n" +
+"FROM\n" +
+"     (\n" +
+"     SELECT\n" +
+"       sum(T_UNJUK_KERJA.\"JML_JAM_KERJA\") AS KUM_JK_SKRG\n" +
+"     FROM\n" +
+"        \"dbo\".\"T_UNJUK_KERJA\" T_UNJUK_KERJA\n" +
+"     WHERE\n" +
+"        T_UNJUK_KERJA.\"TANGGAL\" <= cast('" + $P{YEAR} + "-" + $P{MONTH} + "-01' as datetime)\n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} +
+"     ) SKRG,\n" +
+"     (\n" +
+"     SELECT\n" +
+"       sum(T_UNJUK_KERJA.\"JML_JAM_KERJA\") AS KUM_JK_LALU\n" +
+"     FROM\n" +
+"        \"dbo\".\"T_UNJUK_KERJA\" T_UNJUK_KERJA\n" +
+"     WHERE\n" +
+"       T_UNJUK_KERJA.\"TANGGAL\" <= cast('" + $P{PREV_YEAR} + "-" + $P{PREV_MONTH} + "-01' as datetime)\n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} +
+"     ) LALU\n"]]></defaultValueExpression>
+		</parameter>
+		<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+			<defaultValueExpression><![CDATA[$P{TOTAL} != null && $P{TOTAL} > 0 ?
+    $P{RESET_QUERY} :
+    $P{NON_RESET_QUERY}]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[$P!{DYNAMIC_QUERY}]]>
+		</queryString>
+		<field name="KUM_JK_SKRG" class="java.lang.Integer"/>
+		<field name="KUM_JK_LALU" class="java.lang.Integer"/>
+		<field name="TANGGAL" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="New Dataset 1">
+		<queryString>
+			<![CDATA[SELECT
+     sum(T_UNJUK_KERJA."JML_JAM_KERJA") AS KUM_JK_SKRG
+FROM
+     "dbo"."T_UNJUK_KERJA" T_UNJUK_KERJA INNER JOIN "dbo"."T_INSIDEN" T_INSIDEN ON T_UNJUK_KERJA."TANGGAL" >= T_INSIDEN."TANGGAL"
+WHERE
+     T_INSIDEN."STATUS_RESET" = 1
+ AND T_UNJUK_KERJA."TANGGAL" <= cast('2012-8-01' as datetime)]]>
+		</queryString>
+		<field name="KUM_JK_SKRG" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="ID_DIR" class="java.lang.String"/>
+	<parameter name="ID_DIV" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PREV_MONTH" class="java.lang.String"/>
+	<parameter name="PREV_YEAR" class="java.lang.String"/>
+	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() ?
+    "  AND T_INSIDEN.\"ID_DIREKTORAT\" = " + $P{ID_DIR} + "\n" :
+    ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() ?
+    "  AND T_INSIDEN.\"ID_DIVPROSBU\" = " + $P{ID_DIV} + "\n" :
+    ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["SELECT\n" +
+"     count(T_INSIDEN.\"TANGGAL\") AS TOTAL\n" +
+"FROM\n" +
+"     \"dbo\".\"T_INSIDEN\" T_INSIDEN\n" +
+"WHERE\n" +
+"     T_INSIDEN.\"STATUS_RESET\" = 1" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     count(T_INSIDEN."TANGGAL") AS TOTAL
+FROM
+     "dbo"."T_INSIDEN" T_INSIDEN
+WHERE
+     T_INSIDEN."STATUS_RESET" = 1]]>
+	</queryString>
+	<field name="TOTAL" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="62" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="802" height="60"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="DetailDS">
+						<datasetParameter name="TOTAL">
+							<datasetParameterExpression><![CDATA[$F{TOTAL}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="MONTH">
+							<datasetParameterExpression><![CDATA[$P{MONTH}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="YEAR">
+							<datasetParameterExpression><![CDATA[$P{YEAR}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ID_DIR">
+							<datasetParameterExpression><![CDATA[$P{ID_DIR}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ID_DIV">
+							<datasetParameterExpression><![CDATA[$P{ID_DIV}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PREV_MONTH">
+							<datasetParameterExpression><![CDATA[$P{PREV_MONTH}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PREV_YEAR">
+							<datasetParameterExpression><![CDATA[$P{PREV_YEAR}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="60" width="802">
+						<staticText>
+							<reportElement x="0" y="0" width="200" height="20"/>
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Kumulatif Jam Kerja Bulan Lalu]]></text>
+						</staticText>
+						<textField isBlankWhenNull="true">
+							<reportElement x="200" y="0" width="150" height="20"/>
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{KUM_JK_LALU} != null ?
+    $F{KUM_JK_LALU} :
+    0]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement x="0" y="20" width="200" height="20"/>
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Kumulatif Jam Kerja Bulan Sekarang]]></text>
+						</staticText>
+						<textField isBlankWhenNull="true">
+							<reportElement x="200" y="20" width="150" height="20"/>
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{KUM_JK_SKRG} != null ?
+    $F{KUM_JK_SKRG} :
+    0]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement x="0" y="40" width="200" height="20"/>
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<paragraph leftIndent="2"/>
+							</textElement>
+							<text><![CDATA[Terhitung Mulai Tanggal]]></text>
+						</staticText>
+						<textField pattern="" isBlankWhenNull="true">
+							<reportElement x="200" y="40" width="150" height="20"/>
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{TANGGAL}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

@@ -949,13 +949,23 @@ function M_LUK_TJK (displayBulan)
 		rows	: [this.col_hdr]
 	});
 
+	this.btn_print = new Ext.Button({
+			text		: 'Print'
+		,	iconCls		: 'print16'
+		,	scope		: this
+		,	handler		: function() {
+				this.do_print();
+			}
+	});
+
 	this.grid = new Ext.grid.GridPanel({
-		store		: this.store
-	,	cm			: this.cm
-	,	autoScroll	: true
-	,	autoHeight	: true
-	,	autoWidth	: true
-	,	plugins		: [this.hdr]
+			store		: this.store
+		,	cm			: this.cm
+		,	autoScroll	: true
+		,	autoHeight	: true
+		,	autoWidth	: true
+		,	plugins		: [ this.hdr ]
+		,	tbar		: [ this.btn_print ]
 	});
 
 	/*
@@ -1026,6 +1036,57 @@ function M_LUK_TJK (displayBulan)
 		]
 	});
 
+	this.do_print = function(){
+		var form;
+		var id_report	= '37';
+		var tipe_report	= 'xls';
+
+		form = document.createElement('form');
+		
+		form.setAttribute('method', 'post');
+		form.setAttribute('target', '_blank');
+		form.setAttribute('action', _g_root +'/report');
+		
+		var hiddenField1 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField1.setAttribute('name', 'id');
+        hiddenField1.setAttribute('value', id_report);
+		
+		var hiddenField2 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField2.setAttribute('name', 'type');
+        hiddenField2.setAttribute('value', tipe_report);
+
+		var hiddenField3 = document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+		hiddenField3.setAttribute('name', 'month');
+        hiddenField3.setAttribute('value', this.set_waktu.formBulan.getValue());
+
+		var hiddenField4= document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField4.setAttribute('name', 'year');
+        hiddenField4.setAttribute('value', this.set_waktu.formTahun.getValue());
+
+		var hiddenField5= document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField5.setAttribute('name', 'id_dir');
+        hiddenField5.setAttribute('value', this.set_org.formDirektorat.getValue());
+		
+		var hiddenField6= document.createElement ('input');
+        hiddenField1.setAttribute('type', 'hidden');
+        hiddenField6.setAttribute('name', 'id_div');
+        hiddenField6.setAttribute('value', this.set_org.formDivProSBU.getValue());
+		
+		form.appendChild(hiddenField1);
+		form.appendChild(hiddenField2);
+		form.appendChild(hiddenField3);
+		form.appendChild(hiddenField4);
+		form.appendChild(hiddenField5);
+		form.appendChild(hiddenField6);
+		document.body.appendChild(form);
+		form.submit();
+	}
+	
 	this.do_load = function (dir, div, dep, dinas, seksi, tahun, bulan)
 	{
 		this.store.load ({

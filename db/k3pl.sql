@@ -16938,3 +16938,19 @@ insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WI
 go
 insert	into R_SEKSI (ID_DIREKTORAT, ID_DIVPROSBU, ID_DEPARTEMEN, ID_DINAS, ID_WILAYAH, NAMA_SEKSI, ID_USER) values (3, 32, 103, 165, null, 'Teknologi Informasi', '1')
 go
+
+insert into R_REPORT (
+	NAMA_REPORT
+,	TIPE_REPORT
+,	FILE_LOCATION
+,	WEB_PARAMS
+,	REPORT_PARAMS
+)
+values (
+	'Laporan Unjuk Kerja'
+,	'xls'
+,	'reports/lap_unjuk_kerja.jasper'
+,	'month;year;id_dir;id_div'
+,	'MONTH;YEAR;ID_DIR;ID_DIV'
+)
+go
