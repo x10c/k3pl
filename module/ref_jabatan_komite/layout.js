@@ -599,7 +599,8 @@ function M_RefKelJabatanKomite()
 	{
 		Ext.Ajax.request({
 			params :{
-				nama	: record.data['nama']
+				id		: record.data['id']
+			,	nama	: record.data['nama']
 			,	id_kel_jabatan_csc	: m_ref_jab_kel_csc_id
 			,	id_direktorat	: m_ref_direktorat_id
 			,	id_divprosbu	: m_ref_divprosbu_id

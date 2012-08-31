@@ -62,7 +62,7 @@ try {
 		out.print("{success:false,info:'DML tipe tidak diketahui ("+dml+")!'}");
 		return;
 	}
-
+	
 	q	+="; insert into __log (nipg, nama_menu, status_akses) values ('"
 		+ session.getAttribute("user.nipg") +"','"
 		+ session.getAttribute("menu.id") +"','"+ dml +"')";

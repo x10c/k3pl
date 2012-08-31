@@ -9,13 +9,13 @@
 <%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
+		db_con	= (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
 
-	Statement	db_stmt = db_con.createStatement();
+		db_stmt = db_con.createStatement();
 	String id_direktorat	= request.getParameter("id_direktorat");
 	String id_divprosbu		= request.getParameter("id_divprosbu");
 	String id_departemen	= request.getParameter("id_departemen");
@@ -24,10 +24,12 @@ try {
 	String where_clause = "";
 	
 	if (! "1".equals (user_group)) {
-		if (!id_direktorat.equals(user_dir) || !id_divprosbu.equals(user_div)){
-			id_departemen = null;
-			id_dinas = null;
-			id_seksi = null;
+		if (id_direktorat != null){
+			if (!id_direktorat.equals(user_dir) || !id_divprosbu.equals(user_div)){
+				id_departemen = null;
+				id_dinas = null;
+				id_seksi = null;
+			}
 		}
 		id_direktorat 	= user_dir;
 		id_divprosbu 	= user_div;
