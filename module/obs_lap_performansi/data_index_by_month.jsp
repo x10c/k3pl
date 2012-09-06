@@ -103,7 +103,7 @@ try {
 			+" from		t_stop_detail "
 			+" where 	id_stop in ("
 			+"	select	id_stop "
-			+"	from	t_stop "
+			+"	from	t_stop A"
 			+"	where	status_aktif	= '1' "
 			+"	and	year		= "+ year
 			+"	and	month		= "+ (i + 1);
