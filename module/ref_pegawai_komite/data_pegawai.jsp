@@ -9,13 +9,6 @@
 <%@ include file="../modinit.jsp" %>
 <%
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt = db_con.createStatement();
 	String id_direktorat	= request.getParameter("id_direktorat");
 	String id_divprosbu		= request.getParameter("id_divprosbu");
 	String id_departemen	= request.getParameter("id_departemen");
@@ -23,6 +16,8 @@ try {
 	String id_seksi	= request.getParameter("id_seksi");
 	String where_clause = "";
 	
+	db_stmt = db_con.createStatement();
+
 	if (! "1".equals (user_group)) {
 		if (!id_direktorat.equals(user_dir) || !id_divprosbu.equals(user_div)){
 			id_departemen = null;
@@ -49,7 +44,7 @@ try {
 		where_clause += " and A.id_seksi = "+ id_seksi;
 	}
 	
-	String q=" select	A.nipg "
+	db_q=" select	A.nipg "
 		+" ,		B.nama_klasifikasi_pegawai "
 		+" ,		C.nama_jabatan "
 		+" ,		isnull(D.nama_departemen, '') nama_departemen "
@@ -72,32 +67,28 @@ try {
 		+" where A.status_pegawai = '1' "+ where_clause
 		+" order by	A.nipg";
 
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int		i = 0;
-	String		data = "{ rows: [";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
+	while (db_rs.next()) {
+		json_o = new JSONObject ();
+		json_o.put ("nipg",  db_rs.getString ("nipg"));
+		json_o.put ("nama_klasifikasi_pegawai", db_rs.getString ("nama_klasifikasi_pegawai"));
+		json_o.put ("nama_jabatan", db_rs.getString ("nama_jabatan"));
+		json_o.put ("nama_departemen", db_rs.getString ("nama_departemen"));
+		json_o.put ("nama_dinas", db_rs.getString ("nama_dinas"));
+		json_o.put ("nama_seksi", db_rs.getString ("nama_seksi"));
+		json_o.put ("nama_pegawai", db_rs.getString ("nama_pegawai"));
+		json_o.put ("email", db_rs.getString ("email"));
+		json_o.put ("status_pegawai", db_rs.getString ("status_pegawai"));
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+="{ nipg			: '"+ rs.getString("nipg") +"' "
-			+ ", nama_klasifikasi_pegawai	: '"+ rs.getString("nama_klasifikasi_pegawai") +"' "
-			+ ", nama_jabatan			: '"+ rs.getString("nama_jabatan") +"' "
-			+ ", nama_departemen		: '"+ rs.getString("nama_departemen") +"' "
-			+ ", nama_dinas			: '"+ rs.getString("nama_dinas") +"' "
-			+ ", nama_seksi			: '"+ rs.getString("nama_seksi") +"' "
-			+ ", nama_pegawai		: '"+ rs.getString("nama_pegawai") +"' "
-			+ ", email			: '"+ rs.getString("email") +"' "
-			+ ", status_pegawai		: '"+ rs.getString("status_pegawai") +"' "
-			+  "}";
+		json_a.put (json_o);
 	}
 
-	data += "]}";
-
-	out.print(data);
+	_return.put ("success", true);
+	_return.put ("rows", json_a);
 } catch (Exception e) {
-	out.print("{success:false, info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>
