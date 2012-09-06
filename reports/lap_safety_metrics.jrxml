@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_safety_metrics" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="04d3e531-0296-4c3d-9f2b-e22966a6d559">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lap_safety_metrics" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -69,7 +69,7 @@
 "       and     b.id_area_direktorat  = a.id_direktorat " +
 "       )   as KECELAKAAN_KENDARAAN " +
 ",      ( " +
-"       select	cast((isnull(sum(b.jml_hari_absen),0) / isnull(nullif(sum(b.jml_hari_kerja), 0), 1) ) / 100 as varchar) " +
+"       select	cast(round((isnull(sum(b.jml_hari_absen),0) / isnull(nullif(cast(sum(b.jml_hari_kerja) as float), 0.0), 1.0) ) * 100, 2, 1) as varchar) " +
 "       from	t_unjuk_kerja   as b " +
 "       where	b.bulan         = " + $P{MONTH} +
 "       and     b.tahun         = " + $P{YEAR} +
@@ -260,7 +260,7 @@
 "       and     b.id_area_divprosbu   = a.id_divprosbu " +
 "       )   as KECELAKAAN_KENDARAAN " +
 ",      ( " +
-"       select	cast((isnull(sum(b.jml_hari_absen),0) / isnull(nullif(sum(b.jml_hari_kerja), 0), 1) ) / 100 as varchar) " +
+"       select	cast(round((isnull(sum(b.jml_hari_absen),0) / isnull(nullif(cast(sum(b.jml_hari_kerja) as float), 0.0), 1.0) ) * 100, 2, 1) as varchar) " +
 "       from	t_unjuk_kerja   as b " +
 "       where	b.bulan         = " + $P{MONTH} +
 "       and     b.tahun         = " + $P{YEAR} +
@@ -468,7 +468,7 @@
 "       and     b.id_area_departemen  = a.id_departemen " +
 "       )   as KECELAKAAN_KENDARAAN " +
 ",      ( " +
-"       select	cast((isnull(sum(b.jml_hari_absen),0) / isnull(nullif(sum(b.jml_hari_kerja), 0), 1) ) / 100 as varchar) " +
+"       select	cast(round((isnull(sum(b.jml_hari_absen),0) / isnull(nullif(cast(sum(b.jml_hari_kerja) as float), 0.0), 1.0) ) * 100, 2, 1) as varchar) " +
 "       from	t_unjuk_kerja   as b " +
 "       where	b.bulan         = " + $P{MONTH} +
 "       and     b.tahun         = " + $P{YEAR} +
@@ -628,7 +628,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 ",      '-' as FIRST_AID " +
 ",      '-' as NEAR_MISSED " +
 ",      '-' as KECELAKAAN_KENDARAAN " +
-",      '0.45' as TSAF " +
+",      (select target_tsaf from r_k3pl) as TSAF " +
 ",      '-' as JAM_KERJA_AMAN " +
 ",      100 as PERCENT_PARTISIPASI_RCA " +
 ",      20  as PERCENT_45 " +
@@ -664,7 +664,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 	<title>
 		<band height="55" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="c475ae60-7ee2-4939-afb5-d1f6bf800d6c" x="0" y="0" width="802" height="30"/>
+				<reportElement x="0" y="0" width="802" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="20" isBold="true"/>
 				</textElement>
@@ -675,7 +675,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 	<columnHeader>
 		<band height="70">
 			<staticText>
-				<reportElement uuid="404f97cd-735f-4250-b370-1ec68f20d7c4" mode="Opaque" x="22" y="0" width="265" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="22" y="0" width="265" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -689,7 +689,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="1d243bd8-6c8e-482c-b8bf-495e5b232001" mode="Opaque" x="287" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="287" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -703,7 +703,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 				<text><![CDATA[Fatality]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3dc5e4e4-d733-4f05-aaa4-6c3d338b900b" mode="Opaque" x="322" y="0" width="46" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="322" y="0" width="46" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -717,7 +717,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 				<text><![CDATA[LTIF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="567a5cb0-3e44-430d-8140-23be9cceac41" mode="Opaque" x="368" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="368" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -732,7 +732,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 Ringan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="daf4c627-1a31-4b77-a20a-883fbe09c541" mode="Opaque" x="0" y="0" width="22" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="0" y="0" width="22" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -746,7 +746,7 @@ Ringan]]></text>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e2136f6b-7e44-4719-8401-ce3763b9a980" mode="Opaque" x="612" y="0" width="135" height="20" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="612" y="0" width="135" height="20" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -760,7 +760,7 @@ Ringan]]></text>
 				<text><![CDATA[Risk Containment Audit]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b9330bc3-8dad-456e-9341-3904838a4e39" mode="Opaque" x="612" y="20" width="45" height="50" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="612" y="20" width="45" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -775,7 +775,7 @@ Ringan]]></text>
 Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e876d4b4-4908-4e24-983c-76c7d7a5d6fe" mode="Opaque" x="657" y="20" width="45" height="50" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="657" y="20" width="45" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -791,7 +791,7 @@ Severity
 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="153c272c-69d8-4a2f-8075-e225640b2563" mode="Opaque" x="702" y="20" width="45" height="50" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="702" y="20" width="45" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -807,7 +807,7 @@ Perbaikan
 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="965d7b36-920c-4394-81b8-9294d00d5562" mode="Opaque" x="747" y="0" width="55" height="20" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="747" y="0" width="55" height="20" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -821,7 +821,7 @@ Perbaikan
 				<text><![CDATA[Observasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a799ff5a-7f16-45d0-8a3d-58cdc1c863c4" mode="Opaque" x="747" y="20" width="55" height="50" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="747" y="20" width="55" height="50" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -836,7 +836,7 @@ Perbaikan
 Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="44158cd9-e10a-40fd-a30c-11acfc66f970" mode="Opaque" x="473" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="473" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -851,7 +851,7 @@ Partisipasi]]></text>
 Kendaraan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="170f2cd0-66e4-4509-8218-fd2ee210e221" mode="Opaque" x="403" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="403" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -866,7 +866,7 @@ Kendaraan]]></text>
 Aid]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="416446c8-3727-4aa9-9735-4b00f7c1399d" mode="Opaque" x="438" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="438" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -881,7 +881,7 @@ Aid]]></text>
 Missed]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="6cfc5688-d92d-4c6f-bb81-5ee138fdcc19" mode="Opaque" x="508" y="0" width="35" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="508" y="0" width="35" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -895,7 +895,7 @@ Missed]]></text>
 				<text><![CDATA[TSAF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5e34e0f8-fa0d-4531-a19f-f82a3a871bdf" mode="Opaque" x="543" y="0" width="69" height="70" backcolor="#C0C0C0"/>
+				<reportElement mode="Opaque" x="543" y="0" width="69" height="70" backcolor="#C0C0C0"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -913,7 +913,7 @@ Missed]]></text>
 	<detail>
 		<band height="20">
 			<textField>
-				<reportElement uuid="d6b42322-3f97-4624-9d6d-89ea3e4f5f82" x="22" y="0" width="265" height="20"/>
+				<reportElement x="22" y="0" width="265" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -927,7 +927,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{ITEM}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="edf3ab60-4941-49ac-acfd-e20191709cd1" x="0" y="0" width="22" height="20"/>
+				<reportElement x="0" y="0" width="22" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -941,7 +941,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$V{NO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
-				<reportElement uuid="14ae7298-1d43-422c-a2af-280f155d7721" x="612" y="0" width="45" height="20"/>
+				<reportElement x="612" y="0" width="45" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -955,7 +955,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{PERCENT_PARTISIPASI_RCA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1f9ba34b-396d-429d-bc4d-086cf33ce17e" x="657" y="0" width="45" height="20"/>
+				<reportElement x="657" y="0" width="45" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -969,7 +969,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{PERCENT_45}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="0b339dcf-3e94-417d-a958-a5402fea21cd" x="702" y="0" width="45" height="20"/>
+				<reportElement x="702" y="0" width="45" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -983,7 +983,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{PERCENT_PERBAIKAN_TEMUAN_45}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7feae150-1cb8-4acf-829d-815f63243acd" x="747" y="0" width="55" height="20"/>
+				<reportElement x="747" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -997,7 +997,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{PERCENT_PARTISIPASI_OBSERVASI}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="f9dced16-7fe6-4618-9889-7655e0b68def" x="287" y="0" width="35" height="20"/>
+				<reportElement x="287" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1011,7 +1011,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{FATALITY}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="85f950e1-d139-480f-b1ae-4758ac6b9c41" x="322" y="0" width="46" height="20"/>
+				<reportElement x="322" y="0" width="46" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1025,7 +1025,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{LTIF}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="43558ff8-8a6d-42f4-8623-829ef212b50e" x="368" y="0" width="35" height="20"/>
+				<reportElement x="368" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1039,7 +1039,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{KECELAKAAN_RINGAN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ee640edd-99f2-4062-a37c-d2a07d6cbad1" x="403" y="0" width="35" height="20"/>
+				<reportElement x="403" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1053,7 +1053,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{FIRST_AID}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7cb62613-4187-4b22-b0fa-f5573480857c" x="438" y="0" width="35" height="20"/>
+				<reportElement x="438" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1067,7 +1067,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{NEAR_MISSED}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="db5af78a-e2d9-410d-a50c-070535807c5b" x="473" y="0" width="35" height="20"/>
+				<reportElement x="473" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1081,7 +1081,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{KECELAKAAN_KENDARAAN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="b9457c8f-a995-4e75-a52d-177d00f8f5c2" x="508" y="0" width="35" height="20"/>
+				<reportElement x="508" y="0" width="35" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1095,7 +1095,7 @@ Missed]]></text>
 				<textFieldExpression><![CDATA[$F{TSAF}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="b919cfdf-a663-444a-a8da-9458e3a5d9f1" x="543" y="0" width="69" height="20"/>
+				<reportElement x="543" y="0" width="69" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
