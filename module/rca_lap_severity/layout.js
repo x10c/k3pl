@@ -107,12 +107,13 @@ function M_RCALapSeverityGrid()
 		,	{ name: 'status' }
 		,	{ name: 'nama_status' }
 		,	{ name: 'note' }
+		,	{ name: 'id_rca_detail' }
 	]);
 
 	this.store = new Ext.ux.data.PagingArrayStore({
 			url			: m_rca_lap_severity_d +'data.jsp'
 		,	fields		: this.record
-		,	idIndex		: 0
+		,	idIndex		: 17
 		,	autoLoad	: false
 	});
 
@@ -333,6 +334,8 @@ function M_RCALapSeverityGrid()
 			,	id_area		: id_area
 			,	year		: year
 			,	month		: month
+			,	start		: 0
+			,	limit		: 50
 			}
 		});
 	}
