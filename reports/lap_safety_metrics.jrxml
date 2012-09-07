@@ -623,7 +623,7 @@ $P{CLAUSE_QUERY_DEP}]]></defaultValueExpression>
 "       select	' Target ' + '" + $P{YEAR} + "' " +
 "       ) as ITEM " +
 ",      '0' as FATALITY " +
-",      '0' as LTIF " +
+",      (select target_ltif from r_k3pl) as LTIF " +
 ",      '3' as KECELAKAAN_RINGAN " +
 ",      '-' as FIRST_AID " +
 ",      '-' as NEAR_MISSED " +
@@ -924,7 +924,7 @@ Missed]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ITEM}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ITEM}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="22" height="20"/>
@@ -938,7 +938,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{NO}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{NO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00">
 				<reportElement x="612" y="0" width="45" height="20"/>
@@ -952,7 +952,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PERCENT_PARTISIPASI_RCA}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PERCENT_PARTISIPASI_RCA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="657" y="0" width="45" height="20"/>
@@ -966,7 +966,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PERCENT_45}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PERCENT_45}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="702" y="0" width="45" height="20"/>
@@ -980,7 +980,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PERCENT_PERBAIKAN_TEMUAN_45}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PERCENT_PERBAIKAN_TEMUAN_45}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="747" y="0" width="55" height="20"/>
@@ -994,7 +994,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PERCENT_PARTISIPASI_OBSERVASI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PERCENT_PARTISIPASI_OBSERVASI}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="287" y="0" width="35" height="20"/>
@@ -1008,7 +1008,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{FATALITY}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FATALITY}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="322" y="0" width="46" height="20"/>
@@ -1022,7 +1022,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{LTIF}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{LTIF}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="368" y="0" width="35" height="20"/>
@@ -1036,7 +1036,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{KECELAKAAN_RINGAN}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KECELAKAAN_RINGAN}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="403" y="0" width="35" height="20"/>
@@ -1050,7 +1050,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{FIRST_AID}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FIRST_AID}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="438" y="0" width="35" height="20"/>
@@ -1064,7 +1064,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NEAR_MISSED}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NEAR_MISSED}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="473" y="0" width="35" height="20"/>
@@ -1078,7 +1078,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{KECELAKAAN_KENDARAAN}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KECELAKAAN_KENDARAAN}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="508" y="0" width="35" height="20"/>
@@ -1092,7 +1092,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TSAF}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TSAF}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="543" y="0" width="69" height="20"/>
@@ -1106,7 +1106,7 @@ Missed]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{JAM_KERJA_AMAN}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{JAM_KERJA_AMAN}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
