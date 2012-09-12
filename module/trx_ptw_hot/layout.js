@@ -622,26 +622,14 @@ function M_TrxPTWHotMaster(title)
 
 	this.do_print = function()
 	{
-		var data = this.sm.getSelected();
+		var data	= this.sm.getSelected();
+		var url		= _g_root +'/module/lap_ptw/export_hwp.jsp';
 
 		if (data == undefined) {
 			return;
 		}
 
-		var form;
-		form = document.createElement('form');
-
-		form.setAttribute('method', 'post');
-		form.setAttribute('target', '_blank');
-		form.setAttribute('action', _g_root +'/module/lap_ptw/export_hwp.jsp');
-
-		var id_ptw = document.createElement('input');
-		id_ptw.setAttribute('type', 'hidden');
-		id_ptw.setAttribute('name', 'id_ptw');
-		id_ptw.setAttribute('value', data.get('id_ptw'));
-
-		form.appendChild(id_ptw);
-		form.submit();
+		window.open (url +'?id_ptw='+ data.get ('id_ptw'), '_blank');
 	}
 
 	this.do_load = function()

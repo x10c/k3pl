@@ -239,11 +239,11 @@ PT PERUSAHAAN GAS NEGARA (Persero) Tbk <br/>
 <%
 q
 =" select	B.nama_sbak_ptw			as name"
-+" ,		isnull(A.v,'&#x2610;')	as v"
++" ,		isnull(A.v,'cb_0.jpg')	as v"
 +" from	("
 +" 	select	A.id_sbak_ptw"
 +" 	,		B.nama_sbak_ptw"
-+" 	,		'&#x2611;' as v"
++" 	,		'cb_1.jpg' as v"
 +" 	from	t_ptw_sbak	A"
 +" 	,		r_sbak_ptw	B"
 +" 	where	A.id_sbak_ptw	= B.id_sbak_ptw"
@@ -266,7 +266,7 @@ while (rs.next()) {
 	if ((i % 6) == 0) {
 		out.print("</tr><tr>");
 	}
-	out.print("<td>"+ rs.getString("v") +"&nbsp;"+ rs.getString("name") +"</td>");
+	out.print("<td><img src='../../images/"+ rs.getString("v") +"'/>&nbsp;"+ rs.getString("name") +"</td>");
 	i++;
 }
 out.print("</tr>");
