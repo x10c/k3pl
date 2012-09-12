@@ -63,6 +63,15 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 		,	maxValue		: m_stop_n_observed
 		});
 
+	this.form_unsafe = new Ext.ux.form.SpinnerField ({
+			allowBlank		: false
+		,	allowDecimals	: false
+		,	allowNegative	: false
+		,	value			: 0
+		,	minValue		: 0
+		,	maxValue		: m_stop_n_observed
+		});
+
 	this.cm = new Ext.grid.ColumnModel({
 		is_all_safe	: false
 	,	columns		: [
@@ -71,6 +80,7 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 			,	header		: 'Tidak Aman'
 			,	css			: 'background-color: #FFB5C1;'
 			,	width		: 50
+			,	editor		: this.form_unsafe
 			},{
 				id		: 'detail_name'
 			,	dataIndex	: 'detail_name'
@@ -116,6 +126,8 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 				afteredit		: function(e) {
 					if (e.field == 'safe') {
 						e.record.set('unsafe', m_stop_n_observed - e.record.get('safe'));
+					} else if (e.field == 'unsafe') {
+						e.record.set('safe', m_stop_n_observed - e.record.get('unsafe'));
 					}
 				}
 			}
@@ -255,7 +267,7 @@ function M_ObsInputStop()
 	/* observation data */
 	this.panel_user = new Ext.form.FormPanel({
 		labelAlign	: 'right'
-	,	labelWidth	: 220
+	,	labelWidth	: 230
 	,	autoWidth	: true
 	,	autoHeight	: true
 	,	style		: 'margin: 8px;'
@@ -330,11 +342,12 @@ function M_ObsInputStop()
 				o = m_stop_form_obs[i].tipe[j];
 
 				tipe[j].form_safe.setMaxValue(v);
+				tipe[j].form_unsafe.setMaxValue (v);
 
 				/* set all safe value to n-observed */
 				for (k = 0; k < o.store.getCount(); k++) {
 					r = o.store.getAt(k);
-					r.set('safe', v);
+					r.set('safe', 0);
 					r.set('unsafe', 0);
 				}
 			}
@@ -572,7 +585,7 @@ function M_ObsInputStop()
 		this.form_safe.setValue('');
 		this.form_unsafe.setValue('');
 
-		this.set_detail_max_value (1);
+		this.set_detail_max_value (0);
 	}
 
 	this.do_add = function()
@@ -603,6 +616,8 @@ function M_ObsInputStop()
 		this.form_n_observed.setValue(data.jml_org_observasi);
 		this.form_safe.setValue(data.safe);
 		this.form_unsafe.setValue(data.unsafe);
+
+		this.set_detail_max_value (m_stop_n_observed);
 
 		for (i = 0; i < d.length; i++) {
 			grid_id = 'obs_input_detail_'+ d[i].kel_id +'_'+ d[i].tipe_id;
