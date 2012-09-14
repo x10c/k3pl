@@ -327,7 +327,7 @@ function RefCSMPerfEvalPS ()
 	}
 }
 
-function RefCSMPenilaianDetail ()
+function RefCSMEvaluasiDetail ()
 {
 	this.id_penilaian = 0;
 
@@ -487,7 +487,7 @@ function RefCSMPenilaianDetail ()
 	}
 }
 
-function RefCSMPenilaian (id_faktor, detail)
+function RefCSMEvaluasi (id_faktor, detail)
 {
 	this.id_faktor	= id_faktor;
 	this.dml		= 0;
@@ -650,10 +650,10 @@ function RefCSMPenilaian (id_faktor, detail)
 	}
 }
 
-function RefCSMPenilaianMD (id, title)
+function RefCSMEvaluasiMD (id, title)
 {
-	this.detail = new RefCSMPenilaianDetail ();
-	this.master = new RefCSMPenilaian (id, this.detail);
+	this.detail = new RefCSMEvaluasiDetail ();
+	this.master = new RefCSMEvaluasi (id, this.detail);
 
 	this.panel	= new Ext.Panel ({
 		title	:title
@@ -675,8 +675,8 @@ function RefCSMPenilaianMD (id, title)
 function RefCSM ()
 {
 	m_ref_csm_perfevalsi	= new RefCSMPerfEvalSI ();
-	m_ref_csm_nilai_utama	= new RefCSMPenilaianMD (1, "Penilaian - Faktor Utama");
-	m_ref_csm_nilai_tambah	= new RefCSMPenilaianMD (2, "Penilaian - Faktor Tambahan");
+	m_ref_csm_nilai_utama	= new RefCSMEvaluasiMD (1, "Evaluasi - Faktor Utama");
+	m_ref_csm_nilai_tambah	= new RefCSMEvaluasiMD (2, "Evaluasi - Faktor Tambahan");
 	m_ref_csm_perfeval_ps	= new RefCSMPerfEvalPS ();
 
 	this.panel = new Ext.TabPanel ({
