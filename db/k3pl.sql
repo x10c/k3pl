@@ -16958,6 +16958,11 @@ values (
 )
 go
 
+delete from T_PSSR_REFERENCE;
+delete from T_PSSR_KEANGGOTAAN;
+delete from T_PSSR_DETAIL;
+delete from T_PSSR;
+
 delete R_ITEM_DETAIL_PSSR where ID_ITEM_DETAIL_PSSR is not null;
 delete R_ITEM_PSSR where ID_ITEM_PSSR is not null;
 delete R_KATEGORI_ITEM_PSSR where ID_KATEGORI_ITEM_PSSR is not null;
