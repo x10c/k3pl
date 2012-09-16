@@ -26,6 +26,19 @@ create table R_CSM_PENILAIAN2_PENILAIAN (
 ,	NILAI			int not null default 0
 );
 
+create table T_CSM_PROYEK_KONTRAKTOR2 (
+	ID_PROJECT			bigint primary key references t_csm_proyek (id_project)
+,	ID_KONTRAKTOR		bigint foreign key references r_kontraktor (id)
+,	TANGGAL				date default current_timestamp
+,	JENIS_PEKERJAAN		varchar (512) not null default ''
+,	TEMPAT_KONSTRUKSI	varchar (512) not null default ''
+,	TOTAL_NILAI			float not null default 0.0
+,	KETERANGAN			varchar (64) not null default 'Tidak Lulus'
+);
+
+/* add columne PASSING_GRADE to table T_CSM_PROYEK */
+alter table t_csm_proyek add PASSING_GRADE float not null default 50;
+
 delete R_CSM_PENILAIAN2_PENILAIAN where ID is not null;
 delete R_CSM_PENILAIAN2_DETAIL2 where ID is not null;
 delete R_CSM_PENILAIAN2_DETAIL where ID is not null;

@@ -14,6 +14,7 @@ try {
 	String	id		= request.getParameter("id");
 	String	k_utama	= request.getParameter("koefisien_utama");
 	String	k_tambah= request.getParameter("koefisien_tambah");
+	String	pg		= request.getParameter ("passing_grade");
 
 	db_stmt = db_con.createStatement();
 
@@ -28,6 +29,7 @@ try {
 			+" ,	koefisien_tambah"
 			+" ,	id_divprosbu"
 			+" ,	id_direktorat"
+			+" ,	passing_grade"
 			+" ) values ("
 			+ id
 			+", null"
@@ -37,6 +39,7 @@ try {
 			+","+ k_tambah
 			+","+ user_div
 			+","+ user_dir
+			+","+ pg
 			+")";
 		break;
 	case 3:
@@ -45,7 +48,17 @@ try {
 			+" ,		koefisien_tambah= "+ k_tambah
 			+" ,		id_divprosbu	= "+ user_div
 			+" ,		id_direktorat	= "+ user_dir
-			+" where	id_project		= "+ id;
+			+" ,		passing_grade	= "+ pg
+			+" where	id_project		= "+ id +";";
+
+		db_q+=" update	t_csm_proyek_kontraktor2"
+			+ " set		keterangan		= 'Lulus'"
+			+ " where	total_nilai		> "+ pg +";";
+
+		db_q+=" update	t_csm_proyek_kontraktor2"
+			+ " set		keterangan		= 'Tidak Lulus'"
+			+ " where	total_nilai		<= "+ pg +";";
+
 		break;
 	case 4:
 		db_q="	delete from t_csm_proyek_kont_eval_nilai where id_project = "+ id

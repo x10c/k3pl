@@ -1,49 +1,45 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2012 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
-<%@ page import="java.sql.*"%>
-<%@ page import="org.json.*"%>
+<%@ include file="../modinit.jsp"%>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt		= db_con.createStatement();
+	JSONArray	item		= null;
 	String		id_proyek	= request.getParameter("id_proyek");
 
-	q	=" select   id"
+	db_stmt = db_con.createStatement();
+
+	db_q=" select   id"
 		+" ,        nama"
 		+" from     r_kontraktor"
 		+" where	id not in ("
 		+"		select	id_kontraktor"
-		+"		from	t_csm_proyek_kontraktor"
+		+"		from	t_csm_proyek_kontraktor2"
 		+"		where	id_project = "+ id_proyek
 		+" )";
 
-	ResultSet	rs		= db_stmt.executeQuery (q);
-	JSONArray	data	= new JSONArray ();
-	JSONArray	item	= null;
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	while (rs.next()) {
+	while (db_rs.next()) {
 		item = new JSONArray ();
-		item.put (rs.getString ("id"));
-		item.put (rs.getString ("nama"));
+		item.put (db_rs.getString ("id"));
+		item.put (db_rs.getString ("nama"));
 
-		data.put (item);
+		json_a.put (item);
 	}
 
-	out.print (data.toString ());
+	out.print (json_a);
 
-	rs.close ();
+	db_rs.close ();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
