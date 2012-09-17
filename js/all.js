@@ -523,7 +523,7 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 			this.formSeksi.filterBy (function (r, id)
 			{
 				var id_dir		= r.get('id_direktorat');
-				var id_div		= r.get('id_div');
+				var id_div		= r.get('id_divprosbu');
 				var id_dep		= r.get('id_departemen');
 				var id_dinas	= r.get('id_dinas');
 				var id_seksi	= r.get('id');
