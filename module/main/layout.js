@@ -64,18 +64,18 @@ function get_layout(n)
 				window.execScript
 					? window.execScript(r.responseText)
 					: window.eval(r.responseText);
+
+				var m =	eval("m_"+ n.id);
+
+				m.do_refresh (_g_ha);
+
+				main_content.add (m.panel);
+				main_content.layout.setActiveItem (m.panel);
+				main_content.doLayout ();
+				main_load.hide ();
 			} catch (e) {
-				console.log(e.stack);
+				Ext.Msg.alert ('Error', e.message);
 			}
-
-			var m =	eval("m_"+ n.id);
-
-			m.do_refresh (_g_ha);
-
-			main_content.add (m.panel);
-			main_content.layout.setActiveItem (m.panel);
-			main_content.doLayout ();
-			main_load.hide ();
 		}
 	});
 }
