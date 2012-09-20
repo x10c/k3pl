@@ -67,6 +67,12 @@ function form_charts_on_select(r, id)
 	}
 }
 
+function form_sbu_on_select (r, id)
+{
+	m_charts_id_div = r.get ('id');
+	charts_start ();
+}
+
 function charts_init()
 {
 	this.store_charts = new Ext.data.ArrayStore({
@@ -103,9 +109,22 @@ function charts_init()
 		}
 	});
 
+	this.form_sbu = new k3pl.form.DivProSBU ({
+		itemAll		:true
+	,	listeners	: {
+			scope		: this
+		,	select		: function (cb, record, id) {
+				form_sbu_on_select (record, id);
+			}
+		}
+	});
+
+	this.form_sbu.do_load ();
+
 	m_charts = new M_Charts();
 
 	m_charts.panel.setHeight(400);
+	m_charts.panel.getTopToolbar().add(this.form_sbu);
 	m_charts.panel.getTopToolbar().add('->');
 	m_charts.panel.getTopToolbar().add(this.form_charts);
 
@@ -157,4 +176,3 @@ function form_pass_on_keydown(e)
 
 	call_do_login();
 }
-

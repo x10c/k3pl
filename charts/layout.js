@@ -10,6 +10,7 @@ var m_charts;
 var m_charts_interval;
 var m_charts_n			= 8;
 var m_charts_active		= 0;
+var m_charts_id_div		= 0;
 var m_charts_d			= _g_root +'/charts/';
 var m_obs_lap_perf_d	= _g_root +'/module/obs_lap_performansi/';
 var m_obs_lap_part_d	= _g_root +'/module/obs_lap_partisipasi/';
@@ -105,7 +106,7 @@ function M_ChartPerfByCategory()
 			scope		: this
 		,	params		: {
 				id_dir		: 0
-			,	id_div		: 0
+			,	id_div		: m_charts_id_div
 			,	id_dep		: 0
 			,	id_dinas	: 0
 			,	id_seksi	: 0
@@ -150,11 +151,12 @@ function M_ChartPerfByIndex()
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: 0
-			,	id_dinas	: 0
-			,	id_seksi	: 0
+				id_div			: m_charts_id_div
+			,	id_dep			: 0
+			,	id_dinas		: 0
+			,	id_seksi		: 0
 			,	id_area_seksi	: 0
-			,	year		: year
+			,	year			: year
 			}
 		});
 	}
@@ -192,11 +194,12 @@ function M_ChartPerfByHour()
 		this.store.load({
 			scope		: this
 		,	params		: {
-				id_dep		: 0
-			,	id_dinas	: 0
-			,	id_seksi	: 0
+				id_div			: m_charts_id_div
+			,	id_dep			: 0
+			,	id_dinas		: 0
+			,	id_seksi		: 0
 			,	id_area_seksi	: 0
-			,	year		: year
+			,	year			: year
 			}
 		});
 	}
@@ -299,6 +302,7 @@ function M_LUKChart(title, y_title, store_url, chart_type, show_target)
 				year		: year
 			,	month_start	: m
 			,	month_end	: month
+			,	id_div		: m_charts_id_div
 			}
 		});
 	}
@@ -386,11 +390,11 @@ function M_ObsPartChart(title, xField, y1)
 		});
 	}
 
-	this.do_refresh = function()
+	this.do_refresh = function ()
 	{
 		var d = new Date();
 
-		this.do_load(0,0,0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
+		this.do_load (0, m_charts_id_div, 0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
 	}
 }
 
@@ -480,7 +484,7 @@ function M_RCAPartChart(title, xField, y1)
 	{
 		var d = new Date();
 
-		this.do_load(0,0,0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
+		this.do_load(0, m_charts_id_div, 0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
 	}
 }
 
@@ -568,12 +572,12 @@ function charts_do_refresh()
 
 function charts_start()
 {
-	m_charts_interval = setInterval('charts_do_refresh()', _g_chart_delay);
+	m_charts_interval = self.setInterval('charts_do_refresh()', _g_chart_delay);
 }
 
 function charts_stop()
 {
-	clearInterval(m_charts_interval);
+	window.clearInterval (m_charts_interval);
 }
 
 //@ sourceURL=charts.layout.js

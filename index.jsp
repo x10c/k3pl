@@ -154,7 +154,6 @@ rs.close();
 			<h3>Berita K3PL</h3>
 				<div>
 <%
-
 	q	=" select"
 		+" 			replace(convert(varchar, date_published, 111), '/', '-') published"
 		+" ,		subject"

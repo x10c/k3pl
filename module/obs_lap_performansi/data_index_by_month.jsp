@@ -8,7 +8,9 @@
  % WARNING: This script is used by charts module.
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");

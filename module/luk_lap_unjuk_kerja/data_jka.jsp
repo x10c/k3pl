@@ -64,6 +64,10 @@ try {
 	Cookie[]	cookies		= request.getCookies ();
 	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.div", null);
 
+	if (user_div == null) {
+		user_div = request.getParameter ("id_div");
+	}
+
 	Statement	db_stmt	= db_con.createStatement();
 
 	String		year		= (String) request.getParameter ("year");
@@ -114,7 +118,7 @@ try {
 +" 	and		tahun					= "+ year
 +" 	and		bulan					= "+ month;
 
-if (user_div != null && "0".equals (user_div)) {
+if (user_div != null && !"0".equals (user_div)) {
 	q	+="	and		id_divprosbu		= "+ user_div;
 }
 
@@ -127,7 +131,7 @@ q
 +" 	and		tahun					= "+ year
 +" 	and		bulan					= "+ month;
 
-if (user_div != null && "0".equals (user_div)) {
+if (user_div != null && !"0".equals (user_div)) {
 	q	+="	and		id_divprosbu		= "+ user_div;
 }
 
@@ -140,7 +144,7 @@ q
 +" 	and		tahun					= "+ year
 +" 	and		bulan					= "+ month;
 
-if (user_div != null && "0".equals (user_div)) {
+if (user_div != null && !"0".equals (user_div)) {
 	q	+="	and		id_divprosbu		= "+ user_div;
 }
 
@@ -152,7 +156,7 @@ q
 +" 	where	tahun			= "+ year
 +" 	and		bulan			= "+ month;
 
-if (user_div != null && "0".equals (user_div)) {
+if (user_div != null && !"0".equals (user_div)) {
 	q	+="	and		id_divprosbu		= "+ user_div;
 }
 

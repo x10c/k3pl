@@ -5,27 +5,42 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
  %   - agus sugianto (agus.delonge@gmail.com)
+ %
+ % WARNING: do not use modinit.jsp
 --%>
-<%@ include file="../modinit.jsp" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
+JSONObject _return = new JSONObject ();
 try {
-	String		id_direktorat	= request.getParameter("id_direktorat");
-	JSONArray	div				= null;
-
-	if (id_direktorat == null || id_direktorat.equals("0")) {
-		id_direktorat ="0 or 1 = 1 ";
+	Connection db_con = (Connection) session.getAttribute("db.con");
+	if (db_con == null || (db_con != null && db_con.isClosed())) {
+		response.sendRedirect(request.getContextPath());
+		return;
 	}
 
-	db_stmt	= db_con.createStatement();
-	db_q	= " select   id_direktorat"
-			+ " ,        id_divprosbu"
-			+ " ,        nama_divprosbu"
-			+ " ,        status_divprosbu"
-			+ " from     r_divprosbu"
-			+ " where    id_direktorat = "+ id_direktorat
-			+ " order by id_divprosbu, id_direktorat";
-	db_rs	= db_stmt.executeQuery (db_q);
-	json_a	= new JSONArray ();
+	String		id_dir	= request.getParameter("id_direktorat");
+	JSONArray	div		= null;
+
+	if (id_dir == null || id_dir.equals("0")) {
+		id_dir ="0 or 1 = 1 ";
+	}
+
+	Statement	db_stmt	= db_con.createStatement();
+	String		db_q	= " select   id_direktorat"
+				+ " ,        id_divprosbu"
+				+ " ,        nama_divprosbu"
+				+ " ,        status_divprosbu"
+				+ " from     r_divprosbu"
+				+ " where    id_direktorat = "+ id_dir
+				+ " order by id_divprosbu, id_direktorat";
+	ResultSet	db_rs	= db_stmt.executeQuery (db_q);
+	JSONArray	json_a	= new JSONArray ();
 
 	while (db_rs.next()) {
 		div = new JSONArray ();
