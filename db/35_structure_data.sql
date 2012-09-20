@@ -1,53 +1,138 @@
 create table R_CSM_PENILAIAN2 (
-	ID		int identity (1,1) not null primary key
-,	ELEMEN	varchar (1024) not null
-,	NILAI	int not null default 0
-);
+	ID		int 			identity(1,1)
+,	ELEMEN	varchar (1024)	not null
+,	NILAI	int 			not null default 0
+,	constraint PK_R_CSM_PENILAIAN2 primary key (ID)
+)
+go
 
 create table R_CSM_PENILAIAN2_DETAIL (
-	ID				int identity (1,1) not null primary key
-,	ID_PENILAIAN	int not null foreign key references R_CSM_PENILAIAN2 (ID)
-,	ELEMEN			varchar (1024) default '-'
-);
+	ID				int 			identity(1,1)
+,	ID_PENILAIAN	int 			not null
+,	ELEMEN			varchar (1024) 	default '-'
+,	constraint PK_R_CSM_PENILAIAN2_DETAIL primary key (ID)
+)
+go
+
+create index R_CSM_PENILAIAN2_DETAIL_FK on R_CSM_PENILAIAN2_DETAIL (
+ID_PENILAIAN ASC
+)
+go
+
+alter table R_CSM_PENILAIAN2_DETAIL
+   add constraint FK_R_CSM_PENILAIAN2_R_CSM_PENILAIAN2_DETAIL foreign key (ID_PENILAIAN)
+      references R_CSM_PENILAIAN2 (ID)
+go
 
 create table R_CSM_PENILAIAN2_DETAIL2 (
-	ID				int identity (1,1) not null primary key
-,	ID_PENILAIAN	int not null foreign key references R_CSM_PENILAIAN2 (ID)
-,	ID_DETAIL		int not null foreign key references R_CSM_PENILAIAN2_DETAIL (ID)
-,	ELEMEN			varchar (1024) default '-'
-);
+	ID				int 			identity(1,1)
+,	ID_PENILAIAN	int 			not null
+,	ID_DETAIL		int 			not null
+,	ELEMEN			varchar (1024) 	default '-'
+,	constraint PK_R_CSM_PENILAIAN2_DETAIL2 primary key (ID)
+)
+go
+
+create index R_CSM_PENILAIAN2_DETAIL2_FK_R_CSM_PENILAIAN2 on R_CSM_PENILAIAN2_DETAIL2 (
+ID_PENILAIAN ASC
+)
+go
+
+create index R_CSM_PENILAIAN2_DETAIL2_FK_R_CSM_PENILAIAN2_DETAIL on R_CSM_PENILAIAN2_DETAIL2 (
+ID_DETAIL ASC
+)
+go
+
+alter table R_CSM_PENILAIAN2_DETAIL2
+   add constraint FK_R_CSM_PENILAIAN2_DETAIL2_R_CSM_PENILAIAN2 foreign key (ID_PENILAIAN)
+      references R_CSM_PENILAIAN2 (ID)
+go
+
+alter table R_CSM_PENILAIAN2_DETAIL2
+   add constraint FK_R_CSM_PENILAIAN2_DETAIL2_R_CSM_PENILAIAN2_DETAIL foreign key (ID_DETAIL)
+      references R_CSM_PENILAIAN2_DETAIL (ID)
+go
 
 create table R_CSM_PENILAIAN2_PENILAIAN (
-	ID				int identity (1,1) not null primary key
-,	ID_PENILAIAN	int not null foreign key references R_CSM_PENILAIAN2 (ID)
-,	ID_DETAIL		int not null foreign key references R_CSM_PENILAIAN2_DETAIL (ID)
-,	ID_DETAIL2		int not null foreign key references R_CSM_PENILAIAN2_DETAIL2 (ID)
-,	PENILAIAN		varchar (1024) not null
-,	NILAI			int not null default 0
-);
+	ID				int 			identity(1,1)
+,	ID_PENILAIAN	int 			not null
+,	ID_DETAIL		int 			not null
+,	ID_DETAIL2		int 			not null
+,	PENILAIAN		varchar (1024) 	not null
+,	NILAI			int 			not null default 0
+,	constraint PK_R_CSM_PENILAIAN2_PENILAIAN primary key (ID)
+)
+go
+
+create index R_CSM_PENILAIAN2_PENILAIAN_FK_R_CSM_PENILAIAN2 on R_CSM_PENILAIAN2_PENILAIAN (
+ID_PENILAIAN ASC
+)
+go
+
+create index R_CSM_PENILAIAN2_PENILAIAN_FK_R_CSM_PENILAIAN2_DETAIL on R_CSM_PENILAIAN2_PENILAIAN (
+ID_DETAIL ASC
+)
+go
+
+create index R_CSM_PENILAIAN2_PENILAIAN_FK_R_CSM_PENILAIAN2_DETAIL2 on R_CSM_PENILAIAN2_PENILAIAN (
+ID_DETAIL2 ASC
+)
+go
+
+alter table R_CSM_PENILAIAN2_PENILAIAN
+   add constraint FK_R_CSM_PENILAIAN2_PENILAIAN_R_CSM_PENILAIAN2 foreign key (ID_PENILAIAN)
+      references R_CSM_PENILAIAN2 (ID)
+go
+
+alter table R_CSM_PENILAIAN2_PENILAIAN
+   add constraint FK_R_CSM_PENILAIAN2_PENILAIAN_R_CSM_PENILAIAN2_DETAIL foreign key (ID_DETAIL)
+      references R_CSM_PENILAIAN2_DETAIL (ID)
+go
+
+alter table R_CSM_PENILAIAN2_PENILAIAN
+   add constraint FK_R_CSM_PENILAIAN2_PENILAIAN_R_CSM_PENILAIAN2_DETAIL2 foreign key (ID_DETAIL2)
+      references R_CSM_PENILAIAN2_DETAIL2 (ID)
+go
 
 create table T_CSM_PROYEK_KONTRAKTOR2 (
-	ID_PROJECT			bigint primary key references t_csm_proyek (id_project)
-,	ID_KONTRAKTOR		bigint foreign key references r_kontraktor (id)
-,	TANGGAL				date default current_timestamp
-,	JENIS_PEKERJAAN		varchar (512) not null default ''
-,	TEMPAT_KONSTRUKSI	varchar (512) not null default ''
-,	TOTAL_NILAI			float not null default 0.0
-,	KETERANGAN			varchar (64) not null default 'Tidak Lulus'
-);
+	ID_PROJECT			bigint			not null
+,	ID_KONTRAKTOR		bigint			not null
+,	TANGGAL				date 			default current_timestamp
+,	JENIS_PEKERJAAN		varchar (512) 	not null default ''
+,	TEMPAT_KONSTRUKSI	varchar (512) 	not null default ''
+,	TOTAL_NILAI			float 			not null default 0.0
+,	KETERANGAN			varchar (64) 	not null default 'Tidak Lulus'
+,	constraint PK_T_CSM_PROYEK_KONTRAKTOR2 primary key (ID_PROJECT)
+)
+go
+
+create index T_CSM_PROYEK_KONTRAKTOR2_FK_R_KONTRAKTOR on T_CSM_PROYEK_KONTRAKTOR2 (
+ID_KONTRAKTOR ASC
+)
+go
+
+alter table T_CSM_PROYEK_KONTRAKTOR2
+   add constraint FK_T_CSM_PROYEK_KONTRAKTOR2_T_CSM_PROYEK foreign key (ID_PROJECT)
+      references T_CSM_PROYEK (ID_PROJECT)
+go
+
+alter table T_CSM_PROYEK_KONTRAKTOR2
+   add constraint FK_T_CSM_PROYEK_KONTRAKTOR2_R_KONTRAKTOR foreign key (ID_KONTRAKTOR)
+      references R_KONTRAKTOR (ID)
+go
 
 /* add columne PASSING_GRADE to table T_CSM_PROYEK */
-alter table t_csm_proyek add PASSING_GRADE float not null default 50;
+alter table T_CSM_PROYEK add PASSING_GRADE float not null default 50
+go
 
-delete R_CSM_PENILAIAN2_PENILAIAN where ID is not null;
-delete R_CSM_PENILAIAN2_DETAIL2 where ID is not null;
-delete R_CSM_PENILAIAN2_DETAIL where ID is not null;
-delete R_CSM_PENILAIAN2 where ID is not null;
-
-DBCC CHECKIDENT('R_CSM_PENILAIAN2_PENILAIAN', RESEED, 0);
-DBCC CHECKIDENT('R_CSM_PENILAIAN2_DETAIL2', RESEED, 0);
-DBCC CHECKIDENT('R_CSM_PENILAIAN2_DETAIL', RESEED, 0);
-DBCC CHECKIDENT('R_CSM_PENILAIAN2', RESEED, 0);
+delete from R_CSM_PENILAIAN2_PENILAIAN
+go
+delete from R_CSM_PENILAIAN2_DETAIL2
+go
+delete from R_CSM_PENILAIAN2_DETAIL
+go
+delete from R_CSM_PENILAIAN2
+go
 
 insert into R_CSM_PENILAIAN2			values ('IMPLEMENTASI DAN PEMANTAUAN KINERJA K3 PERUSAHAAN', 10);
 insert into R_CSM_PENILAIAN2_DETAIL		values (1, '-');
