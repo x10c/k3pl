@@ -25,7 +25,7 @@ try {
 	String		load_type		= (String) request.getParameter("load_type");
 	
 	String q=" select	a.id_rca "
-		+" ,		replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
+		+" ,		a.tanggal_rca as tanggal_rca "
 		+" ,		a.auditor_seksi as id_seksi "
 		+" ,		( select c.nama_seksi from r_seksi as c where a.auditor_seksi = c.id_seksi ) as auditor_seksi "
 		+" ,		( "
@@ -46,8 +46,8 @@ try {
 		+" ,		'" + nipg + "' as user_login "
 		+" ,		a.id_user	as id_user "
 		+" from		t_rca	as a "
-		+" where	a.penanggung_jawab_nipg = '"+ nipg +"'"
-		+" or		'"+ nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca)";
+		+" where	(a.penanggung_jawab_nipg = '"+ nipg +"'"
+		+" or		'"+ nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca))";
 
 		if (load_type.equals("all")) {
 			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)"

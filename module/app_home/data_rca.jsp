@@ -35,11 +35,11 @@ try {
 			+" from		t_rca			as a "
 			+" ,		t_rca_detail	as b "
 			+" where	a.id_rca		= b.id_rca "
-			+" and		a.penanggung_jawab_nipg = '"+ user_nipg +"'"
-			+" or		'"+ user_nipg +"' in (select c.nipg from t_rca_auditor c where c.id_rca = a.id_rca) ";
+			+" and		(a.penanggung_jawab_nipg = '"+user_nipg+"'"
+			+" or		'"+user_nipg+"' in (select c.nipg from t_rca_auditor c where c.id_rca = a.id_rca)) ";
 
 	if (load_type.equals("all")) {
-		q	+=" or		'"+ user_nipg +"' in (select d.nipg from __user_grup as d where d.id_grup = 1) "
+		q	+=" or		'"+user_nipg+"' in (select d.nipg from __user_grup as d where d.id_grup = 1) "
 			+" and	a.auditor_divprosbu		= "+ user_div
 			+" and	a.auditor_direktorat	= "+ user_dir;
 	}

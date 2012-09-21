@@ -108,6 +108,7 @@ function M_RCALapSeverityGrid()
 		,	{ name: 'nama_status' }
 		,	{ name: 'note' }
 		,	{ name: 'id_rca_detail' }
+		,	{ name: 'nama_auditor' }
 	]);
 
 	this.store = new Ext.ux.data.PagingArrayStore({
@@ -141,6 +142,11 @@ function M_RCALapSeverityGrid()
 			locked		: true
 		,	width		: 25
 		}),{
+			header		: 'Nama Auditor'
+		,	dataIndex	: 'nama_auditor'
+		,	sortable	: true
+		,	width		: 200
+		},{
 			id			: 'description'
 		,	header		: 'Deskripsi Severity'
 		,	dataIndex	: 'description'

@@ -55,6 +55,18 @@ try {
 		+"		,	case g.status when '1' then 'Open' when '2' then 'Process' else 'Closed' end as nama_status "
 		+"		,	g.note "
 		+"		,	g.id_rca_detail "
+		+" ,		( "
+		+"				select	nama "
+		+"				from 	( "
+		+"							select	i.nama_pegawai						as nama "
+		+"								, 	row_number() over(order by h.nipg) 	as rownum "
+		+"							from 	t_rca_auditor 	as h "
+		+"								, 	r_pegawai 		as i "
+		+"							where 	h.nipg 		= i.nipg "
+		+"							and 	h.id_rca	= a.id_rca "
+		+"						) as hasil "
+		+"				where rownum between 1 and 1 "
+		+"			) as nama_auditor "
 		+"	from	t_rca						as a"
 		+"	,		r_seksi						as b"
 		+"	,		r_dinas						as c"
@@ -140,6 +152,7 @@ try {
 				+  ",'"+ rs.getString("nama_status") +"'"
 				+  ",'"+ rs.getString("note") +"'"
 				+  ",'"+ rs.getString("id_rca_detail") +"'"
+				+  ",'"+ rs.getString("nama_auditor") +"'"
 				+  "]";
 	}
 

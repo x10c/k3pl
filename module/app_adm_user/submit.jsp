@@ -29,8 +29,7 @@ try {
 
 	} else if (dml.equals("3")) {
 		db_q=" update	__user"
-			+" set		status_user	= '"+ status_user +"'"
-			+" ,		password	= '"+ password +"'"
+			+" set		password	= '"+ password +"'"
 			+" where 	nipg		= '"+ nipg +"'";
 
 	} else if (dml.equals("update_stat")) {

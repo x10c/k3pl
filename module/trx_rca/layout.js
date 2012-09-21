@@ -3472,7 +3472,8 @@ function M_TrxRCAList()
 		{
 			name	: 'id_rca'
 		},{
-			name	: 'tanggal_rca'
+			name	: 'tanggal_rca',
+			type	: 'date'
 		},{
 			name	: 'id_seksi'
 		},{
@@ -3499,33 +3500,44 @@ function M_TrxRCAList()
 		,	autoLoad: false
 	});
 
+	this.filters = new Ext.ux.grid.GridFilters({
+			encode	: true
+		,	local	: true
+	});
+
 	this.cm = new Ext.grid.ColumnModel({
 		columns	: [
 				new Ext.grid.RowNumberer()
 			,	{
-					id			: 'tanggal_rca'
-				,	header		: 'Tanggal'
+					header		: 'Tanggal'
 				,	dataIndex	: 'tanggal_rca'
 				,	align		: 'center'
 				,	width		: 90
+				,	renderer	: Ext.util.Format.dateRenderer('Y-m-d')
+				,	filter		: {
+						type	: 'date'
+					}
 				}
 			,	{
 					id			: 'auditor_seksi'
 				,	header		: 'Satuan Kerja Auditor'
 				,	dataIndex	: 'auditor_seksi'
 				,	width		: 250
+				,	filterable	: true
 				}
 			,	{
 					id			: 'nama_auditor'
 				,	header		: 'Nama Auditor'
 				,	dataIndex	: 'nama_auditor'
 				,	width		: 250
+				,	filterable	: true
 				}
 			,	{
 					id			: 'penanggung_jawab_seksi'
 				,	header		: 'Satuan Kerja Penanggung Jawab'
 				,	dataIndex	: 'penanggung_jawab_seksi'
 				,	width		: 250
+				,	filterable	: true
 				}
 			,	{
 					header		: 'NIPG'
@@ -3640,6 +3652,7 @@ function M_TrxRCAList()
 		,	autoExpandColumn	: 'penanggung_jawab_seksi'
 		,	tbar				: this.toolbar
 		,	view				: this.grid_view
+		,	plugins				: [ this.filters ]
 	});
 
 	this.do_del = function()
