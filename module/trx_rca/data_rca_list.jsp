@@ -5,26 +5,14 @@
  % + PT. Awakami
  %   - agus sugianto (agus.delonge@gmail.com)
 --%>
-
-<%@ page import="java.sql.*" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp"%>
 <%
 try {
-	Connection	db_con		= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	JSONArray	data		= null;
+	String		load_type	= (String) request.getParameter("load_type");
 
-	Cookie[]	cookies			= request.getCookies ();
-	String		nipg			= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
-	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	Statement	db_stmt 		= db_con.createStatement();
-	String		load_type		= (String) request.getParameter("load_type");
-	
-	String q=" select	a.id_rca "
+	db_stmt = db_con.createStatement();
+	db_q=" select	a.id_rca "
 		+" ,		a.tanggal_rca as tanggal_rca "
 		+" ,		a.auditor_seksi as id_seksi "
 		+" ,		( select c.nama_seksi from r_seksi as c where a.auditor_seksi = c.id_seksi ) as auditor_seksi "
@@ -43,49 +31,45 @@ try {
 		+" ,		( select f.nama_seksi from r_seksi as f where a.penanggung_jawab_seksi = f.id_seksi ) as penanggung_jawab_seksi "
 		+" ,		a.penanggung_jawab_nipg as pic "
 		+" ,		( select g.nama_pegawai from r_pegawai as g where a.penanggung_jawab_nipg = g.nipg) as nama_pic "
-		+" ,		'" + nipg + "' as user_login "
+		+" ,		'" + user_nipg + "' as user_login "
 		+" ,		a.id_user	as id_user "
 		+" from		t_rca	as a "
-		+" where	(a.penanggung_jawab_nipg = '"+ nipg +"'"
-		+" or		'"+ nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca))";
+		+" where	(a.penanggung_jawab_nipg = '"+ user_nipg +"'"
+		+" or		'"+ user_nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca))";
 
 		if (load_type.equals("all")) {
-			q+=" or		'"+ nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)"
-			 +" and	a.auditor_divprosbu		= "+ id_divprosbu
-			 +" and	a.auditor_direktorat	= "+ id_direktorat;
+			db_q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)"
+				+" and	a.auditor_divprosbu		= "+ user_div
+				+" and	a.auditor_direktorat	= "+ user_dir;
 		}
 
-		q+=" order by	a.tanggal_rca desc ";
+		db_q+=" order by	a.tanggal_rca desc ";
 
-	ResultSet	rs	= db_stmt.executeQuery(q);
-	int		i	= 0;
-	String		data	= "[";
+	db_rs		= db_stmt.executeQuery (db_q);
+	json_a		= new JSONArray ();
+	while (db_rs.next()) {
+		data = new JSONArray ();
+		data.put (db_rs.getString("id_rca"));
+		data.put (db_rs.getString("tanggal_rca"));
+		data.put (db_rs.getString("id_seksi"));
+		data.put (db_rs.getString("auditor_seksi"));
+		data.put (db_rs.getString("nama_auditor"));
+		data.put (db_rs.getString("penanggung_jawab_seksi"));
+		data.put (db_rs.getString("pic"));
+		data.put (db_rs.getString("nama_pic"));
+		data.put (db_rs.getString("user_login"));
+		data.put (db_rs.getString("id_user"));
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+="[ '"+ rs.getString("id_rca")
-			+ "','"+ rs.getString("tanggal_rca")
-			+ "','"+ rs.getString("id_seksi")
-			+ "','"+ rs.getString("auditor_seksi")
-			+ "','"+ rs.getString("nama_auditor")
-			+ "','"+ rs.getString("penanggung_jawab_seksi")
-			+ "','"+ rs.getString("pic")
-			+ "','"+ rs.getString("nama_pic")
-			+ "','"+ rs.getString("user_login")
-			+ "','"+ rs.getString("id_user")
-			+ "']";
+		json_a.put (data);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	db_rs.close();
+	db_stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

@@ -591,25 +591,8 @@ function M_TrxRCADetail()
 		this.do_calculate();
 	}
 	
-	this.btn_add = new Ext.Button({
-		text	:'Tambah'
-	,	iconCls	:'add16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_add();
-		}
-	});
-
-	this.btn_del = new Ext.Button({
-		text	:'Hapus'
-	,	iconCls	:'del16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_del();
-		}
-	});
+	this.btn_add = new k3pl.button.Add (this);
+	this.btn_del = new k3pl.button.Delete (this);
 
 	this.grid = new Ext.grid.GridPanel({
 		title				: 'Data RCA Detail'
@@ -1215,25 +1198,8 @@ function M_TrxEditRCADetail()
 		});
 	}
 	
-	this.btn_add = new Ext.Button({
-		text	:'Tambah'
-	,	iconCls	:'add16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_add();
-		}
-	});
-
-	this.btn_del = new Ext.Button({
-		text	:'Hapus'
-	,	iconCls	:'del16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_del();
-		}
-	});
+	this.btn_add = new k3pl.button.Add (this);
+	this.btn_del = new k3pl.button.Delete (this);
 
 	this.grid = new Ext.grid.GridPanel({
 		title				: 'Data RCA Detail'
@@ -1939,23 +1905,8 @@ function M_TrxRCAAdd()
 			]
 	});
 	
-	this.btn_cancel = new Ext.Button({
-			text	: 'Kembali'
-		,	iconCls	: 'del16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_cancel();
-			}
-	});
-
-	this.btn_save	= new Ext.Button({
-			text	: 'Simpan'
-		,	iconCls	: 'save16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_save();
-			}
-	});
+	this.btn_cancel = new k3pl.button.Cancel (this);
+	this.btn_save	= new k3pl.button.Save (this);
 
 	this.panel = new Ext.Panel({
 			title		: 'Tambah Data RCA'
@@ -2985,23 +2936,8 @@ function M_TrxRCAEdit()
 			]
 	});
 	
-	this.btn_cancel = new Ext.Button({
-			text	: 'Kembali'
-		,	iconCls	: 'del16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_cancel();
-			}
-	});
-
-	this.btn_save	= new Ext.Button({
-			text	: 'Simpan'
-		,	iconCls	: 'save16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_save();
-			}
-	});
+	this.btn_cancel = new k3pl.button.Cancel (this);
+	this.btn_save	= new k3pl.button.Save (this);
 
 	this.panel = new Ext.Panel({
 			title		: 'Edit Data RCA'
@@ -3572,42 +3508,10 @@ function M_TrxRCAList()
 			}
 	});
 
-	this.btn_del = new Ext.Button({
-			text		: 'Hapus'
-		,	iconCls		: 'del16'
-		,	scope		: this
-		,	disabled	: true
-		,	handler		: function() {
-				this.do_del();
-			}
-		});
-
-	this.btn_edit = new Ext.Button({
-			text		: 'Ubah'
-		,	iconCls		: 'edit16'
-		,	scope		: this
-		,	handler		: function() {
-				this.do_edit();
-			}
-	});
-
-	this.btn_ref = new Ext.Button({
-			text		: 'Refresh'
-		,	iconCls		: 'refresh16'
-		,	scope		: this
-		,	handler		: function() {
-				this.store.reload();
-			}
-	});
-
-	this.btn_add = new Ext.Button({
-			text		: 'Tambah'
-		,	iconCls		: 'add16'
-		,	scope		: this
-		,	handler		: function() {
-				this.do_add();
-			}
-	});
+	this.btn_del	= new k3pl.button.Delete (this);
+	this.btn_edit	= new k3pl.button.Edit (this);
+	this.btn_ref	= new k3pl.button.Refresh (this);
+	this.btn_add	= new k3pl.button.Add (this);
 
 	this.toolbar = new Ext.Toolbar({
 			items	: [
