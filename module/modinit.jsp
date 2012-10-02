@@ -34,7 +34,6 @@
 	|| null == user_seksi || null == user_dinas || null == user_dep
 	|| null == user_div || null == user_dir || null == user_group) {
 		out.print ("{success:false,info:'User NIPG atau Divisi/Direktorat tidak diketahui.'}");
-		response.sendRedirect (request.getContextPath());
 		return;
 	}
 

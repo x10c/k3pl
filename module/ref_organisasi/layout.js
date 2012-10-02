@@ -110,6 +110,12 @@ function M_RefOrgDirektorat ()
 	this.columns = [
 			new Ext.grid.RowNumberer()
 		,{
+			header		: 'Id'
+		,	id			: 'id_direktorat'
+		,	dataIndex	: 'id_direktorat'
+		,	hidden		: true
+		}
+		,{
 			header		: 'Nama'
 		,	id			: 'nama_direktorat'
 		,	dataIndex	: 'nama_direktorat'
@@ -335,6 +341,12 @@ function M_RefOrgDivProSBU ()
 	this.columns = [
 			new Ext.grid.RowNumberer()
 		,	{
+				header		: 'Id'
+			,	id			: 'id_divprosbu'
+			,	dataIndex	: 'id_divprosbu'
+			,	hidden		: true
+			}
+		,	{
 				header		: 'Nama'
 			,	id			: 'nama_divprosbu'
 			,	dataIndex	: 'nama_divprosbu'
@@ -555,6 +567,11 @@ function M_RefOrgDepartement(title)
 
 	this.columns = [
 			new Ext.grid.RowNumberer()
+		,	{ id		: 'id_departemen'
+			, header	: 'id'
+			, dataIndex	: 'id_departemen'
+			, hidden	: true
+			}
 		,	{ id		: 'nama_departemen'
 			, header	: 'Nama'
 			, dataIndex	: 'nama_departemen'
@@ -771,6 +788,11 @@ function M_RefOrgDinas(title)
 
 	this.columns = [
 			new Ext.grid.RowNumberer()
+		,	{ id		: 'id_dinas'
+			, header	: 'id_dinas'
+			, dataIndex	: 'id_dinas'
+			, hidden	: true
+			}
 		,	{ id		: 'nama_dinas'
 			, header	: 'Nama'
 			, dataIndex	: 'nama_dinas'
@@ -1025,6 +1047,12 @@ function M_RefOrgSeksi(title)
 
 	this.columns = [
 			new Ext.grid.RowNumberer()
+		,{
+			id			: 'id_seksi'
+		,	header		: 'id_seksi'
+		,	dataIndex	: 'id_seksi'
+		,	hidden	: true
+		}
 		,{
 			id			: 'nama_seksi'
 		,	header		: 'Nama'

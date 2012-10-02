@@ -77,7 +77,11 @@ try {
 	db_stmt.executeUpdate(q);
 
 	out.print("{success:true,info:'Data telah tersimpan.'}");
-} catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'", "\\'") +"'}");
+} catch (Exception e) {String error_msg = "";
+	error_msg = e.toString().replace("'", "\\'");
+	if (error_msg.startsWith("com.microsoft.sqlserver.jdbc.SQLServerException: The DELETE statement conflicted with the REFERENCE constraint")){
+		error_msg = "Data ini tidak dapat di delete karena dirujuk oleh data lain";
+	}
+	out.print("{success:false,info:'"+ error_msg +"'}");
 }
 %>

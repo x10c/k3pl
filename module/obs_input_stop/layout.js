@@ -63,6 +63,15 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 		,	maxValue		: m_stop_n_observed
 		});
 
+	this.form_unsafe = new Ext.ux.form.SpinnerField ({
+			allowBlank		: false
+		,	allowDecimals	: false
+		,	allowNegative	: false
+		,	value			: 0
+		,	minValue		: 0
+		,	maxValue		: m_stop_n_observed
+		});
+
 	this.cm = new Ext.grid.ColumnModel({
 		is_all_safe	: false
 	,	columns		: [
@@ -71,6 +80,7 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 			,	header		: 'Tidak Aman'
 			,	css			: 'background-color: #FFB5C1;'
 			,	width		: 50
+			,	editor		: this.form_unsafe
 			},{
 				id		: 'detail_name'
 			,	dataIndex	: 'detail_name'
@@ -87,7 +97,7 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 			},{
 				dataIndex	: 'safe'
 			,	header		: 'Aman'
-			,	css		: 'background-color: #CBFFBB;'
+			,	css			: 'background-color: #CBFFBB;'
 			,	editor		: this.form_safe
 			,	width		: 50
 			}]
@@ -116,6 +126,8 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 				afteredit		: function(e) {
 					if (e.field == 'safe') {
 						e.record.set('unsafe', m_stop_n_observed - e.record.get('safe'));
+					} else if (e.field == 'unsafe') {
+						e.record.set('safe', m_stop_n_observed - e.record.get('unsafe'));
 					}
 				}
 			}
@@ -255,7 +267,7 @@ function M_ObsInputStop()
 	/* observation data */
 	this.panel_user = new Ext.form.FormPanel({
 		labelAlign	: 'right'
-	,	labelWidth	: 220
+	,	labelWidth	: 230
 	,	autoWidth	: true
 	,	autoHeight	: true
 	,	style		: 'margin: 8px;'
@@ -330,11 +342,12 @@ function M_ObsInputStop()
 				o = m_stop_form_obs[i].tipe[j];
 
 				tipe[j].form_safe.setMaxValue(v);
+				tipe[j].form_unsafe.setMaxValue (v);
 
 				/* set all safe value to n-observed */
 				for (k = 0; k < o.store.getCount(); k++) {
 					r = o.store.getAt(k);
-					r.set('safe', v);
+					r.set('safe', 0);
 					r.set('unsafe', 0);
 				}
 			}
@@ -396,13 +409,13 @@ function M_ObsInputStop()
 			url		: m_obs_input_stop_d +'data_obs_form.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
-				Ext.MessageBox.alert('Gagal', response.responseText);
+				Ext.Msg.alert('Gagal', response.responseText);
 			}
 		,	success : function (response) {
 				var msg = Ext.util.JSON.decode(response.responseText);
 
 				if (msg.success == false) {
-					Ext.MessageBox.alert('Pesan', msg.info);
+					Ext.Msg.alert('Pesan', msg.info);
 					return;
 				}
 
@@ -462,7 +475,7 @@ function M_ObsInputStop()
 	this.do_save = function()
 	{
 		if (!this.is_valid()) {
-			Ext.MessageBox.alert('Kesalahan', 'Form belum terisi semuanya atau ada kesalahan pada isian.');
+			Ext.Msg.alert('Kesalahan', 'Form belum terisi semuanya atau ada kesalahan pada isian.');
 			return;
 		}
 
@@ -532,18 +545,18 @@ function M_ObsInputStop()
 			}
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
-				Ext.MessageBox.alert('Gagal', response.responseText);
+				Ext.Msg.alert('Gagal', response.responseText);
 				main_load.hide();
 			}
 		,	success : function (response) {
 				var msg = Ext.util.JSON.decode(response.responseText);
 
 				if (msg.success == false) {
-					Ext.MessageBox.alert('Kesalahan', msg.info);
+					Ext.Msg.alert('Kesalahan', msg.info);
 					return;
 				}
 
-				Ext.MessageBox.alert('Informasi', msg.info);
+				Ext.Msg.alert('Informasi', msg.info);
 
 				main_load.hide();
 				m_obs_input_stop.panel.layout.setActiveItem(0);
@@ -572,7 +585,7 @@ function M_ObsInputStop()
 		this.form_safe.setValue('');
 		this.form_unsafe.setValue('');
 
-		this.set_detail_max_value (1);
+		this.set_detail_max_value (0);
 	}
 
 	this.do_add = function()
@@ -603,6 +616,8 @@ function M_ObsInputStop()
 		this.form_n_observed.setValue(data.jml_org_observasi);
 		this.form_safe.setValue(data.safe);
 		this.form_unsafe.setValue(data.unsafe);
+
+		this.set_detail_max_value (m_stop_n_observed);
 
 		for (i = 0; i < d.length; i++) {
 			grid_id = 'obs_input_detail_'+ d[i].kel_id +'_'+ d[i].tipe_id;
@@ -635,13 +650,13 @@ function M_ObsInputStop()
 			}
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
-				Ext.MessageBox.alert('Gagal', response.responseText);
+				Ext.Msg.alert('Gagal', response.responseText);
 			}
 		,	success : function (response) {
 				var msg = Ext.util.JSON.decode(response.responseText);
 
 				if (msg.success == false) {
-					Ext.MessageBox.alert('Pesan', msg.info);
+					Ext.Msg.alert('Pesan', msg.info);
 					return;
 				}
 
@@ -677,7 +692,7 @@ function M_ObsInputStop()
 		this.ha_level = ha_level;
 
 		if (ha_level <= 1) {
-			Ext.MessageBox.alert('Hak Akses'
+			Ext.Msg.alert('Hak Akses'
 , 'Maaf, Anda tidak memiliki hak akses untuk input data observasi!');
 
 			this.panel.setDisabled(true);
@@ -724,9 +739,8 @@ function M_ObsDataStop()
 
 	this.cm = new Ext.ux.grid.LockingColumnModel({
 		columns	: [
-			new Ext.grid.RowNumberer(
-		{
-			locked: true
+			new Ext.grid.RowNumberer({
+				locked	: true
 		}),{
 			header		: 'NIPG'
 		,	dataIndex	: 'nipg'
@@ -824,18 +838,18 @@ function M_ObsDataStop()
 	this.panel_list = new Ext.grid.GridPanel({
 			title		: 'Data Observasi'
 		,	store		: this.store
-		,	cm		: this.cm
-		,	sm		: this.sm
+		,	cm			: this.cm
+		,	sm			: this.sm
 		,	plugins		: this.editor
-		,       view            : new Ext.ux.grid.LockingGridView({
-				syncHeights : true
+		,	view		: new Ext.ux.grid.LockingGridView({
+				syncHeights	: true
 			})
 		,	autoScroll	: true
 		,	tbar		: [
 				this.btn_del, '-'
 			,	this.btn_edit, '-'
 			,	this.btn_ref, '-'
-			,	this.btn_add,
+			,	this.btn_add
 			]
 		,	listeners	: {
 				scope		: this
@@ -850,11 +864,10 @@ function M_ObsDataStop()
 
 	this.panel_add = new M_ObsInputStop();
 
-	/* create observation form */
 	this.panel_add.get_obs_form();
 
 	this.panel = new Ext.Panel({
-			id		: 'obs_data_stop_panel'
+			id			: 'obs_data_stop_panel'
 		,	bodyBorder	: false
 		,	layout		: 'card'
 		,	activeItem	: 0
@@ -898,17 +911,17 @@ function M_ObsDataStop()
 			}
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
-				Ext.MessageBox.alert('Gagal', response.responseText);
+				Ext.Msg.alert('Gagal', response.responseText);
 			}
 		,	success : function (response) {
 				var msg = Ext.util.JSON.decode(response.responseText);
 
 				if (msg.success == false) {
-					Ext.MessageBox.alert('Kesalahan', msg.info);
+					Ext.Msg.alert('Kesalahan', msg.info);
 					return;
 				}
 
-				Ext.MessageBox.alert('Informasi', msg.info);
+				Ext.Msg.alert('Informasi', msg.info);
 
 				this.do_load();
 			}
@@ -951,17 +964,17 @@ function M_ObsDataStop()
 			}
 		,	waitMsg	: 'Mohon Tunggu ...'
 		,	failure	: function(response) {
-				Ext.MessageBox.alert('Gagal', response.responseText);
+				Ext.Msg.alert('Gagal', response.responseText);
 			}
 		,	success : function (response) {
 				var msg = Ext.util.JSON.decode(response.responseText);
 
 				if (msg.success == false) {
-					Ext.MessageBox.alert('Kesalahan', msg.info);
+					Ext.Msg.alert('Kesalahan', msg.info);
 					return;
 				}
 
-				Ext.MessageBox.alert('Informasi', msg.info);
+				Ext.Msg.alert('Informasi', msg.info);
 
 				this.do_load();
 			}
@@ -989,7 +1002,7 @@ function M_ObsDataStop()
 		this.ha_level = ha_level;
 
 		if (ha_level < 1) {
-			Ext.MessageBox.alert('Hak Akses'
+			Ext.Msg.alert('Hak Akses'
 			, 'Maaf, Anda tidak memiliki hak akses untuk Data Observasi!');
 			this.panel.setDisabled(true);
 			return;

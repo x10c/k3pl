@@ -107,12 +107,14 @@ function M_RCALapSeverityGrid()
 		,	{ name: 'status' }
 		,	{ name: 'nama_status' }
 		,	{ name: 'note' }
+		,	{ name: 'id_rca_detail' }
+		,	{ name: 'nama_auditor' }
 	]);
 
 	this.store = new Ext.ux.data.PagingArrayStore({
 			url			: m_rca_lap_severity_d +'data.jsp'
 		,	fields		: this.record
-		,	idIndex		: 0
+		,	idIndex		: 17
 		,	autoLoad	: false
 	});
 
@@ -140,6 +142,11 @@ function M_RCALapSeverityGrid()
 			locked		: true
 		,	width		: 25
 		}),{
+			header		: 'Nama Auditor'
+		,	dataIndex	: 'nama_auditor'
+		,	sortable	: true
+		,	width		: 200
+		},{
 			id			: 'description'
 		,	header		: 'Deskripsi Severity'
 		,	dataIndex	: 'description'
@@ -333,6 +340,8 @@ function M_RCALapSeverityGrid()
 			,	id_area		: id_area
 			,	year		: year
 			,	month		: month
+			,	start		: 0
+			,	limit		: 50
 			}
 		});
 	}

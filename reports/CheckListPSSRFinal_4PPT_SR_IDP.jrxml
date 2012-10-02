@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CheckListPSSRFinal_4PPT_SR_IDP" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_KATEGORI_ITEM_PSSR" class="java.lang.Integer"/>
+	<parameter name="ID_PSSR" class="java.lang.Long"/>
+	<parameter name="ID_ITEM_PSSR" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+     R_ITEM_DETAIL_PSSR."NAMA_ITEM_DETAIL_PSSR" AS R_ITEM_DETAIL_PSSR_NAMA_ITEM_DETAIL_PSSR,
+     T_PSSR_DETAIL."APPLICABLE" AS T_PSSR_DETAIL_APPLICABLE,
+     T_PSSR_DETAIL."CONFIRM_OK" AS T_PSSR_DETAIL_CONFIRM_OK,
+     T_PSSR_DETAIL."PUNCHLIST" AS T_PSSR_DETAIL_PUNCHLIST,
+     T_PSSR_DETAIL."KETERANGAN" AS T_PSSR_DETAIL_KETERANGAN
+FROM
+     "dbo"."R_ITEM_DETAIL_PSSR" R_ITEM_DETAIL_PSSR INNER JOIN "dbo"."T_PSSR_DETAIL" T_PSSR_DETAIL ON R_ITEM_DETAIL_PSSR."ID_ITEM_DETAIL_PSSR" = T_PSSR_DETAIL."ID_ITEM_DETAIL_PSSR"
+     AND R_ITEM_DETAIL_PSSR."ID_KATEGORI_ITEM_PSSR" = T_PSSR_DETAIL."ID_KATEGORI_ITEM_PSSR"
+     AND R_ITEM_DETAIL_PSSR."ID_ITEM_PSSR" = T_PSSR_DETAIL."ID_ITEM_PSSR"
+WHERE
+     T_PSSR_DETAIL."ID_PSSR" = $P{ID_PSSR}
+ AND T_PSSR_DETAIL."ID_KATEGORI_ITEM_PSSR" = $P{ID_KATEGORI_ITEM_PSSR}
+ AND T_PSSR_DETAIL."ID_ITEM_PSSR" = $P{ID_ITEM_PSSR}]]>
+	</queryString>
+	<field name="R_ITEM_DETAIL_PSSR_NAMA_ITEM_DETAIL_PSSR" class="java.lang.String"/>
+	<field name="T_PSSR_DETAIL_APPLICABLE" class="java.lang.Short"/>
+	<field name="T_PSSR_DETAIL_CONFIRM_OK" class="java.lang.Short"/>
+	<field name="T_PSSR_DETAIL_PUNCHLIST" class="java.lang.Short"/>
+	<field name="T_PSSR_DETAIL_KETERANGAN" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="28" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="28" y="0" width="28" height="15"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="56" y="0" width="200" height="15"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{R_ITEM_DETAIL_PSSR_NAMA_ITEM_DETAIL_PSSR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="256" y="0" width="30" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_APPLICABLE} == 1 ? "v" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="286" y="0" width="30" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_APPLICABLE} == 0 ? "v" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="316" y="0" width="30" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_CONFIRM_OK} == 1 ? "v" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="346" y="0" width="30" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_CONFIRM_OK} == 0 ? "v" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="376" y="0" width="30" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_PUNCHLIST} == 1 ? "v" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="406" y="0" width="30" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_PUNCHLIST} == 0 ? "v" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="436" y="0" width="119" height="15"/>
+				<box>
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement>
+					<font fontName="Arial"/>
+					<paragraph leftIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_PSSR_DETAIL_KETERANGAN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

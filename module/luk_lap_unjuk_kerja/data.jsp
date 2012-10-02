@@ -93,8 +93,11 @@ String unjuk_kerja
 +"  name:'Total Hari Kerja'"
 +", id	:'jml_hari_kerja'"
 +"},{"
++"  name:'Jam Kerja'"
++", id  :'jml_jam_kerja'"
++"},{"
 +"  name:'Jam Kerja Aman'"
-+", id	:'jml_jam_kerja'"
++", id	:'jml_jam_kerja_aman'"
 +"}]";
 
 String q_select_all
@@ -107,7 +110,7 @@ String q_select_all
 +" ,	(TI.jml_korban_dampak + TI.jml_korban_medis)											as total_kecelakaan_ringan"
 +" ,	(TI.total_lti + TI.jml_korban_dampak)													as laporan_kecelakaan"
 +" ,	((TI.jml_kecelakaan_kendaraan / isnull(nullif(TUK.jml_jarak_tempuh, 0), 1)) * 100000)	as frek_kecelakaan"
-+" ,	((TUK.jml_hari_absen / isnull(nullif(TUK.jml_hari_kerja, 0), 1)) / 100)					as tsaf";
++" ,	((TUK.jml_hari_absen / isnull(nullif(TUK.jml_hari_kerja, 0), 1)) * 100)					as tsaf";
 
 String q_select_insiden
 =" select	isnull(sum(jml_korban_mati),0)		as jml_korban_mati"
@@ -128,11 +131,11 @@ String q_select_insiden
 +" 	,	isnull(sum(jml_rusak_bangunan),0)		as jml_rusak_bangunan"
 +" 	,	isnull(sum(jml_rusak_kendaraan),0)		as jml_rusak_kendaraan"
 +" 	,	isnull(sum(jml_rusak_lain),0)			as jml_rusak_lain"
-+" 	,	(isnull(sum(nilai_rusak_jaringan),0)"
-+" 	+	isnull(sum(nilai_rusak_bangunan),0)"
-+" 	+	isnull(sum(nilai_rusak_kendaraan),0)"
-+" 	+	isnull(sum(nilai_rusak_lain),0))			as jml_nilai_rusak"
-+" 	,	isnull(sum(jml_pencemaran_lingkungan),0)	as jml_pencemaran_lingkungan"
++" 	,	(isnull(count(nilai_rusak_jaringan),0)"
++" 	+	isnull(count(nilai_rusak_bangunan),0)"
++" 	+	isnull(count(nilai_rusak_kendaraan),0)"
++" 	+	isnull(count(nilai_rusak_lain),0))			as jml_nilai_rusak"
++" 	,	isnull(count(jml_pencemaran_lingkungan),0)	as jml_pencemaran_lingkungan"
 +" 	,	isnull(sum(jml_kecelakaan_kendaraan),0)		as jml_kecelakaan_kendaraan"
 +" 	,	isnull(sum(jml_kejadian_keamanan),0)		as jml_kejadian_keamanan"
 +" 	from	t_insiden";
@@ -142,6 +145,7 @@ String q_select_uk
 +" 	,	isnull(sum(jml_tenaga_kerja),0)			as jml_tenaga_kerja"
 +" 	,	isnull(sum(jml_hari_kerja),0)			as jml_hari_kerja"
 +" 	,	isnull(sum(jml_jam_kerja),0)			as jml_jam_kerja"
++" 	,	isnull(sum(jml_jam_kerja),0)			as jml_jam_kerja_aman"
 +"	,	isnull(sum(jml_jarak_tempuh),0)			as jml_jarak_tempuh"
 +"	,	isnull(sum(jml_jarak_tempuh_aman),0)	as jml_jarak_tempuh_aman"
 +"  	from	t_unjuk_kerja";

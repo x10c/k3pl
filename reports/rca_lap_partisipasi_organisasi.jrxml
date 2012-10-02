@@ -300,7 +300,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Laporan Partisipasi RCA]]></text>
 			</staticText>
@@ -318,7 +318,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama]]></text>
 			</staticText>
@@ -332,7 +332,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Target]]></text>
 			</staticText>
@@ -346,7 +346,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Partisipasi]]></text>
 			</staticText>
@@ -360,7 +360,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Target]]></text>
 			</staticText>
@@ -374,7 +374,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[% Partisipasi]]></text>
 			</staticText>
@@ -392,7 +392,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
@@ -407,7 +407,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TARGET} == null ? 0 : $F{TARGET}]]></textFieldExpression>
@@ -422,7 +422,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
@@ -437,7 +437,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[1]]></textFieldExpression>
@@ -452,7 +452,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
@@ -471,7 +471,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total :]]></text>
 			</staticText>
@@ -485,7 +485,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_TARGET}]]></textFieldExpression>
@@ -500,7 +500,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARTISIPASI}]]></textFieldExpression>
@@ -515,7 +515,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
@@ -529,7 +529,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_TARGET} != null && $V{TOTAL_TARGET} != 0 ? ($V{TOTAL_PARTISIPASI} != null ? $V{TOTAL_PARTISIPASI}.doubleValue() : 0.0)/$V{TOTAL_TARGET}.doubleValue() : 0]]></textFieldExpression>

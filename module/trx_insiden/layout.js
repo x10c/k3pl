@@ -321,6 +321,7 @@ function M_TrxInsidenMasterAdd(title)
 		,	title			: 'Lainnya'
 		,	flex			: 1
 		,	labelWidth		: 180
+		,	autoHeight		: true
 		,	defaults		: {
 					allowDecimals	: false
 				,	allowNegative	: false
@@ -339,7 +340,6 @@ function M_TrxInsidenMasterAdd(title)
 	
 	this.set_kecelakaan_misc = {
 			xtype		: 'container'
-		,	layout		: 'hbox'
 		,	items		: [
 					this.set_kecelakaan
 				,	this.set_misc

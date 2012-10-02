@@ -86,6 +86,16 @@ try {
 	if (rs2.next()) {
 		all_safe = rs2.getLong("sum_safe");
 		all_unsafe = rs2.getLong("sum_unsafe");
+	} else {
+		all_safe	= 1;
+		all_unsafe	= 1;
+	}
+
+	if (all_safe == 0) {
+		all_safe = 1;
+	}
+	if (all_unsafe == 0) {
+		all_unsafe = 1;
 	}
 
 	rs2.close();

@@ -336,6 +336,7 @@ k3pl.record.DivProSBU = new Ext.data.Record.create ([
 		{name:'id_direktorat'}
 	,	{name:'id'}
 	,	{name:'name'}
+	,	{name:'status'}
 	]);
 
 k3pl.record.Departemen = new Ext.data.Record.create([
@@ -523,7 +524,7 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 			this.formSeksi.filterBy (function (r, id)
 			{
 				var id_dir		= r.get('id_direktorat');
-				var id_div		= r.get('id_div');
+				var id_div		= r.get('id_divprosbu');
 				var id_dep		= r.get('id_departemen');
 				var id_dinas	= r.get('id_dinas');
 				var id_seksi	= r.get('id');
@@ -713,23 +714,25 @@ k3pl.form.DivProSBU = Ext.extend (Ext.form.ComboBox, {
 			this.id_dir	= record.get('id_direktorat');
 			this.id_div	= record.get('id');
 
-			this.formDepartemen.clearFilter(true);
-			this.formDepartemen.filterBy(function (r, id)
-			{
-				var id_div	= r.get('id_divprosbu');
-				var id_dir	= r.get('id_direktorat');
+			if (this.formDepartemen != undefined) {
+				this.formDepartemen.clearFilter(true);
+				this.formDepartemen.filterBy(function (r, id)
+				{
+					var id_div	= r.get('id_divprosbu');
+					var id_dir	= r.get('id_direktorat');
 
-				if (id_dir	== 0
-				|| id_div	== 0
-				|| (id_dir	== this.id_dir
-				&& id_div	== this.id_div)) {
-					return true;
+					if (id_dir	== 0
+					|| id_div	== 0
+					|| (id_dir	== this.id_dir
+					&& id_div	== this.id_div)) {
+						return true;
+					}
+					return false;
 				}
-				return false;
-			}
-			, this);
+				, this);
 
-			this.formDepartemen.setValue(this.formDepartemen.store.getAt(0).get('id'));
+				this.formDepartemen.setValue(this.formDepartemen.store.getAt(0).get('id'));
+			}
 		});
 	}
 ,	do_load: function()
@@ -746,6 +749,7 @@ k3pl.form.DivProSBU = Ext.extend (Ext.form.ComboBox, {
 						id_direktorat	:0
 					,	id				:0
 					,	name			:this.itemAllText
+					,	status			:0
 					});
 
 					this.store.insert(0, this.itemAllRecord);

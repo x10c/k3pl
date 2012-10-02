@@ -10,11 +10,13 @@ var m_trx_rca;
 var m_trx_rca_list;
 var m_trx_rca_add;
 var m_trx_rca_edit;
+var m_trx_rca_images;
 var m_trx_rca_id_rca	= '';
 var m_trx_rca_ha_level	= 0;
 var m_trx_rca_id_seksi	= '';
 var m_trx_rca_pic		= '';
 var m_trx_rca_user		= '';
+var m_trx_rca_image_name= '';
 var m_trx_rca_dir 		= _g_root +'/module/trx_rca/';
 
 var m_trx_rca_store_auditor = new Ext.data.ArrayStore({
@@ -591,25 +593,8 @@ function M_TrxRCADetail()
 		this.do_calculate();
 	}
 	
-	this.btn_add = new Ext.Button({
-		text	:'Tambah'
-	,	iconCls	:'add16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_add();
-		}
-	});
-
-	this.btn_del = new Ext.Button({
-		text	:'Hapus'
-	,	iconCls	:'del16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_del();
-		}
-	});
+	this.btn_add = new k3pl.button.Add (this);
+	this.btn_del = new k3pl.button.Delete (this);
 
 	this.grid = new Ext.grid.GridPanel({
 		title				: 'Data RCA Detail'
@@ -1215,25 +1200,8 @@ function M_TrxEditRCADetail()
 		});
 	}
 	
-	this.btn_add = new Ext.Button({
-		text	:'Tambah'
-	,	iconCls	:'add16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_add();
-		}
-	});
-
-	this.btn_del = new Ext.Button({
-		text	:'Hapus'
-	,	iconCls	:'del16'
-	,	scope	:this
-	,	handler	:function()
-		{
-			this.do_del();
-		}
-	});
+	this.btn_add = new k3pl.button.Add (this);
+	this.btn_del = new k3pl.button.Delete (this);
 
 	this.grid = new Ext.grid.GridPanel({
 		title				: 'Data RCA Detail'
@@ -1939,23 +1907,8 @@ function M_TrxRCAAdd()
 			]
 	});
 	
-	this.btn_cancel = new Ext.Button({
-			text	: 'Kembali'
-		,	iconCls	: 'del16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_cancel();
-			}
-	});
-
-	this.btn_save	= new Ext.Button({
-			text	: 'Simpan'
-		,	iconCls	: 'save16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_save();
-			}
-	});
+	this.btn_cancel = new k3pl.button.Cancel (this);
+	this.btn_save	= new k3pl.button.Save (this);
 
 	this.panel = new Ext.Panel({
 			title		: 'Tambah Data RCA'
@@ -2985,23 +2938,8 @@ function M_TrxRCAEdit()
 			]
 	});
 	
-	this.btn_cancel = new Ext.Button({
-			text	: 'Kembali'
-		,	iconCls	: 'del16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_cancel();
-			}
-	});
-
-	this.btn_save	= new Ext.Button({
-			text	: 'Simpan'
-		,	iconCls	: 'save16'
-		,	scope	: this
-		,	handler	: function() {
-				this.do_save();
-			}
-	});
+	this.btn_cancel = new k3pl.button.Cancel (this);
+	this.btn_save	= new k3pl.button.Save (this);
 
 	this.panel = new Ext.Panel({
 			title		: 'Edit Data RCA'
@@ -3472,7 +3410,8 @@ function M_TrxRCAList()
 		{
 			name	: 'id_rca'
 		},{
-			name	: 'tanggal_rca'
+			name	: 'tanggal_rca',
+			type	: 'date'
 		},{
 			name	: 'id_seksi'
 		},{
@@ -3499,33 +3438,44 @@ function M_TrxRCAList()
 		,	autoLoad: false
 	});
 
+	this.filters = new Ext.ux.grid.GridFilters({
+			encode	: true
+		,	local	: true
+	});
+
 	this.cm = new Ext.grid.ColumnModel({
 		columns	: [
 				new Ext.grid.RowNumberer()
 			,	{
-					id			: 'tanggal_rca'
-				,	header		: 'Tanggal'
+					header		: 'Tanggal'
 				,	dataIndex	: 'tanggal_rca'
 				,	align		: 'center'
 				,	width		: 90
+				,	renderer	: Ext.util.Format.dateRenderer('Y-m-d')
+				,	filter		: {
+						type	: 'date'
+					}
 				}
 			,	{
 					id			: 'auditor_seksi'
 				,	header		: 'Satuan Kerja Auditor'
 				,	dataIndex	: 'auditor_seksi'
 				,	width		: 250
+				,	filterable	: true
 				}
 			,	{
 					id			: 'nama_auditor'
 				,	header		: 'Nama Auditor'
 				,	dataIndex	: 'nama_auditor'
 				,	width		: 250
+				,	filterable	: true
 				}
 			,	{
 					id			: 'penanggung_jawab_seksi'
 				,	header		: 'Satuan Kerja Penanggung Jawab'
 				,	dataIndex	: 'penanggung_jawab_seksi'
 				,	width		: 250
+				,	filterable	: true
 				}
 			,	{
 					header		: 'NIPG'
@@ -3550,52 +3500,24 @@ function M_TrxRCAList()
 						m_trx_rca_id_seksi 	= data[0].data['id_seksi'];
 						m_trx_rca_pic 		= data[0].data['pic'];
 						m_trx_rca_user 		= data[0].data['user_login'];
+
+						m_trx_rca_images.do_refresh ();
+						m_trx_rca_images.btn_upload.setDisabled (false);
 					} else {
 						m_trx_rca_id_rca 	= '';
 						m_trx_rca_id_seksi 	= ''
 						m_trx_rca_pic 		= '';
 						m_trx_rca_user 		= ''
+						m_trx_rca_images.btn_upload.setDisabled (true);
 					}
 				}
 			}
 	});
 
-	this.btn_del = new Ext.Button({
-			text		: 'Hapus'
-		,	iconCls		: 'del16'
-		,	scope		: this
-		,	disabled	: true
-		,	handler		: function() {
-				this.do_del();
-			}
-		});
-
-	this.btn_edit = new Ext.Button({
-			text		: 'Ubah'
-		,	iconCls		: 'edit16'
-		,	scope		: this
-		,	handler		: function() {
-				this.do_edit();
-			}
-	});
-
-	this.btn_ref = new Ext.Button({
-			text		: 'Refresh'
-		,	iconCls		: 'refresh16'
-		,	scope		: this
-		,	handler		: function() {
-				this.store.reload();
-			}
-	});
-
-	this.btn_add = new Ext.Button({
-			text		: 'Tambah'
-		,	iconCls		: 'add16'
-		,	scope		: this
-		,	handler		: function() {
-				this.do_add();
-			}
-	});
+	this.btn_del	= new k3pl.button.Delete (this);
+	this.btn_edit	= new k3pl.button.Edit (this);
+	this.btn_ref	= new k3pl.button.Refresh (this);
+	this.btn_add	= new k3pl.button.Add (this);
 
 	this.toolbar = new Ext.Toolbar({
 			items	: [
@@ -3640,6 +3562,8 @@ function M_TrxRCAList()
 		,	autoExpandColumn	: 'penanggung_jawab_seksi'
 		,	tbar				: this.toolbar
 		,	view				: this.grid_view
+		,	plugins				: [ this.filters ]
+		,	region				: 'center'
 	});
 
 	this.do_del = function()
@@ -3694,6 +3618,7 @@ function M_TrxRCAList()
 						Ext.MessageBox.alert('Informasi', msg.info);
 
 						this.do_load();
+						m_trx_rca_images.do_refresh ();
 					}
 				,	scope	: this
 				});
@@ -3767,6 +3692,241 @@ function M_TrxRCAList()
 
 		this.do_load();
 	}
+
+	this.do_upload = function()
+	{
+		var name = this.form_file.getValue();
+		if (name == "") {
+			return;
+		}
+
+		var s = name.lastIndexOf("\\");
+		if (s > 0) {
+			name = name.substring(s + 1);
+		}
+
+		main_load.show();
+
+		this.form_upload.getForm().doAction("submit", {
+			url		:m_repo_browse_d +"submit_file.jsp"
+		,	params	:{
+				id		:m_repo_browse_id
+			,	path	:m_repo_browse_path
+			,	name	:name
+			}
+		,	scope	:this
+		,	failure	:function (form, action) {
+				Ext.Msg.alert("Pesan", action.result.info);
+				main_load.hide();
+			}
+		,	success	:function (form, action) {
+				main_load.hide();
+
+				if (action.result.success == false) {
+					this.win_upload.show ();
+					Ext.Msg.alert ("Kesalahan", action.result.info);
+				} else {
+					this.do_load();
+				}
+			}
+		});
+	}
+}
+
+function M_TrxRCAListImages ()
+{
+	this.store = new Ext.data.JsonStore ({
+			url		: m_trx_rca_dir +'data_rca_images.jsp'
+		,	root	: 'data'
+		,	fields	: ['id_rca', 'name', 'url']
+    });
+/*
+ * windows upload
+ */
+	this.form_file = new Ext.form.TextField({
+		fieldLabel	:"Pilih File"
+	,	inputType	:"file"
+	});
+
+	this.btn_up = new Ext.Button({
+		text	:"Upload"
+	,	iconCls	:"upload16"
+	,	scope	:this
+	,	handler	:function() {
+			this.do_upload();
+		}
+	});
+
+	this.form_upload = new Ext.form.FormPanel({
+		fileUpload	:true
+	,	labelAlign	:"right"
+	,	buttonAlign	:"center"
+	,	padding		:10
+	,	items		:[
+			this.form_file
+		]
+	,	buttons		:[
+			this.btn_up
+		]
+	});
+
+	this.win_upload = new Ext.Window({
+		title		:"Upload Dokumen"
+	,	modal		:true
+	,	autoHeight	:true
+	,	closeAction	:"hide"
+	,	width		:400
+	,	items		:[
+			this.form_upload
+		]
+	});
+
+	this.btn_del		= new k3pl.button.Delete (this);
+	this.btn_refresh	= new k3pl.button.Refresh (this);
+	this.btn_upload		= new Ext.Button({
+		text	:"Upload"
+	,	iconCls	:"upload16"
+	,	scope	:this
+	,	handler	:function() {
+			this.win_upload.show ();
+		}
+	});
+
+	this.toolbar = new Ext.Toolbar ({
+		items	: [
+			this.btn_del
+		,	'-'
+		,	this.btn_refresh
+		,	'-'
+		,	this.btn_upload
+		]
+	});
+
+	this.tpl = new Ext.XTemplate(
+		'<tpl for=".">',
+			'<div class="thumb-wrap" id="{name}">',
+			'<div class="thumb"><img src="{url}" title="{name}"></div>',
+			'<span class="x-editable">{name}</span></div>',
+		'</tpl>',
+		'<div class="x-clear"></div>'
+	);
+
+	this.data_view = new Ext.DataView ({
+			store		:this.store
+		,	tpl			:this.tpl
+		,	autoHeight	:true
+		,	multiSelect	:true
+		,	overClass	:'x-view-over'
+		,	itemSelector:'div.thumb-wrap'
+		,	emptyText	:'Tidak ada gambar'
+		,	prepareData	: function(data) {
+				return data;
+			}
+		,	listeners: {
+				scope			:this
+			,	selectionchange	:{
+					scope			:this
+				,	fn				:function(dv,nodes) {
+						if (nodes.length > 0) {
+							m_trx_rca_image_name = nodes[0].id;
+							this.btn_del.setDisabled (false);
+						}
+					}
+				}
+			}
+		});
+
+	this.panel = new Ext.Panel ({
+			id			:'images-view'
+		,	title		:'Foto RCA'
+		,	region		:'south'
+		,	height		:300
+		,	collapsible	:true
+		,	layout		:'fit'
+		,	tbar		:this.toolbar
+		,	items		:this.data_view
+		});
+
+	this.do_refresh = function ()
+	{
+		this.btn_del.setDisabled (true);
+		this.btn_upload.setDisabled (true);
+
+		if (m_trx_rca_id_rca != '') {
+			this.store.load ({
+				params	: {
+					id_rca	: m_trx_rca_id_rca
+				}
+			});
+		}
+	}
+
+	this.do_upload = function()
+	{
+		var name = this.form_file.getValue();
+		if (name == "") {
+			return;
+		}
+
+		var s = name.lastIndexOf("\\");
+		if (s > 0) {
+			name = name.substring(s + 1);
+		}
+
+		main_load.show();
+
+		this.form_upload.getForm().doAction("submit", {
+			url		:m_trx_rca_dir +"submit_image.jsp"
+		,	params	:{
+				id		:m_trx_rca_id_rca
+			,	name	:name
+			}
+		,	scope	:this
+		,	failure	:function (form, action) {
+				Ext.Msg.alert("Pesan", action.result.info);
+				main_load.hide();
+			}
+		,	success	:function (form, action) {
+				main_load.hide();
+
+				if (action.result.success == false) {
+					this.win_upload.show ();
+					Ext.Msg.alert ("Kesalahan", action.result.info);
+				} else {
+					this.do_refresh ();
+				}
+			}
+		});
+	}
+
+	this.do_del = function ()
+	{
+		main_load.show ();
+
+		Ext.Ajax.request({
+			url		:m_trx_rca_dir +"delete_image.jsp"
+		,	scope	:this
+		,	params	:{
+				id		:m_trx_rca_id_rca
+			,	name	:m_trx_rca_image_name
+			}
+		,	failure	:function (r, o) {
+				var msg = Ext.util.JSON.decode(r.responseText);
+				Ext.Msg.alert('Error', msg.info);
+				main_load.hide();
+			}
+		,	success	:function (r, o) {
+				var msg = Ext.util.JSON.decode(r.responseText);
+
+				if (msg.success == false) {
+					Ext.Msg.alert('Pesan', msg.info);
+				}
+
+				this.do_refresh ();
+				main_load.hide();
+			}
+		});
+	}
 }
 
 function M_TrxRCA()
@@ -3774,6 +3934,23 @@ function M_TrxRCA()
 	m_trx_rca_list	= new M_TrxRCAList();
 	m_trx_rca_add	= new M_TrxRCAAdd();
 	m_trx_rca_edit	= new M_TrxRCAEdit();
+	m_trx_rca_images= new M_TrxRCAListImages ();
+
+	this.rca_list = new Ext.Container({
+			id			: 'trx_rca_list_and_images'
+		,	layout		: 'border'
+		,	autoScroll	: true
+		,	defaults	: {
+				loadMask	: {msg: 'Pemuatan...'}
+			,	split		: true
+			,	autoScroll	: true
+			,	animCollapse: true
+    		}
+		,	items		: [
+				m_trx_rca_list.panel
+			,	m_trx_rca_images.panel
+			]
+		});
 
 	this.panel	= new Ext.Panel({
 			id			: 'trx_rca_panel'
@@ -3782,7 +3959,7 @@ function M_TrxRCA()
 		,	autoWidth	: true
 		,	autoScroll	: true
 		,	items		: [
-				m_trx_rca_list.panel
+				this.rca_list
 			,	m_trx_rca_add.panel
 			,	m_trx_rca_edit.panel
 			]
@@ -3793,7 +3970,8 @@ function M_TrxRCA()
 		m_trx_rca_ha_level	= ha_level;
 		m_trx_rca_id_rca 	= '';
 
-		m_trx_rca_list.do_refresh();
+		m_trx_rca_list.do_refresh ();
+		m_trx_rca_images.do_refresh ();
 	}
 }
 

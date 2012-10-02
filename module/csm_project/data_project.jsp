@@ -20,6 +20,7 @@ db_q
 +" ,		isnull(Y.nama,'-') as nama_kontraktor"
 +" ,		X.koefisien_utama"
 +" ,		X.koefisien_tambah"
++" ,		X.passing_grade"
 +" from"
 +" ("
 +"		select	A.id_project"
@@ -27,6 +28,7 @@ db_q
 +"		,		isnull(A.id_kontraktor, '0') as id_kontraktor"
 +"		,		A.koefisien_utama"
 +"		,		A.koefisien_tambah"
++"		,		A.passing_grade"
 +"		from	t_csm_proyek				A"
 +"		,		r_project					B"
 +"		where	A.id_project	= B.id_project"
@@ -51,6 +53,7 @@ db_q
 		item.put (db_rs.getString ("nama_kontraktor"));
 		item.put (db_rs.getString ("koefisien_utama"));
 		item.put (db_rs.getString ("koefisien_tambah"));
+		item.put (db_rs.getString ("passing_grade"));
 
 		json_a.put (item);
 	}

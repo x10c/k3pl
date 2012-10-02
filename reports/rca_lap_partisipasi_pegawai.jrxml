@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_pegawai" pageWidth="992" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="322"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_DIR" class="java.lang.String"/>
 	<parameter name="ID_DIV" class="java.lang.String"/>
@@ -71,7 +71,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="952" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Laporan Partisipasi RCA]]></text>
 			</staticText>
@@ -89,7 +89,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Name]]></text>
 			</staticText>
@@ -103,7 +103,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[January]]></text>
 			</staticText>
@@ -117,7 +117,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[February]]></text>
 			</staticText>
@@ -131,7 +131,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[March]]></text>
 			</staticText>
@@ -145,7 +145,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[April]]></text>
 			</staticText>
@@ -159,7 +159,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[May]]></text>
 			</staticText>
@@ -173,7 +173,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[June]]></text>
 			</staticText>
@@ -187,7 +187,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[July]]></text>
 			</staticText>
@@ -201,7 +201,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[August]]></text>
 			</staticText>
@@ -215,7 +215,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[September]]></text>
 			</staticText>
@@ -229,7 +229,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[October]]></text>
 			</staticText>
@@ -243,7 +243,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[November]]></text>
 			</staticText>
@@ -257,7 +257,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[December]]></text>
 			</staticText>
@@ -275,10 +275,10 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="SansSerif"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
 			</textField>
 			<subreport>
 				<reportElement x="220" y="0" width="61" height="20"/>
@@ -292,7 +292,7 @@
 					<subreportParameterExpression><![CDATA["1"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="281" y="0" width="61" height="20"/>
@@ -306,7 +306,7 @@
 					<subreportParameterExpression><![CDATA["2"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="342" y="0" width="61" height="20"/>
@@ -320,7 +320,7 @@
 					<subreportParameterExpression><![CDATA["3"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="403" y="0" width="61" height="20"/>
@@ -334,7 +334,7 @@
 					<subreportParameterExpression><![CDATA["4"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="464" y="0" width="61" height="20"/>
@@ -348,7 +348,7 @@
 					<subreportParameterExpression><![CDATA["5"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="525" y="0" width="61" height="20"/>
@@ -362,7 +362,7 @@
 					<subreportParameterExpression><![CDATA["6"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="586" y="0" width="61" height="20"/>
@@ -376,7 +376,7 @@
 					<subreportParameterExpression><![CDATA["7"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="647" y="0" width="61" height="20"/>
@@ -390,7 +390,7 @@
 					<subreportParameterExpression><![CDATA["8"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="708" y="0" width="61" height="20"/>
@@ -404,7 +404,7 @@
 					<subreportParameterExpression><![CDATA["9"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="769" y="0" width="61" height="20"/>
@@ -418,7 +418,7 @@
 					<subreportParameterExpression><![CDATA["10"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="830" y="0" width="61" height="20"/>
@@ -432,7 +432,7 @@
 					<subreportParameterExpression><![CDATA["11"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="891" y="0" width="61" height="20"/>
@@ -446,7 +446,7 @@
 					<subreportParameterExpression><![CDATA["12"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

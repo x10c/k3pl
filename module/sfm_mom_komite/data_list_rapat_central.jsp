@@ -13,7 +13,8 @@ try {
 	Statement	db_stmt = db_con.createStatement();
 	
 	String tipe_rapat = request.getParameter("type");
-String id_user		= (String) session.getAttribute("user.nipg");
+	
+	String id_user		= (String) session.getAttribute("user.nipg");
 	String q=" select	A.id_kel_jabatan_csc "
 		+" from		r_jabatan_komite_sub_komite A"
 		+" left join  t_pegawai_komite_sub_komite B on (B.id_jabatan_komite = A.id_jabatan_komite) "

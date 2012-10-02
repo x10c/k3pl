@@ -15,6 +15,7 @@
 <%@ page import="org.json.JSONObject" %>
 <%@ page import="org.kilabit.ServletUtilities" %>
 <%
+String q = "";
 String tsaf_months
 ="[{"
 +"	id	: '1'"
@@ -63,6 +64,10 @@ try {
 	Cookie[]	cookies		= request.getCookies ();
 	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", null);
 
+	if (user_div == null) {
+		user_div = request.getParameter ("id_div");
+	}
+
 	Statement	db_stmt		= db_con.createStatement();
 	String		year		= (String) request.getParameter ("year");
 	String		month_start	= (String) request.getParameter ("month_start");
@@ -87,7 +92,7 @@ try {
 	JSONObject	tsaf_month;
 
 	ResultSet	rs;
-	String		q, klas, month;
+	String		klas, month;
 	int			i, a;
 
 	for (i = 0; i < tsaf.length(); i++) {
@@ -110,7 +115,7 @@ try {
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
 +" 	/	isnull(nullif(cast(sum(jml_hari_kerja) as float),0.00),1.00))"
-+" 	/	100.00),4,1)		as tsaf"
++" 	*	100.00),4,1)		as tsaf"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 1"
 +" 	and		tahun					= "+ year
@@ -124,7 +129,7 @@ q+=" ) TEK,"
 +" ("
 +" 	select	round(((isnull(sum(jml_hari_absen),0)"
 +" 	/	isnull(nullif(convert(float, sum(jml_hari_kerja), 2),0.00),1.00))"
-+" 	/	100.00),4,1)		as tsaf"
++" 	*	100.00),4,1)		as tsaf"
 +" 	from	t_unjuk_kerja"
 +" 	where	id_klasifikasi_pegawai	= 2"
 +" 	and		tahun					= "+ year

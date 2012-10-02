@@ -37,8 +37,8 @@ try {
 	int			month		= Integer.parseInt(request.getParameter("month"));
 
 	q 	= " "
-		+"	select	a.description "
-		+"		,	a.id_severity "
+		+"	select	g.description "
+		+"		,	g.id_severity "
 		+"		,	a.nama_tempat_rca "
 		+"		,	a.penanggung_jawab_seksi "
 		+"		,	b.nama_seksi "
@@ -50,16 +50,30 @@ try {
 		+"		,	e.nama_divprosbu "
 		+"		,	a.penanggung_jawab_direktorat "
 		+"		,	f.nama_direktorat "
-		+"		,	a.completion_date_target "
-		+"		,	a.status "
-		+"		,	case a.status when '1' then 'Open' when '2' then 'Process' else 'Closed' end as nama_status "
-		+"		,	a.note "
-		+"	from	[k3pl].[dbo].[V_SEVERITY]	as a"
+		+"		,	REPLACE(CONVERT(varchar, g.COMPLETION_DATE_TARGET, 111), '/', '-') as completion_date_target "
+		+"		,	g.status "
+		+"		,	case g.status when '1' then 'Open' when '2' then 'Process' else 'Closed' end as nama_status "
+		+"		,	g.note "
+		+"		,	g.id_rca_detail "
+		+" ,		( "
+		+"				select	nama "
+		+"				from 	( "
+		+"							select	i.nama_pegawai						as nama "
+		+"								, 	row_number() over(order by h.nipg) 	as rownum "
+		+"							from 	t_rca_auditor 	as h "
+		+"								, 	r_pegawai 		as i "
+		+"							where 	h.nipg 		= i.nipg "
+		+"							and 	h.id_rca	= a.id_rca "
+		+"						) as hasil "
+		+"				where rownum between 1 and 1 "
+		+"			) as nama_auditor "
+		+"	from	t_rca						as a"
 		+"	,		r_seksi						as b"
 		+"	,		r_dinas						as c"
 		+"	,		r_departemen				as d"
 		+"	,		r_divprosbu					as e"
 		+"	,		r_direktorat				as f"
+		+"	,		t_rca_detail				as g"
 		+"	where	a.penanggung_jawab_seksi		= b.id_seksi "
 		+"	and		a.penanggung_jawab_dinas		= b.id_dinas "
 		+"	and		a.penanggung_jawab_departemen	= b.id_departemen "
@@ -69,6 +83,7 @@ try {
 		+"	and		b.id_departemen					= d.id_departemen "
 		+"	and		b.id_divprosbu					= e.id_divprosbu "
 		+"	and		b.id_direktorat					= f.id_direktorat "
+		+"	and		a.id_rca						= g.id_rca "
 		+"	and		year(a.tanggal_rca)				= " + year;
 		
 	/* filter/aggregate by month */
@@ -136,6 +151,8 @@ try {
 				+  ",'"+ rs.getString("status") +"'"
 				+  ",'"+ rs.getString("nama_status") +"'"
 				+  ",'"+ rs.getString("note") +"'"
+				+  ",'"+ rs.getString("id_rca_detail") +"'"
+				+  ",'"+ rs.getString("nama_auditor") +"'"
 				+  "]";
 	}
 

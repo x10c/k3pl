@@ -8,9 +8,11 @@
  % WARNING: This script is used by charts module.
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%
-String	q		= "";
+String	q			= "";
 String	q_org		= "";
 String	q_target	= "";
 String	q_part		= "";
@@ -110,7 +112,8 @@ try {
 			q_org	=" select	nipg			as id"
 					+" ,		nama_pegawai	as name"
 					+" from		r_pegawai"
-					+" where	id_seksi = "+ id_seksi;
+					+" where	id_seksi = "+ id_seksi
+					+" order by nama_pegawai";
 		} else if (!id_dinas.equals("0")) {
 			/* select all seksi in one dinas */
 			q_where	=" and A.id_seksi = ";
@@ -118,7 +121,8 @@ try {
 			q_org	=" select	id_seksi	as id"
 					+" ,		nama_seksi	as name"
 					+" from		r_seksi"
-					+" where	id_dinas = "+ id_dinas;
+					+" where	id_dinas = "+ id_dinas
+					+" order by nama_seksi";
 		} else if (!id_dep.equals("0")) {
 			/* select all dinas in one departement */
 			q_where =" and A.id_dinas = ";
@@ -126,7 +130,8 @@ try {
 			q_org	=" select	id_dinas	as id"
 					+" ,		nama_dinas	as name"
 					+" from		r_dinas"
-					+" where	id_departemen = "+ id_dep;
+					+" where	id_departemen = "+ id_dep
+					+" order by nama_dinas";
 		} else if (!id_div.equals ("0")) {
 			/* select all departement */
 			q_where =" and A.id_departemen = ";
@@ -134,7 +139,8 @@ try {
 			q_org	=" select	id_departemen	as id"
 					+" ,		nama_departemen	as name"
 					+" from		r_departemen"
-					+" where	id_divprosbu = "+ id_div;
+					+" where	id_divprosbu = "+ id_div
+					+" order by nama_departemen";
 		} else if (!id_dir.equals ("0")) {
 			/* select all divisi */
 			q_where =" and A.id_divprosbu = ";
@@ -142,14 +148,16 @@ try {
 			q_org	=" select	id_divprosbu	as id"
 					+" ,		nama_divprosbu	as name"
 					+" from		r_divprosbu"
-					+" where	id_direktorat = "+ id_dir;
+					+" where	id_direktorat = "+ id_dir
+					+" order by nama_divprosbu";
 		} else {
 			/* select all direktorat */
 			q_where =" and A.id_direktorat = ";
 
 			q_org	=" select	id_direktorat	as id"
 					+" ,		nama_direktorat	as name"
-					+" from		r_direktorat";
+					+" from		r_direktorat"
+					+" order by nama_direktorat";
 		}
 	} else { /* query by wilayah/area */
 		if (!id_area.equals("0")) {
@@ -159,7 +167,8 @@ try {
 			q_org	=" select	nipg			as id"
 					+" ,		nama_pegawai	as name"
 					+" from		r_pegawai"
-					+" where	id_seksi = "+ id_area;
+					+" where	id_seksi = "+ id_area
+					+" order by nama_pegawai";
 		} else {
 			if (!id_wilayah.equals("0")) {
 				/* select all area in one wilayah */
@@ -168,7 +177,8 @@ try {
 				q_org	=" select	id_seksi	as id"
 						+" ,		nama_seksi	as name"
 						+" from		r_seksi"
-						+" where	id_wilayah = "+ id_wilayah;
+						+" where	id_wilayah = "+ id_wilayah
+						+" order by nama_seksi";
 			} else {
 				/* select all wilayah */
 				q_where =" and A.id_seksi = B.id_seksi"
@@ -176,7 +186,8 @@ try {
 
 				q_org	=" select	id_wilayah	as id"
 						+" ,		nama_wilayah	as name"
-						+" from		r_wilayah";
+						+" from		r_wilayah"
+						+" order by nama_wilayah";
 			}
 		}
 	}

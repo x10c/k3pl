@@ -90,8 +90,8 @@ try {
 				+ id_rapat_materi +", '"
 				+ isi_rapat_materi +"', "
 				+" cast("+  batas_waktu_materi +" as datetime) , '"
-				+ status_materi +"', '"
-				+ keterangan_materi +"', '"
+				+ status_materi +"', "
+				+ keterangan_materi +", '"
 				+ id_user +"' )";
 			if (seksi_pelaksana.equals("") || seksi_pelaksana.equals("undefined") || seksi_pelaksana.equals("-")){
 				seksi_pelaksana = null;
@@ -163,7 +163,7 @@ try {
 					+ id_user +"' )"
 					+"end;";
 			}
-			out.print("test 1");
+			//out.print("test 1");
 		} else if (dml.equals("delete")) {
 			q	=" delete from  t_pic_rapat_materi "
 				+" where	id_rapat   =  "+ id_rapat +" and id_rapat_materi = "+ id_rapat_materi;

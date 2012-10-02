@@ -16,6 +16,8 @@
 <%@ page import="java.text.DateFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Properties" %>
+<%@ page import="java.io.File"%>
+<%@ page import="org.apache.commons.io.FileUtils"%>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -29,6 +31,7 @@ try {
 	String		user_nipg	= null;
 	String		user_name	= null;
 	String		user_email	= null;
+	String		path		= config.getServletContext().getRealPath("/") +"/repository/rca/";
 
 	if (cookies != null) {
 		for (int i = 0; i < cookies.length; i++) {
@@ -279,7 +282,9 @@ try {
 		break;
 
 	case 4:
-		q	=" delete from t_rca_auditor "
+		q	=" delete from t_rca_images"
+			+" where  id_rca = "+ id_rca +";"
+			+" delete from t_rca_auditor "
 			+" where  id_rca =  "+ id_rca;
 
 		q2	=" delete from t_rca_detail "
@@ -308,6 +313,9 @@ try {
 		+ session.getAttribute("menu.id") +"','"+ dml +"')";
 
 	db_stmt.executeUpdate(q);
+
+	log ("delete :"+ path + id_rca);
+	FileUtils.deleteDirectory (new File (path + id_rca));
 
 	out.print("{success:true, info:'Data telah tersimpan.'}");
 } catch (Exception e) {

@@ -15,6 +15,7 @@ String	q_nipg3		= "";
 String	q_org		= "";
 String	q_target	= "";
 String	q_part		= "";
+String	q_partisi	= "";
 String	q_vio		= "";
 String	q_temuan	= "";
 String	q_sev		= "";
@@ -81,6 +82,13 @@ try {
 			+" where	rca.id_rca			= rca_auditor.id_rca"
 			+" and		rca_auditor.status			in (1,2)"
 			+" and		year(rca.tanggal_rca)	= "+ year;
+			
+	q_partisi	=" select	count(distinct(rca_auditor.nipg)) as total_part"
+				+" from		t_rca				as rca"
+				+" ,		t_rca_auditor		as rca_auditor"
+				+" where	rca.id_rca			= rca_auditor.id_rca"
+				+" and		rca_auditor.status			in (1,2)"
+				+" and		year(rca.tanggal_rca)	= "+ year;
 
 	q_vio	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as violation"
 			+" from		t_rca_detail		as rca_detail"
@@ -154,6 +162,7 @@ try {
 	} else {
 		q_target	=" select isnull(sum("+ months[month - 1] +"),1) as target";
 		q_part		+=" and month(rca.tanggal_rca) = "+ month;
+		q_partisi	+=" and month(rca.tanggal_rca) = "+ month;
 		q_vio		+=" and month(rca.tanggal_rca) = "+ month;
 		q_temuan	+=" and month(rca.tanggal_rca) = "+ month;
 		q_sev		+=" and month(rca.tanggal_rca) = "+ month;
@@ -168,6 +177,7 @@ try {
 				+" where	year = "+ year + q_nipg;
 	
 	q_part			+= q_nipg2;
+	q_partisi		+= q_nipg2;
 	q_vio			+= q_nipg3;
 	q_temuan		+= q_nipg3;
 	q_sev			+= q_nipg3;
@@ -186,7 +196,7 @@ try {
 			q_org	=" select	id_seksi	as id"
 					+" ,		nama_seksi	as name"
 					+" from		r_seksi"
-					+" where	id_seksi = "+ id_area;
+					+" where	id_seksi = "+ id_seksi;
 		} else if (!id_dinas.equals("0")) {
 			/* select all seksi in one dinas */
 			q_where	=" and A.id_seksi = ";
@@ -256,7 +266,7 @@ try {
 			}
 		}
 	}
-
+	
 	data	="[";
 	rs_org	= stmt_org.executeQuery(q_org);
 	i		= 0;
@@ -264,7 +274,7 @@ try {
 		id		= rs_org.getString("id");
 		name	= rs_org.getString("name");
 
-		q	=" select	P.total_part as partisipan"
+		q	=" select	PARTISIPAN.total_part as partisipan"
 			+" ,		round((P.total_part"
 			+"			/ cast(isnull(nullif(T.target,0),1) as float))"
 			+"			* 100, 2, 1)		as total_part_percent"
@@ -277,6 +287,7 @@ try {
 			+" ,		round((TL_TEMUAN_NON.temuan / cast(isnull(nullif(GET_TEMUAN_NON.jml,0),1) as float)) * 100, 2, 1) as tl_temuan_non"
 			+" ,		AVERAGE.average"
 			+" from ("+ q_target	+ q_where + id +")) T"
+			+" ,	("+ q_partisi	+ q_where + id +")) PARTISIPAN"
 			+" ,	("+ q_part		+ q_where + id +")) P"
 			+" ,	("+ q_vio		+ q_where + id +")) V"
 			+" ,	("+ q_temuan	+ q_where + id +")) TEMUAN"
@@ -289,6 +300,8 @@ try {
 
 		rs = db_stmt.executeQuery(q);
 
+
+		
 		while (rs.next()) {
 			if (i > 0) {
 				data += ",";
@@ -313,7 +326,7 @@ try {
 	}
 	rs_org.close();
 	data += "]";
-
+	
 	out.print(data);
 
 } catch (Exception e) {

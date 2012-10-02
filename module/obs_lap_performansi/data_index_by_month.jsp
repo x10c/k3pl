@@ -8,7 +8,9 @@
  % WARNING: This script is used by charts module.
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -103,7 +105,7 @@ try {
 			+" from		t_stop_detail "
 			+" where 	id_stop in ("
 			+"	select	id_stop "
-			+"	from	t_stop "
+			+"	from	t_stop A"
 			+"	where	status_aktif	= '1' "
 			+"	and	year		= "+ year
 			+"	and	month		= "+ (i + 1);

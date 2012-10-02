@@ -146,13 +146,13 @@ function M_TrnMatriks()
 					header		: col.name
 				,	align		: 'center'
 				,	dataIndex	: col.id
-				,	xtype		: 'datecolumn'
-				,	format		: 'Y-m-d'
-				,	filter		:{
-						type	:'date'
-					,	format	:'Y-m-d'
-					}
 				,	width		:150
+				,	renderer	: function (v) {
+						if (v != '') {
+							return '&radic;'
+						}
+						return '';
+					}
 				});
 			}, this);
 		}, this);

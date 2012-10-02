@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_severity" pageWidth="1805" pageHeight="595" orientation="Landscape" columnWidth="1765" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="471"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="IS_IN_ORG" class="java.lang.String">
 		<parameterDescription><![CDATA[1: organisasi
@@ -134,7 +134,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 			<staticText>
 				<reportElement x="0" y="0" width="1765" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="15" isBold="true" isUnderline="true"/>
+					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Laporan Severity RCA]]></text>
 			</staticText>
@@ -152,7 +152,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[No]]></text>
 			</staticText>
@@ -166,7 +166,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Deskripsi Severity]]></text>
 			</staticText>
@@ -180,7 +180,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Severity]]></text>
 			</staticText>
@@ -194,7 +194,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lokasi]]></text>
 			</staticText>
@@ -208,7 +208,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Direktorat Owner]]></text>
 			</staticText>
@@ -222,7 +222,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Divisi/Proyek/SBU Owner]]></text>
 			</staticText>
@@ -236,7 +236,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Departemen Owner]]></text>
 			</staticText>
@@ -250,7 +250,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dinas Owner]]></text>
 			</staticText>
@@ -264,7 +264,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Seksi Owner]]></text>
 			</staticText>
@@ -278,7 +278,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Target Tindak Lanjut]]></text>
 			</staticText>
@@ -292,7 +292,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Status]]></text>
 			</staticText>
@@ -306,7 +306,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Keterangan]]></text>
 			</staticText>
@@ -324,7 +324,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
@@ -338,7 +338,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{V_SEVERITY_description}]]></textFieldExpression>
@@ -353,7 +353,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{V_SEVERITY_id_severity}]]></textFieldExpression>
 			</textField>
@@ -367,7 +367,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{V_SEVERITY_nama_tempat_rca}]]></textFieldExpression>
@@ -382,7 +382,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{R_DIREKTORAT_NAMA_DIREKTORAT}]]></textFieldExpression>
@@ -397,7 +397,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{R_DIVPROSBU_NAMA_DIVPROSBU}]]></textFieldExpression>
@@ -412,7 +412,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{R_DEPARTEMEN_NAMA_DEPARTEMEN}]]></textFieldExpression>
@@ -427,7 +427,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{R_DINAS_NAMA_DINAS}]]></textFieldExpression>
@@ -442,7 +442,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{R_SEKSI_NAMA_SEKSI}]]></textFieldExpression>
@@ -457,7 +457,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{V_SEVERITY_completion_date_target}]]></textFieldExpression>
 			</textField>
@@ -471,7 +471,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{V_SEVERITY_status} != null && ! $F{V_SEVERITY_status}.isEmpty() ?
 $F{V_SEVERITY_status}.equalsIgnoreCase( "1" ) ? "Open" :
@@ -488,7 +488,7 @@ $F{V_SEVERITY_status}.equalsIgnoreCase( "2" ) ? "Process" :
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{V_SEVERITY_note}]]></textFieldExpression>
