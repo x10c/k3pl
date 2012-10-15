@@ -48,7 +48,7 @@ try {
 	id_area		= request.getParameter("id_area");
 	year		= request.getParameter("year");
 
-	q	=" select	C.nipg"
+	q	=" select	B.nipg"
 		+" ,		B.nama_pegawai"
 		+" ,		B.id_direktorat"
 		+" ,		B.id_divprosbu"
@@ -70,13 +70,10 @@ try {
 		+" from"
 		+" 			r_pegawai		B"
 		+" ,		r_seksi			D"
-		+" ,		__user_grup		C"
-		+" left join	t_rca_target_pegawai	A"
-		+"	on	C.nipg		= A.nipg"
-		+"	and	A.year		= "+ year
-		+" where	C.id_grup			= 5"
-		+" and		C.nipg				= B.nipg"
-		+" and		B.id_seksi			= D.id_seksi";
+		+" ,		t_rca_target_pegawai	A"
+		+" where	B.nipg		= A.nipg"
+		+" and	A.year		= "+ year
+		+" and	B.id_seksi			= D.id_seksi";
 
 	if (id_dir != null
 	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
