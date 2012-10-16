@@ -40,9 +40,13 @@ try {
 		+"	on	C.nipg		= A.nipg"
 		+"	and	A.year		= "+ year
 		+" where	C.id_grup		= 2"
-		+" and		C.nipg			= B.nipg"
-		+" and		B.id_divprosbu	= "+ user_div
-		+" order by B.nama_pegawai";
+		+" and		C.nipg			= B.nipg";
+
+	if (! "1".equals (user_group)) {
+		db_q+=" and		B.id_divprosbu	= "+ user_div;
+	}
+
+	db_q+=" order by B.nama_pegawai";
 
 	db_rs = db_stmt.executeQuery (db_q);
 
@@ -66,9 +70,13 @@ try {
 		json_a.put (json_o);
 	}
 
-	out.print ("{rows:"+ json_a +"}");
+	db_rs.close ();
+	db_stmt.close ();
 
+	_return.put ("rows", json_a);
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>

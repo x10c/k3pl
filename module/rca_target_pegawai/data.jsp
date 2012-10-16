@@ -7,34 +7,21 @@
  %	 - agus sugianto (agus.delonge@gmail.com)
 --%>
 
-<%@ page import="java.sql.*" %>
-<%@ page import="org.kilabit.ServletUtilities" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
+	String year = (String) request.getParameter("year");
 
-	Cookie[]	cookies			= request.getCookies ();
-	String		id_divprosbu	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
-	String		id_direktorat	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
-
-	Statement	db_stmt			= db_con.createStatement();
-	String		year			= (String) request.getParameter("year");
-	String		data			= "{rows:[";
-	ResultSet	rs				= null;
-	int			i				= 0;
+	json_a = new JSONArray ();
 
 	if (year == null || year.isEmpty()) {
-		data += "]}";
-		out.print(data);
+		out.print("{rows:"+ json_a +"}");
 		return;
 	}
 
-	q	=" select	C.nipg"
+	db_stmt = db_con.createStatement();
+
+	db_q=" select	C.nipg"
 		+" ,		B.nama_pegawai"
 		+" ,		isnull(A.jan,0) as jan"
 		+" ,		isnull(A.feb,0) as feb"
@@ -55,41 +42,44 @@ try {
 		+"	on	C.nipg		= A.nipg"
 		+"	and	A.year		= "+ year
 		+" where	C.id_grup	= 5"
-		+" and		C.nipg		= B.nipg"
-		+" and		B.id_divprosbu	= "+ id_divprosbu
-		+" and		B.id_direktorat	= "+ id_direktorat
-		+" order by B.nama_pegawai";
+		+" and		C.nipg		= B.nipg";
 
-	rs = db_stmt.executeQuery(q);
-
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i = 1;
-		}
-
-		data	+="{ nipg:'"+ rs.getString("nipg") +"'"
-			+ ", name:\""+ rs.getString("nama_pegawai") +"\""
-			+ ", jan:'"+ rs.getString("jan") +"'"
-			+ ", feb:'"+ rs.getString("feb") +"'"
-			+ ", mar:'"+ rs.getString("mar") +"'"
-			+ ", apr:'"+ rs.getString("apr") +"'"
-			+ ", may:'"+ rs.getString("may") +"'"
-			+ ", jun:'"+ rs.getString("jun") +"'"
-			+ ", jul:'"+ rs.getString("jul") +"'"
-			+ ", aug:'"+ rs.getString("aug") +"'"
-			+ ", sep:'"+ rs.getString("sep") +"'"
-			+ ", oct:'"+ rs.getString("oct") +"'"
-			+ ", nov:'"+ rs.getString("nov") +"'"
-			+ ", dec:'"+ rs.getString("dec") +"'"
-			+ "}";
+	if (! "1".equals (user_group)) {
+		db_q+=" and		B.id_divprosbu	= "+ user_div
+			+ " and		B.id_direktorat	= "+ user_dir;
 	}
-	data += "]}";
 
-	out.print(data);
+	db_q	+=" order by B.nama_pegawai";
 
+	db_rs	= db_stmt.executeQuery (db_q);
+
+	while (db_rs.next()) {
+		json_o = new JSONObject ();
+		json_o.put ("nipg", db_rs.getString("nipg"));
+		json_o.put ("name", db_rs.getString("nama_pegawai"));
+		json_o.put ("jan", db_rs.getString("jan"));
+		json_o.put ("feb", db_rs.getString("feb"));
+		json_o.put ("mar", db_rs.getString("mar"));
+		json_o.put ("apr", db_rs.getString("apr"));
+		json_o.put ("may", db_rs.getString("may"));
+		json_o.put ("jun", db_rs.getString("jun"));
+		json_o.put ("jul", db_rs.getString("jul"));
+		json_o.put ("aug", db_rs.getString("aug"));
+		json_o.put ("sep", db_rs.getString("sep"));
+		json_o.put ("oct", db_rs.getString("oct"));
+		json_o.put ("nov", db_rs.getString("nov"));
+		json_o.put ("dec", db_rs.getString("dec"));
+
+		json_a.put (json_o);
+	}
+
+	db_rs.close ();
+	db_stmt.close ();
+
+	_return.put ("rows", json_a);
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
 }
+out.print (_return);
 %>
