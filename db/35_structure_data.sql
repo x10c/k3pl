@@ -1,39 +1,52 @@
 create table R_CSM_PENILAIAN2 (
-	ID		int identity (1,1) not null primary key
-,	ELEMEN	varchar (1024) not null
-,	NILAI	int not null default 0
+	ID		int identity (1,1)	not null
+,	ELEMEN	varchar (1024)		not null
+,	NILAI	int					not null default 0
+,	constraint R_CSM_PENILAIAN2_PK primary key (id)
 );
 
 create table R_CSM_PENILAIAN2_DETAIL (
-	ID				int identity (1,1) not null primary key
-,	ID_PENILAIAN	int not null foreign key references R_CSM_PENILAIAN2 (ID)
-,	ELEMEN			varchar (1024) default '-'
+	ID				int identity (1,1)	not null
+,	ID_PENILAIAN	int					not null
+,	ELEMEN			varchar (1024)		default '-'
+,	constraint r_cms_penilaian2_detail_pk primary key (id)
+,	constraint r_csm_penilaian2_detail_fk_csm_penilaian foreign key (id_penilaian) references r_csm_penilaian2 (id)
 );
 
 create table R_CSM_PENILAIAN2_DETAIL2 (
-	ID				int identity (1,1) not null primary key
-,	ID_PENILAIAN	int not null foreign key references R_CSM_PENILAIAN2 (ID)
-,	ID_DETAIL		int not null foreign key references R_CSM_PENILAIAN2_DETAIL (ID)
+	ID				int identity (1,1)	not null
+,	ID_PENILAIAN	int					not null
+,	ID_DETAIL		int					not null
 ,	ELEMEN			varchar (1024) default '-'
+,	constraint r_csm_penilaian2_detail2_pk primary key (id)
+,	constraint r_csm_penilaian2_detail2_fk_csm_penilaian2 foreign key (id_penilaian) references r_csm_penilaian2 (id)
+,	constraint r_csm_penilaian2_detail2_fk_penilaian2_detail foreign key (id_detail) references r_csm_penilaian2_detail (id)
 );
 
 create table R_CSM_PENILAIAN2_PENILAIAN (
-	ID				int identity (1,1) not null primary key
-,	ID_PENILAIAN	int not null foreign key references R_CSM_PENILAIAN2 (ID)
-,	ID_DETAIL		int not null foreign key references R_CSM_PENILAIAN2_DETAIL (ID)
-,	ID_DETAIL2		int not null foreign key references R_CSM_PENILAIAN2_DETAIL2 (ID)
-,	PENILAIAN		varchar (1024) not null
-,	NILAI			int not null default 0
+	ID				int identity (1,1)	not null
+,	ID_PENILAIAN	int					not null
+,	ID_DETAIL		int					not null
+,	ID_DETAIL2		int					not null
+,	PENILAIAN		varchar (1024)		not null
+,	NILAI			int					not null default 0
+,	constraint r_csm_penilaian2_penilaian_pk primary key (id)
+,	constraint r_csm_penilaian2_penilaian_fk_csm_penilaian2 foreign key (id_penilaian) references r_csm_penilaian2 (id)
+,	constraint r_csm_penilaian2_penilaian_fk_penilaian2_detail foreign key (id_detail) references r_csm_penilaian2_detail (id)
+,	constraint r_csm_penilaian2_penilaian_fk_penilaian2_detail2 foreign key (id_detail2) references r_csm_penilaian2_detail2 (id)
 );
 
 create table T_CSM_PROYEK_KONTRAKTOR2 (
-	ID_PROJECT			bigint primary key references t_csm_proyek (id_project)
-,	ID_KONTRAKTOR		bigint foreign key references r_kontraktor (id)
+	ID_PROJECT			bigint
+,	ID_KONTRAKTOR		bigint
 ,	TANGGAL				date default current_timestamp
 ,	JENIS_PEKERJAAN		varchar (512) not null default ''
 ,	TEMPAT_KONSTRUKSI	varchar (512) not null default ''
 ,	TOTAL_NILAI			float not null default 0.0
 ,	KETERANGAN			varchar (64) not null default 'Tidak Lulus'
+,	constraint t_csm_proyek_kontraktor2_pk primary key (id_project)
+,	constraint t_csm_proyek_kontraktor2_fk_csm_proyek foreign key (id_project) references t_csm_proyek (id_project)
+,	constraint t_csm_proyek_kontraktor2_fk_kontraktor foreign key (id_kontraktor) references r_kontraktor (id)
 );
 
 /* add columne PASSING_GRADE to table T_CSM_PROYEK */

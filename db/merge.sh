@@ -72,3 +72,7 @@ echo "" >> k3pl.sql
 cat 33_data.sql >> k3pl.sql
 echo "" >> k3pl.sql
 cat 34_data.sql >> k3pl.sql
+echo "" >> k3pl.sql
+cat 35_structure_data.sql >> k3pl.sql
+echo "" >> k3pl.sql
+cat 36_structure.sql >> k3pl.sql
