@@ -13,7 +13,7 @@ try {
 	String	id_rca		= request.getParameter ("id_rca");
 
 	db_q	=" select	image_name"
-			+" ,		'"+ ctx_path + repo_rca +"/"+ id_rca +"/'+image_name as url"
+			+" ,		'"+ ctx_path + repo_rca + id_rca +"/'+image_name as url"
 			+" from		t_rca_images"
 			+" where	id_rca = "+ id_rca;
 
