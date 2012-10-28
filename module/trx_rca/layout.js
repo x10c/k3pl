@@ -3805,7 +3805,7 @@ function M_TrxRCAListImages ()
 	this.tpl = new Ext.XTemplate(
 		'<tpl for=".">',
 			'<div class="thumb-wrap" id="{name}">',
-			'<div class="thumb"><img src="{url}" title="{name}"></div>',
+			'<div class="thumb"><img src="{url}" title="{name}" /></div>',
 			'<span class="x-editable">{name}</span></div>',
 		'</tpl>',
 		'<div class="x-clear"></div>'
@@ -3824,6 +3824,12 @@ function M_TrxRCAListImages ()
 			}
 		,	listeners: {
 				scope			:this
+			,	click			:{
+					scope			:this
+				,	fn				:function (dv, i, node) {
+						window.open (dv.getRecord (node).get ("url"));
+					}
+				}
 			,	selectionchange	:{
 					scope			:this
 				,	fn				:function(dv,nodes) {
