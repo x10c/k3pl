@@ -8,7 +8,7 @@
 
 var m_obs_input_stop;
 var m_obs_input_stop_d	= _g_root +'/module/obs_input_stop/';
-var m_stop_form_obs	= [];
+var m_stop_form_obs		= [];
 var m_stop_n_discuss	= 0;
 var m_stop_n_observed	= 1;
 
@@ -60,7 +60,8 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 		,	allowNegative	: false
 		,	value			: 0
 		,	minValue		: 0
-		,	maxValue		: m_stop_n_observed
+// request: remove validation.
+//		,	maxValue		: m_stop_n_observed
 		});
 
 	this.form_unsafe = new Ext.ux.form.SpinnerField ({
@@ -69,7 +70,8 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 		,	allowNegative	: false
 		,	value			: 0
 		,	minValue		: 0
-		,	maxValue		: m_stop_n_observed
+// request: remove validation.
+//		,	maxValue		: m_stop_n_observed
 		});
 
 	this.cm = new Ext.grid.ColumnModel({
@@ -124,11 +126,12 @@ function M_ObsInputDetail(_i, _j, id, title, data)
 		,	colModel		: this.cm
 		,	listeners		: {
 				afteredit		: function(e) {
-					if (e.field == 'safe') {
-						e.record.set('unsafe', m_stop_n_observed - e.record.get('safe'));
-					} else if (e.field == 'unsafe') {
-						e.record.set('safe', m_stop_n_observed - e.record.get('unsafe'));
-					}
+// request: remove validation.
+//					if (e.field == 'safe') {
+//						e.record.set('unsafe', m_stop_n_observed - e.record.get('safe'));
+//					} else if (e.field == 'unsafe') {
+//						e.record.set('safe', m_stop_n_observed - e.record.get('unsafe'));
+//					}
 				}
 			}
 		});
@@ -248,7 +251,8 @@ function M_ObsInputStop()
 					this.form_n_discuss.setMaxValue (newvalue);
 
 					/* don't change safe value if user edit the data */
-					this.set_detail_max_value(m_stop_n_observed);
+// request: remove validation.
+//					this.set_detail_max_value(m_stop_n_observed);
 				}
 			,	scope	: this
 			}
@@ -330,8 +334,10 @@ function M_ObsInputStop()
 			this.panel_user
 		,	this.panel_obs
 		]
-		});
+	});
 
+// request: remove validation.
+/*
 	this.set_detail_max_value = function(v)
 	{
 		var i, j, k, r, tipe, o;
@@ -344,7 +350,7 @@ function M_ObsInputStop()
 				tipe[j].form_safe.setMaxValue(v);
 				tipe[j].form_unsafe.setMaxValue (v);
 
-				/* set all safe value to n-observed */
+				// set all safe value to n-observed
 				for (k = 0; k < o.store.getCount(); k++) {
 					r = o.store.getAt(k);
 					r.set('safe', 0);
@@ -353,7 +359,7 @@ function M_ObsInputStop()
 			}
 		}
 	}
-
+*/
 	this.create_obs_form = function()
 	{
 		var i,j;
@@ -585,7 +591,8 @@ function M_ObsInputStop()
 		this.form_safe.setValue('');
 		this.form_unsafe.setValue('');
 
-		this.set_detail_max_value (0);
+// request: remove validation.
+//		this.set_detail_max_value (0);
 	}
 
 	this.do_add = function()
@@ -617,7 +624,8 @@ function M_ObsInputStop()
 		this.form_safe.setValue(data.safe);
 		this.form_unsafe.setValue(data.unsafe);
 
-		this.set_detail_max_value (m_stop_n_observed);
+// request: remove validation.
+//		this.set_detail_max_value (m_stop_n_observed);
 
 		for (i = 0; i < d.length; i++) {
 			grid_id = 'obs_input_detail_'+ d[i].kel_id +'_'+ d[i].tipe_id;
@@ -666,6 +674,8 @@ function M_ObsInputStop()
 		});
 	}
 
+// request 02: remove periode input validation
+/*
 	this.set_min_max_date = function()
 	{
 		var d_min;
@@ -686,7 +696,7 @@ function M_ObsInputStop()
 		this.form_obs_date.setMinValue(d_min);
 		this.form_obs_date.setMaxValue(d_max);
 	}
-
+*/
 	this.do_refresh = function(ha_level)
 	{
 		this.ha_level = ha_level;
@@ -703,9 +713,10 @@ function M_ObsInputStop()
 
 		this.form_username.setValue(_g_username +' ('+ _g_usernipg +')');
 
-		if (this.ha_level < 4) {
-			this.set_min_max_date();
-		}
+// request 02: remove periode input validation
+//		if (this.ha_level < 4) {
+//			this.set_min_max_date();
+//		}
 		this.do_load_area();
 	}
 }
