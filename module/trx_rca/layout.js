@@ -2114,8 +2114,8 @@ function M_TrxRCAAdd()
 		var j			= 0;
 		var rca_detail	= '[';
 		var date;
-		var date_target;
-		var date_actual;
+		var date_target = '1900-01-01';
+		var date_actual = '1900-01-01';
 
 		this.form_rca_detail.store.each(function(r) {
 			if (j > 0) {
@@ -2125,17 +2125,13 @@ function M_TrxRCAAdd()
 			}
 			
 			if (r.get('completion_date_target') != ''){
-				date = new Date(r.get('completion_date_target'));
-				date_target = (1900 + date.getYear()) +'-'+ (1 + date.getMonth()) +'-'+ date.getDate();
-			} else {
-				date_target = '1900-01-01'
+				date = new Date (r.get('completion_date_target'));
+				date_target = date.format ('Y-m-d')
 			}
 
 			if (r.get('completion_date_actual') != ''){
 				date = new Date(r.get('completion_date_actual'));
-				date_actual = (1900 + date.getYear()) +'-'+ (1 + date.getMonth()) +'-'+ date.getDate();
-			} else {
-				date_actual = '1900-01-01'
+				date_actual = date.format ('Y-m-d');
 			}
 
 			rca_detail += "{description: '" + r.get('description')
@@ -2162,14 +2158,12 @@ function M_TrxRCAAdd()
 		
 		var	d, m ,y;
 		var periode = 0;
-		
-		d = this.form_tanggal_rca.getValue();
-		d = d.getDate();
-		m = this.form_tanggal_rca.getValue();
-		m = 1 + m.getMonth();
-		y = this.form_tanggal_rca.getValue();
-		y = 1900 + y.getYear();
-		
+		var tgl_rca = new Date (this.form_tanggal_rca.getValue ());
+
+		d = tgl_rca.format ('d');
+		m = tgl_rca.format ('m');
+		y = tgl_rca.format ('Y');
+
 		if (d <= 15){
 			periode = 1;
 		} else {
@@ -2241,8 +2235,8 @@ function M_TrxRCAAdd()
 		var d_max;
 		var d		= new Date();
 		var day		= d.getDate();
-		var month	= d.getMonth();
-		var year	= 1900 + d.getYear();
+		var month	= d.format ('m');
+		var year	= d.format ('Y');
 
 		if (day <= 15) {
 			d_min = new Date(year, month, 1);
@@ -3116,13 +3110,11 @@ function M_TrxRCAEdit()
 		var rca_detail 	= '[]';
 		var	d, m ,y;
 		var periode = 0;
+		var tgl_rca = new Date (this.form_tanggal_rca.getValue ());
 
-		d = this.form_tanggal_rca.getValue();
-		d = d.getDate();
-		m = this.form_tanggal_rca.getValue();
-		m = 1 + m.getMonth();
-		y = this.form_tanggal_rca.getValue();
-		y = 1900 + y.getYear();
+		d = tgl_rca.format ('d');
+		m = tgl_rca.format ('m');
+		y = tgl_rca.format ('Y');
 
 		if (d <= 15){
 			periode = 1;
@@ -3368,8 +3360,8 @@ function M_TrxRCAEdit()
 		var d_max;
 		var d		= new Date();
 		var day		= d.getDate();
-		var month	= d.getMonth();
-		var year	= 1900 + d.getYear();
+		var month	= d.format ('m');
+		var year	= d.format ('Y');
 
 		if (day <= 15) {
 			d_min = new Date(year, month, 1);
@@ -3411,8 +3403,9 @@ function M_TrxRCAList()
 		{
 			name	: 'id_rca'
 		},{
-			name	: 'tanggal_rca',
-			type	: 'date'
+			name		: 'tanggal_rca'
+		,	type		: 'date'
+		,	dateFormat	: 'Y-m-d'
 		},{
 			name	: 'id_seksi'
 		},{
@@ -3433,10 +3426,10 @@ function M_TrxRCAList()
 	]);
 
 	this.store = new Ext.data.GroupingStore({
-			url	: _g_root +'/module/trx_rca/data_rca_list.jsp'
+			url			: _g_root +'/module/trx_rca/data_rca_list.jsp'
 		,	reader		: this.reader
 		,	groupField	: 'id_user'
-		,	autoLoad: false
+		,	autoLoad	: false
 	});
 
 	this.filters = new Ext.ux.grid.GridFilters({
@@ -3452,7 +3445,8 @@ function M_TrxRCAList()
 				,	dataIndex	: 'tanggal_rca'
 				,	align		: 'center'
 				,	width		: 90
-				,	renderer	: Ext.util.Format.dateRenderer('Y-m-d')
+				,	xtype		: 'datecolumn'
+				,	format		: 'Y-m-d'
 				,	filter		: {
 						type	: 'date'
 					}

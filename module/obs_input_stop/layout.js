@@ -514,14 +514,12 @@ function M_ObsInputStop()
 
 		var	d, m ,y;
 		var periode = 0;
-		
-		d = this.form_obs_date.getValue();
-		d = d.getDate();
-		m = this.form_obs_date.getValue();
-		m = 1 + m.getMonth();
-		y = this.form_obs_date.getValue();
-		y = 1900 + y.getYear();
-		
+		var obs_date = new Date (this.form_obs_date.getValue ());
+
+		d = obs_date.format ('d');
+		m = obs_date.format ('m');
+		y = obs_date.format ('Y');
+
 		if (d <= 15){
 			periode = 1;
 		} else {
@@ -674,16 +672,14 @@ function M_ObsInputStop()
 		});
 	}
 
-// request 02: remove periode input validation
-/*
 	this.set_min_max_date = function()
 	{
 		var d_min;
 		var d_max;
 		var d		= new Date();
-		var day		= d.getDate();
-		var month	= d.getMonth();
-		var year	= 1900 + d.getYear();
+		var day		= d.format ('d');
+		var month	= d.format ('m');
+		var year	= d.format ('Y');
 
 		if (day <= 15) {
 			d_min = new Date(year, month, 1);
@@ -696,7 +692,7 @@ function M_ObsInputStop()
 		this.form_obs_date.setMinValue(d_min);
 		this.form_obs_date.setMaxValue(d_max);
 	}
-*/
+
 	this.do_refresh = function(ha_level)
 	{
 		this.ha_level = ha_level;
@@ -713,10 +709,9 @@ function M_ObsInputStop()
 
 		this.form_username.setValue(_g_username +' ('+ _g_usernipg +')');
 
-// request 02: remove periode input validation
-//		if (this.ha_level < 4) {
-//			this.set_min_max_date();
-//		}
+		if (this.ha_level < 4) {
+			this.set_min_max_date();
+		}
 		this.do_load_area();
 	}
 }

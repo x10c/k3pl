@@ -13,7 +13,7 @@ try {
 
 	db_stmt = db_con.createStatement();
 	db_q=" select	a.id_rca "
-		+" ,		a.tanggal_rca as tanggal_rca "
+		+" ,		replace(convert(varchar(10), a.tanggal_rca, 111), '/', '-') as tanggal_rca "
 		+" ,		a.auditor_seksi as id_seksi "
 		+" ,		( select c.nama_seksi from r_seksi as c where a.auditor_seksi = c.id_seksi ) as auditor_seksi "
 		+" ,		( "

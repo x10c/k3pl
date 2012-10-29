@@ -96,8 +96,8 @@ function M_ChartPerfByCategory()
 
 	this.do_refresh = function() {
 		var date	= new Date();
-		var year	= 1900 + (date.getYear());
-		var month	= 1 + date.getMonth();
+		var year	= date.format ('Y');
+		var month	= date.format ('m');
 
 		this.chart.set_subtitle('Tahun '+ year +', bulan '
 					+ k3pl_months_wall[month][1]);
@@ -144,7 +144,7 @@ function M_ChartPerfByIndex()
 
 	this.do_refresh = function() {
 		var date	= new Date();
-		var year	= 1900 + (date.getYear());
+		var year	= date.format ('Y');
 
 		this.chart.set_subtitle('Tahun '+ year);
 
@@ -187,7 +187,7 @@ function M_ChartPerfByHour()
 
 	this.do_refresh = function() {
 		var date	= new Date();
-		var year	= 1900 + (date.getYear());
+		var year	= date.format ('Y');
 
 		this.chart.set_subtitle('Tahun '+ year);
 
@@ -284,8 +284,8 @@ function M_LUKChart(title, y_title, store_url, chart_type, show_target)
 
 	this.do_refresh = function(ha_level) {
 		var date	= new Date();
-		var year	= 1900 + (date.getYear());
-		var month	= 1 + date.getMonth();
+		var year	= date.format ('Y');
+		var month	= date.format ('M');
 		var i,m;
 
 		this.chart.setSubTitle('Tahun '+ year);
@@ -394,7 +394,7 @@ function M_ObsPartChart(title, xField, y1)
 	{
 		var d = new Date();
 
-		this.do_load (0, m_charts_id_div, 0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
+		this.do_load (0, m_charts_id_div, 0,0,0,0,0, d.format ('Y'), d.format ('m'), 1);
 	}
 }
 
@@ -484,7 +484,7 @@ function M_RCAPartChart(title, xField, y1)
 	{
 		var d = new Date();
 
-		this.do_load(0, m_charts_id_div, 0,0,0,0,0, 1900 + d.getYear(), d.getMonth() + 1, 1);
+		this.do_load(0, m_charts_id_div, 0,0,0,0,0, d.format ('Y'), d.format ('m'), 1);
 	}
 }
 

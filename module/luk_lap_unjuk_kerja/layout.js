@@ -528,7 +528,7 @@ function M_LUK_JBA ()
 				/* hide all month columns except for the last four months */
 				/*
 				var d		= new Date();
-				var m_end	= d.getMonth() + 1;
+				var m_end	= d.format ('m');
 				var m_start	= 1;
 
 				if (m_end > 3) {
