@@ -12,7 +12,8 @@ try {
 	String	repo_rca	= "/repository/rca/";
 	String	id_rca		= request.getParameter ("id_rca");
 
-	db_q	=" select	image_name"
+	db_q	=" select	id"
+			+" ,		image_name"
 			+" ,		'"+ ctx_path + repo_rca + id_rca +"/'+image_name as url"
 			+" from		t_rca_images"
 			+" where	id_rca = "+ id_rca;
@@ -23,6 +24,7 @@ try {
 	
 	while (db_rs.next ()) {
 		json_o = new JSONObject ();
+		json_o.put ("id", db_rs.getString ("id"));
 		json_o.put ("id_rca", id_rca);
 		json_o.put ("name", db_rs.getString ("image_name"));
 		json_o.put ("url", db_rs.getString ("url"));

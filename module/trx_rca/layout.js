@@ -16,6 +16,7 @@ var m_trx_rca_ha_level	= 0;
 var m_trx_rca_id_seksi	= '';
 var m_trx_rca_pic		= '';
 var m_trx_rca_user		= '';
+var m_trx_rca_image_id	= 0;
 var m_trx_rca_image_name= '';
 var m_trx_rca_dir 		= _g_root +'/module/trx_rca/';
 
@@ -3738,7 +3739,7 @@ function M_TrxRCAListImages ()
 	this.store = new Ext.data.JsonStore ({
 			url		: m_trx_rca_dir +'data_rca_images.jsp'
 		,	root	: 'data'
-		,	fields	: ['id_rca', 'name', 'url']
+		,	fields	: ['id', 'id_rca', 'name', 'url']
     });
 /*
  * windows upload
@@ -3824,7 +3825,7 @@ function M_TrxRCAListImages ()
 			}
 		,	listeners: {
 				scope			:this
-			,	click			:{
+			,	dblclick		:{
 					scope			:this
 				,	fn				:function (dv, i, node) {
 						window.open (dv.getRecord (node).get ("url"));
@@ -3834,7 +3835,9 @@ function M_TrxRCAListImages ()
 					scope			:this
 				,	fn				:function(dv,nodes) {
 						if (nodes.length > 0) {
-							m_trx_rca_image_name = nodes[0].id;
+							var rec = dv.getRecord (nodes[0]);
+							m_trx_rca_image_id		= rec.get ("id");
+							m_trx_rca_image_name	= rec.get ("name");
 							this.btn_del.setDisabled (false);
 						}
 					}
@@ -3864,6 +3867,7 @@ function M_TrxRCAListImages ()
 					id_rca	: m_trx_rca_id_rca
 				}
 			});
+			this.btn_upload.setDisabled (false);
 		}
 	}
 
@@ -3913,7 +3917,8 @@ function M_TrxRCAListImages ()
 			url		:m_trx_rca_dir +"delete_image.jsp"
 		,	scope	:this
 		,	params	:{
-				id		:m_trx_rca_id_rca
+				id		:m_trx_rca_image_id
+			,	id_rca	:m_trx_rca_id_rca
 			,	name	:m_trx_rca_image_name
 			}
 		,	failure	:function (r, o) {

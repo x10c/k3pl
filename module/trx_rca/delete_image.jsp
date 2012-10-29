@@ -10,38 +10,30 @@
 <%
 try {
 	String		id		= request.getParameter("id");
+	String		id_rca	= request.getParameter("id_rca");
 	String		name	= request.getParameter("name");
 	String		path	= config.getServletContext().getRealPath("/");
 	String		repo_rca= "/repository/rca/";
 	File		f;
 
-	db_stmt = db_con.createStatement();
-
-	path += repo_rca + id +"/"+ name;
+	path += repo_rca + id_rca +"/"+ name;
 
 	/* delete file from system */
 	f = new File(path);
 
-	if (f.isDirectory()) {
-		String[] files = f.list();
-
-		if (files.length > 0) {
-			_return.put ("success", false);
-			_return.put ("info", "Direktori memiliki isi, tidak dapat dihapus!");
-			out.print (_return);
-			return;
-		}
-	}
-
 	if (f.exists()) {
 		f.delete();
+	} else {
+		_return.put ("success", false);
+		_return.put ("info", "File '"+ path +"' tidak ditemukan di server!");
+		return;
 	}
 
 	/* delete file from database */
 	db_q=" delete from t_rca_images"
-		+" where	id_rca		= "+ id
-		+" and		image_name	= '"+ name +"'";
+		+" where	id			= "+ id;
 
+	db_stmt = db_con.createStatement();
 	db_stmt.executeUpdate (db_q);
 
 	_return.put ("success", true);
