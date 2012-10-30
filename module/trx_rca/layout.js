@@ -1005,7 +1005,8 @@ function M_TrxEditRCADetail()
 					}
 					
 					if (this.status == 3){
-						if (Ext.util.Cookies.get ('user.group' == 1)) {
+						var c = Ext.util.Cookies.get ('user.group');
+						if (c == 1 || c == '1') {
 							this.btn_del.setDisabled (false);
 						} else {
 							this.btn_del.setDisabled(true);
