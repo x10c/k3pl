@@ -633,7 +633,10 @@ function M_RefPegawai(load_once)
 		if (this.id_dinas != 'undefined' && this.id_dinas != '') {
 			this.form_seksi.clearFilter(true);
 			this.form_seksi.filterBy(this.form_seksi_filter, this);
-			this.form_seksi.setValue(this.store_seksi.getAt(0).get('id'));
+			var r = this.store_seksi.getAt(0);
+			if (r) {
+				this.form_seksi.setValue(r.get('id'));
+			}
 		} else {
 			this.form_seksi.clearFilter(true);
 		}
@@ -657,10 +660,13 @@ function M_RefPegawai(load_once)
 			this.form_dinas.clearFilter(true);
 			this.form_dinas.filterBy(this.form_dinas_filter, this);
 
-			var id = this.store_dinas.getAt(0).get('id');
+			var r = this.store_dinas.getAt(0);
+			if (r) {
+				var id = r.get('id');
 
-			this.form_dinas.setValue(id);
-			this.form_dinas_on_select(id);
+				this.form_dinas.setValue(id);
+				this.form_dinas_on_select(id);
+			}
 		} else {
 			this.form_dinas.clearFilter(true);
 		}
@@ -683,10 +689,13 @@ function M_RefPegawai(load_once)
 			this.form_departemen.clearFilter(true);
 			this.form_departemen.filterBy(this.form_departemen_filter, this);
 
-			var id = this.store_departemen.getAt(0).get('id');
+			var	r = this.store_departemen.getAt(0);
+			if (r) {
+				var id = r.get('id');
 
-			this.form_departemen.setValue(id);
-			this.form_departemen_on_select(id);
+				this.form_departemen.setValue(id);
+				this.form_departemen_on_select(id);
+			}
 		} else {
 			this.form_departemen.clearFilter(true);
 		}
@@ -708,10 +717,13 @@ function M_RefPegawai(load_once)
 			this.form_divprosbu.clearFilter(true);
 			this.form_divprosbu.filterBy(this.form_divprosbu_filter, this);
 
-			var id = this.store_divprosbu.getAt(0).get('id');
+			var r = this.store_divprosbu.getAt(0);
+			if (r) {
+				var id	= r.get('id');
 
-			this.form_divprosbu.setValue(id);
-			this.form_divprosbu_on_select(id);
+				this.form_divprosbu.setValue(id);
+				this.form_divprosbu_on_select(id);
+			}
 		} else {
 			this.form_divprosbu.clearFilter(true);
 		}

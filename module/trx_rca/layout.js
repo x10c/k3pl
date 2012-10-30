@@ -2234,16 +2234,16 @@ function M_TrxRCAAdd()
 		var d_min;
 		var d_max;
 		var d		= new Date();
-		var day		= d.getDate();
+		var day		= d.format ('d');
 		var month	= d.format ('m');
 		var year	= d.format ('Y');
 
 		if (day <= 15) {
-			d_min = new Date(year, month, 1);
-			d_max = new Date(year, month, 15);
+			d_min = new Date(year, month - 1, 1);
+			d_max = new Date(year, month - 1, 15);
 		} else {
-			d_min = new Date(year, month, 16);
-			d_max = new Date(year, month + 1, 0);
+			d_min = new Date(year, month - 1, 16);
+			d_max = new Date(year, month, 0);
 		}
 
 		this.form_tanggal_rca.setMinValue(d_min);
@@ -3359,16 +3359,16 @@ function M_TrxRCAEdit()
 		var d_min;
 		var d_max;
 		var d		= new Date();
-		var day		= d.getDate();
+		var day		= d.format ('d');
 		var month	= d.format ('m');
 		var year	= d.format ('Y');
 
 		if (day <= 15) {
-			d_min = new Date(year, month, 1);
-			d_max = new Date(year, month, 15);
+			d_min = new Date(year, month - 1, 1);
+			d_max = new Date(year, month - 1, 15);
 		} else {
-			d_min = new Date(year, month, 16);
-			d_max = new Date(year, month + 1, 0);
+			d_min = new Date(year, month - 1, 16);
+			d_max = new Date(year, month, 0);
 		}
 
 		this.form_tanggal_rca.setMinValue(d_min);

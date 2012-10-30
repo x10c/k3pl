@@ -26,6 +26,7 @@ try {
 	} else {
 		_return.put ("success", false);
 		_return.put ("info", "File '"+ path +"' tidak ditemukan di server!");
+		out.print (_return);
 		return;
 	}
 

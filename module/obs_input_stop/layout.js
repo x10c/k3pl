@@ -682,11 +682,11 @@ function M_ObsInputStop()
 		var year	= d.format ('Y');
 
 		if (day <= 15) {
-			d_min = new Date(year, month, 1);
-			d_max = new Date(year, month, 15);
+			d_min = new Date(year, month - 1, 1);
+			d_max = new Date(year, month - 1, 15);
 		} else {
-			d_min = new Date(year, month, 16);
-			d_max = new Date(year, month + 1, 0);
+			d_min = new Date(year, month - 1, 16);
+			d_max = new Date(year, month, 0);
 		}
 
 		this.form_obs_date.setMinValue(d_min);
