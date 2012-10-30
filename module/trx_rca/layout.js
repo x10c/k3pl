@@ -1005,7 +1005,11 @@ function M_TrxEditRCADetail()
 					}
 					
 					if (this.status == 3){
-						this.btn_del.setDisabled(true);
+						if (Ext.util.Cookies.get ('user.group' == 1)) {
+							this.btn_del.setDisabled (false);
+						} else {
+							this.btn_del.setDisabled(true);
+						}
 					} else {
 						this.btn_del.setDisabled(false);
 					}
