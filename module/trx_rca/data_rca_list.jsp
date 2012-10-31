@@ -33,17 +33,20 @@ try {
 		+" ,		( select g.nama_pegawai from r_pegawai as g where a.penanggung_jawab_nipg = g.nipg) as nama_pic "
 		+" ,		'" + user_nipg + "' as user_login "
 		+" ,		a.id_user	as id_user "
-		+" from		t_rca	as a "
-		+" where	(a.penanggung_jawab_nipg = '"+ user_nipg +"'"
-		+" or		'"+ user_nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca))";
+		+" from		t_rca	as a ";
+
+	if (! user_group.equalsIgnoreCase ("1")) {
+		db_q+=" where	(a.penanggung_jawab_nipg = '"+ user_nipg +"'"
+			+" or		'"+ user_nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca))";
 
 		if (load_type.equals("all")) {
 			db_q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)"
 				+" and	a.auditor_divprosbu		= "+ user_div
 				+" and	a.auditor_direktorat	= "+ user_dir;
 		}
+	}
 
-		db_q+=" order by	a.tanggal_rca desc ";
+	db_q+=" order by	a.tanggal_rca desc ";
 
 	db_rs		= db_stmt.executeQuery (db_q);
 	json_a		= new JSONArray ();

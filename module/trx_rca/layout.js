@@ -3564,6 +3564,11 @@ function M_TrxRCAList()
 		,	view				: this.grid_view
 		,	plugins				: [ this.filters ]
 		,	region				: 'center'
+		,	bbar				: new Ext.PagingToolbar({
+				store				: this.store
+			,	pageSize			: 50
+			,	plugins				: [this.filters]
+			})
 	});
 
 	this.do_del = function()
