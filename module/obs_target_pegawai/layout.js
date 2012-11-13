@@ -102,15 +102,15 @@ function M_ObsTargetPegawai()
 	});
 
 	this.form_year = new Ext.form.ComboBox({
-		store		: new Ext.data.ArrayStore({
-		fields		: ['year']
-		,	data	: k3pl_create_form_year_data(10)
+		store			: new Ext.data.ArrayStore({
+			fields			: ['year']
+		,	data			: k3pl_create_form_year_data(10)
 		})
-	,	width		: 100
-	,	editable	: false
-	,	valueField	: 'year'
+	,	width			: 100
+	,	editable		: false
+	,	valueField		: 'year'
 	,	displayField	: 'year'
-	,	mode		: 'local'
+	,	mode			: 'local'
 	,	triggerAction	: 'all'
 	});
 

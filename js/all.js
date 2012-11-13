@@ -122,20 +122,27 @@ function checkbox_renderer(checkbox, str_true, str_false)
  * @desc:
  *	create array of year from current year to
  *	(current_year - n_last_year).
+ *
+ *  if current month == 12 then add next year to the list.
  */
-function k3pl_create_form_year_data(n_last_year)
+function k3pl_create_form_year_data (n_last_year)
 {
-	var d		= new Date();
-	var cur_year	= d.getFullYear();
-	var years	= '[["'+ cur_year +'"]';
+	var d		= new Date ();
+	var y		= d.getFullYear();
+	var m		= d.getMonth ();
+	var years	= [];
 
-	for(var i = 1; i <= n_last_year; i++) {
-		years += ',["'+ (cur_year - i) +'"]';
+	if (m == 11) {
+		y++;
 	}
 
-	years += ']';
+	for (var i = 0; i < n_last_year; i++) {
+		var a = [];
+		a.push ((y - i));
+		years.push (a);
+	}
 
-	return Ext.util.JSON.decode(years);
+	return years;
 }
 
 /*
