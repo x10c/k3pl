@@ -10,11 +10,15 @@
 try {
 	JSONArray	stop		= new JSONArray ();
 	String		load_type	= (String) request.getParameter("load_type");
+	int			start		= (int) Integer.parseInt (request.getParameter ("start"));
+	int			limit		= (int) Integer.parseInt (request.getParameter ("limit"));
 	int			i			= 0;
 
 	db_stmt = db_con.createStatement();
 
-	db_q=" select	A.id_stop"
+	db_q=" select	X.*"
+		+" from		("
+		+" select	A.id_stop"
 		+" ,		A.nipg"
 		+" ,		C.nama_pegawai"
 		+" ,		replace(convert(varchar, A.tanggal, 111), '/', '-') tanggal"
@@ -25,6 +29,7 @@ try {
 		+" ,		A.jml_org_observasi"
 		+" ,		A.jml_org_diskusi"
 		+" ,		A.status_aktif"
+		+" ,		row_number () over (order by id_stop) AS rownum"
 		+" from		t_stop		A"
 		+" ,		r_seksi		B"
 		+" ,		r_pegawai	C"
@@ -36,7 +41,9 @@ try {
 		db_q +=" and	A.nipg		= '"+ user_nipg +"'";
 	}
 
-	db_q +=" order by	A.id_stop desc";
+	db_q	+=" ) X"
+			+" where X.rownum between "+ start +" and "+ limit
+			+" order by	X.id_stop desc";
 
 	db_rs = db_stmt.executeQuery (db_q);
 

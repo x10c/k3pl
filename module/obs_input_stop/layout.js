@@ -735,8 +735,10 @@ function M_ObsDataStop()
 			, 'n_dis'
 			, 'status_aktif'
 			]
-		,	url	: m_obs_input_stop_d +'data_list_stop.jsp'
-		,	autoLoad: false
+		,	url				: m_obs_input_stop_d +'data_list_stop.jsp'
+		,	autoLoad		: false
+		,	idProperty		:'id'
+		,	totalProperty	:'total'
 		});
 /*
  * forms
@@ -857,6 +859,12 @@ function M_ObsDataStop()
 			,	this.btn_ref, '-'
 			,	this.btn_add
 			]
+		,	bbar		: new Ext.PagingToolbar ({
+				pageSize	: 50
+			,	store		: this.store
+			,	displayInfo	: true
+			,	emptyMsg	: "Tidak ada data"
+			})
 		,	listeners	: {
 				scope		: this
 			,	rowdblclick	: function(grid, row_idx, e) {
@@ -998,7 +1006,9 @@ function M_ObsDataStop()
 
 		this.store.load({
 			params	: {
-				load_type : load_type
+				start		: 0
+			,	limit		: 50
+			,	load_type	: load_type
 			}
 		});
 	}
