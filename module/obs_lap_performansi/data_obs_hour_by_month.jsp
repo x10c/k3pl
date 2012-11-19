@@ -23,7 +23,7 @@ try {
 
 	ResultSet	rs		= null;
 	String		data	= "[";
-	String		q;
+	String		q		= "";
 	int			i;
 
 	String		id_dir		= request.getParameter("id_dir");
@@ -49,7 +49,12 @@ try {
 			+" ,		r_seksi			C"
 			+" where 	A.id_stop		= B.id_stop"
 			+" and		A.status_aktif	= '1'"
-			+" and		A.year			= "+ year;
+			+" and		A.year			= "+ year
+			+" and		A.id_seksi		= C.id_seksi"
+			+" and		A.id_dinas		= C.id_dinas"
+			+" and		A.id_departemen	= C.id_departemen"
+			+" and		A.id_divprosbu	= C.id_divprosbu"
+			+" and		A.id_direktorat	= C.id_direktorat";
 
 	q_time	=" select	(isnull(sum(A.lama_observasi), 0)) as v"
 			+" from		t_stop			A"

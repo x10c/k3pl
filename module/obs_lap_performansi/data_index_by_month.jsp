@@ -26,7 +26,7 @@ try {
 	String		data	= "[";
 	String		q		= "";
 	String		q2		= "";
-	int		i, sum_act;
+	int			i, sum_act;
 
 	String		id_dir		= request.getParameter("id_dir");
 	String		id_div		= request.getParameter("id_div");
@@ -98,17 +98,22 @@ try {
 			data += ",";
 		}
 
-		q2	=" select	isnull(sum(jumlah_safe),0) sum_safe "
-			+" ,		isnull(sum(jumlah_unsafe),0) sum_unsafe "
-			+" ,		((isnull(sum(jumlah_safe),0)/"+ sum_act +".00)*100) safe_index "
-			+" ,		((isnull(sum(jumlah_unsafe),0)/"+ sum_act +".00)*100) unsafe_index "
-			+" from		t_stop_detail "
-			+" where 	id_stop in ("
-			+"	select	id_stop "
-			+"	from	t_stop A"
-			+"	where	status_aktif	= '1' "
-			+"	and	year		= "+ year
-			+"	and	month		= "+ (i + 1);
+		q2	=" select	isnull(sum(B.jumlah_safe),0) sum_safe "
+			+" ,		isnull(sum(B.jumlah_unsafe),0) sum_unsafe "
+			+" ,		((isnull(sum(B.jumlah_safe),0)/"+ sum_act +".00)*100) safe_index "
+			+" ,		((isnull(sum(B.jumlah_unsafe),0)/"+ sum_act +".00)*100) unsafe_index "
+			+" from		t_stop			A"
+			+" ,		t_stop_detail	B"
+			+" ,		r_seksi			C"
+			+" where 	A.id_stop		= B.id_stop"
+			+" and		A.status_aktif	= '1' "
+			+" and		A.year			= "+ year
+			+" and		A.month			= "+ (i + 1)
+			+" and		A.id_seksi		= C.id_seksi"
+			+" and		A.id_dinas		= C.id_dinas"
+			+" and		A.id_departemen	= C.id_departemen"
+			+" and		A.id_divprosbu	= C.id_divprosbu"
+			+" and		A.id_direktorat	= C.id_direktorat";
 
 		if (id_dir != null && (!id_dir.equals ("0") && !id_dir.equals (""))) {
 			q2 += " and A.id_direktorat = "+ id_dir;
@@ -117,25 +122,23 @@ try {
 			q2 += " and A.id_divprosbu = "+ id_div;
 		}
 		if (!id_dep.equals("0") && !id_dep.equals("")) {
-			q2 += " and	id_departemen	= "+ id_dep;
+			q2 += " and	A.id_departemen	= "+ id_dep;
 		}
 		if (!id_dinas.equals("0") && !id_dinas.equals("")) {
-			q2 += " and	id_dinas	= "+ id_dinas;
+			q2 += " and	A.id_dinas	= "+ id_dinas;
 		}
 		if (!id_seksi.equals("0") && !id_seksi.equals("")) {
-			q2 += " and	id_seksi	= "+ id_seksi;
+			q2 += " and	A.id_seksi	= "+ id_seksi;
 		}
 		if (id_wilayah != null
 		&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-			q2	+=" and	B.id_seksi	= A.id_seksi"
-				+ " and B.id_wilayah	= "+ id_wilayah;
+			q2	+=" and	A.id_seksi		= C.id_seksi"
+				+ " and C.id_wilayah	= "+ id_wilayah;
 		}
 		if (id_area != null
 		&& !(id_area.equals("0") || id_area.equals(""))) {
-			q2	+=" and	id_seksi	= "+ id_area;
+			q2	+=" and	C.id_seksi		= "+ id_area;
 		}
-
-		q2	+=" )";
 
 		ResultSet rs2 = stmt2.executeQuery(q2);
 
