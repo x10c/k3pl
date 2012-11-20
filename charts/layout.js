@@ -285,7 +285,7 @@ function M_LUKChart(title, y_title, store_url, chart_type, show_target)
 	this.do_refresh = function(ha_level) {
 		var date	= new Date();
 		var year	= date.format ('Y');
-		var month	= date.format ('M');
+		var month	= date.format ('m');
 		var i,m;
 
 		this.chart.setSubTitle('Tahun '+ year);

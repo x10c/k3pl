@@ -5,28 +5,36 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
  %
- % WARNING: This script is used by charts module.
+ % WARNING: This script is used by charts module, do not use modinit.
 --%>
 
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.text.DecimalFormat" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
 <%
+JSONObject	_return	= new JSONObject ();
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
+	Connection db_con = (Connection) session.getAttribute("db.con");
 	if (db_con == null || (db_con != null && db_con.isClosed())) {
 		response.sendRedirect(request.getContextPath());
 		return;
 	}
 
-	Statement	stmt	= db_con.createStatement();
-	Statement	stmt2	= db_con.createStatement();
-
-	ResultSet	rs;
-	String		data	= "[";
-	String		q		= "";
-	String		q2		= "";
-	int			i, sum_act;
+	Statement		stmt			= db_con.createStatement();
+	ResultSet		rs				= null;
+	JSONArray		json_a			= new JSONArray ();
+	JSONArray		data			= null;
+	String			q				= "";
+	DecimalFormat	df				= new DecimalFormat("#.##");
+	int				i				= 0;
+	int				sum_safe		= 0;
+	int				sum_unsafe		= 0;
+	double			sum_total		= 0.0;
+	double			safe_index		= 0.0;
+	double			unsafe_index	= 0.0;
 
 	String		id_dir		= request.getParameter("id_dir");
 	String		id_div		= request.getParameter("id_div");
@@ -36,72 +44,12 @@ try {
 	String		id_wilayah	= request.getParameter("id_wilayah");
 	String		id_area		= request.getParameter("id_area");
 	String		year		= request.getParameter("year");
-	String		months[]	= { "Januari", "Februari", "Maret"
-					, "April", "Mei", "Juni"
-					, "Juli", "Agustus", "September"
-					, "October", "November", "Desember"
-					};
+	String		months[]	= { "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des" };
 
-	/* 1: get total safe and unsafe per year */
-	q	=" select	(isnull(sum(jumlah_safe), 0) + isnull(sum(jumlah_unsafe), 0)) sum_act"
-		+" from		t_stop_detail"
-		+" where	id_stop in ("
-		+"	select	A.id_stop"
-		+"	from	t_stop 		A"
-		+"	,		r_seksi		B"
-		+"	where	A.status_aktif	= '1'"
-		+"	and		A.year			= "+ year;
-
-	if (id_dir != null && (!id_dir.equals("0") && !id_dir.equals(""))) {
-		q += " and A.id_direktorat = "+ id_dir;
-	}
-	if (id_div != null && (!id_div.equals ("0") && !id_div.equals (""))) {
-		q += " and A.id_divprosbu = "+ id_div;
-	}
-	if (id_dep != null && !(id_dep.equals("0") || id_dep.equals(""))) {
-		q += " and	A.id_departemen	= "+ id_dep;
-	}
-	if (id_dinas != null
-	&& !(id_dinas.equals("0") || id_dinas.equals(""))) {
-		q += " and	A.id_dinas	= "+ id_dinas;
-	}
-	if (id_seksi != null
-	&& !(id_seksi.equals("0") || id_seksi.equals(""))) {
-		q += " and	A.id_seksi	= "+ id_seksi;
-	}
-
-	if (id_wilayah != null
-	&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-		q	+=" and	B.id_seksi	= A.id_seksi"
-			+ " and B.id_wilayah	= "+ id_wilayah;
-	}
-	if (id_area != null
-	&& !(id_area.equals("0") || id_area.equals(""))) {
-		q += " and	id_seksi	= "+ id_area;
-	}
-
-	q	+=" )";
-
-	rs = stmt.executeQuery(q);
-	rs.next();
-
-	sum_act	= rs.getInt("sum_act");
-
-	/* check zero sum */
-	if (sum_act == 0) {
-		sum_act = 1;
-	}
-
-	/* 2: get total safe and unsafe per month */
+	/* 1: get total safe and unsafe per month */
 	for (i = 0; i < months.length; i++) {
-		if (i > 0) {
-			data += ",";
-		}
-
-		q2	=" select	isnull(sum(B.jumlah_safe),0) sum_safe "
+		q	=" select	isnull(sum(B.jumlah_safe),0) sum_safe "
 			+" ,		isnull(sum(B.jumlah_unsafe),0) sum_unsafe "
-			+" ,		((isnull(sum(B.jumlah_safe),0)/"+ sum_act +".00)*100) safe_index "
-			+" ,		((isnull(sum(B.jumlah_unsafe),0)/"+ sum_act +".00)*100) unsafe_index "
 			+" from		t_stop			A"
 			+" ,		t_stop_detail	B"
 			+" ,		r_seksi			C"
@@ -116,51 +64,59 @@ try {
 			+" and		A.id_direktorat	= C.id_direktorat";
 
 		if (id_dir != null && (!id_dir.equals ("0") && !id_dir.equals (""))) {
-			q2 += " and A.id_direktorat = "+ id_dir;
+			q += " and A.id_direktorat = "+ id_dir;
 		}
 		if (id_div != null && (!id_div.equals ("0") && !id_div.equals (""))) {
-			q2 += " and A.id_divprosbu = "+ id_div;
+			q += " and A.id_divprosbu = "+ id_div;
 		}
 		if (!id_dep.equals("0") && !id_dep.equals("")) {
-			q2 += " and	A.id_departemen	= "+ id_dep;
+			q += " and	A.id_departemen	= "+ id_dep;
 		}
 		if (!id_dinas.equals("0") && !id_dinas.equals("")) {
-			q2 += " and	A.id_dinas	= "+ id_dinas;
+			q += " and	A.id_dinas	= "+ id_dinas;
 		}
 		if (!id_seksi.equals("0") && !id_seksi.equals("")) {
-			q2 += " and	A.id_seksi	= "+ id_seksi;
+			q += " and	A.id_seksi	= "+ id_seksi;
 		}
 		if (id_wilayah != null
 		&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-			q2	+=" and	A.id_seksi		= C.id_seksi"
+			q	+=" and	A.id_seksi		= C.id_seksi"
 				+ " and C.id_wilayah	= "+ id_wilayah;
 		}
 		if (id_area != null
 		&& !(id_area.equals("0") || id_area.equals(""))) {
-			q2	+=" and	C.id_seksi		= "+ id_area;
+			q	+=" and	C.id_seksi		= "+ id_area;
 		}
 
-		ResultSet rs2 = stmt2.executeQuery(q2);
+		rs = stmt.executeQuery(q);
 
-		rs2.next();
+		rs.next();
 
-		data	+="[ '"+ (i+1) +"' "
-			+ ", '"+ months[i] +"' "
-			+ ", "+ rs2.getString("sum_safe")
-			+ ", "+ rs2.getString("sum_unsafe")
-			+ ", "+ rs2.getString("safe_index")
-			+ ", "+ rs2.getString("unsafe_index")
-			+ "]";
+		sum_safe		= rs.getInt ("sum_safe");
+		sum_unsafe		= rs.getInt ("sum_unsafe");
+		sum_total		= sum_safe + sum_unsafe;
+		safe_index		= (double) (sum_safe / (sum_total <= 0 ? 1.00 : sum_total)) * 100;
+		unsafe_index	= (double) (sum_unsafe / (sum_total <= 0 ? 1.00 : sum_total)) * 100;
 
-		rs2.close();
+		data = new JSONArray ();
+		data.put (i + 1);
+		data.put (months[i]);
+		data.put (sum_safe);
+		data.put (sum_unsafe);
+		data.put (Double.valueOf (df.format (safe_index)));
+		data.put (Double.valueOf (df.format (unsafe_index)));
+
+		json_a.put (data);
+
+		rs.close();
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
-
-	rs.close();
+	stmt.close ();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

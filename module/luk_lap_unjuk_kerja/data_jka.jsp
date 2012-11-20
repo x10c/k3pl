@@ -15,6 +15,7 @@
 <%@ page import="org.json.JSONObject" %>
 <%@ page import="org.kilabit.ServletUtilities" %>
 <%
+JSONObject	_return	= new JSONObject ();
 String jka_months
 ="[{"
 +"	id	: '1'"
@@ -106,7 +107,7 @@ try {
 
 		q
 =" select"
-+"	TEK.jka	as teknik"
++"		TEK.jka	as teknik"
 +" ,	SER.jka	as servis"
 +" ,	KON.jka as kontrak"
 +" ,	KUM.jka as kumulatif"
@@ -182,6 +183,8 @@ q
 
 	out.print(data);
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>
