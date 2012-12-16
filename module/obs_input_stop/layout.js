@@ -678,16 +678,21 @@ function M_ObsInputStop()
 		var d_max;
 		var d		= new Date();
 		var day		= d.format ('d');
-		var month	= d.format ('m');
-		var year	= d.format ('Y');
+		var month_max	= (d.format ('m') - 1);
+		var month_min	= month_max - 1;
+		var year_max	= d.format ('Y');
+		var year_min	= year_max;
 
-		if (day <= 15) {
-			d_min = new Date(year, month - 1, 1);
-			d_max = new Date(year, month - 1, 15);
-		} else {
-			d_min = new Date(year, month - 1, 16);
-			d_max = new Date(year, month, 0);
+		if (month_max == 0) {
+			month_min	= 11;
+			year_min	= year - 1;
 		}
+
+		console.log ('max: year: '+ year_max +', month: '+ month_max);
+		console.log ('min: year: '+ year_min +', month: '+ month_min);
+
+		d_min = new Date(year_min, month_min, 25);
+		d_max = new Date(year_max, month_max, 24);
 
 		this.form_obs_date.setMinValue(d_min);
 		this.form_obs_date.setMaxValue(d_max);

@@ -248,7 +248,7 @@ function M_AdmUser()
 
 	this.store = new Ext.data.ArrayStore({
 			url	: m_app_adm_d +'data_user_in_group.jsp'
-		,	fields	: ['nipg', 'name']
+		,	fields	: ['nipg', 'name', 'nama_direktorat', 'nama_divprosbu', 'nama_departemen']
 		,	autoLoad: false
 		});
 
@@ -286,12 +286,29 @@ function M_AdmUser()
 				header		: 'NIPG'
 			,	dataIndex	: 'nipg'
 			,	editor		: this.form_nipg
+			,	width		:180
 			},{
-				id		: 'name'
+				id			: 'name'
 			,	header		: 'Nama'
 			,	dataIndex	: 'name'
+			,	flex		:1
 			,	editor		: this.form_user
 			,	renderer	: combo_renderer(this.form_user)
+			},{
+				header		:'Direktorat'
+			,	dataIndex	:'nama_direktorat'
+			,	width		:180
+			,	hidden		:true
+			},{
+				header		:'Divisi/Proyek/SBU'
+			,	dataIndex	:'nama_divprosbu'
+			,	width		:180
+			,	hidden		:true
+			},{
+				header		:'Departemen'
+			,	dataIndex	:'nama_departemen'
+			,	width		:180
+			,	hidden		:true
 			}
 		]
 	,	defaults: {

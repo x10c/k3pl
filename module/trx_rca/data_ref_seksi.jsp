@@ -22,16 +22,20 @@ try {
 
 	Statement	db_stmt			= db_con.createStatement();
 
-	String	q	=" select	id_seksi "
-				+" ,		id_dinas "
-				+" ,		id_departemen "
-				+" ,		id_divprosbu "
-				+" ,		id_direktorat "
-				+" ,		nama_seksi "
-				+" from		r_seksi "
-				+" where	id_divprosbu	= " + id_divprosbu
-				+" and		id_direktorat	= " + id_direktorat
-				+" order by	nama_seksi ";
+	String	q	=" select	A.id_seksi "
+				+" ,		A.id_dinas "
+				+" ,		A.id_departemen "
+				+" ,		A.id_divprosbu "
+				+" ,		A.id_direktorat "
+				+" ,		C.nama_departemen +' - '+ B.nama_dinas +' - '+ A.nama_seksi as nama_seksi"
+				+" from		r_seksi			A"
+				+" ,		r_dinas			B"
+				+" ,		r_departemen	C"
+				+" where	A.id_divprosbu	= " + id_divprosbu
+				+" and		A.id_direktorat	= " + id_direktorat
+				+" and		A.id_departemen	= C.id_departemen"
+				+" and		A.id_dinas		= B.id_dinas"
+				+" order by	C.nama_departemen, B.nama_dinas, A.nama_seksi";
 
 	ResultSet	rs = db_stmt.executeQuery(q);
 	int		i = 0;
