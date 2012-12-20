@@ -79,7 +79,7 @@ function charts_init()
 		fields	:['id','name']
 	,	data	:[
 			[-1	,'(Auto Refresh)']
-		,	[0	,'Grafik Persentasi Partisipasi STOP']
+		,	[0	,'Grafik Persentasi Partisipasi Observasi']
 		,	[1	,'Grafik Persentasi Partisipasi RCA']
 		,	[2	,'Grafik Performansi per Kategori']
 		,	[3	,'Grafik Safe/Unsafe Index']
@@ -95,7 +95,7 @@ function charts_init()
 	,	value			: -1
 	,	valueField		: 'id'
 	,	displayField	: 'name'
-	,	width			: 200
+	,	width			: 240
 	,	listWidth		: 240
 	,	allowBlank		: false
 	,	editable		: false

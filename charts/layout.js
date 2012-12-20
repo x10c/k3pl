@@ -513,10 +513,10 @@ function M_Charts()
 				, 'column', true);
 
 	this.stop_part		= new M_ObsPartChart(
-				'Persentase Partisipasi STOP'
+				'Persentase Partisipasi Observasi'
 				, 'name'
 				, 'total_part_percent');
-				
+
 	this.rca_part		= new M_RCAPartChart(
 				'Persentase Partisipasi RCA'
 				, 'name'

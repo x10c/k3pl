@@ -688,9 +688,6 @@ function M_ObsInputStop()
 			year_min	= year - 1;
 		}
 
-		console.log ('max: year: '+ year_max +', month: '+ month_max);
-		console.log ('min: year: '+ year_min +', month: '+ month_min);
-
 		d_min = new Date(year_min, month_min, 25);
 		d_max = new Date(year_max, month_max, 24);
 

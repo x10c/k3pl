@@ -98,20 +98,16 @@ function M_ObsTargetPegawai()
 		,	align		:'center'
 		,	sortable	:true
 		,	hideable	:false
+		,	width		:50
 		}
 	});
 
-	this.form_year = new Ext.form.ComboBox({
-		store			: new Ext.data.ArrayStore({
-			fields			: ['year']
-		,	data			: k3pl_create_form_year_data(10)
-		})
-	,	width			: 100
-	,	editable		: false
-	,	valueField		: 'year'
-	,	displayField	: 'year'
-	,	mode			: 'local'
-	,	triggerAction	: 'all'
+	this.form_year = new Ext.ux.form.SpinnerField ({
+		width			:100
+	,	minValue		:1990
+	,	maxValue		:2100
+	,	allowBlank		:false
+	,	editable		:false
 	});
 
 	this.form_month = new Ext.form.ComboBox({
@@ -174,7 +170,10 @@ function M_ObsTargetPegawai()
 	,	autoWidth	:true
 	,	stripeRows	: true
 	,	columnLines	: true
-	,	viewConfig	:{forceFit:true}
+	,	viewConfig	:{
+			forceFit		:true
+		,	scrollOffset	:50
+		}
 	,	tbar		:[
 			' Tahun : '
 		,	this.form_year
@@ -186,7 +185,7 @@ function M_ObsTargetPegawai()
 	,	bbar		:[
 			' Bulan : '
 		,	this.form_month
-		,	'\-'
+		,	'-'
 		,	' Target : '
 		,	this.form_target
 		,	'-'
@@ -316,7 +315,7 @@ function M_ObsTargetPegawai()
 	{
 		this.ha_level = ha_level;
 
-		this.form_year.setValue(this.form_year.store.getAt(0).get('year'));
+		this.form_year.setValue(new Date().getFullYear());
 		this.do_load();
 	}
 }
