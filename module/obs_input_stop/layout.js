@@ -685,7 +685,7 @@ function M_ObsInputStop()
 
 		if (month_max == 0) {
 			month_min	= 11;
-			year_min	= year - 1;
+			year_min	= year_max - 1;
 		}
 
 		d_min = new Date(year_min, month_min, 25);

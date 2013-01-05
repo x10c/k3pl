@@ -43,4 +43,5 @@
 	JSONArray	json_a	= null;
 	JSONObject	json_o	= null;
 	JSONObject	_return	= new JSONObject ();
+	PreparedStatement	db_ps	= null;
 %>

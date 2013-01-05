@@ -1,9 +1,9 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
- %   - m.shulhan (ms@kilabit.org)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
 
 <%@ page import="java.sql.*" %>
@@ -14,6 +14,9 @@ String	months[]	= {	"jan", "feb", "mar", "apr"
 			,	"may", "jun", "jul", "aug"
 			,	"sep", "oct", "nov", "dec"
 			};
+
+String	d1;
+String	d2;
 
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -33,10 +36,11 @@ try {
 	String		id_seksi;
 	String		id_wilayah;
 	String		id_area;
-	String		year;
 	String		data	= "[";
 	String		nipg;
-	int		i,x;
+	int			i,x;
+	int			year;
+	int			month;
 
 	id_dir		= request.getParameter("id_dir");
 	id_div		= request.getParameter("id_div");
@@ -45,7 +49,7 @@ try {
 	id_seksi	= request.getParameter("id_seksi");
 	id_wilayah	= request.getParameter("id_wilayah");
 	id_area		= request.getParameter("id_area");
-	year		= request.getParameter("year");
+	year		= Integer.parseInt (request.getParameter("year"));
 
 	q	=" select	B.nipg"
 		+" ,		B.nama_pegawai"
@@ -72,7 +76,8 @@ try {
 		+" ,	t_stop_target_pegawai	A"
 		+" where	B.nipg		= A.nipg"
 		+" and		A.year		= "+ year
-		+" and		B.id_seksi			= D.id_seksi";
+		+" and		B.id_seksi			= D.id_seksi"
+		+" and		B.status_pegawai	= '1'";
 
 	if (id_dir != null
 	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
@@ -130,13 +135,21 @@ try {
 		}
 
 		for (i = 0; i < months.length; i++) {
+			month = i + 1;
+			if (month == 1) {
+				d1 = (year - 1) +"-12-25";
+				d2 = year +"-"+ month +"-24";
+			} else {
+				d1 = year +"-"+ (month - 1) +"-25";
+				d2 = year +"-"+ month +"-24";
+			}
 			q2	=" select	count(id_stop) as v"
 				+" from		t_stop"
-				+" where	nipg		='"+ nipg +"'"
+				+" where	nipg			='"+ nipg +"'"
 				+" and		status_aktif	= '1'"
 				+" and		status			in (1,2)"
-				+" and		year		= "+ year
-				+" and		month		= "+ (i + 1);
+				+" and		tanggal			>= cast ('"+ d1 +"' as datetime)"
+				+" and		tanggal			<= cast ('"+ d2 +"' as datetime)";
 
 			rs2 = db_stmt2.executeQuery(q2);
 

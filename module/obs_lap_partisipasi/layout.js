@@ -557,7 +557,7 @@ function M_ObsLapPartOrgGrid()
 	]);
 
 	this.store = new Ext.data.ArrayStore ({
-		url	:m_obs_lap_partisipasi_d +'data_part_org.jsp'
+		url	:m_obs_lap_partisipasi_d +'data_part_org2.jsp'
 	,	fields	:this.record
 	,	autoLoad:false
 	});
