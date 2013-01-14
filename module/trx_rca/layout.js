@@ -142,14 +142,14 @@ function M_TrxRCADetail()
 	});
 
 	this.form_violators = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
 		,	allowNegative	: false
+		//,	allowBlank		: false
 	});
 
 	this.form_number_of_violations = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 		,	listeners	: {
 				change	: function(form, newvalue, oldvalue) {
@@ -169,7 +169,7 @@ function M_TrxRCADetail()
 	
 	this.form_severity = new Ext.form.ComboBox({
 			store			: m_trx_rca_store_severity
-		,	allowBlank		: false
+		//,	allowBlank		: false
 		,	valueField		: 'id_severity'
 		,	displayField	: 'id_severity'
 		,	mode			: 'local'
@@ -196,46 +196,46 @@ function M_TrxRCADetail()
 	});
 
 	this.form_violation_x_severity = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 	});
 
 	this.form_li_45 = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 	});
 
 	this.form_li_apd = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 	});
 
 	this.form_li_housekeeping = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 	});
 
 	this.form_li_process_safety = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 	});
 
 	this.form_li_fire_safety = new Ext.form.NumberField({
-			allowBlank		: false
-		,	allowDecimals	: false
+			allowDecimals	: false
+		//,	allowBlank		: false
 		,	allowNegative	: false
 	});
 
 	this.form_actions = new Ext.form.TextField();
 
 	this.form_status = new Ext.form.ComboBox({
-			allowBlank		: false
-		,	store			: this.store_status
+			store			: this.store_status
+		//,	allowBlank		: false
 		,	valueField		: 'id'
 		,	displayField	: 'name'
 		,	mode			: 'local'
@@ -454,7 +454,7 @@ function M_TrxRCADetail()
 			,	good_citizens			: 0
 			,	violators				: 0
 			,	number_of_violations	: 0
-			,	id_severity				: ''
+			,	id_severity				: 0
 			,	violation_x_severity	: 0
 			,	li_45					: 0
 			,	li_apd					: 0
@@ -543,7 +543,7 @@ function M_TrxRCADetail()
 			}
 		}
 		
-		if (violators != 0){
+		if (violators != 0 || good_citizens != 0){
 			good_citizens_violators = good_citizens + violators
 			number_people_on_site = good_citizens + violators
 			percent_workers_observed = good_citizens_violators / number_people_on_site * 100
@@ -568,6 +568,8 @@ function M_TrxRCADetail()
 			m_trx_rca_add.form_no_of_violations.setValue(number_of_violations);
 		} else {
 			m_trx_rca_add.form_no_of_violations.setValue(0);
+			violation_x_severity = 0;
+			li_45 = 0;
 		}
 
 		if (violation_x_severity != 0){

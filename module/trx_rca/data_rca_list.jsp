@@ -40,7 +40,7 @@ try {
 			+" or		'"+ user_nipg +"' in (select b.nipg from t_rca_auditor b where b.id_rca = a.id_rca))";
 
 		if (load_type.equals("all")) {
-			db_q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 1)"
+			db_q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 11)"
 				+" and	a.auditor_divprosbu		= "+ user_div
 				+" and	a.auditor_direktorat	= "+ user_dir;
 		}
