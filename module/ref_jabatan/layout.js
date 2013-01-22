@@ -18,6 +18,7 @@ function M_RefJabatan(title)
 	this.record = new Ext.data.Record.create([
 			{ name	: 'id_jabatan' }
 		,	{ name	: 'nama_jabatan' }
+		,	{ name	: 'pj_rca' }
 		]);
 
 	this.store = new Ext.data.ArrayStore({
@@ -37,8 +38,24 @@ function M_RefJabatan(title)
 			, dataIndex	: 'nama_jabatan'
 			, sortable	: true
 			, editor	: this.form_nama_jabatan
+		},{
+			header		:'Penanggung Jawab RCA'
+		,	id			:'pj_rca'
+		,	dataIndex	:'pj_rca'
+		,	sortable	:true
+		,	align		:'center'
+		,	width		:200
+		,	editor		:new Ext.form.Checkbox ({
+				inputValue	:1
+			})
+		,	renderer	:function (v)
+			{
+				if (v == 1) {
+					return 'Ya';
+				}
+				return 'Tidak';
 			}
-		];
+		}];
 
 	this.sm = new Ext.grid.RowSelectionModel({
 			singleSelect	: true
@@ -97,28 +114,29 @@ function M_RefJabatan(title)
 		});
 
 	this.panel = new Ext.grid.GridPanel({
-			id		: 'ref_jabatan_panel'
-		,	title		: this.title
-		,	store		: this.store
-		,	sm		: this.sm
-		,	columns		: this.columns
-		,	plugins		: this.editor
-		,	tbar		: this.toolbar
+			id				: 'ref_jabatan_panel'
+		,	title			: this.title
+		,	store			: this.store
+		,	sm				: this.sm
+		,	columns			: this.columns
+		,	plugins			: this.editor
+		,	tbar			: this.toolbar
 		,	autoExpandColumn: 'nama_jabatan'
-		,       listeners       : {
-				scope		: this
-			,	rowclick	:
-					function (g, r, e) {
-						return this.do_edit(r);
-					}
-                        }
+		,	listeners       : {
+				scope			: this
+			,	rowclick		: function (g, r, e)
+				{
+					return this.do_edit(r);
+				}
+			}
 		});
 
 	this.do_add = function()
 	{
 		this.record_new = new this.record({
-				id_jabatan	: ''
+				id_jabatan		: ''
 			,	nama_jabatan	: ''
+			,	pj_rca			:0
 			});
 
 		this.editor.stopEditing();
@@ -152,9 +170,10 @@ function M_RefJabatan(title)
 	{
 		Ext.Ajax.request({
 			params  : {
-				id_jabatan	: record.data['id_jabatan']
+				id_jabatan		: record.data['id_jabatan']
 			,	nama_jabatan	: record.data['nama_jabatan']
-			,       dml_type	: this.dml_type
+			,	pj_rca			: (record.data['pj_rca'] == true ? 1 : 0)
+			,	dml_type		: this.dml_type
 			}
 		,	url	: m_ref_jabatan_d +'submit_jabatan.jsp'
 		,	waitMsg	: 'Mohon Tunggu ...'

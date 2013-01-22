@@ -35,7 +35,7 @@ try {
 			+"									,	row_number() over(order by b.id_jabatan desc)	as row_num "
 			+"								from	r_pegawai	as b "
 			+"								where	b.id_seksi 			= a.id_seksi "
-			+"								and		b.id_jabatan		in (3,7) "
+			+"								and		b.id_jabatan		in (select id_jabatan from r_jabatan where pj_rca = 1) "
 			+"								and		b.status_pegawai	= '1' "
 			+"							)	as hasil "
 			+"					where	row_num between 1 and 1 "
