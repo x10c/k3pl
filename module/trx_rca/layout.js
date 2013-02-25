@@ -1469,7 +1469,8 @@ function M_TrxRCAAdd()
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
 		,	width			: 200
-		,	listWidth		: 400
+		,	listWidth		: 800
+		,	autoScroll		: true
 		,	listeners		: {
 				scope	: this
 			,	select	: function(cb, record, index) {
@@ -2494,7 +2495,8 @@ function M_TrxRCAEdit()
 		,	selectOnFocus	: true
 		,	triggerAction	: 'all'
 		,	width			: 200
-		,	listWidth		: 400
+		,	listWidth		: 800
+		,	autoScroll		: true
 		,	listeners		: {
 				scope	: this
 			,	select	: function(cb, record, index) {
