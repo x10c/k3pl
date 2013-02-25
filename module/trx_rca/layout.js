@@ -2069,8 +2069,8 @@ function M_TrxRCAAdd()
 		if (this.pic == undefined || this.pic == 'undefined'
 		|| this.pic == 'null' || this.pic == '')
 		{
-			Ext.MessageBox.alert('Kesalahan', 'Area pada Penanggung Jawab belum memiliki Kepala Seksi/Kepala Dinas!<br/>'
-			+' Tambah/ubah data pegawai dengan jabatan Kepala Seksi/Kepala Dinas pada Area bersangkutan.' );
+			Ext.MessageBox.alert('Kesalahan', 'Area Penanggung Jawab belum memiliki "Penanggung Jawab RCA"!<br/>'
+			+' Tambah/ubah data pegawai dengan jabatan yang memiliki "Penanggung Jawab RCA" pada Area bersangkutan.' );
 			return;
 		}
 
@@ -3053,8 +3053,8 @@ function M_TrxRCAEdit()
 		if (this.pic == undefined || this.pic == 'undefined'
 		|| this.pic == 'null' || this.pic == '')
 		{
-			Ext.MessageBox.alert('Kesalahan', 'Area pada Penanggung Jawab belum memiliki Kepala Seksi/Kepala Dinas!<br/>'
-			+' Tambah/ubah data pegawai dengan jabatan Kepala Seksi/Kepala Dinas pada Area bersangkutan.' );
+			Ext.MessageBox.alert('Kesalahan', 'Area Penanggung Jawab belum memiliki "Penanggung Jawab RCA"!<br/>'
+			+' Tambah/ubah data pegawai dengan jabatan yang memiliki "Penanggung Jawab RCA" pada Area bersangkutan.' );
 			return;
 		}
 

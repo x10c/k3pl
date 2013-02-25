@@ -1,25 +1,20 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %	 - agus sugianto (agus.delonge@gmail.com)
+	- mhd.sulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp"%>
 <%
 try {
-	Connection	db_con		= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt		= db_con.createStatement();
-	
 	String		id_seksi	= request.getParameter("id_seksi");
+	JSONArray	data		= null;
 
-	String	q	=" select	nipg "
+	db_stmt = db_con.createStatement();
+	db_q	=" select	nipg "
 			+" ,		nama_pegawai "
 			+" ,		id_seksi "
 			+" from		r_pegawai "
@@ -32,28 +27,26 @@ try {
 			+"					) "
 			+" order by	nama_pegawai ";
 
-	ResultSet	rs = db_stmt.executeQuery(q);
-	int		i = 0;
-	String		data = "[";
+	db_rs	= db_stmt.executeQuery (db_q);
+	json_a	= new JSONArray ();
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		data	+= "[ '"+ rs.getString("nipg") +"' "
-			+  ",\""+ rs.getString("nama_pegawai") +"\""
-			+  ", '"+ rs.getString("id_seksi") +"' "
-			+  "]";
+	while (db_rs.next()) {
+		data = new JSONArray ();
+		data.put (db_rs.getString("nipg"));
+		data.put (db_rs.getString("nama_pegawai"));
+		data.put (db_rs.getString("id_seksi"));
+
+		json_a.put (data);
 	}
 
-	data += "]";
+	db_rs.close();
+	db_stmt.close ();
 
-	out.print(data);
+	out.print (json_a);
 
-	rs.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success", false);
+	_return.put ("info", e);
+	out.print (_return);
 }
 %>

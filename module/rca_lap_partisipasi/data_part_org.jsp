@@ -1,11 +1,11 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
  %
- % WARNING: This script is used by charts module.
+ % WARNING: This script is used by charts module. DO NOT USE MODINIT.JSP.
 --%>
 
 <%@ page import="java.sql.*" %>
@@ -13,7 +13,6 @@
 String	q		= "";
 String	q_org		= "";
 String	q_target	= "";
-String	q_part		= "";
 String	q_part2		= "";
 String	q_where		= "";
 String	months[]	= {	"jan", "feb", "mar", "apr"
@@ -47,18 +46,10 @@ try {
 	String		nipg;
 	int		i,x;
 
-	q_part	=" 	select	count(a.nipg) 	as total_part"
-		+" 		from	t_rca_auditor	as a"
-		+" 		,		t_rca			as b"
-		+" 		where	a.id_rca			= b.id_rca"
-		+"		and		a.status			in (1,2)"
-		+" 		and		year(b.tanggal_rca)		= "+ year;
-
 	q_part2	=" 	select	count(a.nipg) 	as total_part"
 		+" 		from	t_rca_auditor	as a"
 		+" 		,		t_rca			as b"
 		+" 		where	a.id_rca			= b.id_rca"
-		+"		and		a.status			in (1,2)"
 		+" 		and		year(b.tanggal_rca)	= "+ year;
 
 	if (month == 0) {
@@ -76,7 +67,6 @@ try {
 		q_target=" select isnull(sum("+ months[month - 1]
 							+"),0) as target";
 
-		q_part	+=" and month(b.tanggal_rca) = "+ month;
 		q_part2	+=" and month(b.tanggal_rca) = "+ month;
 	}
 
@@ -84,13 +74,6 @@ try {
 	+=" from	t_rca_target_pegawai"
 	+" where	year	= "+ year
 	+" and		nipg in ("
-	+"	select	A.nipg"
-	+"	from	r_pegawai	A"
-	+"	,	r_seksi		B"
-	+"	where	A.status_pegawai = '1'";
-
-	q_part
-	+=" and nipg in ("
 	+"	select	A.nipg"
 	+"	from	r_pegawai	A"
 	+"	,	r_seksi		B"
