@@ -12,7 +12,7 @@ var m_obs_data_stop_d	= _g_root +'/module/obs_input_stop/';
 
 function M_HomeLog()
 {
-	this.store = new Ext.data.ArrayStore({
+	this.store = new Ext.ux.data.PagingArrayStore({
 		url			:m_app_home_d +'data_log.jsp'
 	,	fields		:[
 			'date'
@@ -75,6 +75,10 @@ function M_HomeLog()
 	,	cm					:this.cm
 	,	stripeRows			:true
 	,	autoExpandColumn	:'menu'
+	,	bbar				: new Ext.PagingToolbar({
+			store				: this.store
+		,	pageSize			: 50
+		})
 	});
 /*
  */

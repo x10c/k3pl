@@ -1,78 +1,70 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
- %
- % Author(s):
- % + PT. Awakami
- %   - m.shulhan (ms@kilabit.org)
+	Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
+
+	Author(s):
+	+ PT. Awakami
+		- mhd.sulhan (ms@kilabit.org)
 --%>
-
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String q = "";
 try {
-	Connection db_con = (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt		= db_con.createStatement();
+	JSONArray	data		= null;
 	String		date_bgn	= request.getParameter("date_bgn");
 	String		date_end	= request.getParameter("date_end");
 	String		user		= request.getParameter("user");
 	String		menu		= request.getParameter("menu");
 	String		stat		= request.getParameter("stat");
 
-	q	=" select"
-		+" 			replace(convert(varchar, A.tanggal, 120), '/', '-') tanggal"
-		+" ,		B.nama_pegawai"
-		+" ,		A.nama_menu"
-		+" ,		A.status_akses"
-		+" from		__log		A"
-		+" ,		r_pegawai	B"
-		+" where	A.nipg = B.nipg";
+	db_q	=" select"
+			+" 			replace(convert(varchar, A.tanggal, 120), '/', '-') tanggal"
+			+" ,		B.nama_pegawai"
+			+" ,		A.nama_menu"
+			+" ,		A.status_akses"
+			+" from		__log		A"
+			+" ,		r_pegawai	B"
+			+" where	A.nipg = B.nipg";
 
 	if (date_bgn != null && !date_bgn.equals("")) {
-		q	+=" and A.tanggal >= cast('"+ date_bgn +"' as datetime)";
+		db_q	+=" and A.tanggal >= cast('"+ date_bgn +"' as datetime)";
 	}
 	if (date_end != null && !date_end.equals("")) {
-		q	+=" and A.tanggal <= cast('"+ date_end +"' as datetime)";
+		db_q	+=" and A.tanggal <= cast('"+ date_end +"' as datetime)";
 	}
 	if (user != null && !user.equals("")) {
-		q	+=" and B.nama_pegawai like '%"+ user +"%'";
+		db_q	+=" and B.nama_pegawai like '%"+ user +"%'";
 	}
 	if (menu != null && !menu.equals("")) {
-		q	+=" and A.nama_menu = '"+ menu +"'";
+		db_q	+=" and A.nama_menu = '"+ menu +"'";
 	}
 	if (stat != null && !stat.equals("")) {
-		q	+=" and A.status_akses = '"+ stat +"'";
+		db_q	+=" and A.status_akses = '"+ stat +"'";
 	}
 
-	q +=" order by	A.tanggal desc";
+	db_q		+=" order by	A.tanggal desc";
 
-	ResultSet	rs		= db_stmt.executeQuery(q);
-	String		data	= "[";
-	int			i		= 0;
+	db_stmt		= db_con.createStatement ();
+	db_rs		= db_stmt.executeQuery(db_q);
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i = 1;
-		}
-		data	+= "['"+ rs.getString("tanggal") +"'"
-			+  ",\""+ rs.getString("nama_pegawai") +"\""
-			+  ",'"+ rs.getString("nama_menu") +"'"
-			+  ","+ rs.getString("status_akses")
-			+  "]";
+	json_a		= new JSONArray ();
+	while (db_rs.next()) {
+		data = new JSONArray ();
+
+		data.put (db_rs.getString	("tanggal"));
+		data.put (db_rs.getString	("nama_pegawai"));
+		data.put (db_rs.getString	("nama_menu"));
+		data.put (db_rs.getInt		("status_akses"));
+
+		json_a.put (data);
 	}
 
-	data += "]";
+	out.print (json_a);
 
-	out.print(data);
+	db_rs.close ();
+	db_stmt.close ();
 
-	rs.close();
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success"	,false);
+	_return.put ("info"		,e);
+	out.print (_return);
 }
 %>
