@@ -1,14 +1,13 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
- %
- % Author(s):
- % + PT. Awakami
- %   - agus sugianto (agus.delonge@gmail.com)
---%>
+	Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
 
-<%@ page import="java.sql.*" %>
+	Author(s):
+	+ PT. Awakami
+		- agus sugianto (agus.delonge@gmail.com)
+		- mhd.sulhan (ms@kilabit.org)
+--%>
+<%@ include file="../modinit.jsp"%>
 <%
-String	q			= "";
 String	q_nipg		= "";
 String	q_nipg2		= "";
 String	q_nipg3		= "";
@@ -31,16 +30,9 @@ String	months[]	= {	"jan", "feb", "mar", "apr"
 					,	"sep", "oct", "nov", "dec"
 					};
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
 	Statement	stmt_org	= db_con.createStatement();
-	Statement	db_stmt		= db_con.createStatement();
+				db_stmt		= db_con.createStatement();
 	ResultSet	rs_org;
-	ResultSet	rs;
 	String		id, name;
 
 	String		is_in_org	= request.getParameter("is_in_org");
@@ -54,7 +46,7 @@ try {
 	String		year		= request.getParameter("year");
 	int			month		= Integer.parseInt(request.getParameter("month"));
 
-	String		data;
+	JSONArray	data		= null;
 	String		nipg;
 	int			i,x;
 
@@ -82,7 +74,7 @@ try {
 			+" where	rca.id_rca			= rca_auditor.id_rca"
 			+" and		rca_auditor.status			in (1,2)"
 			+" and		year(rca.tanggal_rca)	= "+ year;
-			
+
 	q_partisi	=" select	count(distinct(rca_auditor.nipg)) as total_part"
 				+" from		t_rca				as rca"
 				+" ,		t_rca_auditor		as rca_auditor"
@@ -103,7 +95,7 @@ try {
 				+" and		rca_detail.id_severity	in (4,5)"
 				+" and		year(rca.tanggal_rca)	= "+ year;
 
-	q_sev	="select	cast(convert(decimal(18,2), case when sum(rca_detail.li_45) is null then 0 else (1.0 * (sum(rca_detail.li_45) * 100) / isnull(sum(rca_detail.number_of_violations),1)) end) as varchar) as severity"
+	q_sev	="select	cast(convert(decimal(18,2), case when sum(rca_detail.li_45) is null then 0 else (1.0 * (sum(rca_detail.li_45) * 100) / isnull(nullif(sum(rca_detail.number_of_violations), 0),1)) end) as varchar) as severity"
 			+" from		t_rca_detail		as rca_detail"
 			+" ,		t_rca				as rca"
 			+" where	rca_detail.id_rca		= rca.id_rca"
@@ -115,14 +107,14 @@ try {
 					+" where	rca_detail.id_rca		= rca.id_rca"
 					+" and		rca_detail.id_severity	in (4,5)"
 					+" and		year(rca.tanggal_rca)	= "+ year;
-					
+
 	q_get_temuan_non	="select	count(rca_detail.id_rca)	as jml"
 						+" from		t_rca_detail				as rca_detail"
 						+" ,		t_rca						as rca"
 						+" where	rca_detail.id_rca		= rca.id_rca"
 						+" and		rca_detail.id_severity	in (1,2,3)"
 						+" and		year(rca.tanggal_rca)	= "+ year;
-			
+
 	q_tl_temuan	=" select	count(rca_detail.id_rca) as temuan"
 				+" from		t_rca_detail		as rca_detail"
 				+" ,		t_rca				as rca"
@@ -130,7 +122,7 @@ try {
 				+" and		rca_detail.id_severity	in (4,5)"
 				+" and		rca_detail.status		in ('2','3')"
 				+" and		year(rca.tanggal_rca)	= "+ year;
-				
+
 	q_tl_temuan_non	=" select	count(rca_detail.id_rca) as temuan"
 					+" from		t_rca_detail		as rca_detail"
 					+" ,		t_rca				as rca"
@@ -139,14 +131,14 @@ try {
 					+" and		rca_detail.status		in ('2','3')"
 					+" and		year(rca.tanggal_rca)	= "+ year;
 				
-	q_avg	="select cast(convert(decimal(18,2), case when sum(rca_detail.violation_x_severity) is null then 0 else (1.0 * sum(rca_detail.violation_x_severity) / isnull(sum(rca_detail.number_of_violations),1)) end) as varchar) as average"
+	q_avg	="select cast(convert(decimal(18,2), case when sum(rca_detail.violation_x_severity) is null then 0 else (1.0 * sum(rca_detail.violation_x_severity) / isnull(nullif(sum(rca_detail.number_of_violations),0),1)) end) as varchar) as average"
 			+" from		t_rca_detail		as rca_detail"
 			+" ,		t_rca				as rca"
 			+" ,		t_rca_auditor		as rca_auditor"
 			+" where	rca_detail.id_rca		= rca.id_rca"
 			+" and		rca.id_rca				= rca_auditor.id_rca"
 			+" and		year(rca.tanggal_rca)	= "+ year;
-	
+
 	/* filter/aggregate by month */
 	if (month == 0) {
 		q_target ="select (";
@@ -175,7 +167,7 @@ try {
 
 	q_target	+=" from	t_rca_target_pegawai"
 				+" where	year = "+ year + q_nipg;
-	
+
 	q_part			+= q_nipg2;
 	q_partisi		+= q_nipg2;
 	q_vio			+= q_nipg3;
@@ -266,15 +258,15 @@ try {
 			}
 		}
 	}
-	
-	data	="[";
+
 	rs_org	= stmt_org.executeQuery(q_org);
-	i		= 0;
+	json_a	= new JSONArray ();
+
 	while (rs_org.next()) {
 		id		= rs_org.getString("id");
 		name	= rs_org.getString("name");
 
-		q	=" select	PARTISIPAN.total_part as partisipan"
+		db_q	=" select	PARTISIPAN.total_part as partisipan"
 			+" ,		round((P.total_part"
 			+"			/ cast(isnull(nullif(T.target,0),1) as float))"
 			+"			* 100, 2, 1)		as total_part_percent"
@@ -298,38 +290,37 @@ try {
 			+" ,	("+ q_tl_temuan_non	+ q_where + id +")) TL_TEMUAN_NON"
 			+" ,	("+ q_avg		+ q_where + id +")) AVERAGE";
 
-		rs = db_stmt.executeQuery(q);
+		db_rs = db_stmt.executeQuery(db_q);
 
+		while (db_rs.next()) {
+			data = new JSONArray ();
 
-		
-		while (rs.next()) {
-			if (i > 0) {
-				data += ",";
-			} else {
-				i = 1;
-			}
-			data	+="[\""+ name +"\""
-					+ ","+ rs.getString("partisipan")
-					+ ","+ rs.getString("total_part_percent")
-					+ ","+ rs.getString("violation")
-					+ ","+ rs.getString("temuan")
-					+ ","+ rs.getString("severity")
-					+ ","+ rs.getString("jml_tl_temuan")
-					+ ","+ rs.getString("tl_temuan")
-					+ ","+ rs.getString("jml_tl_temuan_non")
-					+ ","+ rs.getString("tl_temuan_non")
-					+ ","+ rs.getString("average")
-					+ "]";
+			data.put (name);
+			data.put (db_rs.getString	("partisipan"));
+			data.put (db_rs.getDouble	("total_part_percent"));
+			data.put (db_rs.getDouble	("violation"));
+			data.put (db_rs.getDouble	("temuan"));
+			data.put (db_rs.getDouble	("severity"));
+			data.put (db_rs.getDouble	("jml_tl_temuan"));
+			data.put (db_rs.getDouble	("tl_temuan"));
+			data.put (db_rs.getDouble	("jml_tl_temuan_non"));
+			data.put (db_rs.getDouble	("tl_temuan_non"));
+			data.put (db_rs.getDouble	("average"));
+
+			json_a.put (data);
 		}
 
-		rs.close();
+		db_rs.close();
 	}
+
 	rs_org.close();
-	data += "]";
-	
-	out.print(data);
+
+	out.print (json_a);
 
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success"	, false);
+	_return.put ("info"		, e);
+	_return.put ("query"	, db_q);
+	out.print (_return);
 }
 %>
