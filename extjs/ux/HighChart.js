@@ -1,12 +1,8 @@
 /**
- * @author Daniel Kloosterman
- * @email buz.i286@gmail.com
- * @version 0.4.0
+ * @author Daniel Kloosterman (modified by Joe Kuan)
+ * @email kuan.joe@gmail.com
+ * @version 0.5.0
  * @date 20-10-2010
- * @examples {@link http://www.senchasugar.com/examples/}
- * @requires HighChart 2.0.5 {@link http://www.highcharts.com}
- * Todo:
- * setSerieStyle, setStyle, Multiple datastores (0.5.0)
  *
  */
 /**
@@ -46,12 +42,21 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
     loadMask: false,
 
     /**
+    * @cfg {Boolean} animShift 
+    * Special type of animation for non pie chart
+    * True to animate and shift the line/spline/bar chart when new data arrive
+    * This implies extra checking of new data arrived in xField 
+    */
+    animShift: false,
+
+    /**
     * Add one or more series to the chart
     * @param {Array} series An array of series
     * @param {Boolean} append the serie. Defaults to true
     */
     addSeries: function(series, append) {
-        append = (append == null) ? true : false;
+        if (append == undefined || append == null)
+          append = true;
         var n = new Array(), c = new Array(), cls, serieObject;
         // Add empty data to the serie or just leave it normal. Bug in HighCharts?
         for (var i = 0; i < series.length; i++) {
@@ -87,10 +92,10 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
 
             // Set the data in the config.
         } else {
+
             if (append) {
                 this.chartConfig.series = this.chartConfig.series ? this.chartConfig.series.concat(c) : c;
                 this.series = this.series ? this.series.concat(n) : n;
-
             } else {
                 this.chartConfig.series = c;
                 this.series = n;
@@ -226,7 +231,65 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
             */
         } else if (this.rendered) {
             // Create the chart
-            this.chart = new Highcharts.Chart(this.chartConfig);
+
+            // The only way to get initial animation working is to populate the 
+            // data into the config object first from loading a data store
+            // Only allow initial animation if none of series has defined animation: false
+            var initAnim = true;
+            for (var s = 0; s < this.series.length; s++) {
+              // Look for the type and look into associated animation config in chartConfig
+              var ctype = this.series[s].type;
+              if (this.chartConfig.plotOptions) {
+                var c_anim = (this.chartConfig.plotOptions[ctype] !== undefined &&
+                              this.chartConfig.plotOptions[ctype].animation === false) ? false : true;
+                if (!c_anim) {
+                  initAnim = false;
+                  break;
+                }
+              }
+            }
+
+            if (initAnim)
+              initAnim = (this.chartConfig.plotOptions && this.chartConfig.plotOptions.series !== undefined &&
+                          this.chartConfig.plotOptions.series.animation === false) ? false : true; 
+
+            if (this.store && initAnim) {
+              this.store.load({ 
+                 callback: function(records, option, success) {
+			 var items = records;
+			 for (var i = 0; i < this.chartConfig.series.length; i++) {
+			    this.chartConfig.series[i].data = [ ];
+                            var dataIndex = null;
+                            var xField = null;
+                            if (this.series[i].dataIndex) {
+			      dataIndex = this.chartConfig.series[i].dataIndex;
+                              xField = this.xField;
+                            } else if (this.series[i].yField) {
+                              dataIndex = this.series[i].yField;
+                              xField = this.xField;
+                            } else if (this.series[i].type == 'pie' && this.series[i].dataField) {
+                              dataIndex = this.series[i].dataField;
+                              xField = this.series[i].categorieField;
+                            }
+                            if (!dataIndex || !xField)
+                              continue;
+			    for (var j = 0; j < items.length; j++) {
+			      var x_val = items[j].data[xField];
+			      var y_val = items[j].data[dataIndex];
+			      this.chartConfig.series[i].data.push( [ x_val,  y_val ]);
+			    }
+
+			 }
+			this.chart = new Highcharts.Chart(this.chartConfig);
+                        if (this.xField)
+                          this.updatexAxisData();
+                }, 
+                scope: this
+              });
+              return; 
+            } else {
+                this.chart = new Highcharts.Chart(this.chartConfig);
+            }
         }
 
         for (i = 0; i < this.series.length; i++) {
@@ -333,7 +396,7 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
             for (i = 0; i < seriesCount; i++)
                 data.push(new Array());
 
-            // We only want to go true the data once.
+            // We only want to go through the data once.
             // So we need to have all columns that we use in line.
             // But we need to create a point.
             var items = this.store.data.items;
@@ -357,13 +420,73 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
                 }
             }
 
+            var updateAnim = (this.chartConfig.chart.animation === false) ? false : 
+                                (this.chartConfig.chart.animation === undefined ? true : this.chartConfig.chart.animation);
             // Update the series
             for (i = 0; i < seriesCount; i++) {
+                
                 if (this.series[i].useTotals) {
                     this.chart.series[i].setData(this.series[i].getTotals())
-                }
-                else if (data[i].length > 0)
+                } else if (this.chart.series[i].data.length && updateAnim && !this.animShift) {
+
+                   // Align the data between chart series and store and update
+                   // if different
+                   var chartSz = this.chart.series[i].data.length;
+                   var storeSz = data[i].length;
+                   if (chartSz > storeSz) {
+                     for (x = storeSz-1; x < chartSz; x++) {
+                       var lastIdx = this.chart.series[i].data.length - 1;
+                       this.chart.series[i].data[lastIdx].remove(false, updateAnim);
+                     }
+                   } else if (chartSz < storeSz) {
+                     for (x = chartSz; x < storeSz; x++) 
+                       this.chart.series[i].addPoint([ 0, 0 ], false, false, updateAnim);
+                   }
+                   // Update the y values, x values will be by updatexAxisData if xField defined
+                   for (x = 0; x < storeSz; x++) {
+                     this.chart.series[i].data[x].update(this.series[i].getData(items[x]), true, updateAnim);
+                   }
+                } else if (this.chart.series[i].data.length && updateAnim && this.animShift &&
+                           this.series[i].type != 'pie') {
+                   // Compare the last data in chart's series data to the store item
+                   // Then add the new data points to the chart's series
+                   // All possible scenarios: 
+                   //    i) last data in chart's series not found in the the store data 
+                   //        - use setData to all the new data
+                   //   ii) last data in chart's series is the same as last data in the store data
+                   //        - no need to update
+                   //  iii) last data in the middle of somewhere in store data
+                   //        - add and shift points
+                   var ldi = this.chart.series[i].data.length - 1;
+                   var lastChartData = this.chart.series[i].data[ldi].x;
+                   for (var x = items.length - 1; x >= 0; x--) {
+                     var x_val = data[i][x].data[this.xField];
+                     if (x_val == lastChartData) {
+                       // In the same last position, nothing to update
+                       if (x == items.length - 1) {
+                         //alert('nothing to update');
+                         return;
+                       }
+                       // Somewhere in the middle, all the new data points
+                       if (x >= 0) {
+                         for (var n = x+1, cnt=0; n < items.length; n++, cnt++) {
+                            var new_x = data[i][n].data[this.xField];
+                            var new_y = data[i][n].y;
+                            this.chart.series[i].addPoint([ new_x, new_y ], false, true, updateAnim); 
+                         }
+                       }
+                       break;
+                     } 
+                   }
+                   // All new data
+                   if (x < 0) {
+                     //alert('last chart data ' + lastChartData + ', last store data ' + data[i][items.length-1].data[this.xField]);
+                     this.chart.series[i].setData(data[i], (i == (seriesCount - 1))); // true == redraw.
+                   }
+                } 
+                else {
                     this.chart.series[i].setData(data[i], (i == (seriesCount - 1))); // true == redraw.
+                }
             }
 
             if (this.xField) {
@@ -408,7 +531,7 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
 
     // private
     onDataChange: function() {
-        this.refresh();
+        //this.refresh();
     },
 
     // private

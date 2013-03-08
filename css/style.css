@@ -123,26 +123,6 @@ body {
 	height	: 215px;
 }
 
-#main .image-list {
-	float		: left;
-	margin		: 0px 0px 0px 18px;
-	width		: 74px;
-	height		: 230px;
-	overflow	: scroll;
-}
-
-#main .image-list img.activeSlide {
-	border	: 2px solid #a2232e;
-	opacity	: 1;
-}
-
-#main .image-list img {
-	margin	: 2px 0px;
-	border	: 2px solid #006da6;
-	cursor	: pointer;
-	opacity	: 0.5;
-}
-
 #sidebar .login-section {
 	border					: 0px solid #171717;
 	padding					: 0px;

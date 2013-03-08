@@ -8944,6 +8944,9 @@ li.x-menu-list-item div {
 .print16 {background-image: url(../images/print16.png) !important;}
 .export16 {background-image: url(../images/export16.png) !important;}
 .back16 {background-image: url(../images/back16.png) !important;}
+.upload16 {background-image: url(../images/upload16.png) !important;}
+.dir16 {background-image: url(../images/dir16.png) !important;}
+.dirup16 {background-image: url(../images/dirup16.png) !important;}
 
 .app {background-image: url(../images/app16.png) !important;}
 .module {background-image: url(../images/module16.png) !important;}
@@ -9176,4 +9179,75 @@ html {
 
 .unsafe {
 	background-color	:#FFB5C1;
+}
+
+.dir {
+	background-image	:url(../images/dir16.png);
+	background-position	:0;
+	background-repeat	:no-repeat;
+	padding				:4px 0px 4px 20px;
+	margin				:0px
+}
+
+.doc {
+	background-image	:url(../images/doc16.png);
+	background-position	:0;
+	background-repeat	:no-repeat;
+	padding				:4px 0px 4px 20px;
+	margin				:0px
+}
+
+.dirup {
+	background-image	:url(../images/dirup16.png);
+	background-position	:0;
+	background-repeat	:no-repeat;
+	padding				:4px 0px 4px 20px;
+	margin				:0px
+}
+
+#images-view .x-panel-body {
+	background	:white;
+	font		:11px Arial, Helvetica, sans-serif;
+}
+#images-view .thumb {
+	background	:#dddddd;
+	padding		:3px;
+}
+#images-view .thumb img {
+	height		:180px;
+	width		:280px;
+}
+#images-view .thumb-wrap {
+	float		:left;
+	margin		:4px;
+	margin-right:0;
+	padding		:5px;
+}
+#images-view .thumb-wrap span {
+	display		:block;
+	overflow	:hidden;
+	text-align	:center;
+}
+
+#images-view .x-view-over {
+    border		:1px solid #dddddd;
+    background	:#efefef url(../extjs/resources/images/default/grid/row-over.gif) repeat-x left top;
+	padding		:4px;
+}
+
+#images-view .x-view-selected {
+	border		:1px solid #99bbe8;
+	padding		:4px;
+}
+#images-view .x-view-selected .thumb {
+	background	:transparent;
+}
+
+#images-view .loading-indicator {
+	font-size			:11px;
+	background-image	:url('../extjs/resources/images/default/grid/loading.gif');
+	background-repeat	:no-repeat;
+	background-position	:left;
+	padding-left		:20px;
+	margin				:10px;
 }

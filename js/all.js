@@ -320,10 +320,10 @@ Highcharts.setOptions ({
 		enabled	: false
 	}
 ,	exporting	: {
-		url	: _g_root +'/highcharts/export.jsp'
-	,	buttons	: {
+		url			: '/highcharts-export'
+	,	buttons		: {
 			printButton	: {
-				enabled: false
+				enabled		: false
 			}
 		}
 	}

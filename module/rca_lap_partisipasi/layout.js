@@ -598,8 +598,9 @@ function M_RCALapPartOrgChart(store, title, xField, xTitle, y1)
 		store		: store
 	,	xField		: xField
 	,	series		: [{
-			name		: '% Partisipasi'
-		,	dataIndex	: y1
+			name			:'% Partisipasi'
+		,	dataIndex		:y1
+		,	categorieField	:xField
 		}]
 	,	chartConfig	: {
 			chart	: {
