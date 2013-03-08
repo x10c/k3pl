@@ -3771,9 +3771,7 @@ a.x-menu-item {
 .x-combo-list-item {
     padding:2px;
     border:1px solid;
-    white-space: nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
 }
 
 .x-combo-list .x-combo-selected{

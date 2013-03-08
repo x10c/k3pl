@@ -68,6 +68,7 @@ session.setAttribute("user.seksi", user_seksi);
 <script type='text/javascript' src='<%=cpath%>/extjs/extjs-ux-all.js'></script>
 
 <%-- Highcharts --%>
+<script type='text/javascript' src='<%=cpath%>/js/jquery-1.9.1.min.js'></script>
 <script type='text/javascript' src='<%=cpath%>/highcharts/highcharts.js'></script>
 <script type='text/javascript' src='<%=cpath%>/highcharts/modules/exporting.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/HighChart.js'></script>
