@@ -679,7 +679,7 @@ function M_RCALapPartOrg()
 	});
 
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi
-				, id_wilayah, id_area, year, month, is_in_org)
+				, id_wilayah, id_area, year, month, is_in_org, hide_inaktif)
 	{
 		var sub		= '';
 		var record;
@@ -744,6 +744,7 @@ function M_RCALapPartOrg()
 			,	id_area		: id_area
 			,	year		: year
 			,	month		: month
+			,	hide_inaktif: hide_inaktif
 			}
 		,	callback	:function(r, options, success) {
 				if (!success) {
