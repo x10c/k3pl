@@ -111,11 +111,25 @@ function M_RCALapSeverityGrid()
 		,	{ name: 'nama_auditor' }
 	]);
 
-	this.store = new Ext.ux.data.PagingArrayStore({
-			url			: m_rca_lap_severity_d +'data.jsp'
-		,	fields		: this.record
-		,	idIndex		: 17
-		,	autoLoad	: false
+	this.store = new Ext.data.JsonStore ({
+			url				: m_rca_lap_severity_d +'data.jsp'
+		,	storeId			:'m_rca_lap_severity'
+		,	root			:'data'
+		,	totalProperty	:'total'
+		,	fields			:this.record
+		,	idProperty		:'id_rca_detail'
+		,	autoLoad		:false
+		,	baseParams		:{
+				id_dir			:0
+			,	id_div			:0
+			,	id_dep			:0
+			,	id_dinas		:0
+			,	id_seksi		:0
+			,	id_wilayah		:0
+			,	id_area			:0
+			,	year			:0
+			,	month			:0
+			}
 	});
 
 	this.store_status = new Ext.data.ArrayStore({
@@ -223,9 +237,9 @@ function M_RCALapSeverityGrid()
 		,	store		: this.store
 		,	columns		: this.columns
 		,	tbar		: [ this.btn_print ]
-		,	bbar		: new Ext.PagingToolbar({
-				store	: this.store
-			,	pageSize: 50
+		,	bbar		: new Ext.PagingToolbar ({
+				store		:this.store
+			,	pageSize	:k3pl.pageSize
 			})
 	});
 
@@ -326,22 +340,20 @@ function M_RCALapSeverityGrid()
 	
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah, id_area, year, month)
 	{
-		delete this.store.lastParams;
-		
+		this.store.baseParams.id_dir		= id_dir;
+		this.store.baseParams.id_div		= id_div;
+		this.store.baseParams.id_dep		= id_dep;
+		this.store.baseParams.id_dinas		= id_dinas;
+		this.store.baseParams.id_seksi		= id_seksi;
+		this.store.baseParams.id_wilayah	= id_wilayah;
+		this.store.baseParams.id_area		= id_area;
+		this.store.baseParams.year			= year;
+		this.store.baseParams.month			= month;
+
 		this.store.load({
-			scope		: this
-		,	params		: {
-				id_dir		: id_dir
-			,	id_div		: id_div
-			,	id_dep		: id_dep
-			,	id_dinas	: id_dinas
-			,	id_seksi	: id_seksi
-			,	id_wilayah	: id_wilayah
-			,	id_area		: id_area
-			,	year		: year
-			,	month		: month
-			,	start		: 0
-			,	limit		: 50
+			params		: {
+				year		:year
+			,	month		:month
 			}
 		});
 	}

@@ -7,7 +7,7 @@
  */
 
 var k3pl = {
-	pageSize	: 10
+	pageSize	: 50
 };
 
 var k3pl_months_wall = [
