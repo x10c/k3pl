@@ -94,7 +94,6 @@ try {
 	&& !(id_area.equals("0") || id_area.equals(""))) {
 		db_q += " and	B.id_seksi	= "+ id_area;
 	}
-out.print(q);
 	db_q	+=" order by B.nama_pegawai";
 
 	db_stmt	= db_con.createStatement ();
