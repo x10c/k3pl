@@ -55,6 +55,9 @@ rs = db_stmt.executeQuery(q);
 if (rs.next()) {
 	chart_delay		= rs.getInt ("chart_delay");
 	gallery_delay	= rs.getInt ("gallery_delay");
+} else {
+	chart_delay		= 8;
+	gallery_delay	= 5;
 }
 
 rs.close();
@@ -67,11 +70,12 @@ rs.close();
 <script>
 	var _g_root = '<%= cpath %>';
 	var _g_chart_delay		= <%= chart_delay %> * 1000;
-	var _g_gallery_delay	= <%= gallery_delay %> * 1000;
+	var _g_gallery_delay	= <%= gallery_delay %>;
 </script>
 
 <link rel='icon' href='<%=cpath%>/images/favicon_new.ico' />
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/css/index.css'/>
+<link rel='stylesheet' type='text/css' href='<%=cpath%>/extjs/ux/carousel/carousel.css'/>
 <%--
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/extjs/resources/css/ext-all.css'/>
 <link rel='stylesheet' type='text/css' href='<%=cpath%>/extjs/resources/css/xtheme-gray.css'/>
@@ -81,18 +85,14 @@ rs.close();
 <%--
 <script type='text/javascript' src='<%=cpath%>/extjs/adapter/ext/ext-base.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ext-all.js'></script>
-<script type='text/javascript' src='<%=cpath%>/js/jquery-1.4.2.min.js'></script>
-<script type='text/javascript' src='<%=cpath%>/js/jquery.cycle.all.min.js'></script>
-<script type='text/javascript' src='<%=cpath%>/js/jquery_ease.js'></script>
-<script type='text/javascript' src='<%=cpath%>/js/jquery.Scroller-1.0.min.js'></script>
+<script type='text/javascript' src='<%=cpath%>/extjs/ux/carousel/carousel.js'></script>
+<script type='text/javascript' src='<%=cpath%>/js/jquery-1.9.1.min.js'></script>
 --%>
 <script type='text/javascript' src='<%=cpath%>/js/index-all.js'></script>
 
 <%-- Highcharts --%>
-<script type='text/javascript' src='<%=cpath%>/extjs/adapter/highcharts/extjs-highcharts-adapter.js'></script>
 <script type='text/javascript' src='<%=cpath%>/highcharts/highcharts.js'></script>
 <script type='text/javascript' src='<%=cpath%>/highcharts/modules/exporting.js'></script>
-<!--[if IE]><script type="text/javascript" src="<%=cpath%>/highcharts/excanvas.compiled.js"></script><![endif]-->
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/HighChart.js'></script>
 
 <%-- K3PL js --%>
@@ -112,12 +112,9 @@ rs.close();
 
 	<div id="wrap" class="clearfloat">
 		<div id="top">
-			<div class="horizontal_scroller">
-			</div>
 		</div>
 		<div id="main">
-			<div class='image-list'></div>
-			<div class='image-display'>
+			<div id='slideshow' class='image-display'>
 <%
 	q	=" select	A.gallery_path+'/'+B.filename as pic"
 		+" from		r_k3pl			A"

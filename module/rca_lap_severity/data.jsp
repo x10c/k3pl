@@ -1,14 +1,14 @@
 <%--
- % Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
+ % Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
  %
  % Author(s):
  % + PT. Awakami
  %   - agus sugianto (agus.delonge@gmail.com)
+ %   - mhd.sulhan (ms@kilabit.org)
 --%>
 
-<%@ page import="java.sql.*" %>
+<%@ include file="../modinit.jsp" %>
 <%
-String	q			= "";
 String	q_where		= "";
 String	months[]	= {	"jan", "feb", "mar", "apr"
 					,	"may", "jun", "jul", "aug"
@@ -16,14 +16,6 @@ String	months[]	= {	"jan", "feb", "mar", "apr"
 					};
 
 try {
-	Connection	db_con	= (Connection) session.getAttribute("db.con");
-	if (db_con == null || (db_con != null && db_con.isClosed())) {
-		response.sendRedirect(request.getContextPath());
-		return;
-	}
-
-	Statement	db_stmt		= db_con.createStatement();
-	ResultSet	rs;
 	String		id, name;
 	String		is_in_org	= request.getParameter("is_in_org");
 	String		id_dir		= request.getParameter("id_dir");
@@ -35,8 +27,75 @@ try {
 	String		id_area		= request.getParameter("id_area");
 	String		year		= request.getParameter("year");
 	int			month		= Integer.parseInt(request.getParameter("month"));
+	int			start		= ServletUtilities.getIntParameter (request, "start", 0);
+	int			limit		= ServletUtilities.getIntParameter (request, "limit", 50);
+	int			total		= 0;
 
-	q 	= " "
+	/* filter/aggregate by month */
+	if (month != 0) {
+		q_where	+=" and month(a.tanggal_rca) = "+ month;
+	}
+	if (id_dir != null
+	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
+		q_where += " and b.id_direktorat = "+ id_dir;
+	}
+	if (id_div != null
+	&& !(id_div.equals ("0") || id_div.equals (""))) {
+		q_where += " and b.id_divprosbu = "+ id_div;
+	}
+	if (id_dep != null
+	&& !(id_dep.equals("0") || id_dep.equals(""))) {
+		q_where += " and	b.id_departemen	= "+ id_dep;
+	}
+	if (id_dinas != null
+	&& !(id_dinas.equals("0") || id_dinas.equals(""))) {
+		q_where += " and	b.id_dinas	= "+ id_dinas;
+	}
+	if (id_seksi != null
+	&& !(id_seksi.equals("0") || id_seksi.equals(""))) {
+		q_where += " and	b.id_seksi	= "+ id_seksi;
+	}
+	if (id_wilayah != null
+	&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
+		q_where += " and	b.id_wilayah	= "+ id_wilayah;
+	}
+	if (id_area != null
+	&& !(id_area.equals("0") || id_area.equals(""))) {
+		q_where += " and	b.id_seksi	= "+ id_area;
+	}
+
+	db_q=" 	select	count (*) as total"
+		+"	from	t_rca						as a"
+		+"	,		r_seksi						as b"
+		+"	,		r_dinas						as c"
+		+"	,		r_departemen				as d"
+		+"	,		r_divprosbu					as e"
+		+"	,		r_direktorat				as f"
+		+"	,		t_rca_detail				as g"
+		+"	where	a.penanggung_jawab_seksi		= b.id_seksi "
+		+"	and		a.penanggung_jawab_dinas		= b.id_dinas "
+		+"	and		a.penanggung_jawab_departemen	= b.id_departemen "
+		+"	and		a.penanggung_jawab_divprosbu	= b.id_divprosbu "
+		+"	and		a.penanggung_jawab_direktorat	= b.id_direktorat "
+		+"	and		b.id_dinas						= c.id_dinas "
+		+"	and		b.id_departemen					= d.id_departemen "
+		+"	and		b.id_divprosbu					= e.id_divprosbu "
+		+"	and		b.id_direktorat					= f.id_direktorat "
+		+"	and		a.id_rca						= g.id_rca "
+		+"	and		year(a.tanggal_rca)				= " + year
+		+ q_where;
+
+	db_stmt	= db_con.createStatement ();
+	db_rs	= db_stmt.executeQuery (db_q);
+
+	if (db_rs.next ()) {
+		total	= db_rs.getInt ("total");
+	}
+
+	db_rs.close ();
+	db_stmt.close ();
+
+	db_q=";with results as ( "
 		+"	select	g.description "
 		+"		,	g.id_severity "
 		+"		,	a.nama_tempat_rca "
@@ -55,7 +114,7 @@ try {
 		+"		,	case g.status when '1' then 'Open' when '2' then 'Process' else 'Closed' end as nama_status "
 		+"		,	g.note "
 		+"		,	g.id_rca_detail "
-		+" ,		( "
+		+"		,	( "
 		+"				select	nama "
 		+"				from 	( "
 		+"							select	i.nama_pegawai						as nama "
@@ -67,6 +126,7 @@ try {
 		+"						) as hasil "
 		+"				where rownum between 1 and 1 "
 		+"			) as nama_auditor "
+		+"		,	row_number () over (order by a.tanggal_rca, g.status) as rownum"
 		+"	from	t_rca						as a"
 		+"	,		r_seksi						as b"
 		+"	,		r_dinas						as c"
@@ -84,82 +144,52 @@ try {
 		+"	and		b.id_divprosbu					= e.id_divprosbu "
 		+"	and		b.id_direktorat					= f.id_direktorat "
 		+"	and		a.id_rca						= g.id_rca "
-		+"	and		year(a.tanggal_rca)				= " + year;
-		
-	/* filter/aggregate by month */
-	if (month != 0) {
-		q	+=" and month(a.tanggal_rca) = "+ month;
+		+"	and		year(a.tanggal_rca)				= " + year
+		+ q_where
+		+" ) select * from results where rownum >= "+ start +" and rownum <= "+ (start + limit);
+
+	db_stmt		= db_con.createStatement();
+	db_rs 		= db_stmt.executeQuery(db_q);
+	json_a		= new JSONArray ();
+
+	while (db_rs.next()) {
+		json_o	= new JSONObject ();
+
+		json_o.put ("description"					, db_rs.getString	("description"));
+		json_o.put ("id_severity"					, db_rs.getInt		("id_severity"));
+		json_o.put ("nama_tempat_rca"				, db_rs.getString	("nama_tempat_rca"));
+		json_o.put ("penanggung_jawab_seksi"		, db_rs.getInt		("penanggung_jawab_seksi"));
+		json_o.put ("nama_seksi"					, db_rs.getString	("nama_seksi"));
+		json_o.put ("penanggung_jawab_dinas"		, db_rs.getInt		("penanggung_jawab_dinas"));
+		json_o.put ("nama_dinas"					, db_rs.getString	("nama_dinas"));
+		json_o.put ("penanggung_jawab_departemen"	, db_rs.getInt		("penanggung_jawab_departemen"));
+		json_o.put ("nama_departemen"				, db_rs.getString	("nama_departemen"));
+		json_o.put ("penanggung_jawab_divprosbu"	, db_rs.getInt		("penanggung_jawab_divprosbu"));
+		json_o.put ("nama_divprosbu"				, db_rs.getString	("nama_divprosbu"));
+		json_o.put ("penanggung_jawab_direktorat"	, db_rs.getInt		("penanggung_jawab_direktorat"));
+		json_o.put ("nama_direktorat"				, db_rs.getString	("nama_direktorat"));
+		json_o.put ("completion_date_target"		, db_rs.getString	("completion_date_target"));
+		json_o.put ("status"						, db_rs.getInt		("status"));
+		json_o.put ("nama_status"					, db_rs.getString	("nama_status"));
+		json_o.put ("note"							, db_rs.getString	("note"));
+		json_o.put ("id_rca_detail"					, db_rs.getInt		("id_rca_detail"));
+		json_o.put ("nama_auditor"					, db_rs.getString	("nama_auditor"));
+
+		json_a.put (json_o);
 	}
 
-	if (id_dir != null
-	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
-		q += " and b.id_direktorat = "+ id_dir;
-	}
-	if (id_div != null
-	&& !(id_div.equals ("0") || id_div.equals (""))) {
-		q += " and b.id_divprosbu = "+ id_div;
-	}
-	if (id_dep != null
-	&& !(id_dep.equals("0") || id_dep.equals(""))) {
-		q += " and	b.id_departemen	= "+ id_dep;
-	}
-	if (id_dinas != null
-	&& !(id_dinas.equals("0") || id_dinas.equals(""))) {
-		q += " and	b.id_dinas	= "+ id_dinas;
-	}
-	if (id_seksi != null
-	&& !(id_seksi.equals("0") || id_seksi.equals(""))) {
-		q += " and	b.id_seksi	= "+ id_seksi;
-	}
-	if (id_wilayah != null
-	&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-		q += " and	b.id_wilayah	= "+ id_wilayah;
-	}
-	if (id_area != null
-	&& !(id_area.equals("0") || id_area.equals(""))) {
-		q += " and	b.id_seksi	= "+ id_area;
-	}
-	
-	q	+="	order by a.tanggal_rca";
+	db_rs.close ();
+	db_stmt.close ();
 
-	rs 				= db_stmt.executeQuery(q);
-	
-	int		i 		= 0;
-	String	data 	= "[";
+	_return.put ("success"	,true);
+	_return.put ("data"		,json_a);
+	_return.put ("total", total);
 
-	while (rs.next()) {
-		if (i > 0) {
-			data += ",";
-		} else {
-			i++;
-		}
-		
-		data	+= "[ '"+ rs.getString("description") +"'"
-				+  ","+ rs.getString("id_severity")
-				+  ",'"+ rs.getString("nama_tempat_rca") +"'"
-				+  ","+ rs.getString("penanggung_jawab_seksi")
-				+  ",'"+ rs.getString("nama_seksi") + "'"
-				+  ","+ rs.getString("penanggung_jawab_dinas")
-				+  ",'"+ rs.getString("nama_dinas") + "'"
-				+  ","+ rs.getString("penanggung_jawab_departemen")
-				+  ",'"+ rs.getString("nama_departemen") + "'"
-				+  ","+ rs.getString("penanggung_jawab_divprosbu")
-				+  ",'"+ rs.getString("nama_divprosbu") + "'"
-				+  ","+ rs.getString("penanggung_jawab_direktorat")
-				+  ",'"+ rs.getString("nama_direktorat") + "'"
-				+  ",'"+ rs.getString("completion_date_target") +"'"
-				+  ",'"+ rs.getString("status") +"'"
-				+  ",'"+ rs.getString("nama_status") +"'"
-				+  ",'"+ rs.getString("note") +"'"
-				+  ",'"+ rs.getString("id_rca_detail") +"'"
-				+  ",'"+ rs.getString("nama_auditor") +"'"
-				+  "]";
-	}
-
-	data += "]";
-
-	out.print(data);
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success"	,false);
+	_return.put ("info"		,e);
+	_return.put ("total"	,0);
+} finally {
+	out.print (_return);
 }
 %>

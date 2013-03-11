@@ -51,7 +51,6 @@ session.setAttribute("user.seksi", user_seksi);
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/GroupSummary.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/ColumnHeaderGroup.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/LockingGridView.js'></script>
-<script type='text/javascript' src='<%=cpath%>/extjs/ux/PagingStore.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/data_drop_plugin/Override.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/data_drop_plugin/Ext.ux.DataDrop.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/ext_ux_exporter/Exporter-all.js'></script>
@@ -68,10 +67,9 @@ session.setAttribute("user.seksi", user_seksi);
 <script type='text/javascript' src='<%=cpath%>/extjs/extjs-ux-all.js'></script>
 
 <%-- Highcharts --%>
-<script type='text/javascript' src='<%=cpath%>/extjs/adapter/highcharts/extjs-highcharts-adapter.js'></script>
+<script type='text/javascript' src='<%=cpath%>/js/jquery-1.9.1.min.js'></script>
 <script type='text/javascript' src='<%=cpath%>/highcharts/highcharts.js'></script>
 <script type='text/javascript' src='<%=cpath%>/highcharts/modules/exporting.js'></script>
-<!--[if IE]><script type="text/javascript" src="<%=cpath%>/highcharts/excanvas.compiled.js"></script><![endif]-->
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/HighChart.js'></script>
 
 <script>

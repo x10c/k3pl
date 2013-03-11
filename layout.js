@@ -1,57 +1,10 @@
-/**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
- *
- * Author(s):
- * + PT. Awakami
- *   - m.shulhan (ms@kilabit.org)
+/*
+	Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
+
+	Author(s):
+	+ PT. Awakami
+		- mhd.sulhan (ms@kilabit.org)
  */
-
-$(document).ready(function() {
-	// Featured Slider
-	$('.image-display').cycle({
-		fx					:'scrollUp'
-	,	pager				:'.image-list'
-	,	timeout				:_g_gallery_delay
-	,	pagerAnchorBuilder	:function (idx, slide) {
-			return '<img src="'+ slide.src +'" width=50 height=50/>';
-		}
-	});
-
-	$(".right p a").hover(
-		function() {
-			$(this).stop().animate({
-				paddingLeft		:'10'
-			,	paddingRight	:'10'
-			},{
-				duration		:'700'
-			,	easing			:'easeInSine'
-			});
-			return true;
-		}
-	,	function () {
-			$(this).stop().animate(
-			{
-				paddingLeft	:'0'
-			,	paddingRight	:'0'
-			},{
-				duration	:'700'
-			,	easing		:'easeOutSine'
-			});
-		}
-	);
-
-	$('.horizontal_scroller').SetScroller({
-		velocity	:60
-	,	direction	:'horizontal'
-	,	startfrom	:'right'
-	,	loop		:'infinite'
-	,	movetype	:'linear'
-	,	onstartup	:'play'
-	,	cursor		:'pointer'
-	});
-
-	charts_init();
-});
 
 function form_charts_on_select(r, id)
 {
@@ -176,3 +129,18 @@ function form_pass_on_keydown(e)
 
 	call_do_login();
 }
+
+Ext.onReady (function() {
+	new Ext.ux.Carousel ('slideshow', {
+		itemSelector		:'img'
+	,	interval			:_g_gallery_delay || 5
+	,	autoPlay			:true
+	,	showPlayButton		:true
+	,	pauseOnNavigate		:true
+	,	freezeOnHover		:true
+	,	transitionType		:'fade'
+	,	navigationOnHover	:true
+	});
+
+	charts_init ();
+});

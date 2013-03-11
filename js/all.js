@@ -6,6 +6,10 @@
  *   - m.shulhan (ms@kilabit.org)
  */
 
+var k3pl = {
+	pageSize	: 50
+};
+
 var k3pl_months_wall = [
 	['0', 'Semua bulan']
 ,	['1', 'Januari']
@@ -320,10 +324,10 @@ Highcharts.setOptions ({
 		enabled	: false
 	}
 ,	exporting	: {
-		url	: _g_root +'/highcharts/export.jsp'
-	,	buttons	: {
+		url			: '/highcharts-export'
+	,	buttons		: {
 			printButton	: {
-				enabled: false
+				enabled		: false
 			}
 		}
 	}

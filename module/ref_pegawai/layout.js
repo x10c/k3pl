@@ -1,11 +1,10 @@
 /**
- * Copyright 2011 - PT. Perusahaan Gas Negara Tbk.
- *
- * Author(s):
- * + PT. Awakami
- *   - m.shulhan (ms@kilabit.org)
- */
+	Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
 
+	Author(s):
+	+ PT. Awakami
+	- mhd.sulhan (ms@kilabit.org)
+*/
 var m_ref_pegawai;
 var m_ref_pegawai_d = _g_root +'/module/ref_pegawai/';
 
@@ -36,16 +35,18 @@ function M_RefPegawai(load_once)
 	,	{ name: 'status_pegawai' }
 		]);
 
-	this.store = new Ext.ux.data.PagingArrayStore({
-			url		: m_ref_pegawai_d +'data.jsp'
-		,	fields	: this.record
-		,	idIndex	: 0
-		,	autoLoad: false
+	this.store = new Ext.data.JsonStore ({
+			url				:m_ref_pegawai_d +'data.jsp'
+		,	fields			:this.record
+		,	root			:'data'
+		,	totalProperty	:'total'
+		,	idProperty		:'nipg'
+		,	autoLoad		:false
 		});
 
 	this.store_klas = new Ext.data.ArrayStore({
 			fields		: ['id','name']
-		,	url		: _g_root +'/module/ref_klas_pegawai/data.jsp'
+		,	url			: _g_root +'/module/ref_klas_pegawai/data.jsp'
 		,	autoLoad	: false
 		,	idIndex		: 0
 		,	listeners	: {
@@ -542,9 +543,9 @@ function M_RefPegawai(load_once)
 			,	this.btn_add
 			]
 		,	bbar		: new Ext.PagingToolbar({
-				store	: this.store
-			,	pageSize: 50
-			,	plugins	: [this.filters]
+				store		:this.store
+			,	pageSize	:k3pl.pageSize
+			,	plugins		:[this.filters]
 			})
 		,	listeners	:{
 				beforerefresh	: function(v)
@@ -903,7 +904,9 @@ function M_RefPegawai(load_once)
 			this.store.load ({
 				scope	: this
 			,	params	: {
-					nipg	: Ext.util.Cookies.get ("user.nipg")
+					nipg	:Ext.util.Cookies.get ("user.nipg")
+				,	start	:0
+				,	limit	:k3pl.pageSize
 				}
 			,	callback: function (r, options, success) {
 					if (!success) {
@@ -919,12 +922,10 @@ function M_RefPegawai(load_once)
 			return;
 		}
 
-		delete this.store.lastParams;
-
 		this.store.load({
 			params	: {
-				start	: 0
-			,	limit	: 50
+				start	:0
+			,	limit	:k3pl.pageSize
 			}
 		});
 	}

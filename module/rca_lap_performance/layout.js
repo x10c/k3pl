@@ -104,7 +104,6 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 {
 	this.chart = new Ext.ux.HighChart({
 		store		: store
-	,	updateDelay	: 3
 	,	xField		: xField
 	,	series		: [{
 			name		: y1title

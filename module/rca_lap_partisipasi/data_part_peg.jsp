@@ -95,6 +95,8 @@ try {
 		db_q += " and	B.id_seksi	= "+ id_area;
 	}
 
+	db_q	+=" order by B.nama_pegawai";
+
 	db_stmt	= db_con.createStatement ();
 	db_rs	= db_stmt.executeQuery (db_q);
 	json_a	= new JSONArray ();

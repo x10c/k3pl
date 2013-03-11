@@ -21,11 +21,14 @@ function M_AppAdmUser()
 		,	{name: 'stat'}
 		]);
 
-	this.store = new Ext.ux.data.PagingArrayStore({
-			url		: m_app_adm_user_d +'data.jsp'
-		,	fields	: this.record
-		,	autoLoad: false
-		,	idIndex	: 0
+	this.store = new Ext.data.JsonStore ({
+			url				:m_app_adm_user_d +'data.jsp'
+		,	fields			:this.record
+		,	root			:'data'
+		,	totalProperty	:'total'
+		,	autoLoad		:false
+		,	idProperty		:'nipg'
+		,	pageSize		:k3pl.pageSize
 		});
 
 	this.store_peg = new Ext.data.ArrayStore({
@@ -174,14 +177,14 @@ function M_AppAdmUser()
 		});
 
 	this.panel = new Ext.grid.GridPanel({
-			title		: 'Daftar User'
-		,	id		: 'app_adm_user_panel'
+			title			: 'Daftar User'
+		,	id				: 'app_adm_user_panel'
 		,	autoExpandColumn: 'name'
-		,	store		: this.store
-		,	sm		: this.sm
-		,	cm		: this.cm
-		,	plugins		: [this.editor, this.filters]
-		,	tbar		: [
+		,	store			: this.store
+		,	sm				: this.sm
+		,	cm				: this.cm
+		,	plugins			: [this.editor, this.filters]
+		,	tbar			: [
 				this.btn_del
 			,	'-'
 			,	this.btn_edit
@@ -192,7 +195,7 @@ function M_AppAdmUser()
 			]
 		,	bbar		: new Ext.PagingToolbar({
 				store	: this.store
-			,	pageSize: 50
+			,	pageSize: k3pl.pageSize
 			,	plugins	: [this.filters]
 			})
 		,       listeners       : {
@@ -336,8 +339,8 @@ function M_AppAdmUser()
 
 		this.store.load({
 			params	: {
-				start	: 0
-			,	limit	: 50
+				start	:0
+			,	limit	:k3pl.pageSize
 			}
 		});
 

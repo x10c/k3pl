@@ -21,7 +21,7 @@ function M_ObsLapPerfChart(store, title, xField, xTitle, ySafe, yUnsafe)
 {
 	this.chart = new Ext.ux.HighChart({
 		store		: store
-	,	updateDelay	: 3
+	,	updateDelay	: 6
 	,	xField		: xField
 	,	series		: [{
 			name		: '% Safe'
@@ -572,7 +572,7 @@ function charts_do_refresh()
 
 function charts_start()
 {
-	m_charts_interval = self.setInterval('charts_do_refresh()', _g_chart_delay);
+	m_charts_interval = self.setInterval('charts_do_refresh()', _g_chart_delay || 8);
 }
 
 function charts_stop()
