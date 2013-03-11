@@ -12,15 +12,17 @@ var m_obs_data_stop_d	= _g_root +'/module/obs_input_stop/';
 
 function M_HomeLog()
 {
-	this.store = new Ext.ux.data.PagingArrayStore({
-		url			:m_app_home_d +'data_log.jsp'
-	,	fields		:[
+	this.store = new Ext.data.JsonStore ({
+		url				:m_app_home_d +'data_log.jsp'
+	,	root			:'data'
+	,	totalProperty	:'total'
+	,	fields			:[
 			'date'
 		,	'user'
 		,	'menu'
 		,	'stat'
 		]
-	,	autoLoad	:false
+	,	autoLoad		:false
 	});
 
 	this.store_stat = new Ext.data.ArrayStore({
@@ -71,13 +73,13 @@ function M_HomeLog()
 	this.grid = new Ext.grid.GridPanel({
 		region				:"center"
 	,	store				:this.store
-	,	autoScroll	:true
+	,	autoScroll			:true
 	,	cm					:this.cm
 	,	stripeRows			:true
 	,	autoExpandColumn	:'menu'
-	,	bbar				: new Ext.PagingToolbar({
+	,	bbar				: new Ext.PagingToolbar ({
 			store				: this.store
-		,	pageSize			: 50
+		,	pageSize			: k3pl.pageSize
 		})
 	});
 /*
@@ -187,7 +189,10 @@ function M_HomeLog()
 			this.store_menu.load({
 				scope		:this
 			,	callback	: function(r,o,s) {
-					this.store.load();
+					this.store.load ({
+						start	:0
+					,	limit	:k3pl.pageSize
+					});
 				}
 			});
 		}

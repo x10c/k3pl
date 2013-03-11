@@ -6,6 +6,10 @@
  *   - m.shulhan (ms@kilabit.org)
  */
 
+var k3pl = {
+	pageSize	: 10
+};
+
 var k3pl_months_wall = [
 	['0', 'Semua bulan']
 ,	['1', 'Januari']
