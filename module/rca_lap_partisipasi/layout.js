@@ -38,12 +38,17 @@ function M_RCALapPartForm(grid, displayBulan)
 		,	displayBulan	: displayBulan
 	});
 
+	this.cb_inaktif	= new Ext.form.Checkbox ({
+		boxLabel	:'Tanpa User dan Pegawai yang Inaktif'
+	,	checked		:true
+	});
+
 	this.btn_submit = new Ext.Button({
 		text		: 'OK'
 	,	listeners	: {
 			scope	: this
 		,	click	: function(btn, e) {
-				this.ref_grid.do_load(
+				this.ref_grid.do_load (
 						this.set_org.formDirektorat.getValue ()
 					,	this.set_org.formDivProSBU.getValue ()
 					,	this.set_org.formDepartemen.getValue()
@@ -54,6 +59,7 @@ function M_RCALapPartForm(grid, displayBulan)
 					,	this.set_waktu.formTahun.getValue()
 					,	displayBulan ? this.set_waktu.formBulan.getValue() : 0
 					,	this.set_org.collapsed ? 0 : 1
+					,	this.cb_inaktif.getValue () ? 1 : 0
 				);
 			}
 		}
@@ -72,6 +78,7 @@ function M_RCALapPartForm(grid, displayBulan)
 				this.set_org
 			,	this.set_wil
 			,	this.set_waktu
+			,	this.cb_inaktif
 			]
 	});
 
@@ -357,6 +364,7 @@ function M_RCALapPartPegGrid()
 		url += '&id_wilayah='+ m_rca_lap_partisipasi.part_peg.form.set_wil.formWilayah.getValue ();
 		url += '&id_area='+ m_rca_lap_partisipasi.part_peg.form.set_wil.formArea.getValue ();
 		url += '&year='+ m_rca_lap_partisipasi.part_peg.form.set_waktu.formTahun.getValue();
+		url += '&hide_inaktif='+ m_rca_lap_partisipasi.part_peg.form.cb_inaktif.getValue ();
 
 		window.open (url, '_blank');
 	}
@@ -423,7 +431,7 @@ function M_RCALapPartPegGrid()
 	}
 
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah
-				, id_area, year)
+				, id_area, year, month, is_in_org, hide_inaktif)
 	{
 		this.store.load({
 			scope		: this
@@ -436,6 +444,7 @@ function M_RCALapPartPegGrid()
 			,	id_wilayah	: id_wilayah
 			,	id_area		: id_area
 			,	year		: year
+			,	hide_inaktif:hide_inaktif
 			}
 		,	callback	: function(records,options,success) {
 				if (!success) {
@@ -587,6 +596,7 @@ function M_RCALapPartOrgGrid()
 		url += '&id_area='+ m_rca_lap_partisipasi.part_org.form.set_wil.formArea.getValue ();
 		url += '&year='+ m_rca_lap_partisipasi.part_org.form.set_waktu.formTahun.getValue();
 		url += '&month='+ m_rca_lap_partisipasi.part_org.form.set_waktu.formBulan.getValue();
+		url += '&hide_inaktif='+ m_rca_lap_partisipasi.part_org.form.cb_inaktif.getValue ();
 
 		window.open (url, '_blank');
 	}

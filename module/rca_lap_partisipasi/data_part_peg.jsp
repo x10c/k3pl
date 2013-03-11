@@ -1,10 +1,9 @@
 <%--
- % Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
- %
- % Author(s):
- % + PT. Awakami
- %   - mhd.sulhan (ms@kilabit.org)
- %   - agus sugianto (agus.delonge@gmail.com)
+	Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
+
+	Author(s):
+	- mhd.sulhan (ms@kilabit.org)
+	- agus sugianto (agus.delonge@gmail.com)
 --%>
 
 <%@ include file="../modinit.jsp"%>
@@ -28,6 +27,7 @@ try {
 	String		id_area;
 	String		year;
 	String		nipg;
+	int			hide_inaktif	= ServletUtilities.getIntParameter (request, "hide_inaktif", 1);
 	int			i;
 
 	id_dir		= request.getParameter("id_dir");
@@ -59,12 +59,14 @@ try {
 		+" ,		isnull(A.nov,0) as nov"
 		+" ,		isnull(A.dec,0) as dec"
 		+" from"
-		+" 			r_pegawai		B"
-		+" ,		r_seksi			D"
+		+" 			r_pegawai				B"
+		+" ,		r_seksi					D"
 		+" ,		t_rca_target_pegawai	A"
-		+" where	B.nipg		= A.nipg"
-		+" and	A.year		= "+ year
-		+" and	B.id_seksi			= D.id_seksi";
+		+"	,		__user					U"
+		+" where	B.nipg					= A.nipg"
+		+" and		A.year					= "+ year
+		+" and		B.id_seksi				= D.id_seksi"
+		+" and		B.nipg					= U.nipg";
 
 	if (id_dir != null
 	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
@@ -94,6 +96,11 @@ try {
 	&& !(id_area.equals("0") || id_area.equals(""))) {
 		db_q += " and	B.id_seksi	= "+ id_area;
 	}
+	if (1 == hide_inaktif) {
+		db_q	+=" and		U.status_user			= 1"
+				+" and		A.status_pegawai		= 1";
+	}
+
 	db_q	+=" order by B.nama_pegawai";
 
 	db_stmt	= db_con.createStatement ();

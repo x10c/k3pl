@@ -1,14 +1,14 @@
 <%--
- % Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
- %
- % Author(s):
- % + PT. Awakami
- %   - m.shulhan (ms@kilabit.org)
- %
- % WARNING: This script is used by charts module. DO NOT USE MODINIT.JSP.
+	Copyright 2013 - PT. Perusahaan Gas Negara Tbk.
+
+	Author(s):
+	- mhd.sulhan (ms@kilabit.org)
+
+	WARNING: This script is used by charts module. DO NOT USE MODINIT.JSP.
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 String	q		= "";
 String	q_org		= "";
@@ -41,7 +41,8 @@ try {
 	String		id_wilayah	= request.getParameter("id_wilayah");
 	String		id_area		= request.getParameter("id_area");
 	String		year		= request.getParameter("year");
-	int		month		= Integer.parseInt(request.getParameter("month"));
+	int			month			= ServletUtilities.getIntParameter (request, "month", 0);
+	int			hide_inaktif	= ServletUtilities.getIntParameter (request, "hide_inaktif", 1);
 	String		data;
 	String		nipg;
 	int		i,x;
@@ -92,10 +93,18 @@ try {
 			/* select partisipasi by single seksi */
 			q_where	=" and A.nipg = '";
 
-			q_org	=" select	nipg			as id"
-					+" ,		nama_pegawai	as name"
-					+" from		r_pegawai"
-					+" where	id_seksi = "+ id_seksi;
+			q_org	=" select	A.nipg			as id"
+					+" ,		A.nama_pegawai	as name"
+					+" from		r_pegawai		A"
+					+" ,		__user			B"
+					+" where	A.id_seksi		= "+ id_seksi
+					+" and		A.nipg			= B.nipg";
+
+			if (1 == hide_inaktif) {
+				q_org	+="	and A.status_pegawai	= 1"
+						+ " and B.status_user		= 1";
+			}
+
 		} else if (!id_dinas.equals("0")) {
 			/* select all seksi in one dinas */
 			q_where	=" and A.id_seksi = ";
@@ -141,10 +150,17 @@ try {
 			/* select partisipasi by single area */
 			q_where	=" and A.nipg = '";
 
-			q_org	=" select	nipg			as id"
-					+" ,		nama_pegawai	as name"
-					+" from		r_pegawai"
-					+" where	id_seksi = "+ id_area;
+			q_org	=" select	A.nipg			as id"
+					+" ,		B.nama_pegawai	as name"
+					+" from		r_pegawai		A"
+					+" ,		__user			B"
+					+" where	A.id_seksi		= "+ id_area
+					+" and		A.nipg			= B.nipg";
+
+			if (1 == hide_inaktif) {
+				q_org	+="	and A.status_pegawai	= 1"
+						+ " and B.status_user		= 1";
+			}
 		} else {
 			if (!id_wilayah.equals("0")) {
 				/* select all area in one wilayah */
@@ -165,6 +181,8 @@ try {
 			}
 		}
 	}
+
+	q_org	+=" order by name";
 
 	/* loop by organisasi */
 	data	="[";
