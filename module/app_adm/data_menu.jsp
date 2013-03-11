@@ -26,7 +26,6 @@ try {
 			+" and			B.menu_parent	= C.menu_id"
 			+" order by     B.menu_id";
 	db_rs	= db_stmt.executeQuery (db_q);
-
 	json_a	= new JSONArray ();
 	while (db_rs.next()) {
 		menu_id = db_rs.getString ("menu_id");

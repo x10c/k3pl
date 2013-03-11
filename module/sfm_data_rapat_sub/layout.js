@@ -37,6 +37,15 @@ var store_pic_dinas_sub = new Ext.data.ArrayStore({
 	,	autoLoad: false
 	});
 	
+function get_nama_seksi(value){
+		var i = store_pic_seksi_sub.find('id_seksi', value);
+		if (i < 0) {
+			return value;
+		}
+		var rec = store_pic_seksi_sub.getAt(i);
+		return rec ? rec.get('nama_seksi') : "";
+}
+	
 function checkbox_renderer(checkbox){
 	return function(value) {
 		if (value == '1' || value == 'true' || value == true) {
@@ -87,16 +96,6 @@ function do_validate_materi_load(){
 	return 1;
 }
 
-function do_validate_materi_load(){
-	if ( m_sfm_rapat_id == ''
-	||  m_sfm_rapat_tgl == ''
-	||  m_sfm_materi_id == '') {
-		Ext.MessageBox.alert('Pesan', "Pilih data Rapat dan Materi Terlebih dahulu");
-		return 0;
-	}
-	return 1;
-}
-
 function M_SfmSubMateriRapatSub (title){
 	this.title = title;
 	this.dml_type = '';
@@ -105,6 +104,10 @@ function M_SfmSubMateriRapatSub (title){
 	this.pic_kasi 	= '';
 	this.pic_dinas	= '';
 	this.pic_kadin	= '';
+	this.dinas			= '0';
+	this.seksi			= '0';
+	this.nama_seksi		= '';
+
 	
 	this.record = new Ext.data.Record.create([
 			{ name	: 'id_rapat' }
@@ -234,7 +237,193 @@ function M_SfmSubMateriRapatSub (title){
 				}
 		}
 	});
+this.form_pic =  new Ext.form.TextField({
+			fieldLabel		: 'Penanggung Jawab'
+		,	allowBlank		: true
+		,	readOnly		: true
+		,	width			: 175
+	});
 	
+/* Start window penanggung jawab materi (code sama dgn penanggung jawab RCA) */
+	this.record_penanggung_jawab_materi = new Ext.data.Record.create([
+			{ name	: 'id_seksi' }
+		,	{ name	: 'id_dinas' }
+		,	{ name	: 'id_departemen' }
+		,	{ name	: 'id_divprosbu' }
+		,	{ name	: 'id_direktorat' }
+		,	{ name	: 'nama_seksi' }
+		,	{ name	: 'nama_dinas' }
+		,	{ name	: 'nama_departemen' }
+		,	{ name	: 'nama_divprosbu' }
+		,	{ name	: 'nama_direktorat' }
+		,	{ name	: 'pic_seksi' }
+		,	{ name	: 'pic_dinas' }
+	]);
+	
+	this.store_penanggung_jawab_materi = new Ext.data.ArrayStore({
+			url			: m_sfm_central_d + 'data_penanggung_jawab_materi.jsp'
+		,	fields		: this.record_penanggung_jawab_materi
+		,	autoLoad	: false
+	});
+	this.filters_penanggung_jawab_materi = new Ext.ux.grid.GridFilters({
+			encode	: true
+		,	local	: true
+	});
+
+	this.cm_penanggung_jawab_materi = new Ext.grid.ColumnModel({
+		columns	: [
+				new Ext.grid.RowNumberer()
+			,	{
+					header		: 'Direktorat'
+				,	dataIndex	: 'nama_direktorat'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Divisi/Proyek/SBU'
+				,	dataIndex	: 'nama_divprosbu'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Departemen'
+				, 	dataIndex	: 'nama_departemen'
+				, 	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Dinas'
+				,	dataIndex	: 'nama_dinas'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Seksi'
+				,	dataIndex	: 'nama_seksi'
+				,	width		: 150
+				,	filterable	: true
+				}
+		]
+	,	defaults : {
+			sortable	: true
+		,	hideable	: false
+		}
+	});
+	
+	this.btn_pilih_penanggung_jawab_materi = new Ext.Button({
+			text		: 'Pilih'
+		,	iconCls		: 'save16'
+		,	disabled	: true
+		,	scope		: this
+		,	handler		: function() {
+				this.do_pilih_penanggung_jawab_materi();
+			}
+	});
+
+	this.btn_batal_penanggung_jawab_materi = new Ext.Button({
+			text	: 'Batal'
+		,	iconCls	: 'del16'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_batal_penanggung_jawab_materi();
+			}
+	});
+	
+	this.bbar_penanggung_jawab_materi = new Ext.Toolbar({
+		items	: [
+				this.btn_batal_penanggung_jawab_materi
+			,	'->'
+			,	this.btn_pilih_penanggung_jawab_materi
+		]
+	});
+
+	this.sm_penanggung_jawab_materi = new Ext.grid.RowSelectionModel({
+			singleSelect	: true
+		,	listeners		: {
+				scope			: this
+			,	selectionchange	: function(sm) {
+					var data = sm.getSelections();
+					if (data.length) {
+						this.direktorat = data[0].data['id_direktorat'];
+						this.divprosbu	= data[0].data['id_divprosbu'];
+						this.departemen = data[0].data['id_departemen'];
+						this.dinas		= data[0].data['id_dinas'];
+						this.seksi		= data[0].data['id_seksi'];
+						this.pic_kasi		= data[0].data['pic_seksi'];
+						this.pic_kadin		= data[0].data['pic_dinas'];
+						this.nama_seksi	= data[0].data['nama_seksi'];
+						this.btn_pilih_penanggung_jawab_materi.setDisabled(false);
+					} else {
+						this.direktorat = '';
+						this.divprosbu	= '';
+						this.departemen = '';
+						this.dinas		= '';
+						this.seksi		= '';
+						this.pic_kasi		= '';
+						this.pic_kadin		= '';
+						this.nama_seksi	= '';
+						this.btn_pilih_penanggung_jawab_materi.setDisabled(true);
+					}
+				}
+			}
+	});
+
+	this.grid_penanggung_jawab_materi = new Ext.grid.GridPanel({
+			store		: this.store_penanggung_jawab_materi
+		,	cm			: this.cm_penanggung_jawab_materi
+		,	sm			: this.sm_penanggung_jawab_materi
+		,	autoScroll	: true
+		,	stripeRows	: true
+		,	bbar		: this.bbar_penanggung_jawab_materi
+		,	viewConfig	: { forceFit : true }
+		,	plugins		: [ this.filters_penanggung_jawab_materi ]
+	});
+
+	this.window_penanggung_jawab = new Ext.Window ({
+			title		: 'Penanggung Jawab Materi'
+		,	width		: 850
+		,	height		: 400
+		,	modal		: true
+		,	closable	: false
+		,	layout		: 'fit'
+		,	items		: [
+				this.grid_penanggung_jawab_materi
+			]
+	});
+	
+	this.do_pilih_penanggung_jawab_materi = function()
+	{
+		this.form_pic.setValue(this.nama_seksi);
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_batal_penanggung_jawab_materi = function()
+	{
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_load_penanggung_jawab_materi = function()
+	{
+		this.store_penanggung_jawab_materi.load();
+	}
+	
+	this.do_refresh_penanggung_jawab_materi = function()
+	{
+		this.do_load_penanggung_jawab_materi();
+		this.window_penanggung_jawab.show();
+	}
+/* end window penanggung jawab materi */
+
+	this.btn_pilih = new Ext.Button({
+			text	: '...'
+		,	width	: 20
+		,	tooltip	: 'Pilih Penanggung Jawab Materi'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_refresh_penanggung_jawab_materi();
+			}
+	});
+
 	this.columns = [
 			new Ext.grid.RowNumberer()
 		,	{ id		: 'id_rapat'
@@ -425,8 +614,13 @@ function M_SfmSubMateriRapatSub (title){
                     {columnWidth: 0.5, layout: 'form', baseCls: 'x-plain', labelWidth:80,
                                 items: [
                                     this.form_keterangan
-									,	this.form_pic_seksi
-									,	this.form_pic_dinas
+									,{
+										xtype	: 'compositefield'
+										,	items	: [
+												this.form_pic
+											,	this.btn_pilih
+											]
+									}
                                 ]
                     }
                 ]
@@ -474,9 +668,11 @@ function M_SfmSubMateriRapatSub (title){
 			this.form_batas_waktu.setValue('');
 			this.cb_status_sub_materi.setValue('');
 			this.form_keterangan.setValue('');
-			this.form_pic_seksi.setValue('');
-			this.form_pic_dinas.setValue('');
-
+			this.form_pic.setValue('');
+			this.pic_kasi 		= '';
+			this.pic_kadin		= '';
+			this.dinas			= '0';
+			this.seksi			= '0';
 			
 			this.dml_type = 'insert_one';
 		}
@@ -569,8 +765,8 @@ function M_SfmSubMateriRapatSub (title){
 						+ ", keterangan_sub_materi: '"+ this.form_keterangan.getValue() +"' "
 						+ ", nipg_pelaksana: '"+ this.pic_kasi +"' "
 						+ ", nipg_supervisor: '"+ this.pic_kadin +"' "
-						+ ", seksi_pelaksana: '"+ this.form_pic_seksi.getValue() +"' "
-						+ ", dinas_supervisor: '"+ this.form_pic_dinas.getValue() +"' "
+						+ ", seksi_pelaksana: '"+ this.seksi +"' "
+						+ ", dinas_supervisor: '"+ this.dinas +"' "
 						+ " } ";
 						this.dml_type = 'insert';
 		}
@@ -584,8 +780,8 @@ function M_SfmSubMateriRapatSub (title){
 						+ ", keterangan_sub_materi: '"+ this.form_keterangan.getValue() +"' "
 						+ ", nipg_pelaksana: '"+ this.pic_kasi +"' "
 						+ ", nipg_supervisor: '"+ this.pic_kadin +"' "
-						+ ", seksi_pelaksana: '"+ this.form_pic_seksi.getValue() +"' "
-						+ ", dinas_supervisor: '"+ this.form_pic_dinas.getValue() +"' "
+						+ ", seksi_pelaksana: '"+ this.seksi +"' "
+						+ ", dinas_supervisor: '"+ this.dinas +"' "
 						+ " } ";
 		}else {
 			var record = this.sm.getSelections();
@@ -647,8 +843,11 @@ function M_SfmSubMateriRapatSub (title){
 			this.form_batas_waktu.setValue(data[0].data.batas_waktu_sub_materi);
 			this.cb_status_sub_materi.setValue(data[0].data.status_sub_materi);
 			this.form_keterangan.setValue(data[0].data.keterangan_sub_materi);
-			this.form_pic_seksi.setValue(data[0].data.seksi_pelaksana);
-			this.form_pic_dinas.setValue(data[0].data.dinas_supervisor);
+			this.form_pic.setValue(get_nama_seksi(data[0].data.seksi_pelaksana));
+			this.pic_kasi 		= data[0].data.pic_seksi;
+			this.pic_kadin		= data[0].data.pic_dinas;
+			this.dinas			= data[0].data.id_dinas;
+			this.seksi			= data[0].data.id_seksi;
 			return true;
 		}
 		return false;
@@ -661,6 +860,11 @@ function M_SfmSubMateriRapatSub (title){
 				params		: {
 					id_rapat : m_sfm_rapat_id
 				,	id_rapat_materi : m_sfm_materi_id
+				}
+				,callback : function(){
+					store_pic_seksi_sub.load();
+					store_pic_dinas_sub.load();
+	
 				}
 			});
 			
@@ -684,6 +888,19 @@ function M_SfmMateriRapatSub (title){
 	this.title = title;
 	this.dml_type = '';
 	this.ha_level = 0;
+	this.dinas			= '0';
+	this.seksi			= '0';
+	this.nama_seksi		= '';
+	this.pic_kasi 	= '';
+	this.pic_kadin	= '';
+	this.id_direktorat	= '0';
+	this.id_divprosbu	= '0';
+	this.id_departemen	= '0';
+	this.id_dinas		= '0';
+	this.id_seksi		= '0';
+	this.direktorat		= '0';
+	this.divprosbu		= '0';
+	this.departemen		= '0';
 	
 	this.record = new Ext.data.Record.create([
 			{ name	: 'id_rapat' }
@@ -720,6 +937,193 @@ function M_SfmMateriRapatSub (title){
 		,	emptyText	: 'Y-m-d'
 		,	format		: 'Y-m-d'
 		,	editable	: false
+	});
+
+/* Start window penanggung jawab materi (code sama dgn penanggung jawab RCA) */
+	this.record_penanggung_jawab_materi = new Ext.data.Record.create([
+			{ name	: 'id_seksi' }
+		,	{ name	: 'id_dinas' }
+		,	{ name	: 'id_departemen' }
+		,	{ name	: 'id_divprosbu' }
+		,	{ name	: 'id_direktorat' }
+		,	{ name	: 'nama_seksi' }
+		,	{ name	: 'nama_dinas' }
+		,	{ name	: 'nama_departemen' }
+		,	{ name	: 'nama_divprosbu' }
+		,	{ name	: 'nama_direktorat' }
+		,	{ name	: 'pic_seksi' }
+		,	{ name	: 'pic_dinas' }
+	]);
+	
+	this.store_penanggung_jawab_materi = new Ext.data.ArrayStore({
+			url			: m_sfm_sub_d + 'data_penanggung_jawab_materi.jsp'
+		,	fields		: this.record_penanggung_jawab_materi
+		,	autoLoad	: false
+	});
+	this.filters_penanggung_jawab_materi = new Ext.ux.grid.GridFilters({
+			encode	: true
+		,	local	: true
+	});
+
+	this.cm_penanggung_jawab_materi = new Ext.grid.ColumnModel({
+		columns	: [
+				new Ext.grid.RowNumberer()
+			,	{
+					header		: 'Direktorat'
+				,	dataIndex	: 'nama_direktorat'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Divisi/Proyek/SBU'
+				,	dataIndex	: 'nama_divprosbu'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Departemen'
+				, 	dataIndex	: 'nama_departemen'
+				, 	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Dinas'
+				,	dataIndex	: 'nama_dinas'
+				,	width		: 150
+				,	filterable	: true
+				}
+			,	{
+					header		: 'Seksi'
+				,	dataIndex	: 'nama_seksi'
+				,	width		: 150
+				,	filterable	: true
+				}
+		]
+	,	defaults : {
+			sortable	: true
+		,	hideable	: false
+		}
+	});
+	
+	this.btn_pilih_penanggung_jawab_materi = new Ext.Button({
+			text		: 'Pilih'
+		,	iconCls		: 'save16'
+		,	disabled	: true
+		,	scope		: this
+		,	handler		: function() {
+				this.do_pilih_penanggung_jawab_materi();
+			}
+	});
+
+	this.btn_batal_penanggung_jawab_materi = new Ext.Button({
+			text	: 'Batal'
+		,	iconCls	: 'del16'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_batal_penanggung_jawab_materi();
+			}
+	});
+	
+	this.bbar_penanggung_jawab_materi = new Ext.Toolbar({
+		items	: [
+				this.btn_batal_penanggung_jawab_materi
+			,	'->'
+			,	this.btn_pilih_penanggung_jawab_materi
+		]
+	});
+
+	this.sm_penanggung_jawab_materi = new Ext.grid.RowSelectionModel({
+			singleSelect	: true
+		,	listeners		: {
+				scope			: this
+			,	selectionchange	: function(sm) {
+					var data = sm.getSelections();
+					if (data.length) {
+						this.direktorat = data[0].data['id_direktorat'];
+						this.divprosbu	= data[0].data['id_divprosbu'];
+						this.departemen = data[0].data['id_departemen'];
+						this.dinas		= data[0].data['id_dinas'];
+						this.seksi		= data[0].data['id_seksi'];
+						this.pic_kasi		= data[0].data['pic_seksi'];
+						this.pic_kadin		= data[0].data['pic_dinas'];
+						this.nama_seksi	= data[0].data['nama_seksi'];
+						this.btn_pilih_penanggung_jawab_materi.setDisabled(false);
+					} else {
+						this.direktorat = '';
+						this.divprosbu	= '';
+						this.departemen = '';
+						this.dinas		= '';
+						this.seksi		= '';
+						this.pic_kasi		= '';
+						this.pic_kadin		= '';
+						this.nama_seksi	= '';
+						this.btn_pilih_penanggung_jawab_materi.setDisabled(true);
+					}
+				}
+			}
+	});
+
+	this.grid_penanggung_jawab_materi = new Ext.grid.GridPanel({
+			store		: this.store_penanggung_jawab_materi
+		,	cm			: this.cm_penanggung_jawab_materi
+		,	sm			: this.sm_penanggung_jawab_materi
+		,	autoScroll	: true
+		,	stripeRows	: true
+		,	bbar		: this.bbar_penanggung_jawab_materi
+		,	viewConfig	: { forceFit : true }
+		,	plugins		: [ this.filters_penanggung_jawab_materi ]
+	});
+
+	this.window_penanggung_jawab = new Ext.Window ({
+			title		: 'Penanggung Jawab Materi'
+		,	width		: 850
+		,	height		: 400
+		,	modal		: true
+		,	closable	: false
+		,	layout		: 'fit'
+		,	items		: [
+				this.grid_penanggung_jawab_materi
+			]
+	});
+	
+	this.do_pilih_penanggung_jawab_materi = function()
+	{
+		this.form_pic.setValue(this.nama_seksi);
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_batal_penanggung_jawab_materi = function()
+	{
+		this.window_penanggung_jawab.hide();
+	}
+	
+	this.do_load_penanggung_jawab_materi = function()
+	{
+		this.store_penanggung_jawab_materi.load();
+	}
+	
+	this.do_refresh_penanggung_jawab_materi = function()
+	{
+		this.do_load_penanggung_jawab_materi();
+		this.window_penanggung_jawab.show();
+	}
+/* end window penanggung jawab materi */
+
+	this.btn_pilih = new Ext.Button({
+			text	: '...'
+		,	width	: 20
+		,	tooltip	: 'Pilih Penanggung Jawab Materi'
+		,	scope	: this
+		,	handler	: function() {
+				this.do_refresh_penanggung_jawab_materi();
+			}
+	});
+	
+	this.form_pic =  new Ext.form.TextField({
+			fieldLabel		: 'Penanggung Jawab'
+		,	allowBlank		: true
+		,	readOnly		: true
+		,	width			: 175
 	});
 
 	this.store_status_materi = new Ext.data.ArrayStore({
@@ -853,8 +1257,10 @@ function M_SfmMateriRapatSub (title){
 				scope		: this
 			,	selectionchange	: function(sm) {
 					var data = sm.getSelections();
-					if (data.length && this.ha_level == 4) {
-						this.btn_del.setDisabled(false);
+					if (data.length) {
+						if(this.ha_level == 4) {
+							this.btn_del.setDisabled(false);
+						}
 						m_sfm_materi_id = data[0].data.id_rapat_materi;
 					} else {
 						this.btn_del.setDisabled(true);
@@ -965,8 +1371,13 @@ function M_SfmMateriRapatSub (title){
                     {columnWidth: 0.5, layout: 'form', baseCls: 'x-plain', labelWidth:80,
                                 items: [
                                     this.form_keterangan
-									,	this.form_pic_seksi
-									,	this.form_pic_dinas
+									,{
+										xtype	: 'compositefield'
+										,	items	: [
+												this.form_pic
+											,	this.btn_pilih
+											]
+									}
                                 ]
                     }
                 ]
@@ -1012,8 +1423,11 @@ function M_SfmMateriRapatSub (title){
 			this.form_batas_waktu.setValue('');
 			this.cb_status_materi.setValue('');
 			this.form_keterangan.setValue('');
-			this.form_pic_seksi.setValue('');
-			this.form_pic_dinas.setValue('');
+			this.form_pic.setValue('');
+			this.pic_kasi 		= '';
+			this.pic_kadin		= '';
+			this.dinas			= '0';
+			this.seksi			= '0';
 
 			
 			this.dml_type = 'insert_one';
@@ -1055,15 +1469,13 @@ function M_SfmMateriRapatSub (title){
 			return false;
 		}
 
-		if (this.form_pic_seksi.isValid()) {
-			if (!this.form_pic_dinas.isValid()) {
-				err_valid = " [Pilihan Supervisor belum diisi] ";
-				return false;
-			}
+		if ( this.pic_kasi  == ''
+		||  this.pic_kadin  == '') {
+				Ext.MessageBox.alert('Pesan', "Seksi atau Dinas yang dipilih tidak terdaftar Kepala Seksi atau Kepala Dinas, periksa pada referensi Pegawai untuk Seksi dan Dinas bersangkutan");
+			return 0;
 		}
 
 		err_valid = '';
-		this.form_pic_dinas.allowBlank = true;
 		return true;
 	}
 
@@ -1104,8 +1516,8 @@ function M_SfmMateriRapatSub (title){
 						+ ", keterangan_materi: '"+ this.form_keterangan.getValue() +"' "
 						+ ", nipg_pelaksana: '"+ this.pic_kasi +"' "
 						+ ", nipg_supervisor: '"+ this.pic_kadin +"' "
-						+ ", seksi_pelaksana: '"+ this.form_pic_seksi.getValue() +"' "
-						+ ", dinas_supervisor: '"+ this.form_pic_dinas.getValue() +"' "
+						+ ", seksi_pelaksana: '"+ this.seksi +"' "
+						+ ", dinas_supervisor: '"+ this.dinas +"' "
 						+ " } ";
 					this.dml_type ='insert';
 		}
@@ -1118,8 +1530,8 @@ function M_SfmMateriRapatSub (title){
 						+ ", keterangan_materi: '"+ this.form_keterangan.getValue() +"' "
 						+ ", nipg_pelaksana: '"+ this.pic_kasi +"' "
 						+ ", nipg_supervisor: '"+ this.pic_kadin +"' "
-						+ ", seksi_pelaksana: '"+ this.form_pic_seksi.getValue() +"' "
-						+ ", dinas_supervisor: '"+ this.form_pic_dinas.getValue() +"' "
+						+ ", seksi_pelaksana: '"+ this.seksi +"' "
+						+ ", dinas_supervisor: '"+ this.dinas +"' "
 						+ " } ";
 		}else {
 			var record = this.sm.getSelections();
@@ -1179,8 +1591,11 @@ function M_SfmMateriRapatSub (title){
 			this.form_batas_waktu.setValue(data[0].data.batas_waktu_materi);
 			this.cb_status_materi.setValue(data[0].data.status_materi);
 			this.form_keterangan.setValue(data[0].data.keterangan);
-			this.form_pic_seksi.setValue(data[0].data.seksi_pelaksana);
-			this.form_pic_dinas.setValue(data[0].data.dinas_supervisor);
+			this.form_pic.setValue(get_nama_seksi(data[0].data.seksi_pelaksana));
+			this.pic_kasi 		= data[0].data.pic_seksi;
+			this.pic_kadin		= data[0].data.pic_dinas;
+			this.dinas			= data[0].data.id_dinas;
+			this.seksi			= data[0].data.id_seksi;
 			return true;
 		}
 		return false;
@@ -1193,13 +1608,15 @@ function M_SfmMateriRapatSub (title){
 				params		: {
 					id_rapat : m_sfm_rapat_id
 				}
+				,callback : function(){
+					store_pic_seksi_sub.load();
+					store_pic_dinas_sub.load();
+				}
 			});
 		m_sfm_data_sub_materi_sub.store.removeAll();
 		// m_sfm_central_submateri.modified = []; // not necessary if you have pruneModifiedRecords set to true
 		m_sfm_data_sub_materi_sub.store.removed = [];
 		}
-		store_pic_seksi_sub.load();
-		store_pic_dinas_sub.load();
 	}
 
 	this.do_refresh = function(ha_level)

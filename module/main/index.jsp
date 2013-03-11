@@ -88,6 +88,7 @@ session.setAttribute("user.seksi", user_seksi);
 <%-- all module --%>
 <script type='text/javascript' src='<%=cpath%>/module/app_home/layout.js'></script>
 <script type='text/javascript' src='<%=cpath%>/module/main/layout.js'></script>
+<script type='text/javascript' src='<%=cpath%>/module/sfm_data_rapat_central/layout.js'></script>
 </head>
 
 <body>
