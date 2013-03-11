@@ -29,18 +29,13 @@ function M_TrnMatriks()
 	,	{name:'name'}
 	]);
 
-	this.reader = new Ext.data.JsonReader(
-		{
-			id		:'nipg'
-		,	root	:'rows'
-		}
-		, this.fields
-	);
-
-	this.store = new Ext.ux.data.PagingStore({
-		url		: m_trn_lap_d +'data_peg_pelatihan.jsp'
-	,	reader	: this.reader
-	,	autoLoad: false
+	this.store = new Ext.data.JsonStore({
+		url				:m_trn_lap_d +'data_peg_pelatihan.jsp'
+	,	fields			:this.fields
+	,	root			:'rows'
+	,	totalProperty	:'total'
+	,	idProperty		:'nipg'
+	,	autoLoad		:false
 	});
 
 	this.store_jab = new Ext.data.ArrayStore({
@@ -129,7 +124,7 @@ function M_TrnMatriks()
 		]
 	,	bbar		: new Ext.PagingToolbar({
 			store		: this.store
-		,	pageSize	: 50
+		,	pageSize	:k3pl.pageSize
 		,	plugins		: [this.filters]
 		})
 	});
@@ -230,12 +225,10 @@ function M_TrnMatriks()
 
 		this.store_jab.reload();
 
-		delete this.store.lastParams;
-		
-		this.store.reload({
+		this.store.load ({
 			params	: {
-				start	: 0
-			,	limit	: 50
+				start	:0
+			,	limit	:k3pl.pageSize
 			}
 		});
 	}
