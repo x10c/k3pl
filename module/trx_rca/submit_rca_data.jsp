@@ -278,7 +278,7 @@ try {
 					q3 +=" union all";
 				}
 			}
-		}out.print (q3);
+		}
 		break;
 
 	case 4:

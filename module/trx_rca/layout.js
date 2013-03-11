@@ -3132,7 +3132,7 @@ function M_TrxRCAEdit()
 		} else {
 			periode = 2;
 		}
-Ext.MessageBox.alert ('',periode);
+
 		Ext.Ajax.request({
 			url	: m_trx_rca_dir +'submit_rca_data.jsp'
 		,	params	: {
