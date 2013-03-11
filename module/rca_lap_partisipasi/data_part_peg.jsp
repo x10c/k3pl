@@ -98,7 +98,7 @@ try {
 	}
 	if (1 == hide_inaktif) {
 		db_q	+=" and		U.status_user			= 1"
-				+" and		A.status_pegawai		= 1";
+				+" and		B.status_pegawai		= 1";
 	}
 
 	db_q	+=" order by B.nama_pegawai";

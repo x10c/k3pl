@@ -433,7 +433,7 @@ function M_RCALapPartPegGrid()
 	this.do_load = function(id_dir, id_div, id_dep, id_dinas, id_seksi, id_wilayah
 				, id_area, year, month, is_in_org, hide_inaktif)
 	{
-		this.store.load({
+		this.store.load ({
 			scope		: this
 		,	params		: {
 				id_dir		: id_dir
@@ -447,10 +447,9 @@ function M_RCALapPartPegGrid()
 			,	hide_inaktif:hide_inaktif
 			}
 		,	callback	: function(records,options,success) {
-				if (!success) {
-					return;
+				if (success) {
+					this.count_total(records);
 				}
-				this.count_total(records);
 			}
 		});
 	}
