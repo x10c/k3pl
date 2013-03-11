@@ -63,7 +63,6 @@ function build_extjs_all_js {
 		"../extjs/ux/GroupSummary.js"
 		"../extjs/ux/ColumnHeaderGroup.js"
 		"../extjs/ux/LockingGridView.js"
-		"../extjs/ux/PagingStore.js"
 		"../extjs/ux/data_drop_plugin/Override.js"
 		"../extjs/ux/data_drop_plugin/Ext.ux.DataDrop.js"
 		"../extjs/ux/ext_ux_exporter/Exporter-all.js"
@@ -95,6 +94,6 @@ case $1 in
 		build_highcharts_js
 		;;
 	extjs)
-		build_extjs
+		build_extjs_all_js
 		;;
 esac

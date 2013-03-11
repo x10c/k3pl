@@ -51,7 +51,6 @@ session.setAttribute("user.seksi", user_seksi);
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/GroupSummary.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/ColumnHeaderGroup.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/LockingGridView.js'></script>
-<script type='text/javascript' src='<%=cpath%>/extjs/ux/PagingStore.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/data_drop_plugin/Override.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/data_drop_plugin/Ext.ux.DataDrop.js'></script>
 <script type='text/javascript' src='<%=cpath%>/extjs/ux/ext_ux_exporter/Exporter-all.js'></script>
