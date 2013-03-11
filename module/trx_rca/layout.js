@@ -1032,7 +1032,7 @@ function M_TrxEditRCADetail()
 			,	good_citizens			: 0
 			,	violators				: 0
 			,	number_of_violations	: 0
-			,	id_severity				: ''
+			,	id_severity				: 0
 			,	violation_x_severity	: 0
 			,	li_45					: 0
 			,	li_apd					: 0

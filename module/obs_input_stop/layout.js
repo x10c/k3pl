@@ -711,9 +711,9 @@ function M_ObsInputStop()
 
 		this.form_username.setValue(_g_username +' ('+ _g_usernipg +')');
 
-		if (this.ha_level < 4) {
-			this.set_min_max_date();
-		}
+		// if (this.ha_level < 4) {
+			// this.set_min_max_date();
+		// }
 		this.do_load_area();
 	}
 }
