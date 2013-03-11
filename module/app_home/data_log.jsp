@@ -17,7 +17,6 @@ try {
 	String		stat		= request.getParameter("stat");
 	int			start		= ServletUtilities.getIntParameter (request, "start", 0);
 	int			limit		= ServletUtilities.getIntParameter (request, "limit", 50);
-	int			offset		= start * limit;
 	int			total		= 0;
 
 	if (date_bgn != null && !date_bgn.equals("")) {
@@ -62,7 +61,7 @@ try {
 			+"	,		r_pegawai	B"
 			+"	where	A.nipg = B.nipg"
 			+ q_where
-			+" ) select * from results where rownum >= "+ offset +" and rownum <= "+ (offset + limit);
+			+" ) select * from results where rownum >= "+ start +" and rownum <= "+ (start + limit);
 
 	db_stmt		= db_con.createStatement ();
 	db_rs		= db_stmt.executeQuery(db_q);
