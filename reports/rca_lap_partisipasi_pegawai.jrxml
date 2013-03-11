@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_pegawai" pageWidth="992" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="322"/>
+	<property name="ireport.x" value="4"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_DIR" class="java.lang.String"/>
 	<parameter name="ID_DIV" class="java.lang.String"/>
@@ -11,6 +11,7 @@
 	<parameter name="ID_WILAYAH" class="java.lang.String"/>
 	<parameter name="ID_AREA" class="java.lang.String"/>
 	<parameter name="YEAR" class="java.lang.String"/>
+	<parameter name="STATUS_USER" class="java.lang.String"/>
 	<parameter name="CLAUSE_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
     " AND R_PEGAWAI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} : ""]]></defaultValueExpression>
@@ -39,9 +40,13 @@
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
     " AND R_PEGAWAI.\"ID_SEKSI\" = " + $P{ID_AREA} : ""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="CLAUSE_STATUS_USER" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{STATUS_USER} != null && ! $P{STATUS_USER}.isEmpty() && ! $P{STATUS_USER}.equalsIgnoreCase( "true" ) ?
+    " AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 AND __USER.\"STATUS_USER\" = 1 " : ""]]></defaultValueExpression>
+	</parameter>
 	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["SELECT " +
-"     __USER_GRUP.\"NIPG\" AS __USER_GRUP_NIPG, " +
+"     R_PEGAWAI.\"NIPG\" AS R_PEGAWAI_NIPG, " +
 "     R_PEGAWAI.\"NAMA_PEGAWAI\" AS R_PEGAWAI_NAMA_PEGAWAI " +
 "FROM " +
 "     \"dbo\".\"R_SEKSI\" R_SEKSI INNER JOIN \"dbo\".\"R_PEGAWAI\" R_PEGAWAI ON R_SEKSI.\"ID_SEKSI\" = R_PEGAWAI.\"ID_SEKSI\" " +
@@ -49,10 +54,18 @@
 "     AND R_SEKSI.\"ID_DEPARTEMEN\" = R_PEGAWAI.\"ID_DEPARTEMEN\" " +
 "     AND R_SEKSI.\"ID_DIVPROSBU\" = R_PEGAWAI.\"ID_DIVPROSBU\" " +
 "     AND R_SEKSI.\"ID_DIREKTORAT\" = R_PEGAWAI.\"ID_DIREKTORAT\" " +
-"     INNER JOIN \"dbo\".\"__USER_GRUP\" __USER_GRUP ON R_PEGAWAI.\"NIPG\" = __USER_GRUP.\"NIPG\" " +
+"     INNER JOIN \"dbo\".\"__USER\" __USER ON R_PEGAWAI.\"NIPG\" = __USER.\"NIPG\" " +
 "     LEFT OUTER JOIN \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" " +
 "WHERE " +
-"      __USER_GRUP.\"ID_GRUP\" = 5 AND T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + $P{CLAUSE_DIR} + $P{CLAUSE_DIV} + $P{CLAUSE_DEP} + $P{CLAUSE_DINAS} + $P{CLAUSE_SEKSI} + $P{CLAUSE_WILAYAH} + $P{CLAUSE_AREA} +
+"      T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR}
++ $P{CLAUSE_DIR}
++ $P{CLAUSE_DIV}
++ $P{CLAUSE_DEP}
++ $P{CLAUSE_DINAS}
++ $P{CLAUSE_SEKSI}
++ $P{CLAUSE_WILAYAH}
++ $P{CLAUSE_AREA}
++ $P{CLAUSE_STATUS_USER} +
 "      ORDER BY R_PEGAWAI.\"NAMA_PEGAWAI\""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -61,7 +74,7 @@
 	<queryString>
 		<![CDATA[$P!{DYNAMIC_QUERY}]]>
 	</queryString>
-	<field name="__USER_GRUP_NIPG" class="java.lang.String"/>
+	<field name="R_PEGAWAI_NIPG" class="java.lang.String"/>
 	<field name="R_PEGAWAI_NAMA_PEGAWAI" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -283,7 +296,7 @@
 			<subreport>
 				<reportElement x="220" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -297,7 +310,7 @@
 			<subreport>
 				<reportElement x="281" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -311,7 +324,7 @@
 			<subreport>
 				<reportElement x="342" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -325,7 +338,7 @@
 			<subreport>
 				<reportElement x="403" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -339,7 +352,7 @@
 			<subreport>
 				<reportElement x="464" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -353,7 +366,7 @@
 			<subreport>
 				<reportElement x="525" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -367,7 +380,7 @@
 			<subreport>
 				<reportElement x="586" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -381,7 +394,7 @@
 			<subreport>
 				<reportElement x="647" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -395,7 +408,7 @@
 			<subreport>
 				<reportElement x="708" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -409,7 +422,7 @@
 			<subreport>
 				<reportElement x="769" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -423,7 +436,7 @@
 			<subreport>
 				<reportElement x="830" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>
@@ -437,7 +450,7 @@
 			<subreport>
 				<reportElement x="891" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
-					<subreportParameterExpression><![CDATA[$F{__USER_GRUP_NIPG}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="YEAR">
 					<subreportParameterExpression><![CDATA[$P{YEAR}]]></subreportParameterExpression>

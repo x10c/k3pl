@@ -37,6 +37,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MONTH" class="java.lang.String"/>
+	<parameter name="STATUS_USER" class="java.lang.String"/>
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
 "       T_RCA_TARGET_PEGAWAI.\"" + $P{FIELD_MONTH}.get( Integer.parseInt($P{MONTH}) - 1 ).toString() + "\"\n" :
@@ -80,8 +81,12 @@
 	</parameter>
 	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-" AND R_.\"STATUS_PEGAWAI\" = 1 AND R_.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
+" AND R_.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " AND R_.\"NIPG\" = __USER.\"NIPG\"" :
 ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="STATUS_USER_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{STATUS_USER} != null && ! $P{STATUS_USER}.isEmpty() && ! $P{STATUS_USER}.equalsIgnoreCase( "true" ) ?
+    " AND R_.\"STATUS_PEGAWAI\" = 1 AND __USER.\"STATUS_USER\" = 1 " : ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIR_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
@@ -145,18 +150,22 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
     "     \"dbo\".\"R_DIVPROSBU\"" :
     "     \"dbo\".\"R_DIREKTORAT\""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="ADDITIONAL_ORG_FROM_CLAUSE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
+    ",    \"dbo\".\"__USER\"\n" : ""]]></defaultValueExpression>
+	</parameter>
 	<parameter name="ORG_ORDER_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
     "     R_.\"NAMA_PEGAWAI\" " :
 $P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"ID_SEKSI\" " :
+    "     R_.\"NAMA_SEKSI\" " :
 $P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"ID_DINAS\" " :
+    "     R_.\"NAMA_DINAS\" " :
 $P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"ID_DEPARTEMEN\" " :
+    "     R_.\"NAMA_DEPARTEMEN\" " :
 $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"ID_DIVPROSBU\" " :
-    "     R_.\"ID_DIREKTORAT\" "]]></defaultValueExpression>
+    "     R_.\"NAMA_DIVPROSBU\" " :
+    "     R_.\"NAMA_DIREKTORAT\" "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["SELECT \n" + $P{ORG_SELECT_CLAUSE} +
@@ -178,12 +187,19 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
 "               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
 "       WHERE \n" +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
+"           R_PEGAWAI.\"STATUS_PEGAWAI\" IN (0, 1) \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + $P{PART_MONTH_CLAUSE} + "\n" +
 "     ) AS PARTISIPASI \n" +
-"FROM \n" + $P{ORG_FROM_CLAUSE} + " R_ \n" +
+"FROM \n" + $P{ORG_FROM_CLAUSE} + " R_ \n"
++ $P{ADDITIONAL_ORG_FROM_CLAUSE} +
 "WHERE \n" +
-"     1 = 1 \n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE} +
+"     1 = 1 \n"
++ $P{DIR_CLAUSE}
++ $P{DIV_CLAUSE}
++ $P{DEP_CLAUSE}
++ $P{DINAS_CLAUSE}
++ $P{SEKSI_CLAUSE}
++ $P{STATUS_USER_CLAUSE} +
 " ORDER BY \n" + $P{ORG_ORDER_CLAUSE} + " ASC"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
@@ -234,8 +250,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
     "     R_.\"NAMA_PEGAWAI\" " :
 $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"ID_SEKSI\" " :
-    "     R_.\"ID_WILAYAH\" "]]></defaultValueExpression>
+    "     R_.\"NAMA_SEKSI\" " :
+    "     R_.\"NAMA_WILAYAH\" "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_WIL_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["SELECT \n" + $P{WIL_SELECT_CLAUSE} +
@@ -261,7 +277,7 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
 "               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
 "       WHERE \n" +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
+"           R_PEGAWAI.\"STATUS_PEGAWAI\" IN (0, 1) \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + "\n" +
 "     ) AS PARTISIPASI \n" +
 "FROM \n" + $P{WIL_FROM_CLAUSE} + " \n" +

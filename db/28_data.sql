@@ -41,7 +41,7 @@ values (
 	'Laporan Partisipasi RCA Organisasi'
 ,	'xls'
 ,	'reports/rca_lap_partisipasi_organisasi.jasper'
-,	'is_in_org;id_dir;id_div;id_dep;id_dinas;id_seksi;id_wilayah;id_area;year;month'
-,	'IS_IN_ORG;ID_DIR;ID_DIV;ID_DEP;ID_DINAS;ID_SEKSI;ID_WILAYAH;ID_AREA;YEAR;MONTH'
+,	'is_in_org;id_dir;id_div;id_dep;id_dinas;id_seksi;id_wilayah;id_area;year;month;hide_inaktif'
+,	'IS_IN_ORG;ID_DIR;ID_DIV;ID_DEP;ID_DINAS;ID_SEKSI;ID_WILAYAH;ID_AREA;YEAR;MONTH;STATUS_USER'
 )
 go
