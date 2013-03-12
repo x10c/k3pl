@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_organisasi" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_organisasi" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="945dd96b-348e-419e-aaf7-128b1ba5339b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -85,8 +85,10 @@
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="STATUS_USER_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{STATUS_USER} != null && ! $P{STATUS_USER}.isEmpty() && ! $P{STATUS_USER}.equalsIgnoreCase( "true" ) ?
-    " AND R_.\"STATUS_PEGAWAI\" = 1 AND __USER.\"STATUS_USER\" = 1 " : ""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" )
+&& $P{STATUS_USER} != null && ! $P{STATUS_USER}.isEmpty() && ! $P{STATUS_USER}.equalsIgnoreCase( "false" )
+    ? " AND R_.\"STATUS_PEGAWAI\" = 1 AND __USER.\"STATUS_USER\" = 1 "
+    : ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIR_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
@@ -314,7 +316,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="45"/>
+				<reportElement uuid="bc5c1d20-2cdd-450e-8db4-ab01c89df276" x="0" y="0" width="555" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -325,7 +327,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="215" height="20"/>
+				<reportElement uuid="0a5e2005-b64d-4a2f-8619-0fd49874161d" x="0" y="0" width="215" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -339,7 +341,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Nama]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="215" y="0" width="85" height="20"/>
+				<reportElement uuid="6ad72724-4ee1-4014-934e-61e8aaa7dab4" x="215" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -353,7 +355,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Target]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="0" width="85" height="20"/>
+				<reportElement uuid="67dd4e6f-9eba-4f03-a2b8-2f20860385cd" x="300" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -367,7 +369,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="385" y="0" width="85" height="20"/>
+				<reportElement uuid="da048e74-7a58-4317-98c4-747c8e36aba1" x="385" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -381,7 +383,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[% Target]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="470" y="0" width="85" height="20"/>
+				<reportElement uuid="ca59fe5c-37fc-431b-8d74-8db1f888b259" x="470" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -399,7 +401,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
+				<reportElement uuid="5a22bc48-478a-494d-baa5-76947c47d194" stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -414,7 +416,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
+				<reportElement uuid="d1d2038f-0830-4d85-b140-78d5f8645c90" stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -429,7 +431,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$F{TARGET} == null ? 0 : $F{TARGET}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
+				<reportElement uuid="abed370a-2016-41d5-9d74-e8fe9d988e9c" stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -444,7 +446,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
+				<reportElement uuid="b6abbfac-abcf-4ff2-b009-290ec9b9af20" stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -459,7 +461,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[1]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
+				<reportElement uuid="85eae2ac-0e49-473c-ad6f-1ed0c4123303" stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -478,7 +480,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<summary>
 		<band height="20">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="215" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="f136155d-3787-470f-beca-b40d2ba513ae" mode="Opaque" x="0" y="0" width="215" height="20" backcolor="#CCCCCC"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -492,7 +494,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Total :]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="215" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="86feabf4-478c-4337-96dc-bc3b98b5c688" stretchType="RelativeToBandHeight" mode="Opaque" x="215" y="0" width="85" height="20" backcolor="#CCCCCC"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -507,7 +509,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$V{TOTAL_TARGET}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="5e4bfd26-bb09-4c40-9370-1ed2d8e3e18b" stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -522,7 +524,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<textFieldExpression><![CDATA[$V{TOTAL_PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="6c8ef325-26a4-4e41-a22f-1f258158aaf8" mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -536,7 +538,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="470" y="0" width="85" height="20" backcolor="#CCCCCC"/>
+				<reportElement uuid="7ebd71ee-947d-4aed-9d4d-e486af3feebb" stretchType="RelativeToBandHeight" mode="Opaque" x="470" y="0" width="85" height="20" backcolor="#CCCCCC"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
