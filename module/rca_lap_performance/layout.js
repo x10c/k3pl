@@ -140,6 +140,7 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 
 	this.panel = new Ext.Panel({
 		border		: true
+	,	autoWidth	:true
 	,	items		: [
 			this.chart
 		]
@@ -153,7 +154,7 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 
 function M_RCALapRCAGrid()
 {
-	this.store = new Ext.data.ArrayStore({
+	this.store = new Ext.data.JsonStore({
 			fields	: [
 				'item'
 			,	'partisipan'
@@ -169,6 +170,7 @@ function M_RCALapRCAGrid()
 			]
 		,	url		: m_rca_lap_performance_d +'data.jsp'
 		,	autoLoad: false
+		,	root	:'data'
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
