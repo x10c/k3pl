@@ -444,7 +444,9 @@ Ext.ux.HighChart = Ext.extend(Ext.BoxComponent, {
                    }
                    // Update the y values, x values will be by updatexAxisData if xField defined
                    for (x = 0; x < storeSz; x++) {
-                     this.chart.series[i].data[x].update(this.series[i].getData(items[x]), true, updateAnim);
+						if (this.chart.series[i] && this.chart.series[i].data[x]) {
+							this.chart.series[i].data[x].update(this.series[i].getData(items[x]), true, updateAnim);
+						}
                    }
                 } else if (this.chart.series[i].data.length && updateAnim && this.animShift &&
                            this.series[i].type != 'pie') {

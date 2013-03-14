@@ -48,7 +48,7 @@ function M_RCALapPerfForm(grid, displayBulan)
 	,	listeners	: {
 			scope	: this
 		,	click	: function(btn, e) {
-				this.ref_grid.do_load(
+				this.ref_grid.do_load (
 						this.set_org.formDirektorat.getValue()
 					,	this.set_org.formDivProSBU.getValue()
 					,	this.set_org.formDepartemen.getValue()
@@ -148,7 +148,7 @@ function M_RCALapPerfChart(store, title, xField, xTitle, y1data, y1title
 
 	this.do_refresh = function()
 	{
-		this.chart.refresh();
+		this.chart.refresh ();
 	}
 }
 
@@ -388,19 +388,19 @@ function M_RCALapperformance()
 			if (id_seksi != 0) {
 				combo	= this.form.set_org.formSeksi;
 				record	= combo.findRecord(combo.valueField, id_seksi);
-				sub	= 'Seksi '+ record.get(combo.displayField);
+				sub		= 'Seksi - '+ record.get(combo.displayField);
 			} else if (id_dinas != 0) {
 				combo	= this.form.set_org.formDinas;
 				record	= combo.findRecord(combo.valueField, id_dinas);
-				sub	= 'Dinas '+ record.get(combo.displayField);
+				sub		= 'Dinas - '+ record.get(combo.displayField);
 			} else if (id_dep != 0) {
 				combo	= this.form.set_org.formDepartemen;
 				record	= combo.findRecord(combo.valueField, id_dep);
-				sub	= 'Departemen '+ record.get(combo.displayField);
+				sub	= 'Departemen - '+ record.get(combo.displayField);
 			} else if (id_div != 0) {
 				combo	= this.form.set_org.formDivProSBU;
 				record	= combo.findRecord (combo.valueField, id_div);
-				sub		= 'Divisi/Proyek/SBU '+ record.get (combo.displayField);
+				sub		= 'Divisi/Proyek/SBU - '+ record.get (combo.displayField);
 			} else if (id_dir != 0) {
 				combo	= this.form.set_org.formDirektorat;
 				record	= combo.findRecord (combo.valueField, id_dir);
@@ -410,11 +410,11 @@ function M_RCALapperformance()
 			if (id_area != 0) {
 				combo	= this.form.set_wil.formArea;
 				record	= combo.findRecord(combo.valueField, id_area);
-				sub	= 'Area '+ record.get(combo.displayField);
+				sub		= 'Area - '+ record.get(combo.displayField);
 			} else if (id_wilayah != 0) {
 				combo	= this.form.set_wil.formWilayah;
 				record	= combo.findRecord(combo.valueField, id_wilayah);
-				sub	= 'Wilayah '+ record.get(combo.displayField);
+				sub		= 'Wilayah - '+ record.get(combo.displayField);
 			}
 		}
 
@@ -428,9 +428,7 @@ function M_RCALapperformance()
 
 		sub += ' '+ year;
 
-		this.chart.chart.setSubTitle(sub);
-		
-		this.grid.store.load({
+		this.grid.store.load ({
 			scope		: this
 		,	params		: {
 				id_dir		: id_dir
@@ -443,6 +441,10 @@ function M_RCALapperformance()
 			,	year		: year
 			,	month		: month
 			,	is_in_org	: is_in_org
+			}
+		,	callback	:function (r, opt, success) {
+				this.chart.do_refresh ();
+				this.chart.chart.setSubTitle (sub);
 			}
 		});
 	}
