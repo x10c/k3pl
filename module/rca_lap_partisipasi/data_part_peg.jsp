@@ -63,10 +63,15 @@ try {
 		+" ,		r_seksi					D"
 		+" ,		t_rca_target_pegawai	A"
 		+"	,		__user					U"
+		+"	,		__user_grup				E"
+		+"	,		__grup_user				F"
 		+" where	B.nipg					= A.nipg"
 		+" and		A.year					= "+ year
 		+" and		B.id_seksi				= D.id_seksi"
-		+" and		B.nipg					= U.nipg";
+		+" and		B.nipg					= U.nipg"
+		+" and		U.nipg					= E.nipg"
+		+" and		E.id_grup				= F.id_grup"
+		+" and		F.id_grup				= 5";
 
 	if (id_dir != null
 	&& !(id_dir.equals ("0") || id_dir.equals (""))) {
