@@ -117,7 +117,6 @@ function M_RCALapSeverityGrid()
 		,	root			:'data'
 		,	totalProperty	:'total'
 		,	fields			:this.record
-		,	idProperty		:'id_rca_detail'
 		,	autoLoad		:false
 		,	baseParams		:{
 				id_dir			:0
@@ -129,6 +128,8 @@ function M_RCALapSeverityGrid()
 			,	id_area			:0
 			,	year			:0
 			,	month			:0
+			,	start			:0
+			,	limit			:k3pl.pageSize
 			}
 	});
 
@@ -354,6 +355,8 @@ function M_RCALapSeverityGrid()
 			params		: {
 				year		:year
 			,	month		:month
+			,	start		:0
+			,	limit		:k3pl.pageSize
 			}
 		});
 	}

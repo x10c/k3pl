@@ -8,6 +8,9 @@ public class ServletUtilities {
 					, String paramName
 					, int defaultValue) {
 		String paramString = request.getParameter (paramName);
+		if (null == paramString) {
+			return defaultValue;
+		}
 		int paramValue;
 		try {
 			paramValue = Integer.parseInt (paramString);
