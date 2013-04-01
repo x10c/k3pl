@@ -46,20 +46,15 @@ try {
 			+" from"
 			+" 			t_stop			A"
 			+" ,		t_stop_detail	B"
-			+" ,		r_seksi			C"
 			+" where 	A.id_stop		= B.id_stop"
 			+" and		A.status_aktif	= '1'"
-			+" and		A.year			= "+ year
-			+" and		A.id_seksi		= C.id_seksi"
-			+" and		A.id_dinas		= C.id_dinas"
-			+" and		A.id_departemen	= C.id_departemen"
-			+" and		A.id_divprosbu	= C.id_divprosbu"
-			+" and		A.id_direktorat	= C.id_direktorat";
+			+" and		A.year			= "+ year;
 
 	q_time	=" select	(isnull(sum(A.lama_observasi), 0)) as v"
 			+" from		t_stop			A"
 			+" ,		r_seksi			C"
-			+" where	A.status_aktif	= '1'"
+			+" where	A.id_seksi		= C.id_seksi"
+			+" and		A.status_aktif	= '1'"
 			+" and		A.year			= "+ year;
 
 	if (id_dir != null
