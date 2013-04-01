@@ -41,6 +41,8 @@ try {
 			db_q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 11)"
 				+" and	a.auditor_divprosbu		= "+ user_div
 				+" and	a.auditor_direktorat	= "+ user_dir;
+		} else {
+			db_q	+="	and A.id_user = '"+ user_nipg +"'";
 		}
 	}
 
