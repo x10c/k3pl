@@ -723,7 +723,7 @@ function M_ObsDataStop()
 	this.periode_status = 0;
 	this.ha_level		= 0;
 
-	this.store = new Ext.data.ArrayStore({
+	this.store = new Ext.data.JsonStore({
 			fields	: [
 			  'id'
 			, 'nipg'
@@ -741,6 +741,8 @@ function M_ObsDataStop()
 		,	autoLoad		: false
 		,	idProperty		:'id'
 		,	totalProperty	:'total'
+		,	root			:'data'
+		,	pageSize		:k3pl.pageSize
 		});
 /*
  * forms

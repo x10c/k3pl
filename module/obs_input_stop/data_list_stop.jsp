@@ -8,14 +8,35 @@
 <%@ include file="../modinit.jsp" %>
 <%
 try {
-	JSONArray	stop		= new JSONArray ();
 	String		load_type	= (String) request.getParameter("load_type");
 	int			start		= (int) Integer.parseInt (request.getParameter ("start"));
 	int			limit		= (int) Integer.parseInt (request.getParameter ("limit"));
-	int			i			= 0;
+	long		total		= 0;
 
 	db_stmt = db_con.createStatement();
 
+	// get total
+	db_q=" select	count_big (*) as total"
+		+" from		t_stop		A"
+		+" ,		r_seksi		B"
+		+" ,		r_pegawai	C"
+		+" where	A.id_area_seksi	= B.id_seksi"
+		+" and		A.nipg			= C.nipg"
+		+" and		C.id_divprosbu	= "+ user_div;
+
+	if (!load_type.equals("all")) {
+		db_q +=" and	A.nipg		= '"+ user_nipg +"'";
+	}
+
+	db_rs	= db_stmt.executeQuery (db_q);
+
+	if (db_rs.next ()) {
+		total = db_rs.getLong ("total");
+	}
+
+	db_rs.close ();
+
+	// get data
 	db_q=" select	X.*"
 		+" from		("
 		+" select	A.id_stop"
@@ -29,7 +50,7 @@ try {
 		+" ,		A.jml_org_observasi"
 		+" ,		A.jml_org_diskusi"
 		+" ,		A.status_aktif"
-		+" ,		row_number () over (order by id_stop) AS rownum"
+		+" ,		row_number () over (order by nama_pegawai) AS rownum"
 		+" from		t_stop		A"
 		+" ,		r_seksi		B"
 		+" ,		r_pegawai	C"
@@ -42,34 +63,38 @@ try {
 	}
 
 	db_q	+=" ) X"
-			+" where X.rownum between "+ start +" and "+ limit
+			+" where X.rownum between "+ start +" and "+ (start + limit)
 			+" order by	X.nama_pegawai";
 
 	db_rs = db_stmt.executeQuery (db_q);
 
 	json_a = new JSONArray ();
 	while (db_rs.next()) {
-		stop = new JSONArray ();
+		json_o = new JSONObject ();
 
-		stop.put (db_rs.getString ("id_stop"));
-		stop.put (db_rs.getString ("nipg"));
-		stop.put (db_rs.getString ("nama_pegawai"));
-		stop.put (db_rs.getString ("tanggal"));
-		stop.put (db_rs.getString ("nama_area"));
-		stop.put (db_rs.getString ("site"));
-		stop.put (db_rs.getString ("shift"));
-		stop.put (db_rs.getString ("lama_observasi"));
-		stop.put (db_rs.getString ("jml_org_observasi"));
-		stop.put (db_rs.getString ("jml_org_diskusi"));
-		stop.put (db_rs.getString ("status_aktif"));
+		json_o.put ("id"			,db_rs.getString ("id_stop"));
+		json_o.put ("nipg"			,db_rs.getString ("nipg"));
+		json_o.put ("nama_pegawai"	,db_rs.getString ("nama_pegawai"));
+		json_o.put ("date"			,db_rs.getString ("tanggal"));
+		json_o.put ("area"			,db_rs.getString ("nama_area"));
+		json_o.put ("site"			,db_rs.getString ("site"));
+		json_o.put ("shift"			,db_rs.getString ("shift"));
+		json_o.put ("obs_time"		,db_rs.getString ("lama_observasi"));
+		json_o.put ("n_obs"			,db_rs.getString ("jml_org_observasi"));
+		json_o.put ("n_dis"			,db_rs.getString ("jml_org_diskusi"));
+		json_o.put ("status_aktif"	,db_rs.getString ("status_aktif"));
 
-		json_a.put (stop);
+		json_a.put (json_o);
 	}
 
-	out.print (json_a);
-
 	db_rs.close ();
+
+	_return.put ("success"	,true);
+	_return.put ("data"		,json_a);
+	_return.put ("total"	,total);
 } catch (Exception e) {
-	out.print("{success:false,info:'"+ e.toString().replace("'","\\'") +"'}");
+	_return.put ("success"	,false);
+	_return.put ("data"		,e);
 }
+out.print (_return);
 %>
