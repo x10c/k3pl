@@ -243,8 +243,6 @@ function M_ObsLapPerfByCategoryGrid()
 		url += '&year='+ m_obs_lap_performansi.perf_by_cat.form.set_waktu.formTahun.getValue ();
 		url += '&month='+ m_obs_lap_performansi.perf_by_cat.form.set_waktu.formBulan.getValue ();
 
-		console.log (url);
-
 		window.open (url, '_blank');
 	}
 	
@@ -335,24 +333,34 @@ function M_ObsLapPerfByIndexGrid()
 				header		: 'Safe'
 			,	dataIndex	: 'n_safe'
 			,	summaryType	: 'sum'
-			,	css		: 'background-color: #CBFFBB;'
+			,	css			: 'background-color: #CBFFBB;'
 			},{
 				header		: 'Unsafe'
 			,	dataIndex	: 'n_unsafe'
 			,	summaryType	: 'sum'
-			,	css		: 'background-color: #FFB5C1;'
+			,	css			: 'background-color: #FFB5C1;'
 			},{
 				header		: 'Safe Index'
 			,	dataIndex	: 'safe_index'
-			,	summaryType	: 'sum'
 			,	format		: '000.00%'
-			,	css		: 'background-color: #CBFFBB;'
+			,	css			: 'background-color: #CBFFBB;'
+			,	summaryRenderer	:function (d, p, o, scope)
+				{
+					console.log (o.data['n_safe']);
+					console.log (o.data['n_unsafe']);
+					var t = (o.data['n_safe'] / (o.data['n_safe'] + o.data['n_unsafe'])) * 100;
+					return (t.toFixed (2) + '%');
+				}
 			},{
 				header		: 'Unsafe Index'
 			,	dataIndex	: 'unsafe_index'
-			,	summaryType	: 'sum'
 			,	format		: '000.00%'
-			,	css		: 'background-color: #FFB5C1;'
+			,	css			: 'background-color: #FFB5C1;'
+			,	summaryRenderer	:function (d, p, o, scope)
+				{
+					var t = (o.data['n_unsafe'] / (o.data['n_safe'] + o.data['n_unsafe'])) * 100;
+					return (t.toFixed (2) + '%');
+				}
 			}
 		]
 	,	defaults	: {
@@ -399,6 +407,8 @@ function M_ObsLapPerfByIndexGrid()
 		url += '&id_wilayah='+ m_obs_lap_performansi.perf_by_index.form.set_wil.formWilayah.getValue ();
 		url += '&id_area='+ m_obs_lap_performansi.perf_by_index.form.set_wil.formArea.getValue ();
 		url += '&year='+ m_obs_lap_performansi.perf_by_index.form.set_waktu.formTahun.getValue ();
+
+		console.log (url);
 
 		window.open (url, '_blank');
 	}

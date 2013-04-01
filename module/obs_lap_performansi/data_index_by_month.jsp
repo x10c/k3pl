@@ -14,6 +14,7 @@
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="org.json.JSONArray" %>
 <%@ page import="org.json.JSONObject" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 JSONObject	_return	= new JSONObject ();
 try {
@@ -36,15 +37,15 @@ try {
 	double			safe_index		= 0.0;
 	double			unsafe_index	= 0.0;
 
-	String		id_dir		= request.getParameter("id_dir");
-	String		id_div		= request.getParameter("id_div");
-	String		id_dep		= request.getParameter("id_dep");
-	String		id_dinas	= request.getParameter("id_dinas");
-	String		id_seksi	= request.getParameter("id_seksi");
-	String		id_wilayah	= request.getParameter("id_wilayah");
-	String		id_area		= request.getParameter("id_area");
-	String		year		= request.getParameter("year");
-	String		months[]	= { "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des" };
+	int				id_dir		= ServletUtilities.getIntParameter (request, "id_dir"		, 0);
+	int				id_div		= ServletUtilities.getIntParameter (request, "id_div"		, 0);
+	int				id_dep		= ServletUtilities.getIntParameter (request, "id_dep"		, 0);
+	int				id_dinas	= ServletUtilities.getIntParameter (request, "id_dinas"		, 0);
+	int				id_seksi	= ServletUtilities.getIntParameter (request, "id_seksi"		, 0);
+	int				id_wilayah	= ServletUtilities.getIntParameter (request, "id_wilayah"	, 0);
+	int				id_area		= ServletUtilities.getIntParameter (request, "id_area"		, 0);
+	int				year		= ServletUtilities.getIntParameter (request, "year"			, 0);
+	String[]		months		= { "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des" };
 
 	/* 1: get total safe and unsafe per month */
 	for (i = 0; i < months.length; i++) {
@@ -57,34 +58,27 @@ try {
 			+" and		A.status_aktif	= '1' "
 			+" and		A.year			= "+ year
 			+" and		A.month			= "+ (i + 1)
-			+" and		A.id_seksi		= C.id_seksi"
-			+" and		A.id_dinas		= C.id_dinas"
-			+" and		A.id_departemen	= C.id_departemen"
-			+" and		A.id_divprosbu	= C.id_divprosbu"
-			+" and		A.id_direktorat	= C.id_direktorat";
+			+" and		A.id_seksi		= C.id_seksi";
 
-		if (id_dir != null && (!id_dir.equals ("0") && !id_dir.equals (""))) {
+		if (0 != id_dir) {
 			q += " and A.id_direktorat = "+ id_dir;
 		}
-		if (id_div != null && (!id_div.equals ("0") && !id_div.equals (""))) {
+		if (0 != id_div) {
 			q += " and A.id_divprosbu = "+ id_div;
 		}
-		if (!id_dep.equals("0") && !id_dep.equals("")) {
+		if (0 != id_dep) {
 			q += " and	A.id_departemen	= "+ id_dep;
 		}
-		if (!id_dinas.equals("0") && !id_dinas.equals("")) {
+		if (0 != id_dinas) {
 			q += " and	A.id_dinas	= "+ id_dinas;
 		}
-		if (!id_seksi.equals("0") && !id_seksi.equals("")) {
+		if (0 != id_seksi) {
 			q += " and	A.id_seksi	= "+ id_seksi;
 		}
-		if (id_wilayah != null
-		&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-			q	+=" and	A.id_seksi		= C.id_seksi"
-				+ " and C.id_wilayah	= "+ id_wilayah;
+		if (0 != id_wilayah) {
+			q	+=" and C.id_wilayah	= "+ id_wilayah;
 		}
-		if (id_area != null
-		&& !(id_area.equals("0") || id_area.equals(""))) {
+		if (0 != id_area) {
 			q	+=" and	C.id_seksi		= "+ id_area;
 		}
 

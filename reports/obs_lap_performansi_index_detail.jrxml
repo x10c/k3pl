@@ -23,27 +23,27 @@
 	<parameter name="TOTAL_UNSAFE" class="java.lang.Integer"/>
 	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
-" AND R_SEKSI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} :
+" AND T_STOP.\"ID_DIREKTORAT\" = " + $P{ID_DIR} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
-" AND R_SEKSI.\"ID_DIVPROSBU\" = " + $P{ID_DIV} :
+" AND T_STOP.\"ID_DIVPROSBU\" = " + $P{ID_DIV} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DEP_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
-" AND R_SEKSI.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} :
+" AND T_STOP.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DINAS_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
-" AND R_SEKSI.\"ID_DINAS\" = " + $P{ID_DINAS} :
+" AND T_STOP.\"ID_DINAS\" = " + $P{ID_DINAS} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-" AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
+" AND T_STOP.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
@@ -67,36 +67,25 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 		<defaultValueExpression><![CDATA["SELECT \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS SUM_SAFE, \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS SUM_UNSAFE \n" +
-"FROM \n" +
-"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
-"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"FROM T_STOP, T_STOP_DETAIL, R_SEKSI \n" +
 "WHERE \n" +
-"     T_STOP.\"STATUS_AKTIF\" = 1 \n" +
+"     T_STOP.\"STATUS_AKTIF\" = '1' \n" +
+" AND T_STOP.ID_STOP = T_STOP_DETAIL.ID_STOP " +
+" AND T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI " +
 " AND T_STOP.\"MONTH\" = " + $P{MONTH} + "\n" +
-" AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
+" AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n"
++ $P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT
-     sum(T_STOP_DETAIL."JUMLAH_SAFE") AS SUM_SAFE,
-     sum(T_STOP_DETAIL."JUMLAH_UNSAFE") AS SUM_UNSAFE
-FROM
-     "dbo"."T_STOP" T_STOP INNER JOIN "dbo"."T_STOP_DETAIL" T_STOP_DETAIL ON T_STOP."ID_STOP" = T_STOP_DETAIL."ID_STOP"
-WHERE
-     T_STOP."YEAR" = $P{YEAR}
- AND T_STOP."STATUS_AKTIF" = 1
- AND T_STOP."MONTH" = $P{MONTH}]]>
+		<![CDATA[$P!{DYNAMIC_QUERY}]]>
 	</queryString>
 	<field name="SUM_SAFE" class="java.lang.Integer"/>
 	<field name="SUM_UNSAFE" class="java.lang.Integer"/>
 	<variable name="V_TOTAL_SAFE" class="java.lang.Integer">
-		<variableExpression><![CDATA[$P{TOTAL_SAFE} != null ? $P{TOTAL_SAFE} : 0]]></variableExpression>
+		<variableExpression><![CDATA[$F{SUM_SAFE} != null ? $F{SUM_SAFE} : 0]]></variableExpression>
 	</variable>
 	<variable name="V_TOTAL_UNSAFE" class="java.lang.Integer">
-		<variableExpression><![CDATA[$P{TOTAL_UNSAFE} != null ? $P{TOTAL_UNSAFE} : 0]]></variableExpression>
+		<variableExpression><![CDATA[$F{SUM_UNSAFE} != null ? $F{SUM_UNSAFE} : 0]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -114,9 +103,8 @@ WHERE
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SUM_SAFE} == null ? 0 : $F{SUM_SAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SUM_SAFE} == null ? 0 : $F{SUM_SAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="85" y="0" width="85" height="20"/>
@@ -129,9 +117,8 @@ WHERE
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SUM_UNSAFE} == null ? 0 : $F{SUM_UNSAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SUM_UNSAFE} == null ? 0 : $F{SUM_UNSAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="170" y="0" width="85" height="20"/>
@@ -144,9 +131,8 @@ WHERE
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_TOTAL_SAFE}.intValue() + $V{V_TOTAL_UNSAFE}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_TOTAL_SAFE}.intValue() + $V{V_TOTAL_UNSAFE}.intValue() != 0 ?
 $F{SUM_SAFE} == null ? 0 :
 $F{SUM_SAFE}.doubleValue()/($V{V_TOTAL_SAFE}.doubleValue() + $V{V_TOTAL_UNSAFE}.doubleValue()) :
 0]]></textFieldExpression>
@@ -162,9 +148,8 @@ $F{SUM_SAFE}.doubleValue()/($V{V_TOTAL_SAFE}.doubleValue() + $V{V_TOTAL_UNSAFE}.
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_TOTAL_SAFE}.intValue() + $V{V_TOTAL_UNSAFE}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_TOTAL_SAFE}.intValue() + $V{V_TOTAL_UNSAFE}.intValue() != 0 ?
 $F{SUM_UNSAFE} == null ? 0 :
 $F{SUM_UNSAFE}.doubleValue()/($V{V_TOTAL_SAFE}.doubleValue() + $V{V_TOTAL_UNSAFE}.doubleValue()) :
 0]]></textFieldExpression>
