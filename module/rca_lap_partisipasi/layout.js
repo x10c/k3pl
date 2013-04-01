@@ -346,6 +346,9 @@ function M_RCALapPartPegGrid()
 		,	autoScroll	: true
 		,	height		: 500
 		,	tbar		: [this.btn_print]
+		,	viewConfig	:{
+				scrollOffset	:80
+			}
 	});
 
 	this.do_print = function()
