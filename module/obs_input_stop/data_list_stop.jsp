@@ -43,7 +43,7 @@ try {
 
 	db_q	+=" ) X"
 			+" where X.rownum between "+ start +" and "+ limit
-			+" order by	X.id_stop desc";
+			+" order by	X.nama_pegawai";
 
 	db_rs = db_stmt.executeQuery (db_q);
 

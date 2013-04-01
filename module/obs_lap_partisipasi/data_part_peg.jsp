@@ -108,6 +108,8 @@ try {
 		q += " and	B.id_seksi	= "+ id_area;
 	}
 
+	q +=" order by B.nama_pegawai";
+
 	rs = db_stmt.executeQuery(q);
 
 	x = 0;
@@ -120,7 +122,6 @@ try {
 
 		nipg	= rs.getString("nipg");
 			
-
 		data	+="["
 			+"\""+ rs.getString("nama_pegawai") +"\""
 			+",'"+ rs.getString("id_direktorat") +"'"
