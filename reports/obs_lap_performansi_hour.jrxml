@@ -68,25 +68,19 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 "     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS TOTAL_SAFE, \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS TOTAL_UNSAFE, \n" +
 "     ( SELECT sum(T_STOP.\"LAMA_OBSERVASI\") AS LAMA_OBSERVASI \n" +
-"       FROM \n" +
-"			\"dbo\".\"R_SEKSI\" R_SEKSI INNER JOIN \"dbo\".\"T_STOP\" T_STOP ON R_SEKSI.\"ID_SEKSI\" = T_STOP.\"ID_AREA_SEKSI\" \n" +
-"			AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"			AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"			AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"			AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"       FROM    T_STOP \n" +
+"       ,       R_SEKSI \n" +
 "	    WHERE \n" +
-"			T_STOP.\"STATUS_AKTIF\" = 1 \n" +
+"           T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI \n" +
+"		AND	T_STOP.\"STATUS_AKTIF\" = 1 \n" +
 "		AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{ORG_WIL_CLAUSE} +
 "     ) AS LAMA_OBSERVASI \n" +
 "FROM \n" +
-"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
-"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"   T_STOP, T_STOP_DETAIL, R_SEKSI " +
 "WHERE \n" +
 "     T_STOP.\"STATUS_AKTIF\" = 1 \n" +
+" AND T_STOP.ID_STOP = T_STOP_DETAIL.ID_STOP "+
+" AND T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI " +
 " AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
@@ -209,7 +203,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Januari]]></text>
 				</staticText>
@@ -252,7 +245,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA[$F{LAMA_OBSERVASI}]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -268,7 +261,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Februari]]></text>
 				</staticText>
@@ -311,7 +303,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["2"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -327,7 +319,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Maret]]></text>
 				</staticText>
@@ -370,7 +361,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["3"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -386,7 +377,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[April]]></text>
 				</staticText>
@@ -429,7 +419,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["4"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -445,7 +435,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Mei]]></text>
 				</staticText>
@@ -488,7 +477,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["5"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -504,7 +493,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Juni]]></text>
 				</staticText>
@@ -547,7 +535,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["6"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -563,7 +551,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Juli]]></text>
 				</staticText>
@@ -606,7 +593,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["7"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -622,7 +609,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Agustus]]></text>
 				</staticText>
@@ -665,7 +651,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["8"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -681,7 +667,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[September]]></text>
 				</staticText>
@@ -724,7 +709,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["9"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -740,7 +725,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Oktober]]></text>
 				</staticText>
@@ -783,7 +767,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["10"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -799,7 +783,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[November]]></text>
 				</staticText>
@@ -842,7 +825,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["11"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -858,7 +841,6 @@ per Hour]]></text>
 					</box>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial"/>
-						<paragraph leftIndent="2"/>
 					</textElement>
 					<text><![CDATA[Desember]]></text>
 				</staticText>
@@ -901,7 +883,7 @@ per Hour]]></text>
 						<subreportParameterExpression><![CDATA["12"]]></subreportParameterExpression>
 					</subreportParameter>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_hour_detail.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
@@ -933,9 +915,8 @@ per Hour]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_SAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TOTAL_SAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -948,9 +929,8 @@ per Hour]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_UNSAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TOTAL_UNSAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -963,9 +943,8 @@ per Hour]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_LAMA_OBSERVASI}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_LAMA_OBSERVASI}.intValue() != 0 ?
 $F{TOTAL_SAFE} == null ? 0 :
 $F{TOTAL_SAFE}.doubleValue()/($V{V_LAMA_OBSERVASI}.doubleValue() * 100) :
 0]]></textFieldExpression>
@@ -981,9 +960,8 @@ $F{TOTAL_SAFE}.doubleValue()/($V{V_LAMA_OBSERVASI}.doubleValue() * 100) :
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_LAMA_OBSERVASI}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_LAMA_OBSERVASI}.intValue() != 0 ?
 $F{TOTAL_UNSAFE} == null ? 0 :
 $F{TOTAL_UNSAFE}.doubleValue()/($V{V_LAMA_OBSERVASI}.doubleValue() * 100) :
 0]]></textFieldExpression>

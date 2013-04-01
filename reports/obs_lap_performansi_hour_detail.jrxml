@@ -67,28 +67,23 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 "     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS SUM_SAFE, \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS SUM_UNSAFE, \n" +
 "     ( SELECT sum(T_STOP.\"LAMA_OBSERVASI\") AS LAMA_OBSERVASI \n" +
-"       FROM \n" +
-"			\"dbo\".\"R_SEKSI\" R_SEKSI INNER JOIN \"dbo\".\"T_STOP\" T_STOP ON R_SEKSI.\"ID_SEKSI\" = T_STOP.\"ID_AREA_SEKSI\" \n" +
-"			AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"			AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"			AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"			AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"       FROM    T_STOP \n" +
+"       ,       R_SEKSI \n" +
 "	    WHERE \n" +
-"			T_STOP.\"STATUS_AKTIF\" = 1 \n" +
-"		AND T_STOP.\"MONTH\" = " + $P{MONTH} + "\n" +
+"           T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI \n" +
+"		AND	T_STOP.\"STATUS_AKTIF\" = 1 \n" +
 "		AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{ORG_WIL_CLAUSE} +
+"       AND T_STOP.MONTH = "+ $P{MONTH} +
 "     ) AS LAMA_OBSERVASI \n" +
 "FROM \n" +
-"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
-"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"   T_STOP, T_STOP_DETAIL, R_SEKSI " +
 "WHERE \n" +
 "     T_STOP.\"STATUS_AKTIF\" = 1 \n" +
-" AND T_STOP.\"MONTH\" = " + $P{MONTH} + "\n" +
-" AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" + $P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
+" AND T_STOP.ID_STOP = T_STOP_DETAIL.ID_STOP "+
+" AND T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI " +
+" AND T_STOP.\"YEAR\" = " + $P{YEAR}+
+" AND T_STOP.MONTH = "+ $P{MONTH} +
+$P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[$P!{DYNAMIC_QUERY}]]>
@@ -115,9 +110,8 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SUM_SAFE} == null ? 0 : $F{SUM_SAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SUM_SAFE} == null ? 0 : $F{SUM_SAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="85" y="0" width="85" height="20"/>
@@ -130,9 +124,8 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SUM_UNSAFE} == null ? 0 : $F{SUM_UNSAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SUM_UNSAFE} == null ? 0 : $F{SUM_UNSAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="170" y="0" width="85" height="20"/>
@@ -145,9 +138,8 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_JAM_OBSERVASI}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_JAM_OBSERVASI}.intValue() != 0 ?
 $F{SUM_SAFE} == null ? 0 :
 $F{SUM_SAFE}.doubleValue()/($V{V_JAM_OBSERVASI}.doubleValue() * 100) :
 0]]></textFieldExpression>
@@ -163,9 +155,8 @@ $F{SUM_SAFE}.doubleValue()/($V{V_JAM_OBSERVASI}.doubleValue() * 100) :
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_JAM_OBSERVASI}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_JAM_OBSERVASI}.intValue() != 0 ?
 $F{SUM_UNSAFE} == null ? 0 :
 $F{SUM_UNSAFE}.doubleValue()/($V{V_JAM_OBSERVASI}.doubleValue() * 100) :
 0]]></textFieldExpression>
