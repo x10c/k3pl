@@ -66,31 +66,32 @@
 		<defaultValueExpression><![CDATA["SELECT \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS TOTAL_SAFE, \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS TOTAL_UNSAFE \n" +
-"FROM \n" +
-"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
-"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"FROM T_STOP, T_STOP_DETAIL, R_SEKSI \n" +
 "WHERE \n" +
-"     T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" +
-" AND T_STOP.\"STATUS_AKTIF\" = 1 \n" + $P{MONTH_CLAUSE} + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
+"   T_STOP.ID_STOP = T_STOP_DETAIL.ID_STOP "+
+" AND T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI " +
+" AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" +
+" AND T_STOP.\"STATUS_AKTIF\" = 1 \n"
++ $P{MONTH_CLAUSE}
++ $P{DIR_CLAUSE}
++ $P{DIV_CLAUSE}
++ $P{DEP_CLAUSE}
++ $P{DINAS_CLAUSE}
++ $P{SEKSI_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_WIL_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["SELECT \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_SAFE\") AS TOTAL_SAFE, \n" +
 "     sum(T_STOP_DETAIL.\"JUMLAH_UNSAFE\") AS TOTAL_UNSAFE \n" +
-"FROM \n" +
-"     \"dbo\".\"T_STOP\" T_STOP INNER JOIN \"dbo\".\"T_STOP_DETAIL\" T_STOP_DETAIL ON T_STOP.\"ID_STOP\" = T_STOP_DETAIL.\"ID_STOP\" \n" +
-"     INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON T_STOP.\"ID_AREA_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" +
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = T_STOP.\"ID_AREA_DIREKTORAT\" \n" +
-"     AND R_SEKSI.\"ID_DINAS\" = T_STOP.\"ID_AREA_DINAS\" \n" +
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = T_STOP.\"ID_AREA_DIVPROSBU\" \n" +
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = T_STOP.\"ID_AREA_DEPARTEMEN\" \n" +
+"FROM T_STOP, T_STOP_DETAIL, R_SEKSI \n" +
 "WHERE \n" +
-"     T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" +
-" AND T_STOP.\"STATUS_AKTIF\" = 1 \n" + $P{MONTH_CLAUSE} + $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE}]]></defaultValueExpression>
+"   T_STOP.ID_STOP = T_STOP_DETAIL.ID_STOP "+
+" AND T_STOP.ID_SEKSI = R_SEKSI.ID_SEKSI " +
+" AND T_STOP.\"YEAR\" = " + $P{YEAR} + "\n" +
+" AND T_STOP.\"STATUS_AKTIF\" = 1 \n"
++ $P{MONTH_CLAUSE}
++ $P{WILAYAH_CLAUSE}
++ $P{AREA_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MAIN_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
@@ -236,7 +237,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 					<subreportParameterExpression><![CDATA[$P{ID_DINAS}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_kategori_srkategori.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_kategori_srkategori.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

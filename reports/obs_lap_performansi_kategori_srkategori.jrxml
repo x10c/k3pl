@@ -53,9 +53,8 @@ FROM
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_TIPE_OBSERVASI_NAMA_TIPE_OBSERVASI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_TIPE_OBSERVASI_NAMA_TIPE_OBSERVASI}]]></textFieldExpression>
 			</textField>
 			<subreport>
 				<reportElement x="215" y="0" width="340" height="20"/>
@@ -99,7 +98,7 @@ FROM
 					<subreportParameterExpression><![CDATA[$P{ID_DINAS}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_kategori_detail.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_performansi_kategori_detail.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
@@ -130,9 +129,8 @@ FROM
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL_SAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL_SAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -145,9 +143,8 @@ FROM
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL_UNSAFE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL_UNSAFE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -160,9 +157,8 @@ FROM
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL_SAFE} != null && $P{TOTAL_SAFE} != 0 ? 1 : 0]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL_SAFE} != null && $P{TOTAL_SAFE} != 0 ? 1 : 0]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="470" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -175,9 +171,8 @@ FROM
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL_UNSAFE} != null && $P{TOTAL_UNSAFE} != 0 ? 1 : 0]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{TOTAL_UNSAFE} != null && $P{TOTAL_UNSAFE} != 0 ? 1 : 0]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

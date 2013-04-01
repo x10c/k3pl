@@ -9,6 +9,7 @@
 --%>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="org.kilabit.ServletUtilities" %>
 <%
 long	all_safe	= 1;
 long	all_unsafe	= 1;
@@ -29,57 +30,51 @@ try {
 	String		q, q2, q3;
 	int		i	= 0;
 
-	String		id_dir		= request.getParameter("id_dir");
-	String		id_div		= request.getParameter("id_div");
-	String		id_dep		= request.getParameter("id_dep");
-	String		id_dinas	= request.getParameter("id_dinas");
-	String		id_seksi	= request.getParameter("id_seksi");
-	String		id_wilayah	= request.getParameter("id_wilayah");
-	String		id_area		= request.getParameter("id_area");
-	String		year		= request.getParameter("year");
-	String		month		= request.getParameter("month");
+	int			id_dir		= ServletUtilities.getIntParameter (request, "id_dir", 0);
+	int			id_div		= ServletUtilities.getIntParameter (request, "id_div", 0);
+	int			id_dep		= ServletUtilities.getIntParameter (request, "id_dep", 0);
+	int			id_dinas	= ServletUtilities.getIntParameter (request, "id_dinas", 0);
+	int			id_seksi	= ServletUtilities.getIntParameter (request, "id_seksi", 0);
+	int			id_wilayah	= ServletUtilities.getIntParameter (request, "id_wilayah", 0);
+	int			id_area		= ServletUtilities.getIntParameter (request, "id_area", 0);
+	int			year		= ServletUtilities.getIntParameter (request, "year", 0);
+	int			month		= ServletUtilities.getIntParameter (request, "month", 0);
 
-	q2	=" select	isnull(sum(jumlah_safe),1) sum_safe"
-		+" ,		isnull(sum(jumlah_unsafe),1) sum_unsafe"
-		+" from		t_stop_detail "
-		+" where	id_stop in ("
-		+"	select	A.id_stop"
-		+"	from	t_stop		A"
-		+"	,	r_seksi		B"
-		+"	where	A.status_aktif	= '1'"
-		+"	and	A.year		= "+ year;
+	q2	=" select	isnull(sum(B.jumlah_safe),1) sum_safe"
+		+" ,		isnull(sum(B.jumlah_unsafe),1) sum_unsafe"
+		+" from		t_stop			A"
+		+"	,		t_stop_detail	B"
+		+"	where	A.id_stop		= B.id_stop"
+		+"	and		A.status_aktif	= '1'"
+		+"	and		A.year			= "+ year;
 
-		if (id_dir != null && (!id_dir.equals("0") && !id_dir.equals(""))) {
-			q2 += " and A.id_direktorat = "+ id_dir;
-		}
-		if (id_div != null && (!id_div.equals ("0") && !id_div.equals (""))) {
-			q2 += " and A.id_divprosbu = "+ id_div;
-		}
-		if (!id_dep.equals("0") && !id_dep.equals("")) {
-			q2 += " and	A.id_departemen	= "+ id_dep;
-		}
-		if (!id_dinas.equals("0") && !id_dinas.equals("")) {
-			q2 += " and	A.id_dinas	= "+ id_dinas;
-		}
-		if (!id_seksi.equals("0") && !id_seksi.equals("")) {
-			q2 += " and	A.id_seksi	= "+ id_seksi;
-		}
+	if (0 != id_dir) {
+		q2 += " and A.id_direktorat = "+ id_dir;
+	}
+	if (0 != id_div) {
+		q2 += " and A.id_divprosbu = "+ id_div;
+	}
+	if (0 != id_dep) {
+		q2 += " and	A.id_departemen	= "+ id_dep;
+	}
+	if (0 != id_dinas) {
+		q2 += " and	A.id_dinas	= "+ id_dinas;
+	}
+	if (0 != id_seksi) {
+		q2 += " and	A.id_seksi	= "+ id_seksi;
+	}
 
-		if (id_wilayah != null
-		&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-			q2	+=" and	B.id_wilayah	= "+ id_wilayah
-				+ " and B.id_seksi	= A.id_seksi";
-		}
-		if (id_area != null
-		&& !(id_area.equals("0") || id_area.equals(""))) {
-			q2 += " and	A.id_seksi	= "+ id_area;
-		}
+	if (0 != id_wilayah) {
+		q2	+=" and	B.id_wilayah	= "+ id_wilayah
+			+ " and B.id_seksi	= A.id_seksi";
+	}
+	if (0 != id_area) {
+		q2 += " and	A.id_seksi	= "+ id_area;
+	}
 
-		if (!month.equals("0")) {
-			q2 += " and	A.month		= "+ month;
-		}
-
-		q2	+=" )";
+	if (0 != month) {
+		q2 += " and	A.month		= "+ month;
+	}
 
 	rs2 = stmt2.executeQuery(q2);
 
@@ -114,51 +109,45 @@ try {
 			i++;
 		}
 
-		id_tipe_obs	= rs.getString("id_tipe_observasi");
+		id_tipe_obs		= rs.getString("id_tipe_observasi");
 		nama_tipe_obs	= rs.getString("nama_tipe_observasi");
 
-		q2	=" select	isnull(sum(jumlah_safe),0) sum_safe "
-			+" ,		isnull(sum(jumlah_unsafe),0) sum_unsafe "
-			+" from		t_stop_detail "
-			+" where	id_tipe_observasi = "+ id_tipe_obs
-			+" and		id_stop in ("
-			+"	select	A.id_stop"
-			+"	from	t_stop		A"
-			+"	,	r_seksi		B"
-			+"	where	A.status_aktif	= '1' "
-			+"	and	A.year		= "+ year;
+		q2	=" select	isnull(sum(B.jumlah_safe),0) sum_safe "
+			+" ,		isnull(sum(B.jumlah_unsafe),0) sum_unsafe "
+			+" from		t_stop				A"
+			+"	,		t_stop_detail		B"
+			+"	,		r_seksi				C"
+			+" where	A.id_stop			= B.id_stop"
+			+"	and		A.id_seksi			= C.id_seksi"
+			+"	and		B.id_tipe_observasi	= "+ id_tipe_obs
+			+"	and		A.status_aktif		= '1' "
+			+"	and		A.year				= "+ year;
 
-		if (!id_dir.equals("0") && !id_dir.equals("")) {
+		if (0 != id_dir) {
 			q2 += " and A.id_direktorat = "+ id_dir;
 		}
-		if (!id_div.equals ("0") && !id_div.equals ("")) {
+		if (0 != id_div) {
 			q2 += " and A.id_divprosbu = "+ id_div;
 		}
-		if (!id_dep.equals("0") && !id_dep.equals("")) {
+		if (0 != id_dep) {
 			q2 += " and	A.id_departemen	= "+ id_dep;
 		}
-		if (!id_dinas.equals("0") && !id_dinas.equals("")) {
+		if (0 != id_dinas) {
 			q2 += " and	A.id_dinas	= "+ id_dinas;
 		}
-		if (!id_seksi.equals("0") && !id_seksi.equals("")) {
+		if (0 != id_seksi) {
 			q2 += " and	A.id_seksi	= "+ id_seksi;
 		}
-
-		if (id_wilayah != null
-		&& !(id_wilayah.equals("0") || id_wilayah.equals(""))) {
-			q2	+=" and	B.id_wilayah	= "+ id_wilayah
-				+ " and B.id_seksi	= A.id_seksi";
+		if (0 != id_wilayah) {
+			q2	+=" and	C.id_wilayah	= "+ id_wilayah
+				+ " and C.id_seksi		= A.id_seksi";
 		}
-		if (id_area != null
-		&& !(id_area.equals("0") || id_area.equals(""))) {
+		if (0 != id_area) {
 			q2 += " and	A.id_seksi	= "+ id_area;
 		}
-
-		if (!month.equals("0")) {
+		if (0 != month) {
 			q2 += " and	A.month		= "+ month;
 		}
-
-		q2	+=" )";
 
 		q3	=" select	A.sum_safe"
 			+" ,		A.sum_unsafe"
