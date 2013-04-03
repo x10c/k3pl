@@ -80,7 +80,7 @@
 	</parameter>
 	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-" AND R_.\"STATUS_PEGAWAI\" = 1 AND R_.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
+" AND R_.\"ID_SEKSI\" = " + $P{ID_SEKSI} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIR_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
@@ -109,14 +109,13 @@
 	</parameter>
 	<parameter name="SEKSI_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-"       AND R_PEGAWAI.\"NIPG\" = R_.\"NIPG\" \n" +
-"       AND R_PEGAWAI.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " \n" :
+"       AND R_.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " \n" :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ORG_SELECT_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"NIPG\" AS ID, \n" +
-    "     R_.\"NAMA_PEGAWAI\" AS NAMA, \n" :
+    "     R_.\"ID_SEKSI\" AS ID, \n" +
+    "     R_.\"NAMA_SEKSI\" AS NAMA, \n" :
 $P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
     "     R_.\"ID_SEKSI\" AS ID, \n" +
     "     R_.\"NAMA_SEKSI\" AS NAMA, \n" :
@@ -134,7 +133,7 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 	</parameter>
 	<parameter name="ORG_FROM_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-    "     \"dbo\".\"R_PEGAWAI\"" :
+    "     \"dbo\".\"R_SEKSI\"" :
 $P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
     "     \"dbo\".\"R_SEKSI\"" :
 $P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
@@ -147,7 +146,7 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 	</parameter>
 	<parameter name="ORG_ORDER_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"NAMA_PEGAWAI\" " :
+     "     R_.\"ID_SEKSI\" " :
 $P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
     "     R_.\"ID_SEKSI\" " :
 $P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
@@ -221,13 +220,13 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
 $P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-" AND R_SEKSI.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} :
+" AND R_.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} :
 " AND R_.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="AREA_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-" AND R_.\"STATUS_PEGAWAI\" = 1 AND R_.\"ID_SEKSI\" = " + $P{ID_AREA} :
+" AND R_.\"ID_SEKSI\" = " + $P{ID_AREA} :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WILAYAH_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
@@ -240,14 +239,13 @@ $P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase
 	</parameter>
 	<parameter name="AREA_TARGET_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-"       AND R_PEGAWAI.\"NIPG\" = R_.\"NIPG\" \n" +
-"       AND R_PEGAWAI.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
+"       AND R_.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WIL_SELECT_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"NIPG\" AS ID, \n" +
-    "     R_.\"NAMA_PEGAWAI\" AS NAMA, \n" :
+    "     R_.\"ID_SEKSI\" AS ID, \n" +
+    "     R_.\"NAMA_SEKSI\" AS NAMA, \n" :
 $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
     "     R_.\"ID_SEKSI\" AS ID, \n" +
     "     R_.\"NAMA_SEKSI\" AS NAMA, \n" :
@@ -256,15 +254,14 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 	</parameter>
 	<parameter name="WIL_FROM_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-    "     \"dbo\".\"R_PEGAWAI\" R_ INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI \n" +
-    "     ON R_.\"ID_SEKSI\" = R_SEKSI.\"ID_SEKSI\" \n" :
+    "     \"dbo\".\"R_SEKSI\" R_ " :
 $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
     "     \"dbo\".\"R_SEKSI\" R_ " :
     "     \"dbo\".\"R_WILAYAH\" R_ "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WIL_ORDER_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-    "     R_.\"NAMA_PEGAWAI\" " :
+    "     R_.\"ID_SEKSI\" " :
 $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
     "     R_.\"ID_SEKSI\" " :
     "     R_.\"ID_WILAYAH\" "]]></defaultValueExpression>
@@ -459,9 +456,8 @@ per Hour]]></text>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAMA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
@@ -474,9 +470,8 @@ per Hour]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
@@ -489,9 +484,8 @@ per Hour]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_TOTAL_SAFE}.intValue() + $V{V_TOTAL_UNSAFE}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_TOTAL_SAFE}.intValue() + $V{V_TOTAL_UNSAFE}.intValue() != 0 ?
 $F{SUM_UNSAFE} == null ? 0 :
 $F{SUM_UNSAFE}.doubleValue()/($V{V_TOTAL_SAFE}.doubleValue() + $V{V_TOTAL_UNSAFE}.doubleValue()) :
 0]]></textFieldExpression>
@@ -507,9 +501,8 @@ $F{SUM_UNSAFE}.doubleValue()/($V{V_TOTAL_SAFE}.doubleValue() + $V{V_TOTAL_UNSAFE
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{V_LAMA_OBSERVASI}.intValue() != 0 ?
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{V_LAMA_OBSERVASI}.intValue() != 0 ?
 $F{SUM_UNSAFE} == null ? 0 :
 $F{SUM_UNSAFE}.doubleValue()/($V{V_LAMA_OBSERVASI}.doubleValue() * 100) :
 0]]></textFieldExpression>

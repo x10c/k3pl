@@ -232,7 +232,8 @@ function M_ObsLapPerfByCategoryGrid()
 		var url = _g_root +'/report';
 
 		url	+= '?id=29';
-		url	+= '&type=xls'
+		url	+= '&type=xls';
+		url += '&is_in_org='+ (m_obs_lap_performansi.perf_by_cat.form.set_org.collapsed ? 0 : 1);
 		url += '&id_dir='+ m_obs_lap_performansi.perf_by_cat.form.set_org.formDirektorat.getValue ();
 		url += '&id_div='+ m_obs_lap_performansi.perf_by_cat.form.set_org.formDivProSBU.getValue ();
 		url += '&id_dep='+ m_obs_lap_performansi.perf_by_cat.form.set_org.formDepartemen.getValue ();
@@ -346,8 +347,6 @@ function M_ObsLapPerfByIndexGrid()
 			,	css			: 'background-color: #CBFFBB;'
 			,	summaryRenderer	:function (d, p, o, scope)
 				{
-					console.log (o.data['n_safe']);
-					console.log (o.data['n_unsafe']);
 					var t = (o.data['n_safe'] / (o.data['n_safe'] + o.data['n_unsafe'])) * 100;
 					return (t.toFixed (2) + '%');
 				}
@@ -398,7 +397,8 @@ function M_ObsLapPerfByIndexGrid()
 		var url = _g_root +'/report';
 
 		url	+= '?id=30';
-		url	+= '&type=xls'
+		url	+= '&type=xls';
+		url += '&is_in_org='+ (m_obs_lap_performansi.perf_by_index.form.set_org.collapsed ? 0 : 1);
 		url += '&id_dir='+ m_obs_lap_performansi.perf_by_index.form.set_org.formDirektorat.getValue ();
 		url += '&id_div='+ m_obs_lap_performansi.perf_by_index.form.set_org.formDivProSBU.getValue ();
 		url += '&id_dep='+ m_obs_lap_performansi.perf_by_index.form.set_org.formDepartemen.getValue ();
@@ -407,8 +407,6 @@ function M_ObsLapPerfByIndexGrid()
 		url += '&id_wilayah='+ m_obs_lap_performansi.perf_by_index.form.set_wil.formWilayah.getValue ();
 		url += '&id_area='+ m_obs_lap_performansi.perf_by_index.form.set_wil.formArea.getValue ();
 		url += '&year='+ m_obs_lap_performansi.perf_by_index.form.set_waktu.formTahun.getValue ();
-
-		console.log (url);
 
 		window.open (url, '_blank');
 	}
@@ -556,7 +554,8 @@ function M_ObsLapPerfByHourGrid()
 		var url	= _g_root +'/report';
 
 		url += '?id=31';
-		url += '&type=xls'
+		url += '&type=xls';
+		url += '&is_in_org='+ (m_obs_lap_performansi.perf_by_hour.form.set_org.collapsed ? 0 : 1);
 		url += '&id_dir='+ m_obs_lap_performansi.perf_by_hour.form.set_org.formDirektorat.getValue ();
 		url += '&id_div='+ m_obs_lap_performansi.perf_by_hour.form.set_org.formDivProSBU.getValue ();
 		url += '&id_dep='+ m_obs_lap_performansi.perf_by_hour.form.set_org.formDepartemen.getValue ();
@@ -699,7 +698,8 @@ function M_ObsLapSTOPGrid()
 		var url = _g_root +'/report';
 
 		url	+= '?id=32';
-		url	+= '&type=xls'
+		url	+= '&type=xls';
+		url += '&is_in_org='+ (m_obs_lap_performansi.perf_stop.form.set_org.collapsed ? 0 : 1);
 		url += '&id_dir='+ m_obs_lap_performansi.perf_stop.form.set_org.formDirektorat.getValue ();
 		url += '&id_div='+ m_obs_lap_performansi.perf_stop.form.set_org.formDivProSBU.getValue ();
 		url += '&id_dep='+ m_obs_lap_performansi.perf_stop.form.set_org.formDepartemen.getValue ();
@@ -709,6 +709,8 @@ function M_ObsLapSTOPGrid()
 		url += '&id_area='+ m_obs_lap_performansi.perf_stop.form.set_wil.formArea.getValue ();
 		url += '&year='+ m_obs_lap_performansi.perf_stop.form.set_waktu.formTahun.getValue ();
 		url += '&month='+ m_obs_lap_performansi.perf_stop.form.set_waktu.formBulan.getValue ();
+
+		console.log (url);
 
 		window.open (url, '_blank');
 	}
