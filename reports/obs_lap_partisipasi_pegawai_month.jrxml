@@ -12,6 +12,8 @@
 	<parameter name="MONTH" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="TGL_SEBELUM" class="java.lang.String"/>
+	<parameter name="TGL_SESUDAH" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      count(T_STOP."ID_STOP") AS COUNT
@@ -21,8 +23,8 @@ WHERE
      T_STOP."NIPG" = $P{NIPG}
  AND T_STOP."STATUS_AKTIF" = 1
  AND T_STOP."STATUS" IN (1, 2)
- AND T_STOP."YEAR" = $P{YEAR}
- AND T_STOP."MONTH" = $P{MONTH}]]>
+ AND T_STOP.TANGGAL >= cast ($P{TGL_SEBELUM} as datetime)
+ AND T_STOP.TANGGAL <= cast ($P{TGL_SESUDAH} as datetime)]]>
 	</queryString>
 	<field name="COUNT" class="java.lang.Integer"/>
 	<background>
@@ -41,9 +43,8 @@ WHERE
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{COUNT}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

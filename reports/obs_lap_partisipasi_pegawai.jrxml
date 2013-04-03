@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="obs_lap_partisipasi_pegawai" pageWidth="992" pageHeight="595" orientation="Landscape" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="68"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="IS_IN_ORG" class="java.lang.String">
 		<parameterDescription><![CDATA[1=organisasi
@@ -107,9 +107,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Name]]></text>
+				<text><![CDATA[Nama]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="220" y="0" width="61" height="20"/>
@@ -121,9 +121,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[January]]></text>
+				<text><![CDATA[Januari]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="281" y="0" width="61" height="20"/>
@@ -135,9 +135,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[February]]></text>
+				<text><![CDATA[Februari]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="342" y="0" width="61" height="20"/>
@@ -149,9 +149,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[March]]></text>
+				<text><![CDATA[Maret]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="403" y="0" width="61" height="20"/>
@@ -163,7 +163,7 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[April]]></text>
 			</staticText>
@@ -177,9 +177,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[May]]></text>
+				<text><![CDATA[Mei]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="525" y="0" width="61" height="20"/>
@@ -191,9 +191,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[June]]></text>
+				<text><![CDATA[Juni]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="586" y="0" width="61" height="20"/>
@@ -205,9 +205,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[July]]></text>
+				<text><![CDATA[Juli]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="647" y="0" width="61" height="20"/>
@@ -219,9 +219,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[August]]></text>
+				<text><![CDATA[Agustus]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="708" y="0" width="61" height="20"/>
@@ -233,7 +233,7 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[September]]></text>
 			</staticText>
@@ -247,9 +247,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[October]]></text>
+				<text><![CDATA[Oktober]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="830" y="0" width="61" height="20"/>
@@ -261,7 +261,7 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[November]]></text>
 			</staticText>
@@ -275,9 +275,9 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[December]]></text>
+				<text><![CDATA[Desember]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -294,12 +294,17 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
 			</textField>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="220" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[((int)Integer.parseInt ($P{YEAR}) - 1) +"-12-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-01-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -310,10 +315,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["1"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="281" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-01-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-02-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -324,10 +335,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["2"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="342" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-02-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-03-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -338,10 +355,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["3"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="403" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-03-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-04-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -352,10 +375,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["4"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="464" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-04-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-05-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -366,10 +395,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["5"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="525" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-05-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-06-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -380,10 +415,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["6"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="586" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-06-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-07-25"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -394,10 +435,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["7"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="647" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-07-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-08-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -408,10 +455,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["8"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="708" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-08-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-09-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -422,10 +475,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["9"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="769" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-09-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-10-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -436,10 +495,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["10"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="830" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-10-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-11-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -450,10 +515,16 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["11"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="891" y="0" width="61" height="20"/>
+				<subreportParameter name="TGL_SEBELUM">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-11-25"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TGL_SESUDAH">
+					<subreportParameterExpression><![CDATA[$P{YEAR} +"-12-24"]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -464,7 +535,7 @@ $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_C
 					<subreportParameterExpression><![CDATA["12"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "obs_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

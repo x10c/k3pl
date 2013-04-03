@@ -54,9 +54,14 @@
 "		T_STOP_TARGET_PEGAWAI.\"DEC\" \n"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PART_MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
-" AND T_STOP.\"MONTH\" = " + $P{MONTH} :
-""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" )
+?   $P{MONTH}.equalsIgnoreCase( "1" )
+    ?   " AND T_STOP.TANGGAL >= cast ("+ ((int)Integer.parseInt ($P{YEAR}) - 1) +"-12-25 as datetime) "+
+        " AND T_STOP.TANGGAL >= cast ("+ $P{YEAR} +"-01-24 as datetime) "
+    :   " AND T_STOP.TANGGAL >= cast ("+ $P{YEAR} +"-"+ ((int) Integer.parseInt ( $P{MONTH} ) - 1) +"-25 as datetime) "+
+        " AND T_STOP.TANGGAL >= cast ("+ $P{YEAR} +"-"+ $P{MONTH}  +"-24 as datetime) "
+:   " AND T_STOP.TANGGAL >= cast ("+ ((int)Integer.parseInt ($P{YEAR}) - 1) +"-12-25 as datetime) "+
+    " AND T_STOP.TANGGAL >= cast ("+ $P{YEAR} +"-12-24 as datetime) "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
@@ -391,9 +396,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAMA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
@@ -406,9 +410,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TARGET} == null ? 0 : $F{TARGET}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TARGET} == null ? 0 : $F{TARGET}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
@@ -421,9 +424,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
@@ -436,9 +438,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[1]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[1]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
@@ -451,9 +452,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -484,9 +484,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_TARGET}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TOTAL_TARGET}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="300" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -499,9 +498,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_PARTISIPASI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TOTAL_PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Opaque" x="385" y="0" width="85" height="20" backcolor="#CCCCCC"/>
@@ -528,9 +526,8 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_TARGET} != null && $V{TOTAL_TARGET} != 0 ? ($V{TOTAL_PARTISIPASI} != null ? $V{TOTAL_PARTISIPASI}.doubleValue() : 0.0)/$V{TOTAL_TARGET}.doubleValue() : 0]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TOTAL_TARGET} != null && $V{TOTAL_TARGET} != 0 ? ($V{TOTAL_PARTISIPASI} != null ? $V{TOTAL_PARTISIPASI}.doubleValue() : 0.0)/$V{TOTAL_TARGET}.doubleValue() : 0]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
