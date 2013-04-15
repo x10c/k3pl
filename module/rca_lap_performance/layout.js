@@ -250,97 +250,24 @@ function M_RCALapRCAGrid()
 
 	this.do_print = function()
 	{
-		var form;
-		var id_report	= '26';
-		var tipe_report	= 'xls';
-		var isinorg		= m_rca_lap_performance.form.set_org.isChecked();
-		
-		if (isinorg){
-			is_in_org	= '1'
-		} else {
-			is_in_org	= '0'
-		}
-		
-		form = document.createElement('form');
+		var url = _g_root +'/report?';
 
-		form.setAttribute('method', 'post');
-		form.setAttribute('target', '_blank');		
-		form.setAttribute('action', _g_root +'/report');
-		
-		var hiddenField1 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-        hiddenField1.setAttribute('name', 'id');
-        hiddenField1.setAttribute('value', id_report);
-		
-		var hiddenField2 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField2.setAttribute('name', 'type');
-        hiddenField2.setAttribute('value', tipe_report);
+		url += '&id=26';
+		url	+= '&type=xls';
+		url += '&is_in_org='+ (m_rca_lap_performance.form.set_org.isChecked() ? '1' : '0');
+		url += '&id_dir='+ m_rca_lap_performance.form.set_org.formDirektorat.getValue ();
+		url += '&id_div='+ m_rca_lap_performance.form.set_org.formDivProSBU.getValue ();
+		url += '&id_dep='+ m_rca_lap_performance.form.set_org.formDepartemen.getValue ();
+		url += '&id_dinas='+ m_rca_lap_performance.form.set_org.formDinas.getValue ();
+		url += '&id_seksi='+ m_rca_lap_performance.form.set_org.formSeksi.getValue ();
+		url += '&id_wilayah='+ m_rca_lap_performance.form.set_wil.formWilayah.getValue ();
+		url += '&id_area='+ m_rca_lap_performance.form.set_wil.formArea.getValue ();
+		url += '&year='+ m_rca_lap_performance.form.set_waktu.formTahun.getValue ();
+		url += '&month='+ m_rca_lap_performance.form.set_waktu.formBulan.getValue ();
 
-		var hiddenField3 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField3.setAttribute('name', 'is_in_org');
-        hiddenField3.setAttribute('value', is_in_org);
-		
-		var hiddenField4 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField4.setAttribute('name', 'id_dir');
-        hiddenField4.setAttribute('value', m_rca_lap_performance.form.set_org.formDirektorat.getValue ());
-		
-		var hiddenField5 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField5.setAttribute('name', 'id_div');
-        hiddenField5.setAttribute('value', m_rca_lap_performance.form.set_org.formDivProSBU.getValue ());
-		
-		var hiddenField6 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField6.setAttribute('name', 'id_dep');
-        hiddenField6.setAttribute('value', m_rca_lap_performance.form.set_org.formDepartemen.getValue());
-		
-		var hiddenField7 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField7.setAttribute('name', 'id_dinas');
-        hiddenField7.setAttribute('value', m_rca_lap_performance.form.set_org.formDinas.getValue());
-		
-		var hiddenField8 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField8.setAttribute('name', 'id_seksi');
-        hiddenField8.setAttribute('value', m_rca_lap_performance.form.set_org.formSeksi.getValue());
-		
-		var hiddenField9 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField9.setAttribute('name', 'id_wilayah');
-        hiddenField9.setAttribute('value', m_rca_lap_performance.form.set_wil.formWilayah.getValue());
-		
-		var hiddenField10 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField10.setAttribute('name', 'id_area');
-        hiddenField10.setAttribute('value', m_rca_lap_performance.form.set_wil.formArea.getValue());
-		
-		var hiddenField11 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField11.setAttribute('name', 'year');
-        hiddenField11.setAttribute('value', m_rca_lap_performance.form.set_waktu.formTahun.getValue());
-		
-		var hiddenField12 = document.createElement ('input');
-        hiddenField1.setAttribute('type', 'hidden');
-		hiddenField12.setAttribute('name', 'month');
-        hiddenField12.setAttribute('value', m_rca_lap_performance.form.set_waktu.formBulan.getValue());
-		
-		form.appendChild(hiddenField1);
-		form.appendChild(hiddenField2);
-		form.appendChild(hiddenField3);
-		form.appendChild(hiddenField4);
-		form.appendChild(hiddenField5);
-		form.appendChild(hiddenField6);
-		form.appendChild(hiddenField7);
-		form.appendChild(hiddenField8);
-		form.appendChild(hiddenField9);
-		form.appendChild(hiddenField10);
-		form.appendChild(hiddenField11);
-		form.appendChild(hiddenField12);
-		document.body.appendChild(form);
-		form.submit();
+		console.log (url);
+
+		window.open (url, '_blank');
 	}
 }
 

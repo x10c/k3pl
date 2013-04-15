@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1105" pageHeight="595" orientation="Landscape" columnWidth="1065" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="a83a0976-f788-48ad-b384-544025ef7ec3">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1105" pageHeight="595" orientation="Landscape" columnWidth="1065" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -38,9 +38,9 @@
 	</parameter>
 	<parameter name="MONTH" class="java.lang.String"/>
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
-"       T_RCA_TARGET_PEGAWAI.\"" + $P{FIELD_MONTH}.get( Integer.parseInt($P{MONTH}) - 1 ).toString() + "\"\n" :
-"       T_RCA_TARGET_PEGAWAI.\"JAN\" + \n" +
+		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" )
+? "       T_RCA_TARGET_PEGAWAI.\"" + $P{FIELD_MONTH}.get( Integer.parseInt($P{MONTH}) - 1 ).toString() + "\"\n"
+: "       T_RCA_TARGET_PEGAWAI.\"JAN\" + \n" +
 "		T_RCA_TARGET_PEGAWAI.\"FEB\" + \n" +
 "		T_RCA_TARGET_PEGAWAI.\"MAR\" + \n" +
 "		T_RCA_TARGET_PEGAWAI.\"APR\" + \n" +
@@ -169,29 +169,35 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "               AND R_SEKSI.\"ID_DEPARTEMEN\" = R_PEGAWAI.\"ID_DEPARTEMEN\" \n"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["SELECT \n" + $P{ORG_SELECT_CLAUSE} +
-"     ( SELECT sum( \n" + $P{MONTH_CLAUSE} +
-"                    ) AS TOTAL \n" +
-"       FROM \n" +
-"           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI \n" +
-"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" \n" +
-"       WHERE \n" +
-"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
-"       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
-"     ) AS TARGET, \n" +
-"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART \n" +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" +
-"               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
-"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
-"       WHERE \n" +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + $P{PART_MONTH_CLAUSE} + "\n" +
-"     ) AS PARTISIPASI, \n" +
-"     ( SELECT sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\") AS SUM_OF_VIOLATIONS \n" +
+		<defaultValueExpression><![CDATA["SELECT "+ $P{ORG_SELECT_CLAUSE} +
+"       (   SELECT  sum ("+ $P{MONTH_CLAUSE} +") AS TOTAL "+
+"           FROM    R_PEGAWAI "+
+"           ,       T_RCA_TARGET_PEGAWAI "+
+"           WHERE   R_PEGAWAI.NIPG                  = T_RCA_TARGET_PEGAWAI.NIPG " +
+"           AND     T_RCA_TARGET_PEGAWAI.YEAR       = " + $P{YEAR} +
+"           AND     R_PEGAWAI.STATUS_PEGAWAI        = 1"+
+            $P{DIR_TARGET_CLAUSE} +
+            $P{DIV_TARGET_CLAUSE} +
+            $P{DEP_TARGET_CLAUSE} +
+            $P{DINAS_TARGET_CLAUSE} +
+            $P{SEKSI_TARGET_CLAUSE} +
+"     ) AS TARGET," +
+"     ( SELECT count (distinct (T_RCA_AUDITOR.NIPG)) AS TOTAL_PART " +
+"       FROM    T_RCA " +
+"       ,       T_RCA_AUDITOR " +
+"       ,       R_PEGAWAI " +
+"       WHERE   T_RCA.ID_RCA                = T_RCA_AUDITOR.ID_RCA "+
+"       AND     year (T_RCA.TANGGAL_RCA)    = "+ $P{YEAR} + $P{PART_MONTH_CLAUSE} +
+"       AND     T_RCA_AUDITOR.NIPG          = R_PEGAWAI.NIPG " +
+"       AND     T_RCA_AUDITOR.STATUS        IN (1, 2) " +
+"       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
+        $P{DIR_TARGET_CLAUSE} +
+        $P{DIV_TARGET_CLAUSE} +
+        $P{DEP_TARGET_CLAUSE} +
+        $P{DINAS_TARGET_CLAUSE} +
+        $P{SEKSI_TARGET_CLAUSE} +
+"     ) AS PARTISIPASI, " +
+"     ( SELECT  sum (T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\") AS SUM_OF_VIOLATIONS \n" +
 "       FROM \n" +
 "           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
 "               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
@@ -210,7 +216,24 @@ $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_T
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
 "     ) AS TEMUAN, \n" +
-"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"LI_45\") is null then 0 else (1.0 * (sum(T_RCA_DETAIL.\"LI_45\") * 100) / isnull(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),1)) end) as varchar) AS SEVERITY_PERCENTAGE \n" +
+"     ( SELECT  isnull (nullif (count(T_RCA_DETAIL.ID_RCA), 0), 1) AS COUNT_OF_TEMUAN " +
+"       FROM    T_RCA " +
+"       ,       T_RCA_DETAIL " +
+"       ,       R_PEGAWAI "+
+"       ,       R_SEKSI R_S "+
+"       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
+"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
+"       AND     R_PEGAWAI.ID_SEKSI          = R_S.ID_SEKSI "+
+"       AND     T_RCA_DETAIL.ID_SEVERITY    IN (1, 2, 3) " +
+"       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} + $P{PART_MONTH_CLAUSE} +
+        $P{DIR_TARGET_CLAUSE} +
+        $P{DIV_TARGET_CLAUSE} +
+        $P{DEP_TARGET_CLAUSE} +
+        $P{DINAS_TARGET_CLAUSE} +
+        $P{SEKSI_TARGET_CLAUSE} +
+"     ) AS TEMUAN_NON, " +
+"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"LI_45\") is null then 0 else (1.0 * (sum(T_RCA_DETAIL.\"LI_45\") * 100) / isnull(nullif(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"), 0),1)) end) as varchar) AS SEVERITY_PERCENTAGE \n" +
 "       FROM \n" +
 "           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
 "               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
@@ -226,7 +249,7 @@ $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_T
 "               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{ORG_NIPG3_CLAUSE} +
 "       WHERE \n" +
 "           T_RCA_DETAIL.\"ID_SEVERITY\" IN (4, 5) \n" +
-"       AND T_RCA_DETAIL.\"STATUS\" IN (2, 3) \n" +
+"       AND T_RCA_DETAIL.\"STATUS\" IN ('2', '3') \n" +
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
 "     ) AS TL_TEMUAN_45, \n" +
@@ -237,11 +260,11 @@ $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_T
 "               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{ORG_NIPG3_CLAUSE} +
 "       WHERE \n" +
 "           T_RCA_DETAIL.\"ID_SEVERITY\" IN (1, 2, 3) \n" +
-"       AND T_RCA_DETAIL.\"STATUS\" IN (2, 3) \n" +
+"       AND T_RCA_DETAIL.\"STATUS\" IN ('2', '3') \n" +
 "       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_TARGET_CLAUSE} + $P{DINAS_TARGET_CLAUSE} + $P{SEKSI_TARGET_CLAUSE} +
 "     ) AS TL_TEMUAN_NON_45, \n" +
-"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") is null then 0 else (1.0 * sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") / isnull(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),1)) end) as varchar) AS SUM_OF_VXS \n" +
+"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") is null then 0 else (1.0 * sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") / isnull(nullif(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),0),1)) end) as varchar) AS SUM_OF_VXS \n" +
 "       FROM \n" +
 "           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
 "               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
@@ -255,7 +278,7 @@ $P{PART_MONTH_CLAUSE} + $P{DIR_TARGET_CLAUSE} + $P{DIV_TARGET_CLAUSE} + $P{DEP_T
 "FROM \n" + $P{ORG_FROM_CLAUSE} + " R_ \n" +
 "WHERE \n" +
 "     1 = 1 \n" + $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE} +
-" ORDER BY \n" + $P{ORG_ORDER_CLAUSE} + " ASC"]]></defaultValueExpression>
+" ORDER BY NAMA ASC"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
@@ -319,97 +342,119 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "               AND R_S.\"ID_DEPARTEMEN\" = R_PEGAWAI.\"ID_DEPARTEMEN\" \n"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_WIL_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["SELECT \n" + $P{WIL_SELECT_CLAUSE} +
-"     ( SELECT sum( \n" + $P{MONTH_CLAUSE} +
-"                    ) AS TOTAL \n" +
-"       FROM \n" +
-"           \"dbo\".\"R_PEGAWAI\" R_PEGAWAI INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_TARGET_PEGAWAI\" T_RCA_TARGET_PEGAWAI \n" +
-"               ON R_PEGAWAI.\"NIPG\" = T_RCA_TARGET_PEGAWAI.\"NIPG\" \n" +
-"               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
-"               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
-"       WHERE \n" +
-"           T_RCA_TARGET_PEGAWAI.\"YEAR\" = " + $P{YEAR} + "\n" +
-"       AND R_PEGAWAI.\"STATUS_PEGAWAI\" = 1 \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS TARGET, \n" +
-"     ( SELECT count(T_RCA_AUDITOR.\"NIPG\") AS TOTAL_PART \n" +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" +
-"               \"dbo\".\"R_PEGAWAI\" R_PEGAWAI \n" +
-"               ON T_RCA_AUDITOR.\"NIPG\" = R_PEGAWAI.\"NIPG\" \n" +
-"               INNER JOIN \"dbo\".\"R_SEKSI\" R_S \n" +
-"               ON R_PEGAWAI.\"ID_SEKSI\" = R_S.\"ID_SEKSI\" \n" +
-"       WHERE \n" +
-"           T_RCA_AUDITOR.\"STATUS\" IN (1, 2) \n" + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} + "\n" +
-"     ) AS PARTISIPASI, \n" +
-"     ( SELECT sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\") AS SUM_OF_VIOLATIONS \n" +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
-"       WHERE \n" +
-"           year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
+		<defaultValueExpression><![CDATA["SELECT " + $P{WIL_SELECT_CLAUSE} +
+"     ( SELECT  sum ("+ $P{MONTH_CLAUSE} +") AS TOTAL " +
+"       FROM    R_PEGAWAI "+
+"       ,       T_RCA_TARGET_PEGAWAI "+
+"       ,       R_SEKSI R_S "+
+"       WHERE   R_PEGAWAI.NIPG              = T_RCA_TARGET_PEGAWAI.NIPG "+
+"       AND     R_PEGAWAI.ID_SEKSI          = R_S.ID_SEKSI "+
+"       AND     T_RCA_TARGET_PEGAWAI.YEAR   = "+ $P{YEAR} +
+"       AND     R_PEGAWAI.STATUS_PEGAWAI    = 1 "+
+        $P{WILAYAH_TARGET_CLAUSE} +
+        $P{AREA_TARGET_CLAUSE} +
+"     ) AS TARGET, " +
+"     ( SELECT  count(distinct(T_RCA_AUDITOR.NIPG)) AS TOTAL_PART " +
+"       FROM    T_RCA" +
+"       ,       T_RCA_AUDITOR " +
+"       ,       R_PEGAWAI "+
+"       ,       R_SEKSI R_S "+
+"       WHERE   T_RCA.ID_RCA            = T_RCA_AUDITOR.ID_RCA "+
+"       AND     T_RCA_AUDITOR.NIPG      = R_PEGAWAI.NIPG " +
+"       AND     R_PEGAWAI.ID_SEKSI      = R_S.ID_SEKSI " +
+"       AND     T_RCA_AUDITOR.STATUS    IN (1, 2) " +
+"       AND     year (T_RCA.TANGGAL_RCA ) = " + $P{YEAR} + $P{PART_MONTH_CLAUSE} +
+        $P{WILAYAH_TARGET_CLAUSE} +
+        $P{AREA_TARGET_CLAUSE} +
+"     ) AS PARTISIPASI, " +
+"     ( SELECT  sum(T_RCA_DETAIL.NUMBER_OF_VIOLATIONS) AS SUM_OF_VIOLATIONS " +
+"       FROM    T_RCA "+
+"       ,       T_RCA_DETAIL "+
+"       ,       R_PEGAWAI "+
+"       ,       R_SEKSI R_S "+
+"       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA "+
+"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     R_PEGAWAI.ID_SEKSI          = R_S.ID_SEKSI "+
+"       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
+        $P{PART_MONTH_CLAUSE} +
+        $P{WILAYAH_TARGET_CLAUSE} +
+        $P{AREA_TARGET_CLAUSE} +
+"     ) AS VIOLATION, " +
+"     ( SELECT  count(T_RCA_DETAIL.ID_RCA) AS COUNT_OF_TEMUAN " +
+"       FROM    T_RCA " +
+"       ,       T_RCA_DETAIL " +
+"       ,       R_PEGAWAI "+
+"       ,       R_SEKSI R_S "+
+"       WHERE   T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA " +
+"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     R_PEGAWAI.ID_SEKSI          = R_S.ID_SEKSI "+
+"       AND     T_RCA_DETAIL.ID_SEVERITY    IN (4, 5) " +
+"       AND year(T_RCA.TANGGAL_RCA)         = " + $P{YEAR} +
+        $P{PART_MONTH_CLAUSE} +
+        $P{WILAYAH_TARGET_CLAUSE} +
+        $P{AREA_TARGET_CLAUSE} +
+"     ) AS TEMUAN, " +
+"     ( SELECT  isnull (nullif (count(T_RCA_DETAIL.ID_RCA), 0), 1) AS COUNT_OF_TEMUAN " +
+"       FROM    T_RCA " +
+"       ,       T_RCA_DETAIL " +
+"       ,       R_PEGAWAI "+
+"       ,       R_SEKSI R_S "+
+"       WHERE   T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA " +
+"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     R_PEGAWAI.ID_SEKSI          = R_S.ID_SEKSI "+
+"       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
+"       AND     T_RCA_DETAIL.ID_SEVERITY    IN (1, 2, 3) " +
+"       AND year(T_RCA.TANGGAL_RCA)         = " + $P{YEAR} +
+        $P{PART_MONTH_CLAUSE} +
+        $P{WILAYAH_TARGET_CLAUSE} +
+        $P{AREA_TARGET_CLAUSE} +
+"     ) AS TEMUAN_NON, " +
+"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.LI_45) is null then 0 else (1.0 * (sum(T_RCA_DETAIL.LI_45) * 100) / isnull(nullif(sum(T_RCA_DETAIL.NUMBER_OF_VIOLATIONS),0),1)) end) as varchar) AS SEVERITY_PERCENTAGE " +
+"       FROM " +
+"           T_RCA T_RCA INNER JOIN " +
+"               T_RCA_DETAIL T_RCA_DETAIL " +
+"               ON T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA INNER JOIN " + $P{WIL_NIPG3_CLAUSE} +
+"       WHERE " +
+"           year(T_RCA.TANGGAL_RCA) = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS VIOLATION, \n" +
-"     ( SELECT count(T_RCA_DETAIL.\"ID_RCA\") AS COUNT_OF_TEMUAN \n" +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
-"       WHERE \n" +
-"           T_RCA_DETAIL.\"ID_SEVERITY\" IN (4, 5) \n" +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
+"     ) AS SEVERITY, " +
+"     ( SELECT count(T_RCA_DETAIL.ID_RCA) AS JUMLAH " +
+"       FROM " +
+"           T_RCA T_RCA INNER JOIN " +
+"               T_RCA_DETAIL T_RCA_DETAIL " +
+"               ON T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA INNER JOIN " + $P{WIL_NIPG3_CLAUSE} +
+"       WHERE " +
+"           T_RCA_DETAIL.ID_SEVERITY IN (4, 5) " +
+"       AND T_RCA_DETAIL.STATUS IN ('2', '3') " +
+"       AND year(T_RCA.TANGGAL_RCA) = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS TEMUAN, \n" +
-"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"LI_45\") is null then 0 else (1.0 * (sum(T_RCA_DETAIL.\"LI_45\") * 100) / isnull(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),1)) end) as varchar) AS SEVERITY_PERCENTAGE \n" +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
-"       WHERE \n" +
-"           year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
+"     ) AS TL_TEMUAN_45, " +
+"     ( SELECT count(T_RCA_DETAIL.ID_RCA) AS JUMLAH " +
+"       FROM " +
+"           T_RCA T_RCA INNER JOIN " +
+"               T_RCA_DETAIL T_RCA_DETAIL " +
+"               ON T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA INNER JOIN " + $P{WIL_NIPG3_CLAUSE} +
+"       WHERE " +
+"           T_RCA_DETAIL.ID_SEVERITY IN (1, 2, 3) " +
+"       AND T_RCA_DETAIL.STATUS IN ('2', '3') " +
+"       AND year(T_RCA.TANGGAL_RCA) = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS SEVERITY, \n" +
-"     ( SELECT count(T_RCA_DETAIL.\"ID_RCA\") AS JUMLAH " +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
-"       WHERE \n" +
-"           T_RCA_DETAIL.\"ID_SEVERITY\" IN (4, 5) \n" +
-"       AND T_RCA_DETAIL.\"STATUS\" IN (2, 3) \n" +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
+"     ) AS TL_TEMUAN_NON_45, " +
+"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.VIOLATION_X_SEVERITY) is null then 0 else (1.0 * sum(T_RCA_DETAIL.VIOLATION_X_SEVERITY) / isnull(nullif(sum(T_RCA_DETAIL.NUMBER_OF_VIOLATIONS),0),1)) end) as varchar) AS SUM_OF_VXS " +
+"       FROM " +
+"           T_RCA T_RCA INNER JOIN " +
+"               T_RCA_DETAIL T_RCA_DETAIL " +
+"               ON T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA INNER JOIN " +
+"               T_RCA_AUDITOR T_RCA_AUDITOR " +
+"               ON T_RCA.ID_RCA = T_RCA_AUDITOR.ID_RCA INNER JOIN " + $P{WIL_NIPG3_CLAUSE} +
+"       WHERE " +
+"           year(T_RCA.TANGGAL_RCA) = " + $P{YEAR} +
 $P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS TL_TEMUAN_45, \n" +
-"     ( SELECT count(T_RCA_DETAIL.\"ID_RCA\") AS JUMLAH " +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
-"       WHERE \n" +
-"           T_RCA_DETAIL.\"ID_SEVERITY\" IN (1, 2, 3) \n" +
-"       AND T_RCA_DETAIL.\"STATUS\" IN (2, 3) \n" +
-"       AND year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
-$P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS TL_TEMUAN_NON_45, \n" +
-"     ( SELECT cast(convert(decimal(18,2), case when sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") is null then 0 else (1.0 * sum(T_RCA_DETAIL.\"VIOLATION_X_SEVERITY\") / isnull(sum(T_RCA_DETAIL.\"NUMBER_OF_VIOLATIONS\"),1)) end) as varchar) AS SUM_OF_VXS \n" +
-"       FROM \n" +
-"           \"dbo\".\"T_RCA\" T_RCA INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_DETAIL\" T_RCA_DETAIL \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_DETAIL.\"ID_RCA\" INNER JOIN \n" +
-"               \"dbo\".\"T_RCA_AUDITOR\" T_RCA_AUDITOR \n" +
-"               ON T_RCA.\"ID_RCA\" = T_RCA_AUDITOR.\"ID_RCA\" INNER JOIN \n" + $P{WIL_NIPG3_CLAUSE} +
-"       WHERE \n" +
-"           year(T_RCA.\"TANGGAL_RCA\") = " + $P{YEAR} +
-$P{PART_MONTH_CLAUSE} + $P{WILAYAH_TARGET_CLAUSE} + $P{AREA_TARGET_CLAUSE} +
-"     ) AS VXS \n" +
-"FROM \n" + $P{WIL_FROM_CLAUSE} + " \n" +
-"WHERE \n" +
-"     1 = 1 \n" + $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} +
-" ORDER BY \n" + $P{WIL_ORDER_CLAUSE} + " ASC"]]></defaultValueExpression>
+"     ) AS VXS " +
+"FROM " + $P{WIL_FROM_CLAUSE} + " " +
+"WHERE " +
+"     1 = 1 " + $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} +
+" ORDER BY NAMA ASC"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MAIN_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
@@ -431,6 +476,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<field name="TL_TEMUAN_45" class="java.lang.Integer"/>
 	<field name="TL_TEMUAN_NON_45" class="java.lang.Integer"/>
 	<field name="VXS" class="java.lang.String"/>
+	<field name="TEMUAN_NON" class="java.lang.Integer"/>
 	<variable name="PARTISIPASI_PERCENTAGE" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{TARGET} != null && $F{TARGET}.intValue() != 0 ? new BigDecimal($F{PARTISIPASI}.doubleValue()/$F{TARGET}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
 	</variable>
@@ -438,12 +484,12 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 		<variableExpression><![CDATA[$F{TEMUAN} != null && $F{TEMUAN}.intValue() != 0 ? new BigDecimal($F{TL_TEMUAN_45}.doubleValue()/$F{TEMUAN}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="TL_TEMUAN_NON_PERCENTAGE" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{TEMUAN} != null && $F{TEMUAN}.intValue() != 0 ? new BigDecimal($F{TL_TEMUAN_NON_45}.doubleValue()/$F{TEMUAN}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{TEMUAN_NON} != null && $F{TEMUAN_NON}.intValue() != 0 ? new BigDecimal($F{TL_TEMUAN_NON_45}.doubleValue()/$F{TEMUAN_NON}.doubleValue()) : BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="8bb71290-9bf4-4f56-a855-6c7018d4c452" x="0" y="0" width="1065" height="45"/>
+				<reportElement x="0" y="0" width="1065" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -454,7 +500,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="76a9fe6a-2cb1-4679-9ba0-6874880644e5" x="0" y="0" width="215" height="40"/>
+				<reportElement x="0" y="0" width="215" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -468,7 +514,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="47577618-b357-457f-8c63-74e62e316de8" x="215" y="0" width="85" height="40"/>
+				<reportElement x="215" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -482,7 +528,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Partisipan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ff391ddb-553b-43cc-ba93-11c9459ad11c" x="300" y="0" width="85" height="40"/>
+				<reportElement x="300" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -496,7 +542,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[% Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="00892caa-d996-429b-a72f-bb8faf4bcb15" x="385" y="0" width="85" height="40"/>
+				<reportElement x="385" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -510,7 +556,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Violation]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="2744926f-3dcb-4fb4-aab0-3f25cdb221d3" x="470" y="0" width="85" height="40"/>
+				<reportElement x="470" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -524,7 +570,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Temuan Kumulatif 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b696061e-18bb-412f-82c2-05989bd5950a" x="555" y="0" width="85" height="40"/>
+				<reportElement x="555" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -538,7 +584,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[% Severity 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e0c76bf2-6ef3-4a79-b52b-6886ed43d265" x="640" y="0" width="85" height="40"/>
+				<reportElement x="640" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -554,7 +600,7 @@ Tindak Lanjut
 Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="09b0aeef-d9ec-4599-8f01-17d9dc2023e5" x="725" y="0" width="85" height="40"/>
+				<reportElement x="725" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -568,7 +614,7 @@ Temuan 4/5]]></text>
 				<text><![CDATA[% Tindak Lanjut Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d84e438d-feea-4ede-9bcc-d63625b31f0a" x="810" y="0" width="85" height="40"/>
+				<reportElement x="810" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -584,7 +630,7 @@ Tindak Lanjut
 Temuan Non 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="0a59f54a-d66d-4585-a014-c8079cf85635" x="895" y="0" width="85" height="40"/>
+				<reportElement x="895" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -598,7 +644,7 @@ Temuan Non 4/5]]></text>
 				<text><![CDATA[% Tindak Lanjut Temuan Non 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="0a62951c-bdbc-45ea-be77-e79a9829d910" x="980" y="0" width="85" height="40"/>
+				<reportElement x="980" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -616,7 +662,7 @@ Temuan Non 4/5]]></text>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8cb2ac7f-a9e9-4115-ad5e-881b70fe3695" stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -626,12 +672,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAMA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="30525f3e-a3df-482a-9119-da8a1e98cf77" stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -641,12 +686,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="e44404c8-a469-4c49-8da8-d16066ac182c" stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -656,12 +700,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1a83b09b-b024-435c-873d-e117f8e1ad3c" stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="385" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -671,12 +714,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{VIOLATION} == null ? 0 : $F{VIOLATION}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{VIOLATION} == null ? 0 : $F{VIOLATION}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="47c241e5-ef2f-4820-a94f-64acd28c599b" stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="470" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -686,12 +728,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TEMUAN} == null ? 0 : $F{TEMUAN}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TEMUAN} == null ? 0 : $F{TEMUAN}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="e60958c2-2f07-4d5e-9d5f-26f0b5939912" stretchType="RelativeToBandHeight" x="555" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="555" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -701,12 +742,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SEVERITY} == null ? 0 : $F{SEVERITY} + " %"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SEVERITY} == null ? 0 : $F{SEVERITY} + " %"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="6bbe87c8-48cc-4a26-b631-57640abc15fa" stretchType="RelativeToBandHeight" x="640" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="640" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -716,12 +756,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TL_TEMUAN_45} == null ? 0 : $F{TL_TEMUAN_45}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TL_TEMUAN_45} == null ? 0 : $F{TL_TEMUAN_45}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="e3149c29-61a3-41b1-9a74-ba068919ff50" stretchType="RelativeToBandHeight" x="725" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="725" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -731,12 +770,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TL_TEMUAN_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TL_TEMUAN_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="015c9eba-bb10-4836-aa95-c04b449f7514" stretchType="RelativeToBandHeight" x="810" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="810" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -746,12 +784,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TL_TEMUAN_NON_45} == null ? 0 : $F{TL_TEMUAN_NON_45}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TL_TEMUAN_NON_45} == null ? 0 : $F{TL_TEMUAN_NON_45}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="f17bf0bb-4697-470e-b2ca-cc068aaff01b" stretchType="RelativeToBandHeight" x="895" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="895" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -761,12 +798,11 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TL_TEMUAN_NON_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TL_TEMUAN_NON_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="247b4749-9aa4-4bf6-a74f-9606067e5d37" stretchType="RelativeToBandHeight" x="980" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="980" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -776,9 +812,8 @@ Temuan Non 4/5]]></text>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{VXS} + " %"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{VXS} + " %"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
