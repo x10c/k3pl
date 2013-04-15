@@ -58,20 +58,20 @@ $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} :
 $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["SELECT \n" +
-"     R_PEGAWAI.\"NIPG\" AS R_PEGAWAI_NIPG, \n" +
-"     R_PEGAWAI.\"NAMA_PEGAWAI\" AS R_PEGAWAI_NAMA_PEGAWAI \n" +
-"FROM \n" +
-"     \"dbo\".\"R_SEKSI\" R_SEKSI INNER JOIN \"dbo\".\"R_PEGAWAI\" R_PEGAWAI ON R_SEKSI.\"ID_SEKSI\" = R_PEGAWAI.\"ID_SEKSI\" \n" +
-"     AND R_SEKSI.\"ID_DINAS\" = R_PEGAWAI.\"ID_DINAS\" \n" +
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = R_PEGAWAI.\"ID_DEPARTEMEN\" \n" +
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = R_PEGAWAI.\"ID_DIVPROSBU\" \n" +
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = R_PEGAWAI.\"ID_DIREKTORAT\" \n" +
-"     INNER JOIN \"dbo\".\"__USER_GRUP\" __USER_GRUP ON R_PEGAWAI.\"NIPG\" = __USER_GRUP.\"NIPG\" \n" +
-"WHERE \n" +
-"     __USER_GRUP.\"ID_GRUP\" = 2 \n" + $P{ORG_WIL_CLAUSE} +
-" ORDER BY \n" +
-"     R_PEGAWAI.\"NAMA_PEGAWAI\" ASC"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["SELECT R_PEGAWAI.NIPG AS R_PEGAWAI_NIPG, " +
+"       R_PEGAWAI.NAMA_PEGAWAI AS R_PEGAWAI_NAMA_PEGAWAI " +
+" FROM  T_STOP_TARGET_PEGAWAI "+
+" ,     R_PEGAWAI "+
+" ,     __USER_GRUP "+
+" ,     R_SEKSI "+
+" WHERE T_STOP_TARGET_PEGAWAI.NIPG  = R_PEGAWAI.NIPG "+
+" AND   T_STOP_TARGET_PEGAWAI.YEAR  = "+ $P{YEAR} +
+" AND   R_PEGAWAI.STATUS_PEGAWAI    = '1' "+
+" AND   R_PEGAWAI.NIPG              = __USER_GRUP.NIPG "+
+" AND   __USER_GRUP.ID_GRUP         = 2 "+
+" AND   R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI " +
+ $P{ORG_WIL_CLAUSE} +
+" ORDER BY R_PEGAWAI.NAMA_PEGAWAI ASC"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>

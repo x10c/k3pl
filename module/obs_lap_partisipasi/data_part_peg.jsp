@@ -71,11 +71,14 @@ try {
 		+" ,		isnull(A.nov,0) as nov"
 		+" ,		isnull(A.dec,0) as dec"
 		+" from"
-		+" 		r_pegawai		B"
-		+" ,	r_seksi			D"
-		+" ,	t_stop_target_pegawai	A"
-		+" where	B.nipg		= A.nipg"
-		+" and		A.year		= "+ year
+		+" 		t_stop_target_pegawai	A"
+		+" ,	r_pegawai				B"
+		+" ,	__user_grup				C"
+		+" ,	r_seksi					D"
+		+" where	A.nipg				= B.nipg"
+		+" and		B.nipg				= C.nipg"
+		+" and		C.id_grup			= 2"
+		+" and		A.year				= "+ year
 		+" and		B.id_seksi			= D.id_seksi"
 		+" and		B.status_pegawai	= '1'";
 

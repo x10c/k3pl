@@ -6,7 +6,7 @@
  *   - m.shulhan (ms@kilabit.org)
  */
 
-Ext.Ajax.timeout = 120000;
+Ext.Ajax.timeout = 300000;
 
 var k3pl = {
 	pageSize	: 50
