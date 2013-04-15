@@ -37,8 +37,7 @@ try {
 	db_rs.close ();
 
 	// get data
-	db_q=" select	X.*"
-		+" from		("
+	db_q=" with results as ("
 		+" select	A.id_stop"
 		+" ,		A.nipg"
 		+" ,		C.nama_pegawai"
@@ -50,7 +49,7 @@ try {
 		+" ,		A.jml_org_observasi"
 		+" ,		A.jml_org_diskusi"
 		+" ,		A.status_aktif"
-		+" ,		row_number () over (order by nama_pegawai) AS rownum"
+		+" ,		row_number () over (order by C.nama_pegawai) AS rownum"
 		+" from		t_stop		A"
 		+" ,		r_seksi		B"
 		+" ,		r_pegawai	C"
@@ -62,9 +61,8 @@ try {
 		db_q +=" and	A.nipg		= '"+ user_nipg +"'";
 	}
 
-	db_q	+=" ) X"
-			+" where X.rownum between "+ start +" and "+ (start + limit)
-			+" order by	X.nama_pegawai";
+	db_q	+=" ) "
+			+" select * from results where rownum >= "+ (start + 1) +" and rownum <= "+ (start + limit);
 
 	db_rs = db_stmt.executeQuery (db_q);
 

@@ -743,6 +743,9 @@ function M_ObsDataStop()
 		,	totalProperty	:'total'
 		,	root			:'data'
 		,	pageSize		:k3pl.pageSize
+		,	baseParams		:{
+				load_type		:'user'
+			}
 		});
 /*
  * forms
@@ -1007,6 +1010,8 @@ function M_ObsDataStop()
 		if (this.ha_level == 4) {
 			load_type = 'all';
 		}
+
+		this.store.baseParams.load_type = load_type;
 
 		this.store.load({
 			params	: {
