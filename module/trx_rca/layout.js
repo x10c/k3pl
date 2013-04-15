@@ -3441,6 +3441,9 @@ function M_TrxRCAList()
 		,	reader		: this.reader
 		,	groupField	: 'id_user'
 		,	autoLoad	: false
+		,	baseParams	:{
+				load_type	:'user'
+			}
 	});
 
 	this.filters = new Ext.ux.grid.GridFilters({
@@ -3570,11 +3573,6 @@ function M_TrxRCAList()
 		,	view				: this.grid_view
 		,	plugins				: [ this.filters ]
 		,	region				: 'center'
-		,	bbar				: new Ext.PagingToolbar({
-				store				: this.store
-			,	pageSize			: 50
-			,	plugins				: [this.filters]
-			})
 	});
 
 	this.do_del = function()
@@ -3666,9 +3664,13 @@ function M_TrxRCAList()
 			load_type = 'all';
 		}
 
+		this.store.baseParams.load_type = load_type;
+
 		this.store.load({
 			params	: {
-				load_type : load_type
+				start		: 0
+			,	limit		: k3pl.pageSize
+			,	load_type	: load_type
 			}
 		});
 	}

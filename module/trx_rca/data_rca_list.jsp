@@ -42,7 +42,8 @@ try {
 				+" and	a.auditor_divprosbu		= "+ user_div
 				+" and	a.auditor_direktorat	= "+ user_dir;
 		} else {
-			db_q	+="	and A.id_user = '"+ user_nipg +"'";
+			db_q	+="	and A.id_user = '"+ user_nipg +"'"
+					+ " or	A.penanggung_jawab_nipg = '"+ user_nipg +"'";
 		}
 	}
 
