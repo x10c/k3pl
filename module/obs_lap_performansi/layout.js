@@ -710,8 +710,6 @@ function M_ObsLapSTOPGrid()
 		url += '&year='+ m_obs_lap_performansi.perf_stop.form.set_waktu.formTahun.getValue ();
 		url += '&month='+ m_obs_lap_performansi.perf_stop.form.set_waktu.formBulan.getValue ();
 
-		console.log (url);
-
 		window.open (url, '_blank');
 	}
 	

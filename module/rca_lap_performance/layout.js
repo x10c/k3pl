@@ -265,8 +265,6 @@ function M_RCALapRCAGrid()
 		url += '&year='+ m_rca_lap_performance.form.set_waktu.formTahun.getValue ();
 		url += '&month='+ m_rca_lap_performance.form.set_waktu.formBulan.getValue ();
 
-		console.log (url);
-
 		window.open (url, '_blank');
 	}
 }
