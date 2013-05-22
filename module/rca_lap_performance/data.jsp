@@ -45,6 +45,9 @@ try {
 
 	String		nipg;
 	int			i,x;
+	int			total_part			= 0;
+	int			target				= 0;
+	double		total_part_percent	= 0.0;
 
 	q_part	=" select	count(rca_auditor.nipg) as total_part"
 			+" from		t_rca					as rca"
@@ -203,7 +206,7 @@ try {
 					+"			isnull (sum (nov), 0) +"
 					+"			isnull (sum (dec), 0) ) as target";
 	} else {
-		q_target			=" select isnull ( sum ("+ months[month - 1] +" ) , 1 ) as target";
+		q_target			=" select isnull ( sum ("+ months[month - 1] +" ) , 0 ) as target";
 		q_part				+=" and month(rca.tanggal_rca) = "+ month;
 		q_partisi			+=" and month(rca.tanggal_rca) = "+ month;
 		q_vio				+=" and month(rca.tanggal_rca) = "+ month;
@@ -318,20 +321,8 @@ try {
 		name	= rs_org.getString("name");
 
 		db_q="	select	PARTISIPAN.total_part		as partisipan"
-			+"	,		round ("
-			+"				("
-			+"					 P.total_part"
-			+"					/"
-			+"					cast ("
-			+"						isnull ("
-			+"							nullif ( T.target , 0 )"
-			+"							, 1"
-			+"						)"
-			+"						as float"
-			+"					)"
-			+"				)"
-			+"				* 100, 2, 1"
-			+"			)							as total_part_percent"
+			+"	,		isnull (P.total_part, 0)	as total_part"
+			+"	,		isnull (T.Target, 0)		as target"
 			+"	,		V.violation"
 			+"	,		TEMUAN.temuan"
 			+"	,		SEV.severity"
@@ -380,11 +371,19 @@ try {
 		db_rs	= db_stmt.executeQuery(db_q);
 
 		while (db_rs.next()) {
-			json_o	= new JSONObject ();
+			json_o		= new JSONObject ();
+			total_part	= db_rs.getInt ("total_part");
+			target		= db_rs.getInt ("target");
+
+			if (target <= 0) {
+				total_part_percent	= 0.00;
+			} else {
+				total_part_percent	= new BigDecimal ((total_part / (target * 1.00)) * 100).setScale (2, RoundingMode.HALF_UP).doubleValue ();
+			}
 
 			json_o.put ("item"					,name);
 			json_o.put ("partisipan"			,db_rs.getInt		("partisipan"));
-			json_o.put ("total_part_percent"	,db_rs.getDouble	("total_part_percent"));
+			json_o.put ("total_part_percent"	,total_part_percent);
 			json_o.put ("violation"				,db_rs.getDouble	("violation"));
 			json_o.put ("temuan"				,db_rs.getDouble	("temuan"));
 			json_o.put ("severity"				,db_rs.getDouble	("severity"));

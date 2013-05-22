@@ -5,6 +5,8 @@
  % + PT. Awakami
  %   - m.shulhan (ms@kilabit.org)
 --%>
+<%@ page import="java.math.BigDecimal"%>
+<%@ page import="java.math.RoundingMode"%>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.Statement" %>
 <%@ page import="java.sql.PreparedStatement" %>
