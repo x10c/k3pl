@@ -52,7 +52,6 @@ try {
 			+" ,		r_pegawai				as A"
 			+" ,		r_seksi					as B"
 			+" where	rca.id_rca				= rca_auditor.id_rca"
-			+" and		rca_auditor.status		in (1,2)"
 			+" and		year(rca.tanggal_rca)	= "+ year
 			+" and		rca_auditor.nipg		= A.nipg"
 			+" and		A.status_pegawai		= '1'"
@@ -64,7 +63,6 @@ try {
 				+" ,		r_pegawai				as A"
 				+" ,		r_seksi					as B"
 				+" where	rca.id_rca				= rca_auditor.id_rca"
-				+" and		rca_auditor.status		in (1,2)"
 				+" and		year(rca.tanggal_rca)	= "+ year
 				+" and		rca_auditor.nipg		= A.nipg"
 				+" and		A.status_pegawai		= '1'"
