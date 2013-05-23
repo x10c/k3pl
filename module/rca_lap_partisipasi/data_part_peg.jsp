@@ -123,7 +123,7 @@ try {
 		data.put (db_rs.getString ("id_seksi"));
 
 		for (i = 0; i < months.length; i++) {
-			data.put (db_rs.getString (months[i]));
+			data.put (db_rs.getInt (months[i]));
 		}
 
 		for (i = 0; i < months.length; i++) {

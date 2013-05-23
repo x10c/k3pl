@@ -158,6 +158,8 @@ function M_RCALapRCAGrid()
 			fields	: [
 				'item'
 			,	'partisipan'
+			,	'target'
+			,	'partisipasi'
 			,	'total_part_percent'
 			,	'violation'
 			,	'temuan'
@@ -189,6 +191,12 @@ function M_RCALapRCAGrid()
 			header		: 'Partisipan'
 		,	dataIndex	: 'partisipan'
 		,	css			: 'background-color: #f0f0f0;'
+		},{
+			header		: 'Target'
+		,	dataIndex	: 'target'
+		},{
+			header		: 'Partisipasi'
+		,	dataIndex	: 'partisipasi'
 		},{
 			header		: '% Partisipasi'
 		,	dataIndex	: 'total_part_percent'

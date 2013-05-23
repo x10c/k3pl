@@ -54,106 +54,187 @@ try {
 			+" ,		t_rca_auditor			as rca_auditor"
 			+" ,		r_pegawai				as A"
 			+" ,		r_seksi					as B"
+			+"	,		__user					E"
+			+"	,		__user_grup				F"
+			+"	,		__grup_user				G"
 			+" where	rca.id_rca				= rca_auditor.id_rca"
 			+" and		year(rca.tanggal_rca)	= "+ year
 			+" and		rca_auditor.nipg		= A.nipg"
 			+" and		A.status_pegawai		= '1'"
-			+" and		A.id_seksi				= B.id_seksi";
+			+" and		A.id_seksi				= B.id_seksi"
+			+"	and		A.nipg					= E.nipg"
+			+"	and		E.nipg					= F.nipg"
+			+"	and		F.id_grup				= G.id_grup"
+			+"	and		G.id_grup				= 5"
+			+"	and		A.status_pegawai		= '1'"
+			+"	and		E.status_user			= 1";
 
 	q_partisi	=" select	count(distinct(rca_auditor.nipg)) as total_part"
 				+" from		t_rca					as rca"
 				+" ,		t_rca_auditor			as rca_auditor"
 				+" ,		r_pegawai				as A"
 				+" ,		r_seksi					as B"
+				+"	,		__user					E"
+				+"	,		__user_grup				F"
+				+"	,		__grup_user				G"
 				+" where	rca.id_rca				= rca_auditor.id_rca"
 				+" and		year(rca.tanggal_rca)	= "+ year
 				+" and		rca_auditor.nipg		= A.nipg"
 				+" and		A.status_pegawai		= '1'"
-				+" and		A.id_seksi				= B.id_seksi";
+				+" and		A.id_seksi				= B.id_seksi"
+				+"	and		A.nipg					= E.nipg"
+				+"	and		E.nipg					= F.nipg"
+				+"	and		F.id_grup				= G.id_grup"
+				+"	and		G.id_grup				= 5"
+				+"	and		A.status_pegawai		= '1'"
+				+"	and		E.status_user			= 1";
 
 	q_vio	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as violation"
 			+" from		t_rca_detail				as rca_detail"
 			+" ,		t_rca						as rca"
 			+" ,		r_pegawai					as A"
 			+" ,		r_seksi						as B"
+			+"	,		__user						E"
+			+"	,		__user_grup					F"
+			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		year(rca.tanggal_rca)		= "+ year
 			+" and		rca.penanggung_jawab_nipg	= A.nipg"
 			+" and		A.status_pegawai			= '1'"
-			+" and		A.id_seksi					= B.id_seksi";
+			+" and		A.id_seksi					= B.id_seksi"
+			+"	and		A.nipg						= E.nipg"
+			+"	and		E.nipg						= F.nipg"
+			+"	and		F.id_grup					= G.id_grup"
+			+"	and		G.id_grup					= 5"
+			+"	and		A.status_pegawai			= '1'"
+			+"	and		E.status_user				= 1";
 
 	q_temuan	=" select	count(rca_detail.id_rca)	as temuan"
 				+" from		t_rca_detail				as rca_detail"
 				+" ,		t_rca						as rca"
 				+" ,		r_pegawai					as A"
 				+" ,		r_seksi						as B"
+				+"	,		__user						E"
+				+"	,		__user_grup					F"
+				+"	,		__grup_user					G"
 				+" where	rca_detail.id_rca			= rca.id_rca"
 				+" and		rca_detail.id_severity		in (4,5)"
 				+" and		year(rca.tanggal_rca)		= "+ year
 				+" and		rca.penanggung_jawab_nipg	= A.nipg"
 				+" and		A.status_pegawai			= '1'"
-				+" and		A.id_seksi					= B.id_seksi";
+				+" and		A.id_seksi					= B.id_seksi"
+				+"	and		A.nipg						= E.nipg"
+				+"	and		E.nipg						= F.nipg"
+				+"	and		F.id_grup					= G.id_grup"
+				+"	and		G.id_grup					= 5"
+				+"	and		A.status_pegawai			= '1'"
+				+"	and		E.status_user				= 1";
 
 	q_sev	="select	cast(convert(decimal(18,2), case when sum(rca_detail.li_45) is null then 0 else (1.0 * (sum(rca_detail.li_45) * 100) / isnull(nullif(sum(rca_detail.number_of_violations), 0),1)) end) as varchar) as severity"
 			+" from		t_rca_detail				as rca_detail"
 			+" ,		t_rca						as rca"
 			+" ,		r_pegawai					as A"
 			+" ,		r_seksi						as B"
+			+"	,		__user						E"
+			+"	,		__user_grup					F"
+			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		year(rca.tanggal_rca)		= "+ year
 			+" and		rca.penanggung_jawab_nipg	= A.nipg"
 			+" and		A.status_pegawai			= '1'"
-			+" and		A.id_seksi					= B.id_seksi";
+			+" and		A.id_seksi					= B.id_seksi"
+			+"	and		A.nipg						= E.nipg"
+			+"	and		E.nipg						= F.nipg"
+			+"	and		F.id_grup					= G.id_grup"
+			+"	and		G.id_grup					= 5"
+			+"	and		A.status_pegawai			= '1'"
+			+"	and		E.status_user				= 1";
 
 	q_get_temuan	="select	count(rca_detail.id_rca)	as jml"
 					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
 					+" ,		r_pegawai					as A"
 					+" ,		r_seksi						as B"
+					+"	,		__user						E"
+					+"	,		__user_grup					F"
+					+"	,		__grup_user					G"
 					+" where	rca_detail.id_rca			= rca.id_rca"
 					+" and		rca_detail.id_severity		in (4,5)"
 					+" and		year(rca.tanggal_rca)		= "+ year
 					+" and		rca.penanggung_jawab_nipg	= A.nipg"
 					+" and		A.status_pegawai			= '1'"
-					+" and		A.id_seksi					= B.id_seksi";
+					+" and		A.id_seksi					= B.id_seksi"
+					+"	and		A.nipg						= E.nipg"
+					+"	and		E.nipg						= F.nipg"
+					+"	and		F.id_grup					= G.id_grup"
+					+"	and		G.id_grup					= 5"
+					+"	and		A.status_pegawai			= '1'"
+					+"	and		E.status_user				= 1";
 
 	q_get_temuan_non	="select	count(rca_detail.id_rca)	as jml"
 						+" from		t_rca_detail				as rca_detail"
 						+" ,		t_rca						as rca"
 						+" ,		r_pegawai					as A"
 						+" ,		r_seksi						as B"
+						+"	,		__user						E"
+						+"	,		__user_grup					F"
+						+"	,		__grup_user					G"
 						+" where	rca_detail.id_rca			= rca.id_rca"
 						+" and		rca_detail.id_severity		in (1,2,3)"
 						+" and		year(rca.tanggal_rca)		= "+ year
 						+" and		rca.penanggung_jawab_nipg	= A.nipg"
 						+" and		A.status_pegawai			= '1'"
-						+" and		A.id_seksi					= B.id_seksi";
+						+" and		A.id_seksi					= B.id_seksi"
+						+"	and		A.nipg						= E.nipg"
+						+"	and		E.nipg						= F.nipg"
+						+"	and		F.id_grup					= G.id_grup"
+						+"	and		G.id_grup					= 5"
+						+"	and		A.status_pegawai			= '1'"
+						+"	and		E.status_user				= 1";
 
 	q_tl_temuan	=" select	count(rca_detail.id_rca)	as temuan"
 				+" from		t_rca_detail				as rca_detail"
 				+" ,		t_rca						as rca"
 				+" ,		r_pegawai					as A"
 				+" ,		r_seksi						as B"
+				+"	,		__user						E"
+				+"	,		__user_grup					F"
+				+"	,		__grup_user					G"
 				+" where	rca_detail.id_rca			= rca.id_rca"
 				+" and		rca_detail.id_severity		in (4,5)"
 				+" and		rca_detail.status			in ('2','3')"
 				+" and		year(rca.tanggal_rca)		= "+ year
 				+" and		rca.penanggung_jawab_nipg	= A.nipg"
 				+" and		A.status_pegawai			= '1'"
-				+" and		A.id_seksi					= B.id_seksi";
+				+" and		A.id_seksi					= B.id_seksi"
+				+"	and		A.nipg						= E.nipg"
+				+"	and		E.nipg						= F.nipg"
+				+"	and		F.id_grup					= G.id_grup"
+				+"	and		G.id_grup					= 5"
+				+"	and		A.status_pegawai			= '1'"
+				+"	and		E.status_user				= 1";
 
 	q_tl_temuan_non	=" select	count(rca_detail.id_rca)	as temuan"
 					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
 					+" ,		r_pegawai					as A"
 					+" ,		r_seksi						as B"
+					+"	,		__user						E"
+					+"	,		__user_grup					F"
+					+"	,		__grup_user					G"
 					+" where	rca_detail.id_rca			= rca.id_rca"
 					+" and		rca_detail.id_severity		in (1,2,3)"
 					+" and		rca_detail.status			in ('2','3')"
 					+" and		year(rca.tanggal_rca)		= "+ year
 					+" and		rca.penanggung_jawab_nipg	= A.nipg"
 					+" and		A.status_pegawai			= '1'"
-					+" and		A.id_seksi					= B.id_seksi";
+					+" and		A.id_seksi					= B.id_seksi"
+					+"	and		A.nipg						= E.nipg"
+					+"	and		E.nipg						= F.nipg"
+					+"	and		F.id_grup					= G.id_grup"
+					+"	and		G.id_grup					= 5"
+					+"	and		A.status_pegawai			= '1'"
+					+"	and		E.status_user				= 1";
 
 	q_avg	="	select"
 			+"		cast ("
@@ -184,29 +265,38 @@ try {
 			+" ,		t_rca_auditor				as rca_auditor"
 			+" ,		r_pegawai					as A"
 			+" ,		r_seksi						as B"
+			+"	,		__user						E"
+			+"	,		__user_grup					F"
+			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		rca.id_rca					= rca_auditor.id_rca"
 			+" and		year(rca.tanggal_rca)		= "+ year
 			+" and		rca.penanggung_jawab_nipg	= A.nipg"
 			+" and		A.status_pegawai			= '1'"
-			+" and		A.id_seksi					= B.id_seksi";
+			+" and		A.id_seksi					= B.id_seksi"
+			+"	and		A.nipg						= E.nipg"
+			+"	and		E.nipg						= F.nipg"
+			+"	and		F.id_grup					= G.id_grup"
+			+"	and		G.id_grup					= 5"
+			+"	and		A.status_pegawai			= '1'"
+			+"	and		E.status_user				= 1";
 
 	/* filter/aggregate by month */
 	if (month == 0) {
-		q_target	="	select (isnull (sum (jan), 0) +"
-					+"			isnull (sum (feb), 0) +"
-					+"			isnull (sum (mar), 0) +"
-					+"			isnull (sum (apr), 0) +"
-					+"			isnull (sum (may), 0) +"
-					+"			isnull (sum (jun), 0) +"
-					+"			isnull (sum (jul), 0) +"
-					+"			isnull (sum (aug), 0) +"
-					+"			isnull (sum (sep), 0) +"
-					+"			isnull (sum (oct), 0) +"
-					+"			isnull (sum (nov), 0) +"
-					+"			isnull (sum (dec), 0) ) as target";
+		q_target	="	select (isnull (sum (B.jan), 0) +"
+					+"			isnull (sum (B.feb), 0) +"
+					+"			isnull (sum (B.mar), 0) +"
+					+"			isnull (sum (B.apr), 0) +"
+					+"			isnull (sum (B.may), 0) +"
+					+"			isnull (sum (B.jun), 0) +"
+					+"			isnull (sum (B.jul), 0) +"
+					+"			isnull (sum (B.aug), 0) +"
+					+"			isnull (sum (B.sep), 0) +"
+					+"			isnull (sum (B.oct), 0) +"
+					+"			isnull (sum (B.nov), 0) +"
+					+"			isnull (sum (B.dec), 0) ) as target";
 	} else {
-		q_target			=" select isnull ( sum ("+ months[month - 1] +" ) , 0 ) as target";
+		q_target			=" select isnull ( sum (B."+ months[month - 1] +" ) , 0 ) as target";
 		q_part				+=" and month(rca.tanggal_rca) = "+ month;
 		q_partisi			+=" and month(rca.tanggal_rca) = "+ month;
 		q_vio				+=" and month(rca.tanggal_rca) = "+ month;
@@ -219,11 +309,21 @@ try {
 		q_avg				+=" and month(rca.tanggal_rca) = "+ month;
 	}
 
-	q_target	+="	from	r_pegawai				A"
+	q_target	+=" from	r_pegawai				A"
 				+"	,		t_rca_target_pegawai	B"
-				+"	where	A.nipg					= B.nipg"
+				+"	,		r_seksi					D"
+				+"	,		__user					E"
+				+"	,		__user_grup				F"
+				+"	,		__grup_user				G"
+				+"	where	B.year					= "+ year
+				+"	and		A.nipg					= B.nipg"
+				+"	and		A.id_seksi				= D.id_seksi"
+				+"	and		A.nipg					= E.nipg"
+				+"	and		E.nipg					= F.nipg"
+				+"	and		F.id_grup				= G.id_grup"
+				+"	and		G.id_grup				= 5"
 				+"	and		A.status_pegawai		= '1'"
-				+"	and		B.year					= "+ year;
+				+"	and		E.status_user			= 1";
 
 	/* query by organisasi */
 	if (is_in_org == 1) {
@@ -383,6 +483,8 @@ try {
 
 			json_o.put ("item"					,name);
 			json_o.put ("partisipan"			,db_rs.getInt		("partisipan"));
+			json_o.put ("target"				,target);
+			json_o.put ("partisipasi"			,total_part);
 			json_o.put ("total_part_percent"	,total_part_percent);
 			json_o.put ("violation"				,db_rs.getDouble	("violation"));
 			json_o.put ("temuan"				,db_rs.getDouble	("temuan"));
