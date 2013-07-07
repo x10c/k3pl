@@ -201,9 +201,19 @@ function M_HomeLog()
 
 function M_HomeUserObs()
 {
-	this.store = new Ext.data.ArrayStore({
-			url		: m_obs_data_stop_d +'data_list_stop.jsp'
-		,	fields	: [
+	this.store				= new Ext.data.JsonStore({
+			url				: m_obs_data_stop_d +'data_list_stop.jsp'
+		,	autoLoad		: false
+		,	idProperty		:'id'
+		,	totalProperty	:'total'
+		,	root			:'data'
+		,	pageSize		:k3pl.pageSize
+		,	baseParams		:
+			{
+				load_type		:'user'
+			}
+		,	fields	:
+			[
 			  'id'
 			, 'nipg'
 			, 'nama_pegawai'
@@ -216,7 +226,6 @@ function M_HomeUserObs()
 			, 'n_dis'
 			, 'status_aktif'
 			]
-		,	autoLoad: false
 		});
 
 	this.cm = new Ext.grid.ColumnModel({
@@ -261,19 +270,37 @@ function M_HomeUserObs()
 
 	this.panel = new Ext.grid.GridPanel({
 			title		: 'Data Observasi Anda'
+		,	region		:"north"
+		,	height		:300
+		,	layout		:"fit"
 		,	store		: this.store
 		,	cm			: this.cm
 		,	autoScroll	: true
-		,	height		: 200
-		,	style		: {
-				marginBottom	:12
-			}
+		,	bbar		: new Ext.PagingToolbar
+			({
+				store		:this.store
+			,	displayInfo	:true
+			,	pageSize	:k3pl.pageSize
+			})
 	});
 
-	this.do_refresh = function(ha_level) {
+	this.do_refresh = function (ha_level)
+	{
+		var load_type = 'user';
+
+		this.ha_level = ha_level;
+
+		if (this.ha_level == 4) {
+			load_type = 'all';
+		}
+
+		this.store.baseParams.load_type = load_type;
+
 		this.store.load({
-			params	:{
-				load_type	:''
+			params	: {
+				start		: 0
+			,	limit		: 50
+			,	load_type	: load_type
 			}
 		});
 	}
@@ -281,17 +308,29 @@ function M_HomeUserObs()
 
 function M_HomeUserRCA()
 {
-	this.record = new Ext.data.Record.create([
-			{ name	: 'tanggal_rca'	}
-		,	{ name	: 'description' }
-		,	{ name	: 'id_severity' }
-		,	{ name	: 'status' }
-	]);
-	
-	this.store = new Ext.data.ArrayStore({
-			url			: m_app_home_d + 'data_rca.jsp'
-		,	fields		: this.record
-		,	autoLoad	: false
+	this.store				= new Ext.data.JsonStore({
+			url				: m_app_home_d + 'data_rca.jsp'
+		,	autoLoad		: false
+		,	idProperty		:'id'
+		,	totalProperty	:'total'
+		,	root			:'data'
+		,	pageSize		:k3pl.pageSize
+		,	baseParams		:
+			{
+				load_type		:'user'
+			}
+		,	fields			:
+			[{
+				name	:"tanggal_rca"
+			},{
+				name	: 'tanggal_rca'
+			},{
+				name	: 'description'
+			},{
+				name	: 'id_severity'
+			},{
+				name	: 'status'
+			}]
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
@@ -333,12 +372,19 @@ function M_HomeUserRCA()
 
 	this.panel = new Ext.grid.GridPanel({
 			title				: 'Data Risk Containment Audit (RCA)'
+		,	region				:"center"
+		,	layout				:"fit"
 		,	store				: this.store
 		,	cm					: this.cm
 		,	sm					: this.sm
 		,	autoScroll			: true
-		,	height				: 200
 		,	autoExpandColumn	: 'description'
+		,	bbar				: new Ext.PagingToolbar
+			({
+				store				:this.store
+			,	displayInfo			:true
+			,	pageSize			:k3pl.pageSize
+			})
 	});
 
 	this.do_refresh = function()
@@ -531,6 +577,7 @@ function M_Home()
 			this.btn_my_account
 		]
 	,	defaults		:{margins:'0 auto 12 auto'}
+	,	layout			:"border"
 	,	items			:[
 				this.data_obs.panel
 			,	this.data_rca.panel
