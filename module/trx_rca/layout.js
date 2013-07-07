@@ -1827,6 +1827,7 @@ function M_TrxRCAAdd()
 	this.panel_form = new Ext.form.FormPanel({
 			layout		: 'column'
 		,	autoWidth	: true
+		,	height		:150
 		,	items		: [
 				{
 					columnWidth	: 0.5
@@ -2854,6 +2855,7 @@ function M_TrxRCAEdit()
 	this.panel_form = new Ext.form.FormPanel({
 			layout		: 'column'
 		,	autoWidth	: true
+		,	height		:150
 		,	items		: [
 				{
 					columnWidth	: 0.5
