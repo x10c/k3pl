@@ -3410,38 +3410,42 @@ function M_TrxRCAList()
 	this.dml_type		= 0;
 	this.periode_status = 0;
 	
-	this.reader = new Ext.data.ArrayReader({}, [
-		{
-			name	: 'id_rca'
+	this.reader		= new Ext.data.JsonReader ({
+		idProperty	:"id_rca"
+	,	root		:"data"
+	,	fields		:
+		[{
+			name		: 'id_rca'
 		},{
 			name		: 'tanggal_rca'
 		,	type		: 'date'
 		,	dateFormat	: 'Y-m-d'
 		},{
-			name	: 'id_seksi'
+			name		: 'id_seksi'
 		},{
-			name	: 'auditor_seksi'
+			name		: 'auditor_seksi'
 		},{
-			name	: 'nama_auditor'
+			name		: 'nama_auditor'
 		},{
-			name	: 'penanggung_jawab_seksi'
+			name		: 'penanggung_jawab_seksi'
 		},{
-			name	: 'pic'
+			name		: 'pic'
 		},{
-			name	: 'nama_pic'
+			name		: 'nama_pic'
 		},{
-			name	: 'user_login'
+			name		: 'user_login'
 		},{
-			name	: 'id_user'
-		}
-	]);
+			name		: 'id_user'
+		}]
+	});
 
-	this.store = new Ext.data.GroupingStore({
+	this.store = new Ext.data.GroupingStore ({
 			url			: _g_root +'/module/trx_rca/data_rca_list.jsp'
 		,	reader		: this.reader
 		,	groupField	: 'id_user'
 		,	autoLoad	: false
-		,	baseParams	:{
+		,	baseParams	:
+			{
 				load_type	:'user'
 			}
 	});
@@ -3573,6 +3577,12 @@ function M_TrxRCAList()
 		,	view				: this.grid_view
 		,	plugins				: [ this.filters ]
 		,	region				: 'center'
+		,	bbar				: new Ext.PagingToolbar (
+			{
+				store				: this.store
+			,	pageSize			: k3pl.pageSize
+			})
+
 	});
 
 	this.do_del = function()
