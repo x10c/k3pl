@@ -8,6 +8,20 @@
 	<parameter name="MONTH" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="iYear" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Integer.valueOf ($P{YEAR})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="iMonth" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Integer.valueOf ($P{MONTH})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DateBefore" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{iMonth}.intValue () == 1
+? ($P{iYear}.intValue () - 1) +"-12-25"
+: $P{iYear} +"-"+ ($P{iMonth}.intValue () - 1) +"-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DateAfter" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{YEAR} +"-"+ $P{MONTH} +"-24"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      count(T_RCA_AUDITOR."NIPG") AS COUNT_NIPG
@@ -16,7 +30,8 @@ FROM
 WHERE
      T_RCA_AUDITOR."NIPG" = $P{NIPG}
  AND year(T_RCA."TANGGAL_RCA") = $P{YEAR}
- AND month(T_RCA."TANGGAL_RCA") = $P{MONTH}]]>
+ AND T_RCA.TANGGAL_RCA >= cast ($P{DateBefore} as datetime)
+ AND T_RCA.TANGGAL_RCA <= cast ($P{DateAfter} as datetime)]]>
 	</queryString>
 	<field name="COUNT_NIPG" class="java.lang.Integer"/>
 	<background>
@@ -35,9 +50,8 @@ WHERE
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph rightIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{COUNT_NIPG}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{COUNT_NIPG}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

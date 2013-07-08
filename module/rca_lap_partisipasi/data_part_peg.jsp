@@ -14,6 +14,9 @@ String	months[]	= {	"jan", "feb", "mar", "apr"
 			,	"sep", "oct", "nov", "dec"
 			};
 
+String	d1;
+String	d2;
+
 try {
 	Statement	db_stmt2	= db_con.createStatement();
 	ResultSet	db_rs2		= null;
@@ -25,10 +28,11 @@ try {
 	String		id_seksi;
 	String		id_wilayah;
 	String		id_area;
-	String		year;
 	String		nipg;
 	int			hide_inaktif	= ServletUtilities.getIntParameter (request, "hide_inaktif", 1);
 	int			i;
+	int			year;
+	int			month;
 
 	id_dir		= request.getParameter("id_dir");
 	id_div		= request.getParameter("id_div");
@@ -37,7 +41,7 @@ try {
 	id_seksi	= request.getParameter("id_seksi");
 	id_wilayah	= request.getParameter("id_wilayah");
 	id_area		= request.getParameter("id_area");
-	year		= request.getParameter("year");
+	year		= Integer.parseInt (request.getParameter("year"));
 
 	db_q=" select	B.nipg"
 		+" ,		B.nama_pegawai"
@@ -127,13 +131,23 @@ try {
 		}
 
 		for (i = 0; i < months.length; i++) {
+			month = i + 1;
+			if (month == 1) {
+				d1 = (year - 1) +"-12-25";
+				d2 = year +"-"+ month +"-24";
+			} else {
+				d1 = year +"-"+ (month - 1) +"-25";
+				d2 = year +"-"+ month +"-24";
+			}
+
 			q2	=" select	count(a.nipg) 	as v"
 				+" from		t_rca_auditor	as a"
 				+" ,		t_rca			as b"
 				+" where	a.nipg					= '"+ nipg +"'"
 				+" and		a.id_rca				= b.id_rca"
 				+" and		year(b.tanggal_rca)		= "+ year
-				+" and		month(b.tanggal_rca)	= "+ (i + 1);
+				+" and		b.tanggal_rca			>= cast ('"+ d1 +"' as datetime)"
+				+" and		b.tanggal_rca			<= cast ('"+ d2 +"' as datetime)";
 
 			db_rs2 = db_stmt2.executeQuery(q2);
 

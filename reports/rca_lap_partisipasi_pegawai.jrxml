@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_pegawai" pageWidth="992" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="c255ca46-91a0-4890-9d57-e326e3623776">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_partisipasi_pegawai" pageWidth="992" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="952" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="257"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_DIR" class="java.lang.String"/>
 	<parameter name="ID_DIV" class="java.lang.String"/>
@@ -82,7 +82,7 @@
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="20e036ed-b2da-44fa-baa4-b71b29af4471" x="0" y="0" width="952" height="45"/>
+				<reportElement x="0" y="0" width="952" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -93,7 +93,7 @@
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="03bb9e9d-2f6f-4bb4-a0df-76bcee4279ed" x="0" y="0" width="220" height="20"/>
+				<reportElement x="0" y="0" width="220" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -107,7 +107,7 @@
 				<text><![CDATA[Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="04aefaca-fee2-4aa6-9011-5bf0448d5718" x="220" y="0" width="61" height="20"/>
+				<reportElement x="220" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -116,12 +116,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[January]]></text>
+				<text><![CDATA[Januari]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="4dd2391e-3ba2-46b5-a449-459707a0fbdf" x="281" y="0" width="61" height="20"/>
+				<reportElement x="281" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -130,12 +130,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[February]]></text>
+				<text><![CDATA[Februari]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c84827c9-ae8d-4447-8f26-fc84cd2d3cab" x="342" y="0" width="61" height="20"/>
+				<reportElement x="342" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -144,12 +144,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[March]]></text>
+				<text><![CDATA[Maret]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="cc672bd7-17fe-439a-ba1e-a6b9268bf3c3" x="403" y="0" width="61" height="20"/>
+				<reportElement x="403" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -158,12 +158,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[April]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="0882505f-db69-4a45-9a08-7c03bab85286" x="464" y="0" width="61" height="20"/>
+				<reportElement x="464" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -172,12 +172,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[May]]></text>
+				<text><![CDATA[Mei]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c327560f-68c4-45b4-8535-09ab183f6570" x="525" y="0" width="61" height="20"/>
+				<reportElement x="525" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -186,12 +186,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[June]]></text>
+				<text><![CDATA[Juni]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f6d3fc86-46c9-403e-974e-d9f3114924df" x="586" y="0" width="61" height="20"/>
+				<reportElement x="586" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -200,12 +200,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[July]]></text>
+				<text><![CDATA[Juli]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b176a046-018c-4c3d-aa41-465f4792d6bb" x="647" y="0" width="61" height="20"/>
+				<reportElement x="647" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -214,12 +214,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[August]]></text>
+				<text><![CDATA[Agustus]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3624e294-469b-4f50-989a-53396d158405" x="708" y="0" width="61" height="20"/>
+				<reportElement x="708" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -228,12 +228,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[September]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d96197b7-1a81-4fa4-a13b-64e5449047e0" x="769" y="0" width="61" height="20"/>
+				<reportElement x="769" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -242,12 +242,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[October]]></text>
+				<text><![CDATA[Oktober]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d7725ece-da71-40ce-bdfc-5bd57a77f43f" x="830" y="0" width="61" height="20"/>
+				<reportElement x="830" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -256,12 +256,12 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[November]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="9b841b1c-91ed-434b-90b6-1bab83bd0091" x="891" y="0" width="61" height="20"/>
+				<reportElement x="891" y="0" width="61" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -270,16 +270,16 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[December]]></text>
+				<text><![CDATA[Desember]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a13d24ec-84ad-44df-b8a9-b64832922c8a" stretchType="RelativeToBandHeight" x="0" y="0" width="220" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="220" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -289,12 +289,11 @@
 				</box>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
-					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{R_PEGAWAI_NAMA_PEGAWAI}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement uuid="a4a5965d-e3cf-49d7-8e10-670fca67425f" x="220" y="0" width="61" height="20"/>
+				<reportElement x="220" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -305,10 +304,10 @@
 					<subreportParameterExpression><![CDATA["1"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="739ad4e0-55be-475f-a512-2cc0434def63" x="281" y="0" width="61" height="20"/>
+				<reportElement x="281" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -319,10 +318,10 @@
 					<subreportParameterExpression><![CDATA["2"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="9ed7e70c-86cb-41ca-9c93-f4d3de0df72b" x="342" y="0" width="61" height="20"/>
+				<reportElement x="342" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -333,10 +332,10 @@
 					<subreportParameterExpression><![CDATA["3"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="c23a7256-77f1-4fb0-aa41-a45991ccead6" x="403" y="0" width="61" height="20"/>
+				<reportElement x="403" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -347,10 +346,10 @@
 					<subreportParameterExpression><![CDATA["4"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="ca3610d4-9953-4091-ad4e-c6e2c809fa1b" x="464" y="0" width="61" height="20"/>
+				<reportElement x="464" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -361,10 +360,10 @@
 					<subreportParameterExpression><![CDATA["5"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="a6b6a5a3-0bc1-4564-8ff3-d567ef5086a2" x="525" y="0" width="61" height="20"/>
+				<reportElement x="525" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -375,10 +374,10 @@
 					<subreportParameterExpression><![CDATA["6"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="e18db6d4-404e-490d-a78e-c56e87f2856c" x="586" y="0" width="61" height="20"/>
+				<reportElement x="586" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -389,10 +388,10 @@
 					<subreportParameterExpression><![CDATA["7"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="3a361c54-2510-4157-8867-feff2ff0924e" x="647" y="0" width="61" height="20"/>
+				<reportElement x="647" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -403,10 +402,10 @@
 					<subreportParameterExpression><![CDATA["8"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="7a3820a3-3006-4451-b6d6-61531ba1a7a9" x="708" y="0" width="61" height="20"/>
+				<reportElement x="708" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -417,10 +416,10 @@
 					<subreportParameterExpression><![CDATA["9"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="afda0a18-81ec-4f22-9fef-83180d68b43e" x="769" y="0" width="61" height="20"/>
+				<reportElement x="769" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -431,10 +430,10 @@
 					<subreportParameterExpression><![CDATA["10"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="a3054d64-5ded-4975-84ec-dd6b5ab804f7" x="830" y="0" width="61" height="20"/>
+				<reportElement x="830" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -445,10 +444,10 @@
 					<subreportParameterExpression><![CDATA["11"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement uuid="9bfe8cba-6594-43b4-95cc-490ab905d9e5" x="891" y="0" width="61" height="20"/>
+				<reportElement x="891" y="0" width="61" height="20"/>
 				<subreportParameter name="NIPG">
 					<subreportParameterExpression><![CDATA[$F{R_PEGAWAI_NIPG}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -459,7 +458,7 @@
 					<subreportParameterExpression><![CDATA["12"]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rca_lap_partisipasi_pegawai_month.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
