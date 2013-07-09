@@ -21,10 +21,10 @@
         )
     )]]></defaultValueExpression>
 	</parameter>
-	<parameter name="IS_IN_ORG" class="java.lang.Integer">
+	<parameter name="IS_IN_ORG" class="java.lang.String">
 		<parameterDescription><![CDATA[1=organisasi
 0=wilayah]]></parameterDescription>
-		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_DIR" class="java.lang.String"/>
 	<parameter name="ID_DIV" class="java.lang.String"/>
@@ -33,16 +33,16 @@
 	<parameter name="ID_SEKSI" class="java.lang.String"/>
 	<parameter name="ID_WILAYAH" class="java.lang.String"/>
 	<parameter name="ID_AREA" class="java.lang.String"/>
-	<parameter name="YEAR" class="java.lang.Integer">
+	<parameter name="YEAR" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="MONTH" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[new Integer (0)]]></defaultValueExpression>
+	<parameter name="MONTH" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="STATUS_USER" class="java.lang.String"/>
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{MONTH}.intValue () > 0
-?   "       T_RCA_TARGET_PEGAWAI." + $P{FIELD_MONTH}.get( $P{MONTH}.intValue () - 1 ).toString()
+		<defaultValueExpression><![CDATA[Integer.parseInt ($P{MONTH}) > 0
+?   "       T_RCA_TARGET_PEGAWAI." + $P{FIELD_MONTH}.get( Integer.parseInt ($P{MONTH}) - 1 ).toString()
 :   "       T_RCA_TARGET_PEGAWAI.JAN +" +
     "		T_RCA_TARGET_PEGAWAI.FEB +" +
     "		T_RCA_TARGET_PEGAWAI.MAR +" +
@@ -59,18 +59,18 @@
 	<parameter name="PART_MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["\n AND T_RCA.TANGGAL_RCA >= cast ('"
 +   (
-        ($P{MONTH}.intValue () == 0)
-        ? ($P{YEAR}.intValue () - 1) +"-12-25"
-        : ($P{MONTH}.intValue () == 1)
-            ? ($P{YEAR}.intValue () - 1) +"-12-25"
-            : $P{YEAR} +"-"+ ($P{MONTH}.intValue () - 1) +"-25"
+        (Integer.parseInt ($P{MONTH}) == 0)
+        ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
+        : (Integer.parseInt ($P{MONTH}) == 1)
+            ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
+            : $P{YEAR} +"-"+ (Integer.parseInt ($P{MONTH}) - 1) +"-25"
     )
 +   "' as datetime) "
 +   "\n AND T_RCA.TANGGAL_RCA <= cast ('"
 +   (
-        ($P{MONTH}.intValue () == 0)
+        (Integer.parseInt ($P{MONTH}) == 0)
         ? $P{YEAR} +"-12-24"
-        : ($P{MONTH}.intValue () == 1)
+        : (Integer.parseInt ($P{MONTH}) == 1)
             ? $P{YEAR} +"-01-24"
             : $P{YEAR} +"-"+ $P{MONTH} +"-24"
     )
@@ -187,7 +187,7 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
     "     R_.\"NAMA_DIREKTORAT\" "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_ORG_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[    "\n SELECT " + $P{ORG_SELECT_CLAUSE}
+		<defaultValueExpression><![CDATA["\n SELECT " + $P{ORG_SELECT_CLAUSE}
 +   "\n     ( SELECT sum (" + $P{MONTH_CLAUSE} +") AS TOTAL "
 +   "\n       FROM "
 +   "\n           dbo.R_PEGAWAI R_PEGAWAI INNER JOIN "
@@ -314,7 +314,7 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 " ORDER BY \n" + $P{WIL_ORDER_CLAUSE} + " ASC"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MAIN_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{IS_IN_ORG}.intValue () == 0
+		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null && ! $P{IS_IN_ORG}.isEmpty() && $P{IS_IN_ORG}.equalsIgnoreCase("0")
 ?   $P{DYNAMIC_WIL_QUERY}
 :   $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	</parameter>

@@ -579,9 +579,9 @@ function M_RCALapPartOrgGrid()
 		var isinorg		= m_rca_lap_partisipasi.part_org.form.set_org.isChecked();
 
 		if (isinorg){
-			is_in_org	= '1'
+			is_in_org	= 1;
 		} else {
-			is_in_org	= '0'
+			is_in_org	= 0;
 		}
 
 		var url = _g_root +'/report';
