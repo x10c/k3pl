@@ -19,6 +19,8 @@ String	months[]	= {	"jan", "feb", "mar", "apr"
 			,	"may", "jun", "jul", "aug"
 			,	"sep", "oct", "nov", "dec"
 			};
+String		part_tgl_1	= "";
+String		part_tgl_2	= "";
 
 try {
 	Connection	db_con	= (Connection) session.getAttribute("db.con");
@@ -70,6 +72,9 @@ try {
 	}
 
 	if (month == 0) {
+		part_tgl_1	= (year - 1) +"-12-25";
+		part_tgl_2	= year +"-12-24";
+
 		q_target	="	select (sum (isnull(A.jan,0))"
 					+"	+		sum (isnull(A.feb,0))"
 					+"	+		sum (isnull(A.mar,0))"
@@ -83,10 +88,22 @@ try {
 					+"	+		sum (isnull(A.nov,0))"
 					+"	+		sum (isnull(A.dec,0))"
 					+"	) as target";
+
+		q_part2		+=" and B.tanggal_rca >= cast ('"+ part_tgl_1 +"' as datetime)"
+					+ " and B.tanggal_rca <= cast ('"+ part_tgl_2 +"' as datetime)";
 	} else {
+		if (month == 1) {
+			part_tgl_1	= (year - 1) +"-12-25";
+			part_tgl_2	= year +"-01-24";
+		} else {
+			part_tgl_1	= year +"-"+ (month - 1) +"-25";
+			part_tgl_2	= year +"-"+ month +"-24";
+		}
+
 		q_target	="	select isnull(sum(A."+ months[month - 1] +"),0) as target";
 
-		q_part2		+=" and month (B.tanggal_rca) = "+ month;
+		q_part2		+=" and B.tanggal_rca >= cast ('"+ part_tgl_1 +"' as datetime)"
+					+ " and B.tanggal_rca <= cast ('"+ part_tgl_2 +"' as datetime)";
 	}
 
 	q_target	+=" from	t_rca_target_pegawai	A"

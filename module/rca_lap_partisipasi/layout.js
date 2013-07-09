@@ -577,7 +577,7 @@ function M_RCALapPartOrgGrid()
 		var id_report	= '19';
 		var tipe_report	= 'xls';
 		var isinorg		= m_rca_lap_partisipasi.part_org.form.set_org.isChecked();
-		
+
 		if (isinorg){
 			is_in_org	= '1'
 		} else {
