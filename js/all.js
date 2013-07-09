@@ -468,6 +468,7 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 
 		k3pl.form.Seksi.superclass.constructor.apply(this, arguments);
 	}
+
 ,	do_load: function()
 	{
 		this.store.load({
@@ -479,10 +480,10 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.itemAll) {
 					this.itemAllRecord = new k3pl.record.Seksi({
-						id_direktorat	:Ext.util.Cookies.get ('user.direktorat')
-					,	id_divprosbu	:Ext.util.Cookies.get ('user.divprosbu')
-					,	id_departemen	:Ext.util.Cookies.get ('user.departemen')
-					,	id_dinas		:Ext.util.Cookies.get ('user.dinas')
+						id_direktorat	:0
+					,	id_divprosbu	:0
+					,	id_departemen	:0
+					,	id_dinas		:0
 					,	id				:0
 					,	name			:this.itemAllText
 					});
@@ -509,8 +510,6 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 	{
 		this.clearFilter (true);
 
-		console.log (id_dir +", "+ id_div +", "+ id_dep +", "+ id_dinas);
-
 		this.filterBy (function (r, id)
 		{
 			var dir		= r.get('id_direktorat');
@@ -527,7 +526,6 @@ k3pl.form.Seksi = Ext.extend (Ext.form.ComboBox, {
 						return true;
 					}
 				} else if (dir == id_dir && div == id_div && dep == id_dep) {
-					console.log (r.get ("name"));
 					return true;
 				}
 			} else if (dir == id_dir && div == id_div && dep == id_dep && dinas == id_dinas) {
@@ -572,10 +570,19 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 			var id_div		= record.get('id_divprosbu');
 			var id_dep		= record.get('id_departemen');
 			var id_dinas	= record.get('id');
+			var id_seksi	= 0;
 
-			this.formSeksi.do_filter (id_dir, id_div, id_dep, id_dinas);
+			if (id_dinas == 0) {
+				id_dep = this.ownerCt.formDepartemen.getValue ();
+				id_div = this.ownerCt.formDivProSBU.getValue ();
+				id_dir = this.ownerCt.formDirektorat.getValue ();
+			}
 
-			this.formSeksi.setValue(this.formSeksi.store.getAt(0).get('id'));
+			if (this.formSeksi != undefined) {
+				this.formSeksi.do_filter (id_dir, id_div, id_dep, id_dinas);
+				id_seksi = this.formSeksi.store.getAt (0).get ('id');
+				this.formSeksi.setValue (id_seksi);
+			}
 		});
 	}
 
@@ -590,8 +597,8 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.itemAll) {
 					this.itemAllRecord = new k3pl.record.Dinas ({
-						id_direktorat	:Ext.util.Cookies.get ('user.direktorat')
-					,	id_divprosbu	:Ext.util.Cookies.get ('user.divprosbu')
+						id_direktorat	:0
+					,	id_divprosbu	:0
 					,	id_departemen	:0
 					,	id				:0
 					,	name			:this.itemAllText
@@ -632,10 +639,10 @@ k3pl.form.Dinas = Ext.extend (Ext.form.ComboBox, {
 			if (dinas == 0) {
 				return true;
 			} else if (id_dep == 0) {
-				if (div	== id_div && dir == id_dir) {
+				if (dir	== id_dir && div == id_div) {
 					return true;
 				}
-			} else if (div	== id_div && dir == id_dir && dep == id_dep) {
+			} else if (dir == id_dir && div == id_div && dep == id_dep) {
 				return true;
 			}
 			return false;
@@ -680,17 +687,27 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 				return;
 			}
 
-			var id_dir	= record.get ('id_direktorat');
-			var id_div	= record.get ('id_divprosbu');
-			var id_dep	= record.get ('id');
+			var id_dir		= record.get ('id_direktorat');
+			var id_div		= record.get ('id_divprosbu');
+			var id_dep		= record.get ('id');
+			var id_dinas	= 0;
+			var id_seksi	= 0;
 
-			this.formDinas.do_filter (id_dir, id_div, id_dep);
+			if (id_dep == 0) {
+				id_dir = this.ownerCt.formDirektorat.getValue ();
+				id_div = this.ownerCt.formDivProSBU.getValue ();
+			}
 
-			var id_dinas = this.formDinas.store.getAt(0).get('id');
-
-			this.formDinas.setValue (id_dinas);
-
-			this.formSeksi.do_filter (id_dir, id_div, id_dep, id_dinas);
+			if (this.formDinas != undefined) {
+				this.formDinas.do_filter (id_dir, id_div, id_dep);
+				id_dinas = this.formDinas.store.getAt (0).get ('id');
+				this.formDinas.setValue (id_dinas);
+			}
+			if (this.formSeksi != undefined) {
+				this.formSeksi.do_filter (id_dir, id_div, id_dep, id_dinas);
+				id_seksi = this.formSeksi.store.getAt (0).get ("id");
+				this.formSeksi.setValue (id_seksi);
+			}
 		});
 	}
 
@@ -705,8 +722,8 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 
 				if (this.itemAll) {
 					this.itemAllRecord = new k3pl.record.Departemen ({
-						id_direktorat	:Ext.util.Cookies.get ('user.direktorat')
-					,	id_divprosbu	:Ext.util.Cookies.get ('user.divprosbu')
+						id_direktorat	:0
+					,	id_divprosbu	:0
 					,	id				:0
 					,	name			:this.itemAllText
 					});
@@ -739,8 +756,9 @@ k3pl.form.Departemen = Ext.extend (Ext.form.ComboBox, {
 		{
 			var dir	= r.get ('id_direktorat');
 			var div	= r.get ('id_divprosbu');
+			var dep = r.get ("id");
 
-			if (div == 0) {
+			if (dep == 0) {
 				return true;
 			} else if (id_div == 0) {
 				if (dir == id_dir) {
@@ -773,6 +791,7 @@ k3pl.form.DivProSBU = Ext.extend (Ext.form.ComboBox, {
 			,	listWidth		:400
 			,	formSeksi		:undefined
 			,	formDinas		:undefined
+			,	formDepartemen	:undefined
 			,	itemAll			:false
 			,	itemAllText		:'Semua Divisi/Proyek/SBU'
 			,	itemAllRecord	:undefined
@@ -792,12 +811,30 @@ k3pl.form.DivProSBU = Ext.extend (Ext.form.ComboBox, {
 				this.formDinas.setValue(this.formDinas.store.getAt(0).get('id'));
 			}
 
-			var id_dir	= record.get('id_direktorat');
-			var id_div	= record.get('id');
+			var id_dir		= record.get('id_direktorat');
+			var id_div		= record.get('id');
+			var id_dep		= 0;
+			var id_dinas	= 0;
+			var id_seksi	= 0;
+
+			if (id_div == 0) {
+				id_dir = this.ownerCt.formDirektorat.getValue ();
+			}
 
 			if (this.formDepartemen != undefined) {
 				this.formDepartemen.do_filter (id_dir, id_div);
-				this.formDepartemen.setValue (this.formDepartemen.store.getAt(0).get('id'));
+				id_dep = this.formDepartemen.store.getAt (0).get ('id');
+				this.formDepartemen.setValue (id_dep);
+			}
+			if (this.formDinas != undefined) {
+				this.formDinas.do_filter (id_dir, id_div, id_dep);
+				id_dinas = this.formDinas.store.getAt (0).get ("id");
+				this.formDinas.setValue (id_dinas);
+			}
+			if (this.formSeksi != undefined) {
+				this.formSeksi.do_filter (id_dir, id_div, id_dep, id_dinas);
+				id_seksi = this.formSeksi.store.getAt (0).get ("id");
+				this.formSeksi.setValue (id_seksi);
 			}
 		});
 	}
