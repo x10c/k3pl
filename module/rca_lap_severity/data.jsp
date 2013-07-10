@@ -31,19 +31,34 @@ try {
 		q_where	+=" and month(a.tanggal_rca) = "+ month;
 	}
 	if (id_dir != 0) {
-		q_where += " and b.id_direktorat = "+ id_dir;
+		q_where +="	and ("
+				+"		a.penanggung_jawab_direktorat	= "+ id_dir
+				+"	or  a.auditor_direktorat			= "+ id_dir
+				+" )";
 	}
 	if (id_div != 0) {
-		q_where += " and b.id_divprosbu = "+ id_div;
+		q_where	+=" and ("
+				+"		a.penanggung_jawab_divprosbu	= "+ id_div
+				+"	or	a.auditor_divprosbu				= "+ id_div
+				+"	)";
 	}
 	if (id_dep != 0) {
-		q_where += " and b.id_departemen = "+ id_dep;
+		q_where +="	and	("
+				+"		a.penanggung_jawab_departemen	= "+ id_dep
+				+"	or	a.auditor_departemen			= "+ id_dep
+				+"	)";
 	}
 	if (id_dinas != 0) {
-		q_where += " and b.id_dinas	= "+ id_dinas;
+		q_where += " and ("
+				+"		a.penanggung_jawab_dinas	= "+ id_dinas
+				+"	or	a.auditor_dinas				= "+ id_dinas
+				+"	)";
 	}
 	if (id_seksi != 0) {
-		q_where += " and b.id_seksi	= "+ id_seksi;
+		q_where +=" and ("
+				+"		a.penanggung_jawab_seksi	= "+ id_seksi
+				+"	or	a.auditor_seksi				= "+ id_seksi
+				+"	)";
 	}
 	if (id_wilayah != 0) {
 		q_where += " and b.id_wilayah = "+ id_wilayah;
