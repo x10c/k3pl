@@ -99,7 +99,8 @@ try {
 			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		year(rca.tanggal_rca)		= "+ year
-			+" and		rca.penanggung_jawab_nipg	= A.nipg"
+			+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+			+"	or		rca.ID_USER					= A.NIPG)"
 			+" and		A.status_pegawai			= '1'"
 			+" and		A.id_seksi					= B.id_seksi"
 			+"	and		A.nipg						= E.nipg"
@@ -120,7 +121,8 @@ try {
 				+" where	rca_detail.id_rca			= rca.id_rca"
 				+" and		rca_detail.id_severity		in (4,5)"
 				+" and		year(rca.tanggal_rca)		= "+ year
-				+" and		rca.penanggung_jawab_nipg	= A.nipg"
+				+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+				+"	or		rca.ID_USER					= A.NIPG)"
 				+" and		A.status_pegawai			= '1'"
 				+" and		A.id_seksi					= B.id_seksi"
 				+"	and		A.nipg						= E.nipg"
@@ -140,7 +142,8 @@ try {
 			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		year(rca.tanggal_rca)		= "+ year
-			+" and		rca.penanggung_jawab_nipg	= A.nipg"
+			+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+			+"	or		rca.ID_USER					= A.NIPG)"
 			+" and		A.status_pegawai			= '1'"
 			+" and		A.id_seksi					= B.id_seksi"
 			+"	and		A.nipg						= E.nipg"
@@ -161,7 +164,8 @@ try {
 					+" where	rca_detail.id_rca			= rca.id_rca"
 					+" and		rca_detail.id_severity		in (4,5)"
 					+" and		year(rca.tanggal_rca)		= "+ year
-					+" and		rca.penanggung_jawab_nipg	= A.nipg"
+					+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+					+"	or		rca.ID_USER					= A.NIPG)"
 					+" and		A.status_pegawai			= '1'"
 					+" and		A.id_seksi					= B.id_seksi"
 					+"	and		A.nipg						= E.nipg"
@@ -182,7 +186,8 @@ try {
 						+" where	rca_detail.id_rca			= rca.id_rca"
 						+" and		rca_detail.id_severity		in (1,2,3)"
 						+" and		year(rca.tanggal_rca)		= "+ year
-						+" and		rca.penanggung_jawab_nipg	= A.nipg"
+						+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+						+"	or		rca.ID_USER					= A.NIPG)"
 						+" and		A.status_pegawai			= '1'"
 						+" and		A.id_seksi					= B.id_seksi"
 						+"	and		A.nipg						= E.nipg"
@@ -204,7 +209,8 @@ try {
 				+" and		rca_detail.id_severity		in (4,5)"
 				+" and		rca_detail.status			in ('2','3')"
 				+" and		year(rca.tanggal_rca)		= "+ year
-				+" and		rca.penanggung_jawab_nipg	= A.nipg"
+				+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+				+"	or		rca.ID_USER					= A.NIPG)"
 				+" and		A.status_pegawai			= '1'"
 				+" and		A.id_seksi					= B.id_seksi"
 				+"	and		A.nipg						= E.nipg"
@@ -226,7 +232,8 @@ try {
 					+" and		rca_detail.id_severity		in (1,2,3)"
 					+" and		rca_detail.status			in ('2','3')"
 					+" and		year(rca.tanggal_rca)		= "+ year
-					+" and		rca.penanggung_jawab_nipg	= A.nipg"
+					+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+					+"	or		rca.ID_USER					= A.NIPG)"
 					+" and		A.status_pegawai			= '1'"
 					+" and		A.id_seksi					= B.id_seksi"
 					+"	and		A.nipg						= E.nipg"
@@ -271,7 +278,8 @@ try {
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		rca.id_rca					= rca_auditor.id_rca"
 			+" and		year(rca.tanggal_rca)		= "+ year
-			+" and		rca.penanggung_jawab_nipg	= A.nipg"
+			+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+			+"	or		rca.ID_USER					= A.NIPG)"
 			+" and		A.status_pegawai			= '1'"
 			+" and		A.id_seksi					= B.id_seksi"
 			+"	and		A.nipg						= E.nipg"

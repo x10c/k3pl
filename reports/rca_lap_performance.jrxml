@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1255" pageHeight="595" orientation="Landscape" columnWidth="1215" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="9bfd9a0d-f746-4d58-a9e3-f1923f2a826f">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_performance" pageWidth="1255" pageHeight="595" orientation="Landscape" columnWidth="1215" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -242,7 +242,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
 "       AND     year(T_RCA.TANGGAL_RCA)     = "+ $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -267,7 +268,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
 "       AND     year(T_RCA.TANGGAL_RCA)     = "+ $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -293,7 +295,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -318,7 +321,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -343,7 +347,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -370,7 +375,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -399,7 +405,8 @@ $P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA "+
 "       AND     T_RCA.ID_RCA                = T_RCA_AUDITOR.ID_RCA "+
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.NIPG              = __USER.NIPG "+
@@ -536,7 +543,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA "+
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
@@ -557,7 +565,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA " +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     T_RCA_DETAIL.ID_SEVERITY    IN (4, 5) " +
@@ -579,7 +588,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA = T_RCA_DETAIL.ID_RCA " +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     T_RCA_DETAIL.ID_SEVERITY    IN (1, 2, 3) " +
@@ -601,7 +611,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG " +
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
@@ -622,7 +633,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG " +
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
@@ -645,7 +657,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG " +
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     year(T_RCA.TANGGAL_RCA)     = " + $P{YEAR} +
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
@@ -668,7 +681,8 @@ $P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsI
 "       ,       __USER_GRUP "+
 "       ,       __GRUP_USER "+
 "       WHERE   T_RCA.ID_RCA                = T_RCA_DETAIL.ID_RCA " +
-"       AND     T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG " +
+"       AND     (T_RCA.PENANGGUNG_JAWAB_NIPG = R_PEGAWAI.NIPG "+
+"        OR     T_RCA.ID_USER               = R_PEGAWAI.NIPG) "+
 "       AND     year(T_RCA.TANGGAL_RCA)     = "+ $P{YEAR} +
 "       AND     R_PEGAWAI.STATUS_PEGAWAI    = '1'"+
 "       AND     R_PEGAWAI.ID_SEKSI          = R_SEKSI.ID_SEKSI "+
@@ -722,7 +736,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="efbca475-9e54-416c-a119-b853a257d25a" x="0" y="0" width="1210" height="45"/>
+				<reportElement x="0" y="0" width="1210" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -733,7 +747,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="ca7004de-37b0-488f-a08b-2f36b1788e6c" x="0" y="0" width="215" height="40"/>
+				<reportElement x="0" y="0" width="215" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -747,7 +761,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="87d58245-0a32-451e-9a61-b8d274c00f0c" x="215" y="0" width="85" height="40"/>
+				<reportElement x="215" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -761,7 +775,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Partisipan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fbb209f0-f590-46d6-804c-027eea698c53" x="445" y="0" width="85" height="40"/>
+				<reportElement x="445" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -775,7 +789,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[% Partisipasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7409829c-1157-44a3-8d9c-a697c7b71128" x="530" y="0" width="85" height="40"/>
+				<reportElement x="530" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -789,7 +803,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Violation]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="cd5fa33f-83a2-4100-b5be-1a7c14b7fe9f" x="615" y="0" width="85" height="40"/>
+				<reportElement x="615" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -803,7 +817,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[Temuan Kumulatif 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="06189de2-4cca-49cc-9824-1f906535565a" x="700" y="0" width="85" height="40"/>
+				<reportElement x="700" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -817,7 +831,7 @@ $P{DYNAMIC_ORG_QUERY}]]></defaultValueExpression>
 				<text><![CDATA[% Severity 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="0691cf57-d41b-4b07-ad64-d93899490f64" x="785" y="0" width="85" height="40"/>
+				<reportElement x="785" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -833,7 +847,7 @@ Tindak Lanjut
 Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="07f888a3-ec71-4b35-9cdf-10d03c0afbb2" x="870" y="0" width="85" height="40"/>
+				<reportElement x="870" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -847,7 +861,7 @@ Temuan 4/5]]></text>
 				<text><![CDATA[% Tindak Lanjut Temuan 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ee70b9b7-49ba-4bf4-a2ff-d518fed43d15" x="955" y="0" width="85" height="40"/>
+				<reportElement x="955" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -863,7 +877,7 @@ Tindak Lanjut
 Temuan Non 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ad035f94-0b9a-46c9-82ae-7eb53b56b30f" x="1040" y="0" width="85" height="40"/>
+				<reportElement x="1040" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -877,7 +891,7 @@ Temuan Non 4/5]]></text>
 				<text><![CDATA[% Tindak Lanjut Temuan Non 4/5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="259a3a38-751e-49bf-b94d-3552899a4f75" x="1125" y="0" width="85" height="40"/>
+				<reportElement x="1125" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -891,7 +905,7 @@ Temuan Non 4/5]]></text>
 				<text><![CDATA[Average of Severity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="64cc3101-5d9a-43e2-b098-f0d9744143c8" x="300" y="0" width="60" height="40"/>
+				<reportElement x="300" y="0" width="60" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -905,7 +919,7 @@ Temuan Non 4/5]]></text>
 				<text><![CDATA[Target]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f64aaa35-b5da-4443-bcd0-f074f4cfdaa8" x="360" y="0" width="85" height="40"/>
+				<reportElement x="360" y="0" width="85" height="40"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -923,7 +937,7 @@ Temuan Non 4/5]]></text>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8114bd35-7f28-49e7-8b9f-b2a98656fe4b" stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="215" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -934,10 +948,10 @@ Temuan Non 4/5]]></text>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{NAMA}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAMA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="db7dd273-5bac-4311-a573-8eb11181d5f8" stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="215" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -948,10 +962,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PARTISIPASI} == null ? 0 : $F{PARTISIPASI}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="8aaf3438-0ef8-4dac-9f33-f09a597a25b0" stretchType="RelativeToBandHeight" x="445" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="445" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -962,10 +976,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PARTISIPASI_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="c7232f0a-3157-40e5-a895-5492f92e46e2" stretchType="RelativeToBandHeight" x="530" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="530" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -976,10 +990,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{VIOLATION} == null ? 0 : $F{VIOLATION}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{VIOLATION} == null ? 0 : $F{VIOLATION}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="24eea2a0-d7fa-4f5a-823d-00709c4d5485" stretchType="RelativeToBandHeight" x="615" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="615" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -990,10 +1004,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TEMUAN} == null ? 0 : $F{TEMUAN}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TEMUAN} == null ? 0 : $F{TEMUAN}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="4c38724b-de97-4c4d-ad87-d35f1c1701ea" stretchType="RelativeToBandHeight" x="700" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="700" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1004,10 +1018,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{SEVERITY} == null ? 0 : $F{SEVERITY} + " %"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SEVERITY} == null ? 0 : $F{SEVERITY} + " %"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9e25be4e-eba6-4cdd-9167-e6e9795b7a7c" stretchType="RelativeToBandHeight" x="785" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="785" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1018,10 +1032,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TL_TEMUAN_45} == null ? 0 : $F{TL_TEMUAN_45}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TL_TEMUAN_45} == null ? 0 : $F{TL_TEMUAN_45}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="aab7e883-7f7e-4f30-9695-c3b0c252b797" stretchType="RelativeToBandHeight" x="870" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="870" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1032,10 +1046,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TL_TEMUAN_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TL_TEMUAN_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="df5dde3e-7bcc-41f5-ba85-f69ffd02747d" stretchType="RelativeToBandHeight" x="955" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="955" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1046,10 +1060,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TL_TEMUAN_NON_45} == null ? 0 : $F{TL_TEMUAN_NON_45}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TL_TEMUAN_NON_45} == null ? 0 : $F{TL_TEMUAN_NON_45}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
-				<reportElement uuid="2b20f896-9535-4b32-9ec5-d86a28e58555" stretchType="RelativeToBandHeight" x="1040" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="1040" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1060,10 +1074,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TL_TEMUAN_NON_PERCENTAGE}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{TL_TEMUAN_NON_PERCENTAGE}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="ba279d3e-ff90-4d6b-bcca-da75d648642b" stretchType="RelativeToBandHeight" x="1125" y="0" width="85" height="20"/>
+				<reportElement stretchType="RelativeToBandHeight" x="1125" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1074,10 +1088,10 @@ Temuan Non 4/5]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{VXS} + " %"]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{VXS} + " %"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="1b5fcb5a-3a8c-48fd-82d9-755bba620daf" x="300" y="0" width="60" height="20"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="60" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1086,10 +1100,10 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{TARGET}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TARGET}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="6845a01b-b58b-4c6c-9810-cd72f2418c5e" x="360" y="0" width="85" height="20"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="360" y="0" width="85" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -1098,9 +1112,9 @@ Temuan Non 4/5]]></text>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PART}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TOTAL_PART}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
