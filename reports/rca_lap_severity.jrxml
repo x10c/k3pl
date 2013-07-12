@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_severity" pageWidth="1805" pageHeight="595" orientation="Landscape" columnWidth="1765" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_severity" pageWidth="1805" pageHeight="595" orientation="Landscape" columnWidth="1765" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="1e936050-e90f-4576-9b30-bab7a7b19b93">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="471"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="IS_IN_ORG" class="java.lang.String">
 		<parameterDescription><![CDATA[1: organisasi
@@ -20,37 +20,52 @@
 	<parameter name="ID_AREA" class="java.lang.String"/>
 	<parameter name="DIR_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_DIR} != null && ! $P{ID_DIR}.isEmpty() && ! $P{ID_DIR}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_DIREKTORAT\" = " + $P{ID_DIR} + " \n" :
+ " and ("
++"		a.penanggung_jawab_direktorat	= "+ $P{ID_DIR}
++"	or  a.auditor_direktorat			= "+ $P{ID_DIR}
++" )" :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DIV_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_DIVPROSBU\" = " + $P{ID_DIV} + " \n" :
-""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{ID_DIV} != null && ! $P{ID_DIV}.isEmpty() && ! $P{ID_DIV}.equalsIgnoreCase( "0" )
+?" and ("
++"		a.penanggung_jawab_divprosbu	= "+ $P{ID_DIV}
++"	or  a.auditor_divprosbu 			= "+ $P{ID_DIV}
++" )"
+: ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DEP_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_DEPARTEMEN\" = " + $P{ID_DEP} + " \n" :
-""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{ID_DEP} != null && ! $P{ID_DEP}.isEmpty() && ! $P{ID_DEP}.equalsIgnoreCase( "0" )
+?   "	and	("
++   "		a.penanggung_jawab_departemen	= "+ $P{ID_DEP}
++   "	or	a.auditor_departemen			= "+ $P{ID_DEP}
++   "	)"
+: ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DINAS_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_DINAS\" = " + $P{ID_DINAS} + " \n" :
-""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{ID_DINAS} != null && ! $P{ID_DINAS}.isEmpty() && ! $P{ID_DINAS}.equalsIgnoreCase( "0" )
+?" and ("
++"		a.penanggung_jawab_dinas	= "+ $P{ID_DINAS}
++"	or	a.auditor_dinas				= "+ $P{ID_DINAS}
++"	)"
+: ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SEKSI_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_SEKSI} + " \n" :
-""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{ID_SEKSI} != null && ! $P{ID_SEKSI}.isEmpty() && ! $P{ID_SEKSI}.equalsIgnoreCase( "0" )
+?" and ("
++"		a.penanggung_jawab_seksi	= "+ $P{ID_SEKSI}
++"	or	a.auditor_seksi				= "+ $P{ID_SEKSI}
++"	)"
+: ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="WILAYAH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_WILAYAH} != null && ! $P{ID_WILAYAH}.isEmpty() && ! $P{ID_WILAYAH}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} + " \n" :
+"     AND b.\"ID_WILAYAH\" = " + $P{ID_WILAYAH} + " \n" :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="AREA_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{ID_AREA} != null && ! $P{ID_AREA}.isEmpty() && ! $P{ID_AREA}.equalsIgnoreCase( "0" ) ?
-"     AND R_SEKSI.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
+"     AND b.\"ID_SEKSI\" = " + $P{ID_AREA} + " \n" :
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
@@ -61,78 +76,84 @@
 	<parameter name="ORG_WIL_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
 ! $P{IS_IN_ORG}.isEmpty() &&
-$P{IS_IN_ORG}.equalsIgnoreCase( "0" ) ?
-$P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE} :
-$P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
+$P{IS_IN_ORG}.equalsIgnoreCase( "0" )
+? $P{WILAYAH_CLAUSE} + $P{AREA_CLAUSE}
+: $P{DIR_CLAUSE} + $P{DIV_CLAUSE} + $P{DEP_CLAUSE} + $P{DINAS_CLAUSE} + $P{SEKSI_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="DYNAMIC_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["SELECT \n" +
-"     V_SEVERITY.\"description\" AS V_SEVERITY_description, \n" +
-"     V_SEVERITY.\"id_severity\" AS V_SEVERITY_id_severity, \n" +
-"     V_SEVERITY.\"nama_tempat_rca\" AS V_SEVERITY_nama_tempat_rca, \n" +
-"     V_SEVERITY.\"penanggung_jawab_seksi\" AS V_SEVERITY_penanggung_jawab_seksi, \n" +
-"     R_SEKSI.\"NAMA_SEKSI\" AS R_SEKSI_NAMA_SEKSI, \n" +
-"     V_SEVERITY.\"penanggung_jawab_dinas\" AS V_SEVERITY_penanggung_jawab_dinas, \n" +
-"     R_DINAS.\"NAMA_DINAS\" AS R_DINAS_NAMA_DINAS, \n" +
-"     V_SEVERITY.\"penanggung_jawab_departemen\" AS V_SEVERITY_penanggung_jawab_departemen, \n" +
-"     R_DEPARTEMEN.\"NAMA_DEPARTEMEN\" AS R_DEPARTEMEN_NAMA_DEPARTEMEN, \n" +
-"     V_SEVERITY.\"penanggung_jawab_divprosbu\" AS V_SEVERITY_penanggung_jawab_divprosbu, \n" +
-"     R_DIVPROSBU.\"NAMA_DIVPROSBU\" AS R_DIVPROSBU_NAMA_DIVPROSBU, \n" +
-"     V_SEVERITY.\"penanggung_jawab_direktorat\" AS V_SEVERITY_penanggung_jawab_direktorat, \n" +
-"     R_DIREKTORAT.\"NAMA_DIREKTORAT\" AS R_DIREKTORAT_NAMA_DIREKTORAT, \n" +
-"     V_SEVERITY.\"completion_date_target\" AS V_SEVERITY_completion_date_target, \n" +
-"     V_SEVERITY.\"status\" AS V_SEVERITY_status, \n" +
-"     V_SEVERITY.\"note\" AS V_SEVERITY_note, \n" +
-"     V_SEVERITY.\"tanggal_rca\" AS V_SEVERITY_tanggal_rca \n" +
-"FROM \n" +
-"     \"dbo\".\"R_DINAS\" R_DINAS INNER JOIN \"dbo\".\"R_SEKSI\" R_SEKSI ON R_DINAS.\"ID_DINAS\" = R_SEKSI.\"ID_DINAS\" \n" +
-"     AND R_DINAS.\"ID_DIREKTORAT\" = R_SEKSI.\"ID_DIREKTORAT\" \n" +
-"     AND R_DINAS.\"ID_DEPARTEMEN\" = R_SEKSI.\"ID_DEPARTEMEN\" \n" +
-"     AND R_DINAS.\"ID_DIVPROSBU\" = R_SEKSI.\"ID_DIVPROSBU\" \n" +
-"     INNER JOIN \"dbo\".\"R_DEPARTEMEN\" R_DEPARTEMEN ON R_DINAS.\"ID_DEPARTEMEN\" = R_DEPARTEMEN.\"ID_DEPARTEMEN\" \n" +
-"     AND R_DEPARTEMEN.\"ID_DIVPROSBU\" = R_DINAS.\"ID_DIVPROSBU\" \n" +
-"     AND R_DEPARTEMEN.\"ID_DIREKTORAT\" = R_DINAS.\"ID_DIREKTORAT\" \n" +
-"     INNER JOIN \"dbo\".\"R_DIVPROSBU\" R_DIVPROSBU ON R_DEPARTEMEN.\"ID_DIVPROSBU\" = R_DIVPROSBU.\"ID_DIVPROSBU\" \n" +
-"     AND R_DIVPROSBU.\"ID_DIREKTORAT\" = R_DEPARTEMEN.\"ID_DIREKTORAT\" \n" +
-"     INNER JOIN \"dbo\".\"R_DIREKTORAT\" R_DIREKTORAT ON R_DIVPROSBU.\"ID_DIREKTORAT\" = R_DIREKTORAT.\"ID_DIREKTORAT\" \n" +
-"     INNER JOIN \"dbo\".\"V_SEVERITY\" V_SEVERITY ON R_SEKSI.\"ID_SEKSI\" = V_SEVERITY.\"penanggung_jawab_seksi\" \n" +
-"     AND V_SEVERITY.\"penanggung_jawab_departemen\" = R_SEKSI.\"ID_DEPARTEMEN\" \n" +
-"     AND V_SEVERITY.\"penanggung_jawab_direktorat\" = R_SEKSI.\"ID_DIREKTORAT\" \n" +
-"     AND V_SEVERITY.\"penanggung_jawab_divprosbu\" = R_SEKSI.\"ID_DIVPROSBU\" \n" +
-"     AND V_SEVERITY.\"penanggung_jawab_dinas\" = R_SEKSI.\"ID_DINAS\" \n" +
-"WHERE \n" +
-"     year(V_SEVERITY.\"tanggal_rca\") = " + $P{YEAR} + " \n" +
-$P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
-"ORDER BY \n" +
-"     V_SEVERITY.\"tanggal_rca\" ASC \n"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[" select	g.description "
++" ,		g.id_severity "
++" ,		a.nama_tempat_rca "
++" ,		a.penanggung_jawab_seksi "
++" ,		b.nama_seksi "
++" ,		a.penanggung_jawab_dinas "
++" ,		c.nama_dinas "
++" ,		a.penanggung_jawab_departemen "
++" ,		d.nama_departemen "
++" ,		a.penanggung_jawab_divprosbu "
++" ,		e.nama_divprosbu "
++" ,		a.penanggung_jawab_direktorat "
++" ,		f.nama_direktorat "
++" ,		REPLACE(CONVERT(varchar, g.COMPLETION_DATE_TARGET, 111), '/', '-') as completion_date_target "
++" ,		g.status "
++" ,		case g.status when '1' then 'Open' when '2' then 'Process' else 'Closed' end as nama_status "
++" ,		g.note "
++" ,		g.id_rca_detail "
++" ,		( "
++" 			select	nama "
++" 			from 	( "
++" 				select	i.nama_pegawai                      as nama "
++"				,       row_number() over(order by h.nipg) 	as rownum "
++" 				from 	t_rca_auditor                       as h "
++" 				,       r_pegawai                       	as i "
++" 				where 	h.nipg                              = i.nipg "
++" 				and 	h.id_rca                            = a.id_rca "
++" 			) as hasil "
++" 			where rownum between 1 and 1 "
++" 		) as nama_auditor "
++" from	t_rca			as a "
++" ,	r_seksi			as b "
++" ,	r_dinas			as c "
++" ,	r_departemen	as d "
++" ,	r_divprosbu		as e "
++" ,	r_direktorat	as f "
++" ,	t_rca_detail	as g "
++" where	a.id_rca                		= g.id_rca "
++" and		a.penanggung_jawab_seksi    	= b.id_seksi "
++" and		a.penanggung_jawab_dinas        = c.id_dinas "
++" and		a.penanggung_jawab_departemen	= d.id_departemen "
++" and		a.penanggung_jawab_divprosbu	= e.id_divprosbu "
++" and		a.penanggung_jawab_direktorat	= f.id_direktorat "
++" and		year(a.tanggal_rca)             = "+ $P{YEAR}
++ $P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[$P!{DYNAMIC_QUERY}]]>
 	</queryString>
-	<field name="V_SEVERITY_description" class="java.lang.String"/>
-	<field name="V_SEVERITY_id_severity" class="java.lang.Integer"/>
-	<field name="V_SEVERITY_nama_tempat_rca" class="java.lang.String"/>
-	<field name="V_SEVERITY_penanggung_jawab_seksi" class="java.lang.Integer"/>
-	<field name="R_SEKSI_NAMA_SEKSI" class="java.lang.String"/>
-	<field name="V_SEVERITY_penanggung_jawab_dinas" class="java.lang.Integer"/>
-	<field name="R_DINAS_NAMA_DINAS" class="java.lang.String"/>
-	<field name="V_SEVERITY_penanggung_jawab_departemen" class="java.lang.Integer"/>
-	<field name="R_DEPARTEMEN_NAMA_DEPARTEMEN" class="java.lang.String"/>
-	<field name="V_SEVERITY_penanggung_jawab_divprosbu" class="java.lang.Integer"/>
-	<field name="R_DIVPROSBU_NAMA_DIVPROSBU" class="java.lang.String"/>
-	<field name="V_SEVERITY_penanggung_jawab_direktorat" class="java.lang.Integer"/>
-	<field name="R_DIREKTORAT_NAMA_DIREKTORAT" class="java.lang.String"/>
-	<field name="V_SEVERITY_completion_date_target" class="java.lang.String"/>
-	<field name="V_SEVERITY_status" class="java.lang.String"/>
-	<field name="V_SEVERITY_note" class="java.lang.String"/>
-	<field name="V_SEVERITY_tanggal_rca" class="java.sql.Timestamp"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="id_severity" class="java.lang.Integer"/>
+	<field name="nama_tempat_rca" class="java.lang.String"/>
+	<field name="penanggung_jawab_seksi" class="java.lang.Integer"/>
+	<field name="nama_seksi" class="java.lang.String"/>
+	<field name="penanggung_jawab_dinas" class="java.lang.Integer"/>
+	<field name="nama_dinas" class="java.lang.String"/>
+	<field name="penanggung_jawab_departemen" class="java.lang.Integer"/>
+	<field name="nama_departemen" class="java.lang.String"/>
+	<field name="penanggung_jawab_divprosbu" class="java.lang.Integer"/>
+	<field name="nama_divprosbu" class="java.lang.String"/>
+	<field name="penanggung_jawab_direktorat" class="java.lang.Integer"/>
+	<field name="nama_direktorat" class="java.lang.String"/>
+	<field name="completion_date_target" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="note" class="java.lang.String"/>
+	<field name="nama_status" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="1765" height="45"/>
+				<reportElement uuid="e0d2b62b-0199-4218-aac0-10243d1e13e9" x="0" y="0" width="1765" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -143,7 +164,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 	<columnHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="30" height="20"/>
+				<reportElement uuid="b901b161-fb58-4ae8-8e46-a32edff33895" x="0" y="0" width="30" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -157,7 +178,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="0" width="200" height="20"/>
+				<reportElement uuid="71c472a3-75d6-4c39-9c34-cda498c2e6a8" x="30" y="0" width="200" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -171,7 +192,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Deskripsi Severity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="230" y="0" width="55" height="20"/>
+				<reportElement uuid="c2fa9a34-2394-4a78-bd59-502bf4dae053" x="230" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -185,7 +206,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Severity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="285" y="0" width="75" height="20"/>
+				<reportElement uuid="2277ca02-6bf8-4632-b069-584e6f2a9b2b" x="285" y="0" width="75" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -199,7 +220,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Lokasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="0" width="180" height="20"/>
+				<reportElement uuid="374430ad-9cde-4b29-94cd-148b0042b61c" x="360" y="0" width="180" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -213,7 +234,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Direktorat Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="540" y="0" width="150" height="20"/>
+				<reportElement uuid="94278889-0e98-4cb7-842b-aba8c5d5d0b2" x="540" y="0" width="150" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -227,7 +248,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Divisi/Proyek/SBU Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="690" y="0" width="250" height="20"/>
+				<reportElement uuid="dfd8c98d-b62d-4557-8e65-a76d1343deb5" x="690" y="0" width="250" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -241,7 +262,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Departemen Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="940" y="0" width="220" height="20"/>
+				<reportElement uuid="70bbfbc9-7373-43c6-a8e0-5e5cf6869960" x="940" y="0" width="220" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -255,7 +276,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Dinas Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1160" y="0" width="260" height="20"/>
+				<reportElement uuid="835a1a40-a634-40d8-8843-9aa8341aadb2" x="1160" y="0" width="260" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -269,7 +290,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Seksi Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1420" y="0" width="120" height="20"/>
+				<reportElement uuid="a20835a2-8b01-45ec-9ee2-f195696235f8" x="1420" y="0" width="120" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -283,7 +304,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Target Tindak Lanjut]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1540" y="0" width="55" height="20"/>
+				<reportElement uuid="5dd49745-754d-4aa3-bf5d-9c816fd77583" x="1540" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -297,7 +318,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1595" y="0" width="170" height="20"/>
+				<reportElement uuid="6964ba16-8d14-493d-ac45-457675b0d811" x="1595" y="0" width="170" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -315,7 +336,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="20"/>
+				<reportElement uuid="be471d14-1dbb-4edc-8f60-25fab649a538" stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -329,7 +350,7 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="30" y="0" width="200" height="20"/>
+				<reportElement uuid="1509250d-e9cd-4f84-9b71-18830176efbf" stretchType="RelativeToBandHeight" x="30" y="0" width="200" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -341,10 +362,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{V_SEVERITY_description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="230" y="0" width="55" height="20"/>
+				<reportElement uuid="6a77bebd-ff10-4230-84a4-05b861c4773d" stretchType="RelativeToBandHeight" x="230" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -355,10 +376,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{V_SEVERITY_id_severity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{id_severity}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="285" y="0" width="75" height="20"/>
+				<reportElement uuid="0435a50e-b758-426a-8ee2-4bbe74b36c07" stretchType="RelativeToBandHeight" x="285" y="0" width="75" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -370,10 +391,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{V_SEVERITY_nama_tempat_rca}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_tempat_rca}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="360" y="0" width="180" height="20"/>
+				<reportElement uuid="e5f17258-03cc-4217-bebb-a2c5f0f92f1c" stretchType="RelativeToBandHeight" x="360" y="0" width="180" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -385,10 +406,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_DIREKTORAT_NAMA_DIREKTORAT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_direktorat}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="540" y="0" width="150" height="20"/>
+				<reportElement uuid="faf3bd4a-5a13-4be3-8aec-bbfd10ac22e8" stretchType="RelativeToBandHeight" x="540" y="0" width="150" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -400,10 +421,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_DIVPROSBU_NAMA_DIVPROSBU}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_divprosbu}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="690" y="0" width="250" height="20"/>
+				<reportElement uuid="cd4b7059-87df-4bdf-895d-52e18221a52d" stretchType="RelativeToBandHeight" x="690" y="0" width="250" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -415,10 +436,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_DEPARTEMEN_NAMA_DEPARTEMEN}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_departemen}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="940" y="0" width="220" height="20"/>
+				<reportElement uuid="f0d019e7-f830-4b7c-8aa6-99bc10693d86" stretchType="RelativeToBandHeight" x="940" y="0" width="220" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -430,10 +451,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_DINAS_NAMA_DINAS}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_dinas}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1160" y="0" width="260" height="20"/>
+				<reportElement uuid="f2d24101-09f4-49d0-a5b8-92adbaf6f376" stretchType="RelativeToBandHeight" x="1160" y="0" width="260" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -445,10 +466,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{R_SEKSI_NAMA_SEKSI}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_seksi}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1420" y="0" width="120" height="20"/>
+				<reportElement uuid="1df175f8-da67-4488-a4b8-66712e788e93" stretchType="RelativeToBandHeight" x="1420" y="0" width="120" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -459,10 +480,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{V_SEVERITY_completion_date_target}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{completion_date_target}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1540" y="0" width="55" height="20"/>
+				<reportElement uuid="28092906-434e-4ec2-af80-b9b87dac7806" stretchType="RelativeToBandHeight" x="1540" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -473,13 +494,10 @@ $P{MONTH_CLAUSE} + $P{ORG_WIL_CLAUSE} +
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{V_SEVERITY_status} != null && ! $F{V_SEVERITY_status}.isEmpty() ?
-$F{V_SEVERITY_status}.equalsIgnoreCase( "1" ) ? "Open" :
-$F{V_SEVERITY_status}.equalsIgnoreCase( "2" ) ? "Process" :
-"Closed" : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nama_status}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1595" y="0" width="170" height="20"/>
+				<reportElement uuid="b8c5fcaf-0f26-4166-b655-0bf177c58c73" stretchType="RelativeToBandHeight" x="1595" y="0" width="170" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -491,7 +509,7 @@ $F{V_SEVERITY_status}.equalsIgnoreCase( "2" ) ? "Process" :
 					<font fontName="SansSerif" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{V_SEVERITY_note}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
