@@ -109,6 +109,7 @@ function M_RCALapSeverityGrid()
 		,	{ name: 'note' }
 		,	{ name: 'id_rca_detail' }
 		,	{ name: 'nama_auditor' }
+		,	{ name: 'tanggal_rca' }
 	]);
 
 	this.store = new Ext.data.JsonStore ({
@@ -204,6 +205,12 @@ function M_RCALapSeverityGrid()
 		,	dataIndex	: 'nama_seksi'
 		,	sortable	: true
 		,	width		: 300
+		},{
+			header		: 'Target Pelaksanaan RCA'
+		,	dataIndex	: 'tanggal_rca'
+		,	align		: 'center'
+		,	sortable	: true
+		,	width		: 100
 		},{
 			header		: 'Target Tindak Lanjut'
 		,	dataIndex	: 'completion_date_target'

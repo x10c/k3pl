@@ -25,11 +25,26 @@ try {
 	int		month		= ServletUtilities.getIntParameter (request, "month", 0);
 	int		start		= ServletUtilities.getIntParameter (request, "start", 0);
 	int		limit		= ServletUtilities.getIntParameter (request, "limit", 50);
+	String	tgl_before	= "";
+	String	tgl_after	= "";
 
 	/* filter/aggregate by month */
 	if (month != 0) {
-		q_where	+=" and month(a.tanggal_rca) = "+ month;
+		if (month == 1) {
+			tgl_before	= (year - 1) +"-12-25";
+			tgl_after	= year +"-"+ month +"-24";
+		} else {
+			tgl_before	= year +"-"+ (month - 1) +"-25";
+			tgl_after	= year +"-"+ month +"-24";
+		}
+	} else {
+		tgl_before	= (year - 1) +"-12-25";
+		tgl_after	= year +"-12-24";
 	}
+
+	q_where	+=	" and		a.tanggal_rca	>= cast ('"+ tgl_before	+"' as datetime)"
+			+	" and		a.tanggal_rca	<= cast ('"+ tgl_after	+"' as datetime)";
+
 	if (id_dir != 0) {
 		q_where +="	and ("
 				+"		a.penanggung_jawab_direktorat	= "+ id_dir
@@ -81,7 +96,6 @@ try {
 		+"	and		a.penanggung_jawab_departemen	= d.id_departemen "
 		+"	and		a.penanggung_jawab_divprosbu	= e.id_divprosbu "
 		+"	and		a.penanggung_jawab_direktorat	= f.id_direktorat "
-		+"	and		year(a.tanggal_rca)				= " + year
 		+ q_where;
 
 	db_stmt	= db_con.createStatement ();
@@ -125,6 +139,7 @@ try {
 		+"						) as hasil "
 		+"				where rownum between 1 and 1 "
 		+"			) as nama_auditor "
+		+"		,	REPLACE(CONVERT(varchar, a.tanggal_rca, 111), '/', '-')		as tanggal_rca"
 		+"		,	row_number () over (order by a.tanggal_rca,g.status) as rownum"
 		+"	from	t_rca						as a"
 		+"	,		r_seksi						as b"
@@ -139,7 +154,6 @@ try {
 		+"	and		a.penanggung_jawab_departemen	= d.id_departemen "
 		+"	and		a.penanggung_jawab_divprosbu	= e.id_divprosbu "
 		+"	and		a.penanggung_jawab_direktorat	= f.id_direktorat "
-		+"	and		year(a.tanggal_rca)				= " + year
 		+ q_where
 		+" ) select * from results where rownum >= "+ start +" and rownum <= "+ (start + limit);
 
@@ -169,6 +183,7 @@ try {
 		json_o.put ("note"							, db_rs.getString	("note"));
 		json_o.put ("id_rca_detail"					, db_rs.getInt		("id_rca_detail"));
 		json_o.put ("nama_auditor"					, db_rs.getString	("nama_auditor"));
+		json_o.put ("tanggal_rca"					, db_rs.getString	("tanggal_rca"));
 
 		json_a.put (json_o);
 	}
