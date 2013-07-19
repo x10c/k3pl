@@ -167,7 +167,7 @@ function M_RCALapRCAGrid()
 			,	'jml_tl_temuan'
 			,	'tl_temuan'
 			,	'jml_tl_temuan_non'
-			,	'tl_temuan_non'
+			,	'persen_tl_temuan_non'
 			,	'avg'
 			]
 		,	url		: m_rca_lap_performance_d +'data.jsp'
@@ -226,7 +226,7 @@ function M_RCALapRCAGrid()
 		,	dataIndex	: 'jml_tl_temuan_non'
 		},{
 			header		: '% Tindak Lanjut Temuan Non 4/5'
-		,	dataIndex	: 'tl_temuan_non'
+		,	dataIndex	: 'persen_tl_temuan_non'
 		,	format		: '000.00%'
 		,	css			: 'background-color: #f0f0f0;'
 		},{
@@ -284,11 +284,11 @@ function M_RCALapperformance()
 	this.chart		= new M_RCALapPerfChart(
 									this.grid.store
 								,	'Grafik Performance RCA'
-								,	'item'				,	''
-								,	'total_part_percent',	'% Partisipasi'
-								,	'severity'			,	'% Severity 4/5'
-								,	'tl_temuan'			,	'% Tindak Lanjut Temuan 4/5'
-								,	'tl_temuan_non'		,	'% Tindak Lanjut Temuan Non 4/5'
+								,	'item'					,	''
+								,	'total_part_percent'	,	'% Partisipasi'
+								,	'severity'				,	'% Severity 4/5'
+								,	'tl_temuan'				,	'% Tindak Lanjut Temuan 4/5'
+								,	'persen_tl_temuan_non'	,	'% Tindak Lanjut Temuan Non 4/5'
 								,	'column');
 
 	this.panel = new Ext.Panel({

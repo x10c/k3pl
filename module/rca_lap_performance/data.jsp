@@ -42,12 +42,32 @@ try {
 	int			id_area		= ServletUtilities.getIntParameter (request, "id_area", 0);
 	int			year		= ServletUtilities.getIntParameter (request, "year", 0);
 	int			month		= ServletUtilities.getIntParameter (request, "month", 0);
+	String		tgl_before	= "";
+	String		tgl_after	= "";
+	String		q_date		= "";
 
 	String		nipg;
 	int			i,x;
 	int			total_part			= 0;
 	int			target				= 0;
 	double		total_part_percent	= 0.0;
+
+	/* filter/aggregate by month */
+	if (month != 0) {
+		if (month == 1) {
+			tgl_before	= (year - 1) +"-12-25";
+			tgl_after	= year +"-"+ month +"-24";
+		} else {
+			tgl_before	= year +"-"+ (month - 1) +"-25";
+			tgl_after	= year +"-"+ month +"-24";
+		}
+	} else {
+		tgl_before	= (year - 1) +"-12-25";
+		tgl_after	= year +"-12-24";
+	}
+
+	q_date	+=	" and		rca.tanggal_rca	>= cast ('"+ tgl_before	+"' as datetime)"
+			+	" and		rca.tanggal_rca	<= cast ('"+ tgl_after	+"' as datetime)";
 
 	q_part	=" select	count(rca_auditor.nipg) as total_part"
 			+" from		t_rca					as rca"
@@ -58,7 +78,6 @@ try {
 			+"	,		__user_grup				F"
 			+"	,		__grup_user				G"
 			+" where	rca.id_rca				= rca_auditor.id_rca"
-			+" and		year(rca.tanggal_rca)	= "+ year
 			+" and		rca_auditor.nipg		= A.nipg"
 			+" and		A.status_pegawai		= '1'"
 			+" and		A.id_seksi				= B.id_seksi"
@@ -78,7 +97,6 @@ try {
 				+"	,		__user_grup				F"
 				+"	,		__grup_user				G"
 				+" where	rca.id_rca				= rca_auditor.id_rca"
-				+" and		year(rca.tanggal_rca)	= "+ year
 				+" and		rca_auditor.nipg		= A.nipg"
 				+" and		A.status_pegawai		= '1'"
 				+" and		A.id_seksi				= B.id_seksi"
@@ -98,7 +116,6 @@ try {
 			+"	,		__user_grup					F"
 			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
-			+" and		year(rca.tanggal_rca)		= "+ year
 			+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 			+"	or		rca.ID_USER					= A.NIPG)"
 			+" and		A.status_pegawai			= '1'"
@@ -120,7 +137,6 @@ try {
 				+"	,		__grup_user					G"
 				+" where	rca_detail.id_rca			= rca.id_rca"
 				+" and		rca_detail.id_severity		in (4,5)"
-				+" and		year(rca.tanggal_rca)		= "+ year
 				+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 				+"	or		rca.ID_USER					= A.NIPG)"
 				+" and		A.status_pegawai			= '1'"
@@ -141,7 +157,6 @@ try {
 			+"	,		__user_grup					F"
 			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
-			+" and		year(rca.tanggal_rca)		= "+ year
 			+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 			+"	or		rca.ID_USER					= A.NIPG)"
 			+" and		A.status_pegawai			= '1'"
@@ -163,7 +178,6 @@ try {
 					+"	,		__grup_user					G"
 					+" where	rca_detail.id_rca			= rca.id_rca"
 					+" and		rca_detail.id_severity		in (4,5)"
-					+" and		year(rca.tanggal_rca)		= "+ year
 					+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 					+"	or		rca.ID_USER					= A.NIPG)"
 					+" and		A.status_pegawai			= '1'"
@@ -185,7 +199,6 @@ try {
 						+"	,		__grup_user					G"
 						+" where	rca_detail.id_rca			= rca.id_rca"
 						+" and		rca_detail.id_severity		in (1,2,3)"
-						+" and		year(rca.tanggal_rca)		= "+ year
 						+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 						+"	or		rca.ID_USER					= A.NIPG)"
 						+" and		A.status_pegawai			= '1'"
@@ -208,7 +221,6 @@ try {
 				+" where	rca_detail.id_rca			= rca.id_rca"
 				+" and		rca_detail.id_severity		in (4,5)"
 				+" and		rca_detail.status			in ('2','3')"
-				+" and		year(rca.tanggal_rca)		= "+ year
 				+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 				+"	or		rca.ID_USER					= A.NIPG)"
 				+" and		A.status_pegawai			= '1'"
@@ -231,7 +243,6 @@ try {
 					+" where	rca_detail.id_rca			= rca.id_rca"
 					+" and		rca_detail.id_severity		in (1,2,3)"
 					+" and		rca_detail.status			in ('2','3')"
-					+" and		year(rca.tanggal_rca)		= "+ year
 					+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 					+"	or		rca.ID_USER					= A.NIPG)"
 					+" and		A.status_pegawai			= '1'"
@@ -277,7 +288,6 @@ try {
 			+"	,		__grup_user					G"
 			+" where	rca_detail.id_rca			= rca.id_rca"
 			+" and		rca.id_rca					= rca_auditor.id_rca"
-			+" and		year(rca.tanggal_rca)		= "+ year
 			+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 			+"	or		rca.ID_USER					= A.NIPG)"
 			+" and		A.status_pegawai			= '1'"
@@ -304,18 +314,19 @@ try {
 					+"			isnull (sum (B.nov), 0) +"
 					+"			isnull (sum (B.dec), 0) ) as target";
 	} else {
-		q_target			=" select isnull ( sum (B."+ months[month - 1] +" ) , 0 ) as target";
-		q_part				+=" and month(rca.tanggal_rca) = "+ month;
-		q_partisi			+=" and month(rca.tanggal_rca) = "+ month;
-		q_vio				+=" and month(rca.tanggal_rca) = "+ month;
-		q_temuan			+=" and month(rca.tanggal_rca) = "+ month;
-		q_sev				+=" and month(rca.tanggal_rca) = "+ month;
-		q_get_temuan		+=" and month(rca.tanggal_rca) = "+ month;
-		q_get_temuan_non	+=" and month(rca.tanggal_rca) = "+ month;
-		q_tl_temuan			+=" and month(rca.tanggal_rca) = "+ month;
-		q_tl_temuan_non		+=" and month(rca.tanggal_rca) = "+ month;
-		q_avg				+=" and month(rca.tanggal_rca) = "+ month;
+		q_target	=" select isnull ( sum (B."+ months[month - 1] +" ) , 0 ) as target";
 	}
+
+	q_part				+= q_date;
+	q_partisi			+= q_date;
+	q_vio				+= q_date;
+	q_temuan			+= q_date;
+	q_sev				+= q_date;
+	q_get_temuan		+= q_date;
+	q_get_temuan_non	+= q_date;
+	q_tl_temuan			+= q_date;
+	q_tl_temuan_non		+= q_date;
+	q_avg				+= q_date;
 
 	q_target	+=" from	r_pegawai				A"
 				+"	,		t_rca_target_pegawai	B"
@@ -449,6 +460,7 @@ try {
 			+"				)"
 			+"				* 100, 2, 1"
 			+"			)							as tl_temuan"
+			+"	,		GET_TEMUAN_NON.jml			as jml_temuan_non"
 			+"	,		TL_TEMUAN_NON.temuan		as jml_tl_temuan_non"
 			+"	,		round ("
 			+"				("
@@ -462,7 +474,7 @@ try {
 			+"					)"
 			+"				 )"
 			+"				* 100, 2, 1"
-			+"			)							as tl_temuan_non"
+			+"			)							as persen_tl_temuan_non"
 			+"	,		AVERAGE.average"
 			+"	from	("+ q_target			+ q_where + id +") T"
 			+"	,		("+ q_partisi			+ q_where + id +") PARTISIPAN"
@@ -500,7 +512,8 @@ try {
 			json_o.put ("jml_tl_temuan"			,db_rs.getDouble	("jml_tl_temuan"));
 			json_o.put ("tl_temuan"				,db_rs.getDouble	("tl_temuan"));
 			json_o.put ("jml_tl_temuan_non"		,db_rs.getDouble	("jml_tl_temuan_non"));
-			json_o.put ("tl_temuan_non"			,db_rs.getDouble	("tl_temuan_non"));
+			json_o.put ("jml_temuan_non"		,db_rs.getDouble	("jml_temuan_non"));
+			json_o.put ("persen_tl_temuan_non"	,db_rs.getDouble	("persen_tl_temuan_non"));
 			json_o.put ("avg"					,db_rs.getDouble	("average"));
 
 			json_a.put (json_o);
