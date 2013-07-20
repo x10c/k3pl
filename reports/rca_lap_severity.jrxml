@@ -69,9 +69,24 @@
 ""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[$P{MONTH} != null && ! $P{MONTH}.isEmpty() && ! $P{MONTH}.equalsIgnoreCase( "0" ) ?
-"     AND month(V_SEVERITY.\"tanggal_rca\") = " + $P{MONTH} + " \n" :
-""]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["\n and		a.tanggal_rca	>= cast ('"
++ (
+    $P{MONTH} == null || ($P{MONTH} != null && $P{MONTH}.isEmpty())
+    ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
+    : Integer.parseInt ($P{MONTH}) == 1
+        ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
+        :  $P{YEAR} +"-"+ (Integer.parseInt ($P{MONTH}) - 1) +"-25"
+)
++"' as datetime) "
++"\n and a.tanggal_rca	<= cast ('"
++ (
+    $P{MONTH} == null || ($P{MONTH} != null && $P{MONTH}.isEmpty())
+    ? $P{YEAR} +"-12-24"
+    : Integer.parseInt ($P{MONTH}) == 1
+        ? $P{YEAR} +"-"+ $P{MONTH} +"-24"
+        : $P{YEAR} +"-"+ $P{MONTH} +"-24"
+)
++"' as datetime) "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ORG_WIL_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{IS_IN_ORG} != null &&
@@ -124,8 +139,22 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 +" and		a.penanggung_jawab_departemen	= d.id_departemen "
 +" and		a.penanggung_jawab_divprosbu	= e.id_divprosbu "
 +" and		a.penanggung_jawab_direktorat	= f.id_direktorat "
-+" and		year(a.tanggal_rca)             = "+ $P{YEAR}
++ $P{MONTH_CLAUSE}
 + $P{ORG_WIL_CLAUSE}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_BEFORE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH} == null || ($P{MONTH} != null && $P{MONTH}.isEmpty())
+? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
+: Integer.parseInt ($P{MONTH}) == 1
+    ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
+    :  $P{YEAR} +"-"+ (Integer.parseInt ($P{MONTH}) - 1) +"-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATE_AFTER" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH} == null || ($P{MONTH} != null && $P{MONTH}.isEmpty())
+? $P{YEAR} +"-12-24"
+: Integer.parseInt ($P{MONTH}) == 1
+    ? $P{YEAR} +"-"+ $P{MONTH} +"-24"
+    : $P{YEAR} +"-"+ $P{MONTH} +"-24"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[$P!{DYNAMIC_QUERY}]]>
