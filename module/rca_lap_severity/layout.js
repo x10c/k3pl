@@ -206,7 +206,7 @@ function M_RCALapSeverityGrid()
 		,	sortable	: true
 		,	width		: 300
 		},{
-			header		: 'Target Pelaksanaan RCA'
+			header		: 'Tanggal Pelaksanaan'
 		,	dataIndex	: 'tanggal_rca'
 		,	align		: 'center'
 		,	sortable	: true

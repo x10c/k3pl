@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_severity" pageWidth="1805" pageHeight="595" orientation="Landscape" columnWidth="1765" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="1e936050-e90f-4576-9b30-bab7a7b19b93">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rca_lap_severity" pageWidth="2080" pageHeight="595" orientation="Landscape" columnWidth="2040" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="1e936050-e90f-4576-9b30-bab7a7b19b93">
+	<property name="ireport.zoom" value="1.210000000000001"/>
+	<property name="ireport.x" value="1652"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="IS_IN_ORG" class="java.lang.String">
 		<parameterDescription><![CDATA[1: organisasi
@@ -71,7 +71,7 @@
 	<parameter name="MONTH_CLAUSE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["\n and		a.tanggal_rca	>= cast ('"
 + (
-    $P{MONTH} == null || ($P{MONTH} != null && $P{MONTH}.isEmpty())
+    $P{MONTH} == null || ($P{MONTH} != null && ($P{MONTH}.isEmpty() || $P{MONTH}.equals( "0" )))
     ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
     : Integer.parseInt ($P{MONTH}) == 1
         ? (Integer.parseInt ($P{YEAR}) - 1) +"-12-25"
@@ -80,7 +80,7 @@
 +"' as datetime) "
 +"\n and a.tanggal_rca	<= cast ('"
 + (
-    $P{MONTH} == null || ($P{MONTH} != null && $P{MONTH}.isEmpty())
+    $P{MONTH} == null || ($P{MONTH} != null && ($P{MONTH}.isEmpty() || $P{MONTH}.equals( "0" )))
     ? $P{YEAR} +"-12-24"
     : Integer.parseInt ($P{MONTH}) == 1
         ? $P{YEAR} +"-"+ $P{MONTH} +"-24"
@@ -117,15 +117,16 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 +" ,		( "
 +" 			select	nama "
 +" 			from 	( "
-+" 				select	i.nama_pegawai                      as nama "
-+"				,       row_number() over(order by h.nipg) 	as rownum "
-+" 				from 	t_rca_auditor                       as h "
-+" 				,       r_pegawai                       	as i "
-+" 				where 	h.nipg                              = i.nipg "
-+" 				and 	h.id_rca                            = a.id_rca "
-+" 			) as hasil "
-+" 			where rownum between 1 and 1 "
-+" 		) as nama_auditor "
++"                  select	i.nama_pegawai                      as nama "
++"              	,       row_number() over(order by h.nipg) 	as rownum "
++"          		from 	t_rca_auditor                       as h "
++"      			,       r_pegawai                       	as i "
++"   				where 	h.nipg                              = i.nipg "
++"                  and 	h.id_rca                            = a.id_rca "
++"              ) as hasil "
++"          	where rownum between 1 and 1 "
++"          ) as nama_auditor "
++" ,        REPLACE(CONVERT(varchar, a.tanggal_rca, 111), '/', '-')		as tanggal_rca"
 +" from	t_rca			as a "
 +" ,	r_seksi			as b "
 +" ,	r_dinas			as c "
@@ -176,13 +177,15 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 	<field name="status" class="java.lang.String"/>
 	<field name="note" class="java.lang.String"/>
 	<field name="nama_status" class="java.lang.String"/>
+	<field name="tanggal_rca" class="java.lang.String"/>
+	<field name="nama_auditor" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="45" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="e0d2b62b-0199-4218-aac0-10243d1e13e9" x="0" y="0" width="1765" height="45"/>
+				<reportElement uuid="e0d2b62b-0199-4218-aac0-10243d1e13e9" x="0" y="0" width="2040" height="45"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="15" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -202,12 +205,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="71c472a3-75d6-4c39-9c34-cda498c2e6a8" x="30" y="0" width="200" height="20"/>
+				<reportElement uuid="71c472a3-75d6-4c39-9c34-cda498c2e6a8" x="169" y="0" width="201" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -216,12 +219,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Deskripsi Severity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c2fa9a34-2394-4a78-bd59-502bf4dae053" x="230" y="0" width="55" height="20"/>
+				<reportElement uuid="c2fa9a34-2394-4a78-bd59-502bf4dae053" x="370" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -230,12 +233,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Severity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="2277ca02-6bf8-4632-b069-584e6f2a9b2b" x="285" y="0" width="75" height="20"/>
+				<reportElement uuid="2277ca02-6bf8-4632-b069-584e6f2a9b2b" x="425" y="0" width="75" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -244,12 +247,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Lokasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="374430ad-9cde-4b29-94cd-148b0042b61c" x="360" y="0" width="180" height="20"/>
+				<reportElement uuid="374430ad-9cde-4b29-94cd-148b0042b61c" x="500" y="0" width="180" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -258,12 +261,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Direktorat Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="94278889-0e98-4cb7-842b-aba8c5d5d0b2" x="540" y="0" width="150" height="20"/>
+				<reportElement uuid="94278889-0e98-4cb7-842b-aba8c5d5d0b2" x="680" y="0" width="150" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -272,12 +275,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Divisi/Proyek/SBU Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="dfd8c98d-b62d-4557-8e65-a76d1343deb5" x="690" y="0" width="250" height="20"/>
+				<reportElement uuid="dfd8c98d-b62d-4557-8e65-a76d1343deb5" x="830" y="0" width="250" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -286,12 +289,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Departemen Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="70bbfbc9-7373-43c6-a8e0-5e5cf6869960" x="940" y="0" width="220" height="20"/>
+				<reportElement uuid="70bbfbc9-7373-43c6-a8e0-5e5cf6869960" x="1080" y="0" width="220" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -300,12 +303,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dinas Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="835a1a40-a634-40d8-8843-9aa8341aadb2" x="1160" y="0" width="260" height="20"/>
+				<reportElement uuid="835a1a40-a634-40d8-8843-9aa8341aadb2" x="1300" y="0" width="260" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -314,12 +317,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Seksi Owner]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a20835a2-8b01-45ec-9ee2-f195696235f8" x="1420" y="0" width="120" height="20"/>
+				<reportElement uuid="a20835a2-8b01-45ec-9ee2-f195696235f8" x="1695" y="0" width="120" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -328,12 +331,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Target Tindak Lanjut]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5dd49745-754d-4aa3-bf5d-9c816fd77583" x="1540" y="0" width="55" height="20"/>
+				<reportElement uuid="5dd49745-754d-4aa3-bf5d-9c816fd77583" x="1815" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -342,12 +345,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="6964ba16-8d14-493d-ac45-457675b0d811" x="1595" y="0" width="170" height="20"/>
+				<reportElement uuid="6964ba16-8d14-493d-ac45-457675b0d811" x="1870" y="0" width="170" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -356,9 +359,37 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0306b9fb-edd8-408d-b5ea-06821caf6d56" x="1560" y="0" width="135" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal Pelaksanaan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="555e79ab-10f6-4208-8d02-923e3fea5b91" x="30" y="0" width="139" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Auditor]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -374,12 +405,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1509250d-e9cd-4f84-9b71-18830176efbf" stretchType="RelativeToBandHeight" x="30" y="0" width="200" height="20"/>
+				<reportElement uuid="1509250d-e9cd-4f84-9b71-18830176efbf" stretchType="RelativeToBandHeight" x="169" y="0" width="201" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -387,14 +418,14 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="6a77bebd-ff10-4230-84a4-05b861c4773d" stretchType="RelativeToBandHeight" x="230" y="0" width="55" height="20"/>
+				<reportElement uuid="6a77bebd-ff10-4230-84a4-05b861c4773d" stretchType="RelativeToBandHeight" x="370" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -403,12 +434,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id_severity}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="0435a50e-b758-426a-8ee2-4bbe74b36c07" stretchType="RelativeToBandHeight" x="285" y="0" width="75" height="20"/>
+				<reportElement uuid="0435a50e-b758-426a-8ee2-4bbe74b36c07" stretchType="RelativeToBandHeight" x="425" y="0" width="75" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -417,13 +448,13 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_tempat_rca}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e5f17258-03cc-4217-bebb-a2c5f0f92f1c" stretchType="RelativeToBandHeight" x="360" y="0" width="180" height="20"/>
+				<reportElement uuid="e5f17258-03cc-4217-bebb-a2c5f0f92f1c" stretchType="RelativeToBandHeight" x="500" y="0" width="180" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -431,14 +462,14 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_direktorat}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="faf3bd4a-5a13-4be3-8aec-bbfd10ac22e8" stretchType="RelativeToBandHeight" x="540" y="0" width="150" height="20"/>
+				<reportElement uuid="faf3bd4a-5a13-4be3-8aec-bbfd10ac22e8" stretchType="RelativeToBandHeight" x="680" y="0" width="150" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -446,14 +477,14 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_divprosbu}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="cd4b7059-87df-4bdf-895d-52e18221a52d" stretchType="RelativeToBandHeight" x="690" y="0" width="250" height="20"/>
+				<reportElement uuid="cd4b7059-87df-4bdf-895d-52e18221a52d" stretchType="RelativeToBandHeight" x="830" y="0" width="250" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -461,14 +492,14 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_departemen}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f0d019e7-f830-4b7c-8aa6-99bc10693d86" stretchType="RelativeToBandHeight" x="940" y="0" width="220" height="20"/>
+				<reportElement uuid="f0d019e7-f830-4b7c-8aa6-99bc10693d86" stretchType="RelativeToBandHeight" x="1080" y="0" width="220" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -476,14 +507,14 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_dinas}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f2d24101-09f4-49d0-a5b8-92adbaf6f376" stretchType="RelativeToBandHeight" x="1160" y="0" width="260" height="20"/>
+				<reportElement uuid="f2d24101-09f4-49d0-a5b8-92adbaf6f376" stretchType="RelativeToBandHeight" x="1300" y="0" width="260" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -491,14 +522,14 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_seksi}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1df175f8-da67-4488-a4b8-66712e788e93" stretchType="RelativeToBandHeight" x="1420" y="0" width="120" height="20"/>
+				<reportElement uuid="1df175f8-da67-4488-a4b8-66712e788e93" stretchType="RelativeToBandHeight" x="1695" y="0" width="120" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -507,12 +538,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{completion_date_target}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="28092906-434e-4ec2-af80-b9b87dac7806" stretchType="RelativeToBandHeight" x="1540" y="0" width="55" height="20"/>
+				<reportElement uuid="28092906-434e-4ec2-af80-b9b87dac7806" stretchType="RelativeToBandHeight" x="1815" y="0" width="55" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -521,12 +552,12 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama_status}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="b8c5fcaf-0f26-4166-b655-0bf177c58c73" stretchType="RelativeToBandHeight" x="1595" y="0" width="170" height="20"/>
+				<reportElement uuid="b8c5fcaf-0f26-4166-b655-0bf177c58c73" stretchType="RelativeToBandHeight" x="1870" y="0" width="170" height="20"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -534,11 +565,39 @@ $P{IS_IN_ORG}.equalsIgnoreCase( "0" )
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SansSerif" size="8" isBold="true"/>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d20b0dcc-0038-4bb5-892d-bd0c5c36a1f0" stretchType="RelativeToBandHeight" x="1560" y="0" width="135" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tanggal_rca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f87957e6-34c5-4412-899f-3d0d52de493e" stretchType="RelativeToBandHeight" x="30" y="0" width="139" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama_auditor}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
