@@ -8,14 +8,21 @@
 <%@ include file="../modinit.jsp" %>
 <%
 String	nipg	= "";
-String	q_where	= "";
+String	q_where	= " where 1 = 1 ";
+String	filter	= "";
 int		start	= 0;
 int		limit	= 0;
 int		total	= 0;
+JSONArray	f				= null;
+JSONObject	fo				= null;
+String		filter_type		= "";
+String		filter_v		= "";
+JSONArray	filter_list_v	= null;
 try {
 	nipg	= request.getParameter ("nipg");
 	start	= ServletUtilities.getIntParameter (request, "start", 0);
 	limit	= ServletUtilities.getIntParameter (request, "limit", 50);
+	filter	= request.getParameter ("filter");
 
 	if (null != nipg) {
 		q_where +=" where nipg = '"+ nipg +"'";
@@ -23,6 +30,33 @@ try {
 		if (! "1".equals (user_group)) {
 			q_where	+=" where	id_direktorat	= "+ user_dir
 					+ " and		id_divprosbu	= "+ user_div;
+		}
+	}
+
+	if (filter != null && ! filter.isEmpty ()) {
+		f = new JSONArray (filter);
+
+		for (int i = 0; i < f.length (); i++) {
+			fo = f.getJSONObject (i);
+
+			filter_type	= fo.getString ("type");
+			filter_v	= fo.getString ("value");
+
+			if (filter_type.equals ("list")) {
+				filter_list_v	= new JSONArray (filter_v);
+
+				q_where	+=" and "+ fo.getString ("field") +" in ("+ filter_list_v.join (",").replace ("\"", "") +") ";
+			} else if (filter_type.equals ("boolean")) {
+				if (filter_v.equals ("true")) {
+					filter_v = "1";
+				} else {
+					filter_v = "0";
+				}
+
+				q_where	+=" and "+ fo.getString ("field") +" = "+ filter_v;
+			} else {
+				q_where	+=" and "+ fo.getString ("field") +" like '%"+ filter_v +"%' ";
+			}
 		}
 	}
 

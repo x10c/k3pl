@@ -367,7 +367,7 @@ function M_RefPegawai(load_once)
  */
 	this.filters = new Ext.ux.grid.GridFilters({
 			encode	: true
-		,	local	: true
+		,	local	: false
 		});
 
 	this.columns = [
