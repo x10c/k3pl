@@ -3454,7 +3454,7 @@ function M_TrxRCAList()
 
 	this.filters = new Ext.ux.grid.GridFilters({
 			encode	: true
-		,	local	: true
+		,	local	: false
 	});
 
 	this.cm = new Ext.grid.ColumnModel({
