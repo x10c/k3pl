@@ -1239,13 +1239,19 @@ k3pl.form.SetOrganisasi = Ext.extend (Ext.form.FieldSet, {
 		this.formDirektorat.do_load();
 
 		// disable form directorat and DivProSbu if group != 1
-		var group = parseInt (Ext.util.Cookies.get ('user.group'));
+		var group	= parseInt (Ext.util.Cookies.get ('user.group'));
+		var wilayah	= parseInt (Ext.util.Cookies.get ('user.wilayah'));
 
-		if (group != 1) {
+		if (group == 1) {
+			this.formDirektorat.setDisabled (false);
+			this.formDivProSBU.setDisabled (false);
+		} else {
 			this.formDirektorat.setDisabled (true);
 			this.formDivProSBU.setDisabled (true);
-		} else {
-			this.formDirektorat.setDisabled (false);
+		}
+
+		/* Enable divisi only if wilayah is in "Kantor Pusat" */
+		if (wilayah == 21) {
 			this.formDivProSBU.setDisabled (false);
 		}
 	}

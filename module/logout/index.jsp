@@ -26,6 +26,7 @@ session.removeAttribute("user.divprosbu");
 session.removeAttribute("user.departemen");
 session.removeAttribute("user.dinas");
 session.removeAttribute("user.seksi");
+session.removeAttribute("user.wilayah");
 session.removeAttribute("db.con");
 session.removeAttribute("db.url");
 
@@ -41,7 +42,8 @@ if (cookies != null) {
 		||  c_name.equalsIgnoreCase ("user.divprosbu")
 		||  c_name.equalsIgnoreCase ("user.departemen")
 		||  c_name.equalsIgnoreCase ("user.dinas")
-		||  c_name.equalsIgnoreCase ("user.seksi")) {
+		||  c_name.equalsIgnoreCase ("user.seksi")
+		||  c_name.equalsIgnoreCase ("user.wilayah")) {
 			cookies[i].setMaxAge (0);
 			cookies[i].setPath (c_path);
 			response.addCookie (cookies[i]);

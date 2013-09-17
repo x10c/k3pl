@@ -26,6 +26,7 @@ String		user_dinas		= null;
 String		user_dep		= null;
 String		user_div		= null;
 String		user_dir		= null;
+String		user_wilayah	= null;
 String		nipg			= null;
 String		pass			= null;
 Cookie		c_user_nipg		= null;
@@ -37,6 +38,7 @@ Cookie		c_user_div		= null;
 Cookie		c_user_dep		= null;
 Cookie		c_user_din		= null;
 Cookie		c_user_sek		= null;
+Cookie		c_user_wilayah	= null;
 String		c_path			= request.getContextPath ();
 int			c_max_age		= 60 * 60 * 24 * 30; // 30 days
 JSONObject	_return			= new JSONObject ();
@@ -60,13 +62,17 @@ try {
 			+" ,		B.id_departemen"
 			+" ,		B.id_dinas"
 			+" ,		B.id_seksi"
+			+" ,		D.id_wilayah"
 			+" from   	__user		A"
 			+" ,      	r_pegawai	B"
 			+" ,		__user_grup	C"
+			+" ,		r_seksi		D"
 			+" where	A.nipg		= '"+ nipg +"'"
 			+" and		A.password	= '"+ pass +"'"
 			+" and		A.nipg		= B.nipg"
-			+" and		A.nipg		= C.nipg";
+			+" and		A.nipg		= C.nipg"
+			+" and		B.id_seksi	= D.id_seksi";
+
 	db_rs	= db_stmt.executeQuery (db_q);
 
 	if (! db_rs.next()) {
@@ -86,6 +92,7 @@ try {
 	user_dep		= db_rs.getString ("id_departemen");
 	user_dinas		= db_rs.getString ("id_dinas");
 	user_seksi		= db_rs.getString ("id_seksi");
+	user_wilayah	= db_rs.getString ("id_wilayah");
 
 	db_rs.close();
 
@@ -106,6 +113,7 @@ try {
 	session.setAttribute("user.departemen", user_dep);
 	session.setAttribute("user.dinas", user_dinas);
 	session.setAttribute("user.seksi", user_seksi);
+	session.setAttribute("user.wilayah", user_wilayah);
 
 	/* save user data to cookies */
 	c_user_nipg		= new Cookie ("user.nipg", user_nipg);
@@ -117,6 +125,7 @@ try {
 	c_user_dep		= new Cookie ("user.departemen", user_dep);
 	c_user_din		= new Cookie ("user.dinas", user_dinas);
 	c_user_sek		= new Cookie ("user.seksi", user_seksi);
+	c_user_wilayah	= new Cookie ("user.wilayah", user_wilayah);
 
 	c_user_nipg.setMaxAge (c_max_age);
 	c_user_group.setMaxAge (c_max_age);
@@ -127,6 +136,7 @@ try {
 	c_user_dep.setMaxAge (c_max_age);
 	c_user_din.setMaxAge (c_max_age);
 	c_user_sek.setMaxAge (c_max_age);
+	c_user_wilayah.setMaxAge (c_max_age);
 
 	c_user_nipg.setPath (c_path);
 	c_user_group.setPath (c_path);
@@ -137,6 +147,7 @@ try {
 	c_user_dep.setPath (c_path);
 	c_user_din.setPath (c_path);
 	c_user_sek.setPath (c_path);
+	c_user_wilayah.setPath (c_path);
 
 	response.addCookie (c_user_nipg);
 	response.addCookie (c_user_group);
@@ -147,6 +158,7 @@ try {
 	response.addCookie (c_user_dep);
 	response.addCookie (c_user_din);
 	response.addCookie (c_user_sek);
+	response.addCookie (c_user_wilayah);
 
 	/* insert to __log */
 	db_q=" insert into __log (tanggal,nipg,nama_menu,status_akses)"
