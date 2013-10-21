@@ -25,11 +25,11 @@ try {
 	filter	= request.getParameter ("filter");
 
 	if (null != nipg) {
-		q_where +=" where nipg = '"+ nipg +"'";
+		q_where +=" and nipg = '"+ nipg +"'";
 	} else {
 		if (! "1".equals (user_group)) {
-			q_where	+=" where	id_direktorat	= "+ user_dir
-					+ " and		id_divprosbu	= "+ user_div;
+			q_where	+=" and	id_direktorat	= "+ user_dir
+					+ " and	id_divprosbu	= "+ user_div;
 		}
 	}
 

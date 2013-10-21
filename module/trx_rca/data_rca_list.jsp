@@ -93,7 +93,11 @@ try {
 		+" from		t_rca	as a "
 		+" where	1=1 ";
 
-	db_q+=" ) select count (*) as total from results where 1 = 1 "+ q_where;
+	if (load_type.equals("all")) {
+		db_q+=" ) select count (*) as total from results where 1 = 1 "+ q_where;
+	} else {
+		db_q+=" ) select count (*) as total from results where 1 = 1 and id_user = '"+ user_nipg + "'" + q_where;
+	}
 
 	db_stmt	= db_con.createStatement ();
 	db_rs	= db_stmt.executeQuery (db_q + q_where);
