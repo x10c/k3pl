@@ -371,7 +371,7 @@ function M_HomeUserRCA()
 	});
 
 	this.panel = new Ext.grid.GridPanel({
-			title				: 'Data Risk Containment Audit (RCA)'
+			title				: 'Data Risk Containment Audit (RCA) Detail'
 		,	region				:"center"
 		,	layout				:"fit"
 		,	store				: this.store
@@ -387,11 +387,23 @@ function M_HomeUserRCA()
 			})
 	});
 
-	this.do_refresh = function()
+	this.do_refresh = function(ha_level)
 	{
+		var load_type = 'user';
+
+		this.ha_level = ha_level;
+
+		if (this.ha_level == 4) {
+			load_type = 'all';
+		}
+
+		this.store.baseParams.load_type = load_type;
+
 		this.store.load({
 			params	: {
-				load_type : ''
+				start		: 0
+			,	limit		: 50
+			,	load_type	: load_type
 			}
 		});
 	}
@@ -610,7 +622,7 @@ function M_Home()
 	this.do_refresh = function(ha_level)
 	{
 		this.data_obs.do_refresh(ha_level);
-		this.data_rca.do_refresh();
+		this.data_rca.do_refresh(ha_level);
 		this.panel_log.do_refresh(ha_level);
 		if (_g_ha < 4) {
 			this.panel.hideTabStripItem(1);

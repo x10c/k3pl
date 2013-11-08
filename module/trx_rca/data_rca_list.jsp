@@ -93,11 +93,17 @@ try {
 		+" from		t_rca	as a "
 		+" where	1=1 ";
 
-	if (load_type.equals("all")) {
-		db_q+=" ) select count (*) as total from results where 1 = 1 "+ q_where;
-	} else {
-		db_q+=" ) select count (*) as total from results where 1 = 1 and id_user = '"+ user_nipg + "'" + q_where;
+	if (! user_group.equalsIgnoreCase ("1")) {
+		if (user_group.equalsIgnoreCase ("11")) {
+			db_q+=" and	a.auditor_divprosbu		= "+ user_div
+				+" and	a.auditor_direktorat	= "+ user_dir;
+		} else {
+			db_q	+="	and (A.id_user = '"+ user_nipg +"'"
+					+ " or	A.penanggung_jawab_nipg = '"+ user_nipg +"')";
+		}
 	}
+
+	db_q+=" ) select count (*) as total from results where 1 = 1 "+ q_where;
 
 	db_stmt	= db_con.createStatement ();
 	db_rs	= db_stmt.executeQuery (db_q + q_where);
@@ -132,18 +138,23 @@ try {
 		+" ,		( select g.nama_pegawai from r_pegawai as g where a.penanggung_jawab_nipg = g.nipg) as nama_pic "
 		+" ,		'" + user_nipg + "' as user_login "
 		+" ,		a.id_user	as id_user "
+		+" ,		("
+		+" 			select		case ISNULL(MIN(x.status), 1) when 3 then 'Closed' when 2 then 'Process' else 'Open' end"
+		+" 			from		t_rca_detail	x"
+		+" 			where		x.id_rca		= a.id_rca"
+		+" 			group by	x.id_rca"
+		+" 			) status"
 		+" ,		ROW_NUMBER() OVER (ORDER BY a.id_user asc, a.tanggal_rca desc) as rownum"
 		+" from		t_rca	as a "
 		+" where	1=1 ";
 
 	if (! user_group.equalsIgnoreCase ("1")) {
-		if (load_type.equals("all")) {
-			db_q+=" or		'"+ user_nipg +"' in (select c.nipg from __user_grup as c where c.id_grup = 11)"
-				+" and	a.auditor_divprosbu		= "+ user_div
+		if (user_group.equalsIgnoreCase ("11")) {
+			db_q+=" and	a.auditor_divprosbu		= "+ user_div
 				+" and	a.auditor_direktorat	= "+ user_dir;
 		} else {
-			db_q	+="	and A.id_user = '"+ user_nipg +"'"
-					+ " or	A.penanggung_jawab_nipg = '"+ user_nipg +"'";
+			db_q	+="	and (A.id_user = '"+ user_nipg +"'"
+					+ " or	A.penanggung_jawab_nipg = '"+ user_nipg +"')";
 		}
 	}
 
@@ -164,6 +175,7 @@ try {
 		data.put ("nama_pic"				, db_rs.getString("nama_pic"));
 		data.put ("user_login"				, db_rs.getString("user_login"));
 		data.put ("id_user"					, db_rs.getString("id_user"));
+		data.put ("status"					, db_rs.getString("status"));
 
 		json_a.put (data);
 	}

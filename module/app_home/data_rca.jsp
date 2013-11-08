@@ -28,6 +28,7 @@ JSONObject	_return		= new JSONObject ();
 try {
 	Cookie[]	cookies		= request.getCookies ();
 	String		user_nipg	= ServletUtilities.getCookieValue (cookies, "user.nipg", "");
+	String		user_group	= ServletUtilities.getCookieValue (cookies, "user.group", null);
 	String		user_div	= ServletUtilities.getCookieValue (cookies, "user.divprosbu", "");
 	String		user_dir	= ServletUtilities.getCookieValue (cookies, "user.direktorat", "");
 	Connection	db_con		= (Connection) session.getAttribute("db.con");
@@ -38,12 +39,31 @@ try {
 	}
 
 	// get total
-	db_q	=" select	count (*)		as total"
-			+" from		t_rca			as a "
-			+" ,		t_rca_detail	as b "
-			+" where	a.id_rca		= b.id_rca "
-			+" and		(a.penanggung_jawab_nipg = '"+user_nipg+"'"
-			+" or		'"+user_nipg+"' in (select c.nipg from t_rca_auditor c where c.id_rca = a.id_rca)) ";
+	db_q=" with results as ("
+		+" select	replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
+		+" ,		b.description 											as description "
+		+" ,		b.id_severity 											as id_severity "
+		+" ,		case b.status "
+		+" 				when '1' then 'Open' "
+		+" 				when '2' then 'Process' "
+		+" 				when '3' then 'Closed' "
+		+" 			end as status "
+		+" ,		ROW_NUMBER() OVER (ORDER BY a.tanggal_rca desc) as rownum"
+		+" from		t_rca_detail	as b "
+		+" ,		t_rca			as a "
+		+" where	b.id_rca		= a.id_rca";
+
+	if (! user_group.equalsIgnoreCase ("1")) {
+		if (user_group.equalsIgnoreCase ("11")) {
+			db_q+=" and	a.auditor_divprosbu		= "+ user_div
+				+" and	a.auditor_direktorat	= "+ user_dir;
+		} else {
+			db_q	+="	and (A.id_user = '"+ user_nipg +"'"
+					+ " or	A.penanggung_jawab_nipg = '"+ user_nipg +"')";
+		}
+	}
+
+	db_q+=" ) select count (*) as total from results";
 
 	db_stmt	= db_con.createStatement ();
 	db_rs	= db_stmt.executeQuery (db_q);
@@ -56,26 +76,28 @@ try {
 	db_stmt.close ();
 
 	// get data
-	db_q	=" with results as ("
-			+" select	replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
-			+" ,		b.description 											as description "
-			+" ,		b.id_severity 											as id_severity "
-			+" ,		case b.status "
-			+" 				when '1' then 'Open' "
-			+" 				when '2' then 'Process' "
-			+" 				when '3' then 'Closed' "
-			+" 			end as status "
-			+" ,		ROW_NUMBER() OVER (ORDER BY a.tanggal_rca desc) as rownum"
-			+" from		t_rca			as a "
-			+" ,		t_rca_detail	as b "
-			+" where	a.id_rca		= b.id_rca "
-			+" and		(a.penanggung_jawab_nipg = '"+user_nipg+"'"
-			+" or		'"+user_nipg+"' in (select c.nipg from t_rca_auditor c where c.id_rca = a.id_rca)) ";
+	db_q=" with results as ("
+		+" select	replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
+		+" ,		b.description 											as description "
+		+" ,		b.id_severity 											as id_severity "
+		+" ,		case b.status "
+		+" 				when '1' then 'Open' "
+		+" 				when '2' then 'Process' "
+		+" 				when '3' then 'Closed' "
+		+" 			end as status "
+		+" ,		ROW_NUMBER() OVER (ORDER BY a.tanggal_rca desc) as rownum"
+		+" from		t_rca_detail	as b "
+		+" ,		t_rca			as a "
+		+" where	b.id_rca	= a.id_rca";
 
-	if (load_type.equals("all")) {
-		db_q	+=" or		'"+user_nipg+"' in (select d.nipg from __user_grup as d where d.id_grup = 1) "
-				+" and	a.auditor_divprosbu		= "+ user_div
+	if (! user_group.equalsIgnoreCase ("1")) {
+		if (user_group.equalsIgnoreCase ("11")) {
+			db_q+=" and	a.auditor_divprosbu		= "+ user_div
 				+" and	a.auditor_direktorat	= "+ user_dir;
+		} else {
+			db_q	+="	and (A.id_user = '"+ user_nipg +"'"
+					+ " or	A.penanggung_jawab_nipg = '"+ user_nipg +"')";
+		}
 	}
 
 	db_q	+=" ) select * from results where rownum >= "+ start +" and rownum <= "+ (start + limit);

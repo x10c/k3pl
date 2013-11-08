@@ -265,8 +265,7 @@ function M_TrxRCADetail()
 
 	this.cm = new Ext.grid.ColumnModel({
 		columns	: [
-				new Ext.grid.RowNumberer()
-			,{
+			{
 				header		: 'Desription'
 			,	id			: 'description'
 			,	dataIndex	: 'description'
@@ -400,7 +399,7 @@ function M_TrxRCADetail()
 	});
 	
 	this.col_hdr = [{
-			colspan	: 2
+			colspan	: 1
 		},{
 			header	: 'People'
 		,	colspan	: 2
@@ -833,8 +832,7 @@ function M_TrxEditRCADetail()
 
 	this.cm = new Ext.grid.ColumnModel({
 		columns	: [
-				new Ext.grid.RowNumberer()
-			,{
+			{
 				header		: 'Desription'
 			,	id			: 'description'
 			,	dataIndex	: 'description'
@@ -968,7 +966,7 @@ function M_TrxEditRCADetail()
 	});
 	
 	this.col_hdr = [{
-			colspan	: 2
+			colspan	: 1
 		},{
 			header	: 'People'
 		,	colspan	: 2
@@ -3438,6 +3436,8 @@ function M_TrxRCAList()
 			name		: 'user_login'
 		},{
 			name		: 'id_user'
+		},{
+			name		: 'status'
 		}]
 	});
 
@@ -3496,6 +3496,29 @@ function M_TrxRCAList()
 					header		: 'NIPG'
 				,	dataIndex	: 'id_user'
 				,	hidden		: true
+				}
+			,	{
+					header		: 'Status'
+				,	dataIndex	: 'status'
+				,	width		: 100
+				,	filterable	: true
+				}
+			,	{
+					xtype		: 'actioncolumn'
+				,	icon		: _g_root + '/images/delete.gif'
+				,	tooltip		: 'Hapus data'
+				,	width		: 40
+				,	scope		: this
+				,	handler		: function (g, r, c) {
+						var id_user = Ext.util.Cookies.get ('user.nipg');
+						var nipg 	= g.getStore().getAt(r).data.id_user;
+						
+						if (id_user != nipg) {
+							Ext.MessageBox.alert('Kesalahan', 'Hanya user dengan NIPG ' + nipg + ' yang dapat menghapus data ini.');
+						} else {
+							this.do_del();
+						}
+					}
 				}
 		]
 	,	defaults : {

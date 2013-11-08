@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="grafik_performance_rca_severity" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="69"/>
 	<parameter name="YEAR_1" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -11,6 +11,30 @@
 	<parameter name="MONTH_1" class="java.lang.String"/>
 	<parameter name="MONTH_2" class="java.lang.String"/>
 	<parameter name="MONTH_3" class="java.lang.String"/>
+	<parameter name="PART_TGL_1A" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_1}.equalsIgnoreCase("1") ? (Integer.parseInt($P{YEAR_1}) - 1) + "-12-25" :
+$P{YEAR_1} + "-" + (Integer.parseInt($P{MONTH_1}) - 1) + "-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_1B" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_1}.equalsIgnoreCase("1") ? $P{YEAR_1} + "-01-24" :
+$P{YEAR_1} + "-" + $P{MONTH_1} + "-24"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_2A" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_2}.equalsIgnoreCase("1") ? (Integer.parseInt($P{YEAR_2}) - 1) + "-12-25" :
+$P{YEAR_2} + "-" + (Integer.parseInt($P{MONTH_2}) - 1) + "-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_2B" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_2}.equalsIgnoreCase("1") ? $P{YEAR_2} + "-01-24" :
+$P{YEAR_2} + "-" + $P{MONTH_2} + "-24"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_3A" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_3}.equalsIgnoreCase("1") ? (Integer.parseInt($P{YEAR_3}) - 1) + "-12-25" :
+$P{YEAR_3} + "-" + (Integer.parseInt($P{MONTH_3}) - 1) + "-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_3B" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_3}.equalsIgnoreCase("1") ? $P{YEAR_3} + "-01-24" :
+$P{YEAR_3} + "-" + $P{MONTH_3} + "-24"]]></defaultValueExpression>
+	</parameter>
 	<parameter name="ID_DIR" class="java.lang.String"/>
 	<parameter name="ID_DIV" class="java.lang.String"/>
 	<parameter name="QUERY_DIR" class="java.lang.String" isForPrompting="false">
@@ -18,13 +42,28 @@
 "        ,	a.NAMA_DIREKTORAT	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_3} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_3} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_3A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_3B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
 "           )   as PERSENTASE " +
 "    from	R_DIREKTORAT	as a " +
 "    union " +
@@ -32,13 +71,28 @@
 "        ,	a.NAMA_DIREKTORAT	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_2} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_2} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_2A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_2B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
 "           )   as PERSENTASE " +
 "    from	R_DIREKTORAT	as a " +
 "    union " +
@@ -46,13 +100,28 @@
 "        ,	a.NAMA_DIREKTORAT	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_1} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_1} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_1A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_1B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
 "           )   as PERSENTASE " +
 "    from	R_DIREKTORAT	as a "]]></defaultValueExpression>
 	</parameter>
@@ -61,14 +130,29 @@
 "        ,	a.NAMA_DIVPROSBU	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_3} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_3} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"           and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_3A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_3B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
+"           and     p.id_divprosbu                  = a.id_divprosbu " +
 "           )   as PERSENTASE " +
 "    from	R_DIVPROSBU as a " +
 "    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
@@ -77,14 +161,29 @@
 "        ,	a.NAMA_DIVPROSBU	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_2} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_2} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"           and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_2A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_2B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
+"           and     p.id_divprosbu                  = a.id_divprosbu " +
 "           )   as PERSENTASE " +
 "    from	R_DIVPROSBU	as a " +
 "    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
@@ -93,14 +192,29 @@
 "        ,	a.NAMA_DIVPROSBU	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_1} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_1} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"           and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_1A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_1B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
+"           and     p.id_divprosbu                  = a.id_divprosbu " +
 "           )   as PERSENTASE " +
 "    from	R_DIVPROSBU	as a " +
 "    where  a.ID_DIREKTORAT = " + $P{ID_DIR}]]></defaultValueExpression>
@@ -110,15 +224,30 @@
 "        ,	a.NAMA_DEPARTEMEN	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_3} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_3} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_3} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"           and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"           and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_3A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_3B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
+"           and     p.id_divprosbu                  = a.id_divprosbu " +
+"           and     p.id_departemen                 = a.id_departemen " +
 "           )   as PERSENTASE " +
 "    from	R_DEPARTEMEN as a " +
 "    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
@@ -128,15 +257,30 @@
 "        ,	a.NAMA_DEPARTEMEN	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_2} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_2} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_2} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"           and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"           and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_2A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_2B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
+"           and     p.id_divprosbu                  = a.id_divprosbu " +
+"           and     p.id_departemen                 = a.id_departemen " +
 "           )   as PERSENTASE " +
 "    from	R_DEPARTEMEN	as a " +
 "    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +
@@ -146,15 +290,30 @@
 "        ,	a.NAMA_DEPARTEMEN	as ITEM " +
 "        ,	datename(month, dateadd(month, " + $P{MONTH_1} + ", 0) -1)	as BULAN " +
 "        ,  ( " +
-"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(sum(y.number_of_violations),1)) end) " +
+"           select	convert(decimal(18,2), case when sum(y.li_45) is null then 0 else (1.0 * (sum(y.li_45) * 100) / isnull(nullif(sum(y.number_of_violations),0),1)) end) " +
 "           from	t_rca			as x " +
 "               ,	t_rca_detail	as y " +
+"               ,	r_pegawai       as p " +
+"               ,	r_seksi         as q " +
+"               ,	__user          as r " +
+"               ,	__user_grup     as s " +
+"               ,	__grup_user     as t " +
 "           where	x.id_rca                        = y.id_rca " +
+"           and     (x.penanggung_jawab_nipg        = p.nipg " +
+"           or       x.id_user                      = p.nipg) " +
+"           and     p.id_seksi                      = q.id_seksi " +
+"           and     p.nipg                          = r.nipg " +
+"           and     r.nipg                          = s.nipg " +
+"           and     s.id_grup                       = t.id_grup " +
+"           and     t.id_grup                       = 5 " +
+"           and     p.status_pegawai                = '1' " +
+"           and     r.status_user                   = 1 " +
 "           and		year(x.tanggal_rca)             = " + $P{YEAR_1} +
-"           and		month(x.tanggal_rca)            = " + $P{MONTH_1} +
-"           and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"           and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"           and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"           and     x.tanggal_rca                   >= cast('" + $P{PART_TGL_1A} + "' as datetime) "  +
+"           and     x.tanggal_rca                   <= cast('" + $P{PART_TGL_1B} + "' as datetime) "  +
+"           and     p.id_direktorat                 = a.id_direktorat " +
+"           and     p.id_divprosbu                  = a.id_divprosbu " +
+"           and     p.id_departemen                 = a.id_departemen " +
 "           )   as PERSENTASE " +
 "    from	R_DEPARTEMEN	as a " +
 "    where  a.ID_DIREKTORAT = " + $P{ID_DIR} +

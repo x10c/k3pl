@@ -54,7 +54,6 @@ try {
 
 	db_stmt	= db_con.createStatement();
 	db_q	=" select	A.nipg"
-			+" ,		C.id_grup"
 			+" ,		B.nama_pegawai"
 			+" ,		B.email"
 			+" ,		B.id_direktorat"
@@ -63,6 +62,7 @@ try {
 			+" ,		B.id_dinas"
 			+" ,		B.id_seksi"
 			+" ,		D.id_wilayah"
+			+" ,		max (C.id_grup) id_grup"
 			+" from   	__user		A"
 			+" ,      	r_pegawai	B"
 			+" ,		__user_grup	C"
@@ -71,7 +71,16 @@ try {
 			+" and		A.password	= '"+ pass +"'"
 			+" and		A.nipg		= B.nipg"
 			+" and		A.nipg		= C.nipg"
-			+" and		B.id_seksi	= D.id_seksi";
+			+" and		B.id_seksi	= D.id_seksi"
+			+" group by	A.nipg"
+			+" ,		B.nama_pegawai"
+			+" ,		B.email"
+			+" ,		B.id_direktorat"
+			+" ,		B.id_divprosbu"
+			+" ,		B.id_departemen"
+			+" ,		B.id_dinas"
+			+" ,		B.id_seksi"
+			+" ,		D.id_wilayah";
 
 	db_rs	= db_stmt.executeQuery (db_q);
 

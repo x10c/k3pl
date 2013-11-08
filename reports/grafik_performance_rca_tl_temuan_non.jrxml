@@ -11,6 +11,30 @@
 	<parameter name="MONTH_1" class="java.lang.String"/>
 	<parameter name="MONTH_2" class="java.lang.String"/>
 	<parameter name="MONTH_3" class="java.lang.String"/>
+	<parameter name="PART_TGL_1A" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_1}.equalsIgnoreCase("1") ? (Integer.parseInt($P{YEAR_1}) - 1) + "-12-25" :
+$P{YEAR_1} + "-" + (Integer.parseInt($P{MONTH_1}) - 1) + "-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_1B" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_1}.equalsIgnoreCase("1") ? $P{YEAR_1} + "-01-24" :
+$P{YEAR_1} + "-" + $P{MONTH_1} + "-24"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_2A" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_2}.equalsIgnoreCase("1") ? (Integer.parseInt($P{YEAR_2}) - 1) + "-12-25" :
+$P{YEAR_2} + "-" + (Integer.parseInt($P{MONTH_2}) - 1) + "-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_2B" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_2}.equalsIgnoreCase("1") ? $P{YEAR_2} + "-01-24" :
+$P{YEAR_2} + "-" + $P{MONTH_2} + "-24"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_3A" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_3}.equalsIgnoreCase("1") ? (Integer.parseInt($P{YEAR_3}) - 1) + "-12-25" :
+$P{YEAR_3} + "-" + (Integer.parseInt($P{MONTH_3}) - 1) + "-25"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PART_TGL_3B" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{MONTH_3}.equalsIgnoreCase("1") ? $P{YEAR_3} + "-01-24" :
+$P{YEAR_3} + "-" + $P{MONTH_3} + "-24"]]></defaultValueExpression>
+	</parameter>
 	<parameter name="ID_DIR" class="java.lang.String"/>
 	<parameter name="ID_DIV" class="java.lang.String"/>
 	<parameter name="QUERY_DIR" class="java.lang.String" isForPrompting="false">
@@ -20,28 +44,58 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_3A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_3B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_3A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_3B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
-"    from	R_DIREKTORAT	as a " +
+"    from	R_DIREKTORAT as a " +
 "    union " +
 "    select	2                   as NO_URUT " +
 "        ,	a.NAMA_DIREKTORAT	as ITEM " +
@@ -49,25 +103,55 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_2A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_2B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_2A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_2B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DIREKTORAT	as a " +
@@ -78,25 +162,55 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_1A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_1B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_1A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_1B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DIREKTORAT	as a "]]></defaultValueExpression>
@@ -108,27 +222,57 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_3A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_3B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_3A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_3B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DIVPROSBU as a " +
@@ -140,27 +284,57 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_2A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_2B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_2A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_2B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DIVPROSBU	as a " +
@@ -172,27 +346,57 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_1A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_1B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_1A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_1B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DIVPROSBU	as a " +
@@ -205,29 +409,59 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_3A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_3B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
+"                   and     r.id_departemen                 = a.id_departemen " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_3} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_3} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_3} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_3A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_3B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
+"                   and     r.id_departemen                 = a.id_departemen " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DEPARTEMEN as a " +
@@ -240,29 +474,59 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_2A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_2B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
+"                   and     r.id_departemen                 = a.id_departemen " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_2} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_2} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_2} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_2A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_2B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
+"                   and     r.id_departemen                 = a.id_departemen " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DEPARTEMEN	as a " +
@@ -275,29 +539,59 @@
 "       ,   ( " +
 "           select	round((TL_TEMUAN_45.JUMLAH / cast(isnull(nullif(TEMUAN_45.JUMLAH,0),1) as float)) * 100, 2, 1) " +
 "           from	( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		y.STATUS                        in ('2','3') " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		q.STATUS                        in ('2','3') " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_1A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_1B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
+"                   and     r.id_departemen                 = a.id_departemen " +
 "                   )	as TL_TEMUAN_45 " +
 "               ,   ( " +
-"                   select	COUNT(y.ID_RCA)	as JUMLAH " +
-"                   from	T_RCA			as x " +
-"                       ,	T_RCA_DETAIL	as y " +
-"                   where	x.ID_RCA                        = y.ID_RCA " +
-"                   and		y.ID_SEVERITY                   in (1,2,3) " +
-"                   and		YEAR(x.TANGGAL_RCA)             = " + $P{YEAR_1} +
-"                   and		MONTH(x.TANGGAL_RCA)            = " + $P{MONTH_1} +
-"                   and     x.penanggung_jawab_direktorat   = a.id_direktorat " +
-"                   and     x.penanggung_jawab_divprosbu    = a.id_divprosbu " +
-"                   and     x.penanggung_jawab_departemen   = a.id_departemen " +
+"                   select	COUNT(q.ID_RCA)	as JUMLAH " +
+"                   from	T_RCA			as p " +
+"                       ,	T_RCA_DETAIL	as q " +
+"                       ,	R_PEGAWAI       as r " +
+"                       ,	R_SEKSI         as s " +
+"                       ,	__USER          as t " +
+"                       ,	__USER_GRUP     as u " +
+"                       ,	__GRUP_USER     as v " +
+"                   where	q.ID_RCA                        = p.ID_RCA " +
+"                   and		q.ID_SEVERITY                   in (1,2,3) " +
+"                   and		(p.penanggung_jawab_nipg        = r.nipg " +
+"                   or       p.id_user                      = r.nipg) " +
+"                   and		r.id_seksi                      = s.id_seksi " +
+"                   and		r.nipg                          = t.nipg " +
+"                   and		t.nipg                          = u.nipg " +
+"                   and		u.id_grup                       = v.id_grup " +
+"                   and		v.id_grup                       = 5 " +
+"                   and		r.status_pegawai                = '1' " +
+"                   and		t.status_user                   = 1 " +
+"                   and		YEAR(p.TANGGAL_RCA)             = " + $P{YEAR_1} +
+"                   and		p.TANGGAL_RCA                   >= cast('" + $P{PART_TGL_1A} +"' as datetime) "+
+"                   and		p.TANGGAL_RCA                   <= cast('" + $P{PART_TGL_1B} +"' as datetime) "+
+"                   and     r.id_direktorat                 = a.id_direktorat " +
+"                   and     r.id_divprosbu                  = a.id_divprosbu " +
+"                   and     r.id_departemen                 = a.id_departemen " +
 "                   )	as TEMUAN_45 " +
 "           )   as PERSENTASE " +
 "    from	R_DEPARTEMEN	as a " +

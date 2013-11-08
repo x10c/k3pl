@@ -21,11 +21,15 @@ try {
 		+" ,		r_seksi		B"
 		+" ,		r_pegawai	C"
 		+" where	A.id_area_seksi	= B.id_seksi"
-		+" and		A.nipg			= C.nipg"
-		+" and		C.id_divprosbu	= "+ user_div;
+		+" and		A.nipg			= C.nipg";
 
-	if (!load_type.equals("all")) {
-		db_q +=" and	A.nipg		= '"+ user_nipg +"'";
+	if (! user_group.equalsIgnoreCase ("1")) {
+		if (user_group.equalsIgnoreCase ("11")) {
+			db_q+=" and	c.id_divprosbu	= "+ user_div
+				+" and	c.id_direktorat	= "+ user_dir;
+		} else {
+			db_q	+="	and A.nipg = '"+ user_nipg +"'";
+		}
 	}
 
 	db_rs	= db_stmt.executeQuery (db_q);
@@ -54,11 +58,15 @@ try {
 		+" ,		r_seksi		B"
 		+" ,		r_pegawai	C"
 		+" where	A.id_area_seksi	= B.id_seksi"
-		+" and		A.nipg			= C.nipg"
-		+" and		C.id_divprosbu	= "+ user_div;
+		+" and		A.nipg			= C.nipg";
 
-	if (!load_type.equals("all")) {
-		db_q +=" and	A.nipg		= '"+ user_nipg +"'";
+	if (! user_group.equalsIgnoreCase ("1")) {
+		if (user_group.equalsIgnoreCase ("11")) {
+			db_q+=" and	C.id_divprosbu	= "+ user_div
+				+" and	C.id_direktorat	= "+ user_dir;
+		} else {
+			db_q	+="	and A.nipg = '"+ user_nipg +"'";
+		}
 	}
 
 	db_q	+=" ) "
