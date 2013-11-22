@@ -59,7 +59,7 @@ try {
 
 				q_where	+=" and "+ filter_field + filter_cmp +" replace(convert(varchar, cast ('"+ filter_v +"' as datetime), 111), '/', '-') ";
 			} else {
-				q_where	+=" and "+ filter_field +" like '%"+ filter_v +"%' ";
+				q_where	+=" and b.nipg	in ( select c.nipg from r_pegawai c where c.nama_pegawai like '%"+ filter_v +"%') ";
 			}
 		}
 	}
@@ -68,22 +68,11 @@ try {
 
 	// get total
 	db_q=" with results as ("
-		+" select	a.id_rca "
+		+" select	distinct (a.id_rca)	as id_rca"
 		+" ,		replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
 		+" ,		a.auditor_seksi as id_seksi "
 		+" ,		( select c.nama_seksi from r_seksi as c where a.auditor_seksi = c.id_seksi ) as auditor_seksi "
-		+" ,		( "
-		+"				select	nama "
-		+"				from 	( "
-		+"							select	e.nama_pegawai						as nama "
-		+"								, 	row_number() over(order by d.nipg) 	as rownum "
-		+"							from 	t_rca_auditor 	as d "
-		+"								, 	r_pegawai 		as e "
-		+"							where 	d.nipg 		= e.nipg "
-		+"							and 	d.id_rca	= a.id_rca "
-		+"						) as hasil "
-		+"				where rownum between 1 and 1 "
-		+"			) as nama_auditor "
+		+" ,		( select c.nama_pegawai from r_pegawai as c where b.nipg = c.nipg) as nama_auditor "
 		+" ,		( select f.nama_seksi from r_seksi as f where a.penanggung_jawab_seksi = f.id_seksi ) as penanggung_jawab_seksi "
 		+" ,		a.penanggung_jawab_nipg as pic "
 		+" ,		( select g.nama_pegawai from r_pegawai as g where a.penanggung_jawab_nipg = g.nipg) as nama_pic "
@@ -91,7 +80,9 @@ try {
 		+" ,		a.id_user	as id_user "
 		+" ,		ROW_NUMBER() OVER (ORDER BY a.id_user asc, a.tanggal_rca desc) as rownum"
 		+" from		t_rca	as a "
-		+" where	1=1 ";
+		+" ,		t_rca_auditor	as b "
+		+" where	b.id_rca	= a.id_rca "
+		+ q_where;
 
 	if (! user_group.equalsIgnoreCase ("1")) {
 		if (user_group.equalsIgnoreCase ("11")) {
@@ -103,10 +94,10 @@ try {
 		}
 	}
 
-	db_q+=" ) select count (*) as total from results where 1 = 1 "+ q_where;
+	db_q+=" ) select count (*) as total from results where 1 = 1 ";
 
 	db_stmt	= db_con.createStatement ();
-	db_rs	= db_stmt.executeQuery (db_q + q_where);
+	db_rs	= db_stmt.executeQuery (db_q);
 
 	if (db_rs.next()) {
 		total = db_rs.getInt ("total");
@@ -117,22 +108,11 @@ try {
 
 	// get data
 	db_q=" with results as ("
-		+" select	a.id_rca "
+		+" select	distinct(a.id_rca) as id_rca "
 		+" ,		replace(convert(varchar, a.tanggal_rca, 111), '/', '-') as tanggal_rca "
 		+" ,		a.auditor_seksi as id_seksi "
 		+" ,		( select c.nama_seksi from r_seksi as c where a.auditor_seksi = c.id_seksi ) as auditor_seksi "
-		+" ,		( "
-		+"				select	nama "
-		+"				from 	( "
-		+"							select	e.nama_pegawai						as nama "
-		+"								, 	row_number() over(order by d.nipg) 	as rownum "
-		+"							from 	t_rca_auditor 	as d "
-		+"								, 	r_pegawai 		as e "
-		+"							where 	d.nipg 		= e.nipg "
-		+"							and 	d.id_rca	= a.id_rca "
-		+"						) as hasil "
-		+"				where rownum between 1 and 1 "
-		+"			) as nama_auditor "
+		+" ,		( select c.nama_pegawai from r_pegawai as c where b.nipg = c.nipg) as nama_auditor "
 		+" ,		( select f.nama_seksi from r_seksi as f where a.penanggung_jawab_seksi = f.id_seksi ) as penanggung_jawab_seksi "
 		+" ,		a.penanggung_jawab_nipg as pic "
 		+" ,		( select g.nama_pegawai from r_pegawai as g where a.penanggung_jawab_nipg = g.nipg) as nama_pic "
@@ -146,7 +126,9 @@ try {
 		+" 			) status"
 		+" ,		ROW_NUMBER() OVER (ORDER BY a.id_user asc, a.tanggal_rca desc) as rownum"
 		+" from		t_rca	as a "
-		+" where	1=1 ";
+		+" ,		t_rca_auditor	as b "
+		+" where	b.id_rca	= a.id_rca "
+		+ q_where;
 
 	if (! user_group.equalsIgnoreCase ("1")) {
 		if (user_group.equalsIgnoreCase ("11")) {
@@ -158,7 +140,7 @@ try {
 		}
 	}
 
-	db_q+=" ) select * from results where rownum >= "+ start +" and rownum <= "+ (start + limit) + q_where;
+	db_q+=" ) select * from results where rownum >= "+ start +" and rownum <= "+ (start + limit);
 
 	db_stmt		= db_con.createStatement ();
 	db_rs		= db_stmt.executeQuery (db_q);

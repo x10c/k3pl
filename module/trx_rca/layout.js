@@ -3467,16 +3467,12 @@ function M_TrxRCAList()
 				,	width		: 90
 				,	xtype		: 'datecolumn'
 				,	format		: 'Y-m-d'
-				,	filter		: {
-						type	: 'date'
-					}
 				}
 			,	{
 					id			: 'auditor_seksi'
 				,	header		: 'Satuan Kerja Auditor'
 				,	dataIndex	: 'auditor_seksi'
 				,	width		: 250
-				,	filterable	: true
 				}
 			,	{
 					id			: 'nama_auditor'
@@ -3490,7 +3486,6 @@ function M_TrxRCAList()
 				,	header		: 'Satuan Kerja Penanggung Jawab'
 				,	dataIndex	: 'penanggung_jawab_seksi'
 				,	width		: 250
-				,	filterable	: true
 				}
 			,	{
 					header		: 'NIPG'
@@ -3501,7 +3496,6 @@ function M_TrxRCAList()
 					header		: 'Status'
 				,	dataIndex	: 'status'
 				,	width		: 100
-				,	filterable	: true
 				}
 			,	{
 					xtype		: 'actioncolumn'
