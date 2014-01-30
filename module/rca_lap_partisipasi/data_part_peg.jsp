@@ -64,14 +64,14 @@ try {
 		+" ,		isnull(A.dec,0) as dec"
 		+" from"
 		+" 			r_pegawai				B"
+		+" left join	t_rca_target_pegawai	A"
+		+" 		on		A.nipg					= B.nipg"
+		+" 		and		A.year					= "+ year
 		+" ,		r_seksi					D"
-		+" ,		t_rca_target_pegawai	A"
-		+"	,		__user					U"
-		+"	,		__user_grup				E"
-		+"	,		__grup_user				F"
-		+" where	B.nipg					= A.nipg"
-		+" and		A.year					= "+ year
-		+" and		B.id_seksi				= D.id_seksi"
+		+" ,		__user					U"
+		+" ,		__user_grup				E"
+		+" ,		__grup_user				F"
+		+" where	B.id_seksi				= D.id_seksi"
 		+" and		B.nipg					= U.nipg"
 		+" and		U.nipg					= E.nipg"
 		+" and		E.id_grup				= F.id_grup"
@@ -145,7 +145,6 @@ try {
 				+" ,		t_rca			as b"
 				+" where	a.nipg					= '"+ nipg +"'"
 				+" and		a.id_rca				= b.id_rca"
-				+" and		year(b.tanggal_rca)		= "+ year
 				+" and		b.tanggal_rca			>= cast ('"+ d1 +"' as datetime)"
 				+" and		b.tanggal_rca			<= cast ('"+ d2 +"' as datetime)";
 

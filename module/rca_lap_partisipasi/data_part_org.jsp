@@ -58,7 +58,6 @@ try {
 			+"	,		__user_grup				F"
 			+"	,		__grup_user				G"
 			+" 	where	A.id_rca				= B.id_rca"
-			+" 	and		year (B.tanggal_rca)	= "+ year
 			+"	and		A.nipg					= C.nipg"
 			+"	and		C.id_seksi				= D.id_seksi"
 			+"	and		C.nipg					= E.nipg"

@@ -168,6 +168,9 @@ function M_RCALapRCAGrid()
 			,	'tl_temuan'
 			,	'jml_tl_temuan_non'
 			,	'persen_tl_temuan_non'
+			,	'jml_temuan_3'
+			,	'jml_tl_temuan_3'
+			,	'persen_tl_temuan_3'
 			,	'avg'
 			]
 		,	url		: m_rca_lap_performance_d +'data.jsp'
@@ -222,16 +225,28 @@ function M_RCALapRCAGrid()
 		,	format		: '000.00%'
 		,	css			: 'background-color: #f0f0f0;'
 		},{
-			header		: 'Jml Tindak Lanjut Temuan Non 4/5'
-		,	dataIndex	: 'jml_tl_temuan_non'
+			header		: 'Jml Temuan Severity 3'
+		,	dataIndex	: 'jml_temuan_3'
 		},{
-			header		: '% Tindak Lanjut Temuan Non 4/5'
+			header		: 'Jml Tindak Lanjut Temuan Severity 3'
+		,	dataIndex	: 'jml_tl_temuan_3'
+		,	css			: 'background-color: #f0f0f0;'
+		},{
+			header		: '% Tindak Lanjut Temuan Severity 3'
+		,	dataIndex	: 'persen_tl_temuan_3'
+		,	format		: '000.00%'
+		},{
+			header		: 'Jml Tindak Lanjut Temuan Non 3/4/5'
+		,	dataIndex	: 'jml_tl_temuan_non'
+		,	css			: 'background-color: #f0f0f0;'
+		},{
+			header		: '% Tindak Lanjut Temuan Non 3/4/5'
 		,	dataIndex	: 'persen_tl_temuan_non'
 		,	format		: '000.00%'
-		,	css			: 'background-color: #f0f0f0;'
 		},{
 			header		: 'Average Of Severity'
 		,	dataIndex	: 'avg'
+		,	css			: 'background-color: #f0f0f0;'
 		}]
 	});
 

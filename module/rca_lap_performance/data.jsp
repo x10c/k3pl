@@ -16,8 +16,10 @@ String	q_vio				= "";
 String	q_temuan			= "";
 String	q_sev				= "";
 String	q_get_temuan		= "";
+String	q_get_temuan_3		= "";
 String	q_get_temuan_non	= "";
 String	q_tl_temuan			= "";
+String	q_tl_temuan_3		= "";
 String	q_tl_temuan_non		= "";
 String	q_avg				= "";
 String	q_sum				= "";
@@ -189,6 +191,27 @@ try {
 					+"	and		A.status_pegawai			= '1'"
 					+"	and		E.status_user				= 1";
 
+	q_get_temuan_3		="select	count(rca_detail.id_rca)	as jml"
+						+" from		t_rca_detail				as rca_detail"
+						+" ,		t_rca						as rca"
+						+" ,		r_pegawai					as A"
+						+" ,		r_seksi						as B"
+						+"	,		__user						E"
+						+"	,		__user_grup					F"
+						+"	,		__grup_user					G"
+						+" where	rca_detail.id_rca			= rca.id_rca"
+						+" and		rca_detail.id_severity		= 3"
+						+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+						+"	or		rca.ID_USER					= A.NIPG)"
+						+" and		A.status_pegawai			= '1'"
+						+" and		A.id_seksi					= B.id_seksi"
+						+"	and		A.nipg						= E.nipg"
+						+"	and		E.nipg						= F.nipg"
+						+"	and		F.id_grup					= G.id_grup"
+						+"	and		G.id_grup					= 5"
+						+"	and		A.status_pegawai			= '1'"
+						+"	and		E.status_user				= 1";
+
 	q_get_temuan_non	="select	count(rca_detail.id_rca)	as jml"
 						+" from		t_rca_detail				as rca_detail"
 						+" ,		t_rca						as rca"
@@ -198,7 +221,7 @@ try {
 						+"	,		__user_grup					F"
 						+"	,		__grup_user					G"
 						+" where	rca_detail.id_rca			= rca.id_rca"
-						+" and		rca_detail.id_severity		in (1,2,3)"
+						+" and		rca_detail.id_severity		in (1,2)"
 						+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 						+"	or		rca.ID_USER					= A.NIPG)"
 						+" and		A.status_pegawai			= '1'"
@@ -232,6 +255,28 @@ try {
 				+"	and		A.status_pegawai			= '1'"
 				+"	and		E.status_user				= 1";
 
+	q_tl_temuan_3	=" select	count(rca_detail.id_rca)	as temuan"
+					+" from		t_rca_detail				as rca_detail"
+					+" ,		t_rca						as rca"
+					+" ,		r_pegawai					as A"
+					+" ,		r_seksi						as B"
+					+"	,		__user						E"
+					+"	,		__user_grup					F"
+					+"	,		__grup_user					G"
+					+" where	rca_detail.id_rca			= rca.id_rca"
+					+" and		rca_detail.id_severity		= 3"
+					+" and		rca_detail.status			in ('2','3')"
+					+" and		(rca.penanggung_jawab_nipg	= A.nipg"
+					+"	or		rca.ID_USER					= A.NIPG)"
+					+" and		A.status_pegawai			= '1'"
+					+" and		A.id_seksi					= B.id_seksi"
+					+"	and		A.nipg						= E.nipg"
+					+"	and		E.nipg						= F.nipg"
+					+"	and		F.id_grup					= G.id_grup"
+					+"	and		G.id_grup					= 5"
+					+"	and		A.status_pegawai			= '1'"
+					+"	and		E.status_user				= 1";
+
 	q_tl_temuan_non	=" select	count(rca_detail.id_rca)	as temuan"
 					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
@@ -241,7 +286,7 @@ try {
 					+"	,		__user_grup					F"
 					+"	,		__grup_user					G"
 					+" where	rca_detail.id_rca			= rca.id_rca"
-					+" and		rca_detail.id_severity		in (1,2,3)"
+					+" and		rca_detail.id_severity		in (1,2)"
 					+" and		rca_detail.status			in ('2','3')"
 					+" and		(rca.penanggung_jawab_nipg	= A.nipg"
 					+"	or		rca.ID_USER					= A.NIPG)"
@@ -323,8 +368,10 @@ try {
 	q_temuan			+= q_date;
 	q_sev				+= q_date;
 	q_get_temuan		+= q_date;
+	q_get_temuan_3		+= q_date;
 	q_get_temuan_non	+= q_date;
 	q_tl_temuan			+= q_date;
+	q_tl_temuan_3		+= q_date;
 	q_tl_temuan_non		+= q_date;
 	q_avg				+= q_date;
 
@@ -475,6 +522,21 @@ try {
 			+"				 )"
 			+"				* 100, 2, 1"
 			+"			)							as persen_tl_temuan_non"
+			+"	,		GET_TEMUAN_3.jml			as jml_temuan_3"
+			+"	,		TL_TEMUAN_3.temuan			as jml_tl_temuan_3"
+			+"	,		round ("
+			+"				("
+			+"					TL_TEMUAN_3.temuan"
+			+"					/ cast ("
+			+"						isnull ("
+			+"							nullif ( GET_TEMUAN_3.jml, 0 )"
+			+"							, 1"
+			+"						)"
+			+"						as float"
+			+"					)"
+			+"				 )"
+			+"				* 100, 2, 1"
+			+"			)							as persen_tl_temuan_3"
 			+"	,		AVERAGE.average"
 			+"	from	("+ q_target			+ q_where + id +") T"
 			+"	,		("+ q_partisi			+ q_where + id +") PARTISIPAN"
@@ -484,6 +546,8 @@ try {
 			+"	,		("+ q_sev				+ q_where + id +") SEV"
 			+"	,		("+ q_get_temuan		+ q_where + id +") GET_TEMUAN"
 			+"	,		("+ q_tl_temuan			+ q_where + id +") TL_TEMUAN"
+			+"	,		("+ q_get_temuan_3		+ q_where + id +") GET_TEMUAN_3"
+			+"	,		("+ q_tl_temuan_3		+ q_where + id +") TL_TEMUAN_3"
 			+"	,		("+ q_get_temuan_non	+ q_where + id +") GET_TEMUAN_NON"
 			+"	,		("+ q_tl_temuan_non		+ q_where + id +") TL_TEMUAN_NON"
 			+"	,		("+ q_avg				+ q_where + id +") AVERAGE";
@@ -511,6 +575,9 @@ try {
 			json_o.put ("severity"				,db_rs.getDouble	("severity"));
 			json_o.put ("jml_tl_temuan"			,db_rs.getDouble	("jml_tl_temuan"));
 			json_o.put ("tl_temuan"				,db_rs.getDouble	("tl_temuan"));
+			json_o.put ("jml_temuan_3"			,db_rs.getDouble	("jml_temuan_3"));
+			json_o.put ("jml_tl_temuan_3"		,db_rs.getDouble	("jml_tl_temuan_3"));
+			json_o.put ("persen_tl_temuan_3"	,db_rs.getDouble	("persen_tl_temuan_3"));
 			json_o.put ("jml_tl_temuan_non"		,db_rs.getDouble	("jml_tl_temuan_non"));
 			json_o.put ("jml_temuan_non"		,db_rs.getDouble	("jml_temuan_non"));
 			json_o.put ("persen_tl_temuan_non"	,db_rs.getDouble	("persen_tl_temuan_non"));
