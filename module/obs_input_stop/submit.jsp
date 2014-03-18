@@ -320,7 +320,6 @@ try {
 
 	if (email_use_auth.equals("1")) {
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.user", email_username);
 		props.put("mail.smtp.password", email_password);
 	}

@@ -1257,6 +1257,64 @@ k3pl.form.SetOrganisasi = Ext.extend (Ext.form.FieldSet, {
 	}
 });
 
+k3pl.form.SetOrganisasiLess = Ext.extend (Ext.form.FieldSet, {
+	constructor: function (config) {
+		config.formDivProSBU	= new k3pl.form.DivProSBU (config);
+		config.formDirektorat	= new k3pl.form.Direktorat (config);
+		config.labelWidth		= 120;
+
+		Ext.apply(this
+		, config
+		,	{
+				title			:'Organisasi'
+			,	checkboxToggle	:false
+			,	autoHeight		:true
+			,	collapsed		:false
+			,	scope			:this
+			,	formDirektorat	:undefined
+			,	formDivProSBU	:undefined
+			}
+		);
+
+		k3pl.form.SetOrganisasiLess.superclass.constructor.apply(this, arguments);
+
+		this.add(config.formDirektorat);
+		this.add(config.formDivProSBU);
+
+		this.on('collapse', function(panel) {
+			this.formDirektorat.setValue (0);
+			this.formDivProSBU.clearFilter ();
+			this.formDivProSBU.setValue (0);
+		});
+
+		this.on ('expand', function (panel) {
+			var id_dir		= Ext.util.Cookies.get ('user.direktorat');
+			var id_div		= Ext.util.Cookies.get ('user.divprosbu');
+
+			this.formDirektorat.clearFilter ();
+			this.formDirektorat.setValue (id_dir == null ? 0 : id_dir);
+			this.formDivProSBU.clearFilter ();
+			this.formDivProSBU.setValue (id_div == null ? 0 : id_div);
+		});
+	}
+
+,	do_load: function()
+	{
+		this.formDirektorat.do_load();
+
+		// disable form directorat and DivProSbu if group != 1
+		var group	= parseInt (Ext.util.Cookies.get ('user.group'));
+
+		if (group == 1) {
+			this.formDirektorat.setDisabled (false);
+			this.formDivProSBU.setDisabled (false);
+		} else {
+			this.formDirektorat.setDisabled (true);
+			this.formDivProSBU.setDisabled (true);
+		}
+	}
+});
+
 k3pl.form.SetWilayah = Ext.extend (Ext.form.FieldSet, {
 	constructor: function (config) {
 		config.formArea		= new k3pl.form.Area(config);

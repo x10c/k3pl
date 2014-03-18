@@ -14,7 +14,6 @@ String	q_part				= "";
 String	q_partisi			= "";
 String	q_vio				= "";
 String	q_temuan			= "";
-String	q_sev				= "";
 String	q_get_temuan		= "";
 String	q_get_temuan_3		= "";
 String	q_get_temuan_non	= "";
@@ -53,6 +52,17 @@ try {
 	int			total_part			= 0;
 	int			target				= 0;
 	double		total_part_percent	= 0.0;
+	int			violation			= 0;
+	double		severity_45_percent	= 0.0;
+	int			temuan_45			= 0;
+	int			tl_temuan_45		= 0;
+	double		tl_temuan_45_percent	= 0.0;
+	int			temuan_3			= 0;
+	int			tl_temuan_3			= 0;
+	double		tl_temuan_3_percent	= 0.0;
+	int			temuan_non				= 0;
+	int			tl_temuan_non			= 0;
+	double		tl_temuan_non_percent	= 0.0;
 
 	/* filter/aggregate by month */
 	if (month != 0) {
@@ -128,7 +138,7 @@ try {
 			+"	and		A.status_pegawai			= '1'"
 			+"	and		E.status_user				= 1";
 
-	q_temuan	=" select	count(rca_detail.id_rca)	as temuan"
+	q_temuan	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as temuan"
 				+" from		t_rca_detail				as rca_detail"
 				+" ,		t_rca						as rca"
 				+" ,		r_pegawai					as A"
@@ -148,26 +158,7 @@ try {
 				+"	and		A.status_pegawai			= '1'"
 				+"	and		E.status_user				= 1";
 
-	q_sev	="select	cast(convert(decimal(18,2), case when sum(rca_detail.li_45) is null then 0 else (1.0 * (sum(rca_detail.li_45) * 100) / isnull(nullif(sum(rca_detail.number_of_violations), 0),1)) end) as varchar) as severity"
-			+" from		t_rca_detail				as rca_detail"
-			+" ,		t_rca						as rca"
-			+" ,		r_pegawai					as A"
-			+" ,		r_seksi						as B"
-			+"	,		__user						E"
-			+"	,		__user_grup					F"
-			+"	,		__grup_user					G"
-			+" where	rca_detail.id_rca			= rca.id_rca"
-			+" and		rca.penanggung_jawab_nipg	= A.nipg"
-			+" and		A.status_pegawai			= '1'"
-			+" and		A.id_seksi					= B.id_seksi"
-			+"	and		A.nipg						= E.nipg"
-			+"	and		E.nipg						= F.nipg"
-			+"	and		F.id_grup					= G.id_grup"
-			+"	and		G.id_grup					= 5"
-			+"	and		A.status_pegawai			= '1'"
-			+"	and		E.status_user				= 1";
-
-	q_get_temuan	="select	count(rca_detail.id_rca)	as jml"
+	q_get_temuan_3	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as jml"
 					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
 					+" ,		r_pegawai					as A"
@@ -176,7 +167,7 @@ try {
 					+"	,		__user_grup					F"
 					+"	,		__grup_user					G"
 					+" where	rca_detail.id_rca			= rca.id_rca"
-					+" and		rca_detail.id_severity		in (4,5)"
+					+" and		rca_detail.id_severity		= 3"
 					+" and		rca.penanggung_jawab_nipg	= A.nipg"
 					+" and		A.status_pegawai			= '1'"
 					+" and		A.id_seksi					= B.id_seksi"
@@ -187,7 +178,7 @@ try {
 					+"	and		A.status_pegawai			= '1'"
 					+"	and		E.status_user				= 1";
 
-	q_get_temuan_3		="select	count(rca_detail.id_rca)	as jml"
+	q_get_temuan_non	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as jml"
 						+" from		t_rca_detail				as rca_detail"
 						+" ,		t_rca						as rca"
 						+" ,		r_pegawai					as A"
@@ -196,7 +187,7 @@ try {
 						+"	,		__user_grup					F"
 						+"	,		__grup_user					G"
 						+" where	rca_detail.id_rca			= rca.id_rca"
-						+" and		rca_detail.id_severity		= 3"
+						+" and		rca_detail.id_severity		not in (3,4,5)"
 						+" and		rca.penanggung_jawab_nipg	= A.nipg"
 						+" and		A.status_pegawai			= '1'"
 						+" and		A.id_seksi					= B.id_seksi"
@@ -207,27 +198,7 @@ try {
 						+"	and		A.status_pegawai			= '1'"
 						+"	and		E.status_user				= 1";
 
-	q_get_temuan_non	="select	count(rca_detail.id_rca)	as jml"
-						+" from		t_rca_detail				as rca_detail"
-						+" ,		t_rca						as rca"
-						+" ,		r_pegawai					as A"
-						+" ,		r_seksi						as B"
-						+"	,		__user						E"
-						+"	,		__user_grup					F"
-						+"	,		__grup_user					G"
-						+" where	rca_detail.id_rca			= rca.id_rca"
-						+" and		rca_detail.id_severity		in (1,2)"
-						+" and		rca.penanggung_jawab_nipg	= A.nipg"
-						+" and		A.status_pegawai			= '1'"
-						+" and		A.id_seksi					= B.id_seksi"
-						+"	and		A.nipg						= E.nipg"
-						+"	and		E.nipg						= F.nipg"
-						+"	and		F.id_grup					= G.id_grup"
-						+"	and		G.id_grup					= 5"
-						+"	and		A.status_pegawai			= '1'"
-						+"	and		E.status_user				= 1";
-
-	q_tl_temuan	=" select	count(rca_detail.id_rca)	as temuan"
+	q_tl_temuan	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as temuan"
 				+" from		t_rca_detail				as rca_detail"
 				+" ,		t_rca						as rca"
 				+" ,		r_pegawai					as A"
@@ -248,7 +219,7 @@ try {
 				+"	and		A.status_pegawai			= '1'"
 				+"	and		E.status_user				= 1";
 
-	q_tl_temuan_3	=" select	count(rca_detail.id_rca)	as temuan"
+	q_tl_temuan_3	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as temuan"
 					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
 					+" ,		r_pegawai					as A"
@@ -269,7 +240,7 @@ try {
 					+"	and		A.status_pegawai			= '1'"
 					+"	and		E.status_user				= 1";
 
-	q_tl_temuan_non	=" select	count(rca_detail.id_rca)	as temuan"
+	q_tl_temuan_non	=" select	cast(isnull(sum(rca_detail.number_of_violations),0) as varchar) as temuan"
 					+" from		t_rca_detail				as rca_detail"
 					+" ,		t_rca						as rca"
 					+" ,		r_pegawai					as A"
@@ -278,7 +249,7 @@ try {
 					+"	,		__user_grup					F"
 					+"	,		__grup_user					G"
 					+" where	rca_detail.id_rca			= rca.id_rca"
-					+" and		rca_detail.id_severity		in (1,2)"
+					+" and		rca_detail.id_severity		not in (3,4,5)"
 					+" and		rca_detail.status			in ('2','3')"
 					+" and		rca.penanggung_jawab_nipg	= A.nipg"
 					+" and		A.status_pegawai			= '1'"
@@ -356,8 +327,6 @@ try {
 	q_partisi			+= q_date;
 	q_vio				+= q_date;
 	q_temuan			+= q_date;
-	q_sev				+= q_date;
-	q_get_temuan		+= q_date;
 	q_get_temuan_3		+= q_date;
 	q_get_temuan_non	+= q_date;
 	q_tl_temuan			+= q_date;
@@ -481,60 +450,17 @@ try {
 			+"	,		isnull (T.Target, 0)		as target"
 			+"	,		V.violation"
 			+"	,		TEMUAN.temuan"
-			+"	,		SEV.severity"
 			+"	,		TL_TEMUAN.temuan			as jml_tl_temuan"
-			+"	,		round ("
-			+"				("
-			+"					TL_TEMUAN.temuan"
-			+"					/"
-			+"					cast ("
-			+"						isnull ("
-			+"							nullif ( GET_TEMUAN.jml , 0 )"
-			+"							, 1"
-			+"						)"
-			+"						as float"
-			+"					)"
-			+"				)"
-			+"				* 100, 2, 1"
-			+"			)							as tl_temuan"
 			+"	,		GET_TEMUAN_NON.jml			as jml_temuan_non"
 			+"	,		TL_TEMUAN_NON.temuan		as jml_tl_temuan_non"
-			+"	,		round ("
-			+"				("
-			+"					TL_TEMUAN_NON.temuan"
-			+"					/ cast ("
-			+"						isnull ("
-			+"							nullif ( GET_TEMUAN_NON.jml, 0 )"
-			+"							, 1"
-			+"						)"
-			+"						as float"
-			+"					)"
-			+"				 )"
-			+"				* 100, 2, 1"
-			+"			)							as persen_tl_temuan_non"
 			+"	,		GET_TEMUAN_3.jml			as jml_temuan_3"
 			+"	,		TL_TEMUAN_3.temuan			as jml_tl_temuan_3"
-			+"	,		round ("
-			+"				("
-			+"					TL_TEMUAN_3.temuan"
-			+"					/ cast ("
-			+"						isnull ("
-			+"							nullif ( GET_TEMUAN_3.jml, 0 )"
-			+"							, 1"
-			+"						)"
-			+"						as float"
-			+"					)"
-			+"				 )"
-			+"				* 100, 2, 1"
-			+"			)							as persen_tl_temuan_3"
 			+"	,		AVERAGE.average"
 			+"	from	("+ q_target			+ q_where + id +") T"
 			+"	,		("+ q_partisi			+ q_where + id +") PARTISIPAN"
 			+"	,		("+ q_part				+ q_where + id +") P"
 			+"	,		("+ q_vio				+ q_where + id +") V"
 			+"	,		("+ q_temuan			+ q_where + id +") TEMUAN"
-			+"	,		("+ q_sev				+ q_where + id +") SEV"
-			+"	,		("+ q_get_temuan		+ q_where + id +") GET_TEMUAN"
 			+"	,		("+ q_tl_temuan			+ q_where + id +") TL_TEMUAN"
 			+"	,		("+ q_get_temuan_3		+ q_where + id +") GET_TEMUAN_3"
 			+"	,		("+ q_tl_temuan_3		+ q_where + id +") TL_TEMUAN_3"
@@ -555,22 +481,58 @@ try {
 				total_part_percent	= new BigDecimal ((total_part / (target * 1.00)) * 100).setScale (2, RoundingMode.HALF_UP).doubleValue ();
 			}
 
+			violation	= db_rs.getInt ("violation");
+
+			temuan_45	= db_rs.getInt ("temuan");
+
+			if (violation <= 0) {
+				severity_45_percent	= 0.00;
+			} else {
+				severity_45_percent	= new BigDecimal ((temuan_45 / (violation * 1.00)) * 100).setScale (2, RoundingMode.HALF_UP).doubleValue ();
+			}
+
+			tl_temuan_45	= db_rs.getInt ("jml_tl_temuan");
+
+			if (temuan_45 <= 0) {
+				tl_temuan_45_percent	= 0.00;
+			} else {
+				tl_temuan_45_percent	= new BigDecimal ((tl_temuan_45 / (temuan_45 * 1.00)) * 100).setScale (2, RoundingMode.HALF_UP).doubleValue ();
+			}
+
+			temuan_3	= db_rs.getInt ("jml_temuan_3");
+			tl_temuan_3	= db_rs.getInt ("jml_tl_temuan_3");
+
+			if (temuan_3 <= 0) {
+				tl_temuan_3_percent	= 0.00;
+			} else {
+				tl_temuan_3_percent	= new BigDecimal ((tl_temuan_3 / (temuan_3 * 1.00)) * 100).setScale (2, RoundingMode.HALF_UP).doubleValue ();
+			}
+
+			temuan_non		= db_rs.getInt ("jml_temuan_non");
+			tl_temuan_non	= db_rs.getInt ("jml_tl_temuan_non");
+
+			if (temuan_non <= 0) {
+				tl_temuan_non_percent	= 0.00;
+			} else {
+				tl_temuan_non_percent	= new BigDecimal ((tl_temuan_non / (temuan_non * 1.00)) * 100).setScale (2, RoundingMode.HALF_UP).doubleValue ();
+			}
+
 			json_o.put ("item"					,name);
 			json_o.put ("partisipan"			,db_rs.getInt		("partisipan"));
 			json_o.put ("target"				,target);
 			json_o.put ("partisipasi"			,total_part);
 			json_o.put ("total_part_percent"	,total_part_percent);
-			json_o.put ("violation"				,db_rs.getDouble	("violation"));
-			json_o.put ("temuan"				,db_rs.getDouble	("temuan"));
-			json_o.put ("severity"				,db_rs.getDouble	("severity"));
-			json_o.put ("jml_tl_temuan"			,db_rs.getDouble	("jml_tl_temuan"));
-			json_o.put ("tl_temuan"				,db_rs.getDouble	("tl_temuan"));
-			json_o.put ("jml_temuan_3"			,db_rs.getDouble	("jml_temuan_3"));
-			json_o.put ("jml_tl_temuan_3"		,db_rs.getDouble	("jml_tl_temuan_3"));
-			json_o.put ("persen_tl_temuan_3"	,db_rs.getDouble	("persen_tl_temuan_3"));
-			json_o.put ("jml_tl_temuan_non"		,db_rs.getDouble	("jml_tl_temuan_non"));
-			json_o.put ("jml_temuan_non"		,db_rs.getDouble	("jml_temuan_non"));
-			json_o.put ("persen_tl_temuan_non"	,db_rs.getDouble	("persen_tl_temuan_non"));
+			json_o.put ("violation"				,violation);
+			json_o.put ("temuan"				,temuan_45);
+			json_o.put ("severity"				,severity_45_percent);
+			json_o.put ("jml_tl_temuan"			,tl_temuan_45);
+			json_o.put ("tl_temuan"				,tl_temuan_45_percent);
+			json_o.put ("jml_temuan_3"			,temuan_3);
+			json_o.put ("jml_tl_temuan_3"		,tl_temuan_3);
+			json_o.put ("persen_tl_temuan_3"	,tl_temuan_3_percent);
+			json_o.put ("jml_temuan_non"		,temuan_non);
+			json_o.put ("jml_tl_temuan_non"		,tl_temuan_non);
+			json_o.put ("persen_tl_temuan_non"	,tl_temuan_non_percent);
 			json_o.put ("avg"					,db_rs.getDouble	("average"));
 
 			json_a.put (json_o);

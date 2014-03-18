@@ -166,6 +166,7 @@ function M_RCALapRCAGrid()
 			,	'severity'
 			,	'jml_tl_temuan'
 			,	'tl_temuan'
+			,	'jml_temuan_non'
 			,	'jml_tl_temuan_non'
 			,	'persen_tl_temuan_non'
 			,	'jml_temuan_3'
@@ -236,17 +237,20 @@ function M_RCALapRCAGrid()
 		,	dataIndex	: 'persen_tl_temuan_3'
 		,	format		: '000.00%'
 		},{
+			header		: 'Jml Temuan Severity Non 3/4/5'
+		,	dataIndex	: 'jml_temuan_non'
+		,	css			: 'background-color: #f0f0f0;'
+		},{
 			header		: 'Jml Tindak Lanjut Temuan Non 3/4/5'
 		,	dataIndex	: 'jml_tl_temuan_non'
-		,	css			: 'background-color: #f0f0f0;'
 		},{
 			header		: '% Tindak Lanjut Temuan Non 3/4/5'
 		,	dataIndex	: 'persen_tl_temuan_non'
 		,	format		: '000.00%'
+		,	css			: 'background-color: #f0f0f0;'
 		},{
 			header		: 'Average Of Severity'
 		,	dataIndex	: 'avg'
-		,	css			: 'background-color: #f0f0f0;'
 		}]
 	});
 

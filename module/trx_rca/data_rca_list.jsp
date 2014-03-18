@@ -59,7 +59,7 @@ try {
 
 				q_where	+=" and "+ filter_field + filter_cmp +" replace(convert(varchar, cast ('"+ filter_v +"' as datetime), 111), '/', '-') ";
 			} else {
-				q_where	+=" and b.nipg	in ( select c.nipg from r_pegawai c where c.nama_pegawai like '%"+ filter_v +"%') ";
+				q_where	+=" and b.nipg	in ( select c.nipg from r_pegawai c where lower(c.nama_pegawai) like '%"+ filter_v +"%') ";
 			}
 		}
 	}

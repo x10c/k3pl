@@ -10,71 +10,25 @@ var m_rca_grafik_performance;
 
 function M_RCAGrafikPerformance()
 {
-	this.ha_level		= 0;
-	this.id_direktorat	= 0;
-	this.id_divprosbu	= 0;
-	this.tahun_1		= 0;
-	this.tahun_2		= 0;
-	this.tahun_3		= 0;
-	this.bulan_1		= 0;
-	this.bulan_2		= 0;
-	this.bulan_3		= 0;
-	this.year			= (new Date).getFullYear();
+	this.ha_level	= 0;
+	this.id_dir		= 0;
+	this.id_div		= 0;
+	this.tahun_1	= 0;
+	this.tahun_2	= 0;
+	this.tahun_3	= 0;
+	this.bulan_1	= 0;
+	this.bulan_2	= 0;
+	this.bulan_3	= 0;
+	this.year		= (new Date).getFullYear();
 
-	this.store_direktorat = new Ext.data.ArrayStore({
-			fields		: ['id', 'name']
-		,	url			: _g_root +'/module/ref_organisasi/data_direktorat.jsp'
-		,	idIndex		: 0
-		,	autoLoad	: false
-	});
-
-	this.store_divprosbu = new Ext.data.ArrayStore({
-			fields		: ['id_direktorat', 'id', 'name']
-		,	url			: _g_root +'/module/ref_organisasi/data_divprosbu.jsp'
-		,	idIndex		: 1
-		,	autoLoad	: false
-	});
-
-	this.form_direktorat = new Ext.form.ComboBox({
-			store			: this.store_direktorat
-		,	valueField		: 'id'
-		,	displayField	: 'name'
-		,	fieldLabel		: 'Direktorat'
-		,	mode			: 'local'
-		,	allowBlank		: false
-		,	typeAhead		: true
-		,	triggerAction	: 'all'
-		,	selectOnFocus	: true
-		,	width			: 300
-		,	listWidth		: 400
-		,	listeners		: {
-				scope	: this
-			,	select	: function(cb, record, index) {
-					this.form_direktorat_on_select(record.get('id'));
-				}
+	this.set_org = new k3pl.form.SetOrganisasiLess({
+			itemAll			: true
+		,	scope			: this
+		,	onCheckClick	: function() {
+				this.scope.set_checked()
 			}
-	});
+		});
 
-	this.form_divprosbu = new Ext.form.ComboBox({
-			store			: this.store_divprosbu
-		,	valueField		: 'id'
-		,	displayField	: 'name'
-		,	fieldLabel		: 'Divisi/Proyek/SBU'
-		,	mode			: 'local'
-		,	allowBlank		: false
-		,	typeAhead		: true
-		,	triggerAction	: 'all'
-		,	selectOnFocus	: true
-		,	width			: 300
-		,	listWidth		: 400
-		,	listeners		: {
-				scope	: this
-			,	select	: function(cb, record, index) {
-					this.id_divprosbu	= record.get('id');
-				}
-			}
-	});
-	
 	this.store_month = new Ext.data.ArrayStore({
 			fields	: ['id', 'name']
 		,	data	: [[1,'Januari'],
@@ -179,15 +133,14 @@ function M_RCAGrafikPerformance()
 		autoHeight	: true
 	,	buttonAlign	: 'center'
 	,	frame		: true
-	,	labelWidth	: 150
+	,	labelWidth	: 130
 	,	labelAlign	: 'right'
 	,	width		: 500
 	,	buttons		: [
 			this.btn_print
 		]
 	,	items		:[
-			this.form_direktorat
-		,	this.form_divprosbu
+			this.set_org
 		,	this.form_month
 		,	this.form_year
 		,	this.form_jenis
@@ -300,12 +253,12 @@ function M_RCAGrafikPerformance()
 		var hiddenField9 = document.createElement ('input');
         hiddenField1.setAttribute('type', 'hidden');
 		hiddenField9.setAttribute('name', 'id_dir');
-        hiddenField9.setAttribute('value', this.id_direktorat);
+        hiddenField9.setAttribute('value', this.set_org.formDirektorat.getValue());
 		
 		var hiddenField10 = document.createElement ('input');
         hiddenField1.setAttribute('type', 'hidden');
 		hiddenField10.setAttribute('name', 'id_div');
-        hiddenField10.setAttribute('value', this.id_divprosbu);
+        hiddenField10.setAttribute('value', this.set_org.formDivProSBU.getValue());
 				
 		form.appendChild(hiddenField1);
 		form.appendChild(hiddenField2);
@@ -321,65 +274,9 @@ function M_RCAGrafikPerformance()
 		form.submit();
 	}
 	
-	this.form_direktorat_on_select = function(id_direktorat)
-	{
-		this.id_direktorat = id_direktorat;
-
-		this.form_divprosbu.clearFilter(true);
-		this.form_divprosbu.filterBy(function (r, id)
-		{
-			var id_dir	= r.get('id_direktorat');
-			var id_div	= r.get('id');
-
-			if (id_dir	== 0
-			|| id_div	== 0
-			|| id_dir	== this.id_direktorat) {
-				return true;
-			}
-			return false;
-		}
-		, this);
-
-		this.form_divprosbu.setValue(this.store_divprosbu.getAt(0).get('id'));
-	}
-
 	this.do_load = function()
 	{
-		this.store_direktorat.load({
-				scope		: this
-			,	callback	: function(){
-					var record_all_direktorat = new Ext.data.Record ({
-							id		: 0
-						,	name	: 'Semua Direktorat'
-					});
-								
-					this.store_direktorat.insert(0, record_all_direktorat);
-
-					if (this.store_direktorat.getTotalCount() > 0) {
-						this.form_direktorat.setValue(this.store_direktorat.getAt(0).get('id'));
-					}
-
-					this.store_divprosbu.load({
-							scope		: this
-						,	params		: {
-								id_direktorat	: this.id_direktorat
-							}
-						,	callback	:  function(){
-								var record_all_divprosbu = new Ext.data.Record ({
-										id_direktorat	: 0
-									,	id				: 0
-									,	name			: 'Semua Divisi/Proyek/SBU'
-								});
-											
-								this.store_divprosbu.insert(0, record_all_divprosbu);
-								
-								if (this.store_divprosbu.getTotalCount() > 0) {
-									this.form_divprosbu.setValue(this.store_divprosbu.getAt(0).get('id'));
-								}
-							}
-					});
-				}
-		});		
+		this.set_org.do_load();
 	}
 
 	this.do_refresh = function(ha_level)
